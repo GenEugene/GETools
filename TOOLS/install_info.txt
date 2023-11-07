@@ -1,0 +1,5 @@
+1. Put the GETools folder where you want it to be.
+for example: "C:/Users/Username/Documents/maya/scripts/GETools"
+
+2. Drag and Drop the "DRAG_AND_DROP_INSTALL.py" file into Maya
+This will add the GETools to the current shelf.
