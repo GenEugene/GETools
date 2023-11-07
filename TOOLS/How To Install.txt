@@ -1,0 +1,24 @@
+DEPRECATED. NEED TO WRITE NEW INSTRUCTION LATER
+
+Hello there. This is a short guide how to install scripts to your Maya.
+
+1. If you have an archieved file, extract it to any convenient folder. For example you can use C:\Users\Username\Documents\maya\scripts\FOLDER_NAME
+2. If you have a repository, so you just need to clone this repo. (then you need to this path 'MayaToolbelt\Scripts\MyScripts\Tools')
+3. Go to C:\Users\Username\Documents\maya\scripts\ and open your "userSetup.py" file.
+4. If your folder doesn't contain this file, you need to create it manually. Just create new txt file and change extension while renaming.
+
+5. Copy and Paste 2 lines below to "userSetup.py" file (you need to put the path of your script folder instead of 'C:/...')
+import sys
+sys.path.append('C:/Users/Username/Documents/maya/scripts/FOLDER_NAME')
+
+6. Replace every symbol "\" with "/".
+7. Open Script Editor and create new tab with Python
+
+8. Copy and Paste 2 lines below to empty scripts field
+from scripts import EugeneToolbelt
+EugeneToolbelt.EugeneToolbelt().RUN()
+
+9. Press Save On Shelf to create new button and active shelf
+10. Press to the new button and you will see small window
+11. Press first square by right mouse and activate first option for save to shelf
+13. Do it again with the second square in small window
