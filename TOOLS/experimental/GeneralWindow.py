@@ -16,7 +16,7 @@ class GeneralWindow:
 		self.minMaxWeight = (0, 100)
 		self.marginWidthHeight = 5
 		### WINDOW
-		self.window_name = "windowTools"
+		self.window_name = "windowGeneral"
 
 	def CreateUI(self):
 		# WINDOW
@@ -66,4 +66,4 @@ class GeneralWindow:
 		GeneralWindow().CreateUI()
 
 
-GeneralWindow().RUN()
+# GeneralWindow().RUN()

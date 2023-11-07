@@ -1,3 +1,5 @@
+### NEED TO FINISH THIS MODULE BEFORE USE ###
+
 import maya.cmds as cmds
 from utils import Colors
 
@@ -133,15 +135,15 @@ class Checkbox:
 # 		self.valueCached = 0
 
 
-# Docking
+# ### Docking example ###
 # import maya.cmds as cmds
-#
-#myWindow = cmds.window()
-#buttonForm = cmds.formLayout( parent = myWindow )
-#cmds.button(label = "one")
-#cmds.button()
-#allowedAreas = ['right', 'left']
-#cmds.dockControl( area='left', content=myWindow, allowedArea=allowedAreas )
-#cmds.dockControl( area='left', content=myWindow )
-#
-# cmds.dockControl( area='left', content="windowCenterOfMass" )
+
+# myWindow = cmds.window()
+# buttonForm = cmds.formLayout(parent = myWindow)
+# cmds.button(label = "one")
+# cmds.button()
+
+# # allowedAreas = ['right', 'left']
+# # cmds.dockControl(label = "GETOOLS", area = 'left', content = myWindow, allowedArea = allowedAreas)
+# cmds.dockControl(label = "GETOOLS", area = 'left', content = myWindow)
+# cmds.dockControl(label = "GETOOLS", area = 'left', content = "windowCenterOfMass")

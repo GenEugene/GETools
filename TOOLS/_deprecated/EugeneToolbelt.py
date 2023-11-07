@@ -1,3 +1,5 @@
+### DEPRECATED ###
+
 import maya.cmds as cmds
 # from utils import Colors
 from utils import Icons
