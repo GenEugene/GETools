@@ -1,10 +1,10 @@
 import maya.cmds as cmds
 
-nameWindow = "qweqwe"
+nameWindow = "TEST_window"
 windowWidth = 300
 windowHeight = 100
 margin = 5
-dockName = None
+windowWidthMargin = windowWidth - margin * 2
 
 
 # Create a new window
@@ -17,28 +17,14 @@ layout0 = cmds.columnLayout(adjustableColumn = True, width = windowWidth)
 
 # FRAME 1
 cmds.frameLayout(parent = layout0, label = "FRAME 1", collapsable = True, marginWidth = margin, marginHeight = margin)
-# countOffsets = 3
-# cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = windowWidth / countOffsets)
+countOffsets = 3
+cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
 cmds.button(label = "test")
 cmds.button(label = "test")
 cmds.button(label = "test")
-
-# Show the window
-# cmds.showWindow(nameWindow)
-
-
-dockExists = cmds.dockControl("GETOOLS", query = True, exists = True)
-if dockExists:
-    print("Dock control 'GETOOLS' already exists.")
-else:
-    print("No dock control with the label 'GETOOLS' found.")
+cmds.button(label = "test")
+cmds.button(label = "test")
 
 
 
-
-allowedAreas = ['right', 'left']
-dockName = cmds.dockControl(label = "GETOOLS", area = 'left', content = nameWindow, allowedArea = allowedAreas, moveable = True)
-
-print(dockName)
-
-
+cmds.showWindow(nameWindow)

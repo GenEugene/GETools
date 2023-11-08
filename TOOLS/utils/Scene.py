@@ -7,5 +7,5 @@ def Reload():
 	else:
 		cmds.file(new = 1, f = 1)
 
-def Close():
+def ExitMaya():
 	cmds.quit(force = True)
