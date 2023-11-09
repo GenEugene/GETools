@@ -48,11 +48,22 @@ class CenterOfMass:
 		cmds.window(self.window_name, title = self.titleText + " " + self.version, maximizeButton = False, sizeable = False, widthHeight = (self.windowWidth, self.windowHeight))
 		cmds.window(self.window_name, edit = True, resizeToFitChildren = True) # , widthHeight = (self.windowWidth, self.windowHeight)
 		layoutMain = cmds.columnLayout(adjustableColumn = False, width = self.windowWidth) # , h = self.windowHeight
-		uiResize = self.ResizeUI
+
+		self.UILayout(layoutMain)
+
+		cmds.showWindow(self.window_name)
+
+		return self.window_name # XXX
+	
+	def UILayout(self, layoutMain, mainWindow = None): # TODO get values from GeneralWindow
+		print("*****")
+		print(layoutMain)
+		# print(mainWindow)
+		print("*****")
 
 
 		## CENTER OF MASS LOCATOR
-		layoutCOM = cmds.frameLayout(parent = layoutMain, label = "CENTER OF MASS OBJECT", collapseCommand = uiResize, expandCommand = uiResize, collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite10)
+		layoutCOM = cmds.frameLayout(parent = layoutMain, label = "SETUP", collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite10)
 		#
 		COMButtons1 = 4
 		cmds.gridLayout(numberOfColumns = COMButtons1, cellWidth = self.windowWidth / COMButtons1)
@@ -68,15 +79,8 @@ class CenterOfMass:
 		cmds.button(label = "PROJECTOR XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10)
 
 
-		## OFFSET LOCATORS
-		countOffsets = 1
-		cmds.frameLayout(parent = layoutMain, label = "OFFSETS", collapseCommand = uiResize, expandCommand = uiResize, collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite10)
-		cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = self.windowWidth / countOffsets)
-		cmds.button(label = "CREATE OFFSET LOCATORS ON SELECTED", command = self.CreateOffsets, backgroundColor = Colors.green50)
-
-
 		## WEIGHTS
-		layoutWeights = cmds.frameLayout(parent = layoutMain, label = "WEIGHTS", collapseCommand = uiResize, expandCommand = uiResize, collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite10)
+		layoutWeights = cmds.frameLayout(parent = layoutMain, label = "WEIGHTS", collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite10)
 		
 		# CUSTOM WEIGHTS
 		def PartButton(partInfo=("", 0), minMaxValue = self.minMaxWeight, onlyValue=False):
@@ -87,7 +91,7 @@ class CenterOfMass:
 			cmds.button(label = text.format(partInfo[0], value), command = partial(self.COMConstrainToSelected, value), backgroundColor = colorFinal)
 
 		countCustom = 14
-		cmds.frameLayout(parent = layoutWeights, label = "Manual", collapseCommand = uiResize, expandCommand = uiResize, collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite40)
+		cmds.frameLayout(parent = layoutWeights, label = "Manual", collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite40)
 		cmds.gridLayout(numberOfColumns = countCustom, cellWidth = self.windowWidth / countCustom)
 		def CustomButton(value):
 			PartButton(("", value), onlyValue = True)
@@ -106,9 +110,10 @@ class CenterOfMass:
 		CustomButton(90)
 		CustomButton(100)
 
+
 		# BODYPARTS
 		countBodyparts = 3
-		cmds.frameLayout(parent = layoutWeights, label = "Humanoid Bodyparts Percentage", collapseCommand = uiResize, expandCommand = uiResize, collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite40)
+		cmds.frameLayout(parent = layoutWeights, label = "Humanoid Bodyparts Percentage", collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite40)
 		layoutBodyGrid = cmds.gridLayout(numberOfColumns = countBodyparts, cellWidth = self.windowWidth / countBodyparts, cellHeight = 94)
 		#
 		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True, width = self.windowWidth)
@@ -132,7 +137,7 @@ class CenterOfMass:
 
 		## BAKING
 		countBaking1 = 3
-		layoutBaking = cmds.frameLayout(parent = layoutMain, label = "BAKING", collapseCommand = uiResize, expandCommand = uiResize, collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite10)
+		layoutBaking = cmds.frameLayout(parent = layoutMain, label = "BAKING", collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite10)
 		cmds.gridLayout(numberOfColumns = countBaking1, cellWidth = self.windowWidth / countBaking1)
 		#
 		cmds.button(label = "BAKE TO LAST", command = self.BakeScenario1, backgroundColor = Colors.orange10)
@@ -149,12 +154,6 @@ class CenterOfMass:
 		cmds.button(label = "SELECT PARENT", command = self.SelectParent, backgroundColor = Colors.lightBlue50)
 		cmds.button(label = "BAKE ORIGINAL", command = self.BakeCached, backgroundColor = Colors.red50)
 
-
-		## RUN WINDOW
-		cmds.showWindow(self.window_name)
-		self.ResizeUI()
-	def ResizeUI(self, *args):
-		cmds.window(self.window_name, edit = True, height = 1, resizeToFitChildren = True)
 
 	def COMObjectCheck(self, *args):
 		if (self.COMObject == None):
@@ -245,8 +244,6 @@ class CenterOfMass:
 		# 	attributes = cmds.listAttr(children[0])
 		# pass
 
-	def CreateOffsets(self, *args):
-		Locators.CreateOnSelectedWithParentConstrain(hideParent = True, subLocators = True)
 	
 	def BakeAsChildrenFromLastSelected(self, minSelectedCount = 2, *args):
 		self.CachedSelectedObjects = Locators.BakeAsChildrenFromLastSelected(minSelectedCount = minSelectedCount)
@@ -307,7 +304,7 @@ class CenterOfMass:
 
 	# EXECUTION
 	def RUN(self, *args):
-		CenterOfMass().CreateUI()
+		return CenterOfMass().CreateUI()
 
 
 # CenterOfMass().RUN()

@@ -153,6 +153,3 @@ class Tools:
 	# EXECUTION
 	def RUN(self, *args):
 		Tools().CreateUI()
-
-
-# Tools().RUN()
