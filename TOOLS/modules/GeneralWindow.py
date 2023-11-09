@@ -6,30 +6,29 @@ from functools import partial
 from utils import Colors
 from utils import Scene
 from utils import MotionTrail
-from modules import CenterOfMass as com
 from modules import Tools as tls
+from modules import Overlappy as ovlp
+from modules import CenterOfMass as com
 
 class GeneralWindow:
+	version = "v0.0.3"
+	title = "GETools" + " " + version
+
+	windowName = "windowGETools"
+	dockName = "dockGETools"
+	dockAllowedAreas = ["left", "right"]
+	dockStartArea = dockAllowedAreas[0]
+	
+	windowHeight = 100
+	windowWidth = 320
+	windowWidthScrollSpace = 16
+	# lineHeight = 20
+	margin = 5
+
 	def __init__(self):
-		### WINDOW
-		self.version = "v0.0.2"
-		self.titleText = "GETools"
-		self.windowHeight = 100
-		self.windowWidth = 320
-		self.windowWidthScrollSpace = 16
-		# self.lineHeight = 20
-		self.margin = 5
-		self.nameWindow = "windowGETools"
-
-		### DOCK
-		self.dockName = "dockGETools"
-		self.dockAllowedAreas = ["left", "right"]
-		self.dockStartArea = self.dockAllowedAreas[0]
-
 		### PRECOMPILED
-		self.labelText = self.titleText + " " + self.version
-		self.windowWidthScroll = self.windowWidth - self.windowWidthScrollSpace
-		self.windowWidthMargin = self.windowWidthScroll - self.margin * 2
+		self.windowWidthScroll = GeneralWindow.windowWidth - GeneralWindow.windowWidthScrollSpace
+		self.windowWidthMargin = self.windowWidthScroll - GeneralWindow.margin * 2
 
 		### STORED VALUES
 		self.frameTools = None
@@ -38,11 +37,11 @@ class GeneralWindow:
 		self.frameExperimental = None
 	def CreateUI(self):
 		# CREATE WINDOW
-		if cmds.window(self.nameWindow, exists = True):
-			cmds.deleteUI(self.nameWindow)
-		cmds.window(self.nameWindow, title = self.labelText, maximizeButton = False, sizeable = True, widthHeight = (self.windowWidth, self.windowHeight))
-		# layout0 = cmds.columnLayout(adjustableColumn = True, width = self.windowWidth)
-		layout0 = cmds.scrollLayout(width = self.windowWidth) # , horizontalScrollBarThickness = 16, verticalScrollBarThickness = 16
+		if cmds.window(GeneralWindow.windowName, exists = True):
+			cmds.deleteUI(GeneralWindow.windowName)
+		cmds.window(GeneralWindow.windowName, title = GeneralWindow.title, maximizeButton = False, sizeable = True, widthHeight = (GeneralWindow.windowWidth, GeneralWindow.windowHeight))
+		# layout0 = cmds.columnLayout(adjustableColumn = True, width = GeneralWindow.windowWidth)
+		layout0 = cmds.scrollLayout(width = GeneralWindow.windowWidth) # , horizontalScrollBarThickness = 16, verticalScrollBarThickness = 16
 
 		self.LayoutMenu(layout0)
 		###
@@ -75,8 +74,8 @@ class GeneralWindow:
 		cmds.menuItem(label = "Collapse All", command = partial(self.FrameCollapse, True))
 		cmds.menuItem(label = "Expand All", command = partial(self.FrameCollapse, False))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Dock Left", command = partial(self.DockSide, self.dockAllowedAreas[0]))
-		cmds.menuItem(label = "Dock Right", command = partial(self.DockSide, self.dockAllowedAreas[1]))
+		cmds.menuItem(label = "Dock Left", command = partial(self.DockSide, GeneralWindow.dockAllowedAreas[0]))
+		cmds.menuItem(label = "Dock Right", command = partial(self.DockSide, GeneralWindow.dockAllowedAreas[1]))
 		cmds.menuItem(label = "Undock", command = self.DockOff)
 
 
@@ -92,6 +91,7 @@ class GeneralWindow:
 		def LinkLinkedin(self): cmds.showHelp("https://www.linkedin.com/in/geneugene", absolute = True)
 		def LinkYoutube(self): cmds.showHelp("https://youtube.com/@EugeneGataulin", absolute = True)
 		def LinkDiscord(self): cmds.showHelp("https://discord.gg/heMxJhTqCz", absolute = True)
+		def LinkShareIdeas(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/ideas", absolute = True)
 		def LinkReport(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/report-a-problem", absolute = True)
 		cmds.menuItem(label = "About GETools", enable = False) # TODO add window with information
 		cmds.menuItem(dividerLabel = "Links", divider = True)
@@ -103,25 +103,19 @@ class GeneralWindow:
 		cmds.menuItem(label = "YouTube", command = LinkYoutube)
 		cmds.menuItem(label = "Discord", command = LinkDiscord)
 		cmds.menuItem(dividerLabel = "Support", divider = True)
-		cmds.menuItem(label = "Report a Problem...", command = LinkReport)
+		cmds.menuItem(label = "Share your Ideas", command = LinkShareIdeas)
+		cmds.menuItem(label = "Report a Problem", command = LinkReport)
 	def LayoutTools(self, parentLayout):
-		self.frameTools = cmds.frameLayout(parent = parentLayout, label = "TOOLS", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = self.margin, marginHeight = self.margin)
+		self.frameTools = cmds.frameLayout(parent = parentLayout, label = tls.Tools().title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindow.margin, marginHeight = GeneralWindow.margin)
 		tls.Tools().UILayout(self.frameTools)
-	def LayoutOverlappy(self, parentLayout): # TODO
-		# self.frameTools = cmds.frameLayout(parent = parentLayout, label = "TOOLS", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = self.margin, marginHeight = self.margin)
-		# tls.Tools().UILayout(self.frameTools)
-
-		self.frameOverlappy = cmds.frameLayout(parent = parentLayout, label = "OVERLAPPY", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = self.margin, marginHeight = self.margin)
-		countOffsets = 3
-		cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = self.windowWidthMargin / countOffsets)
-		cmds.button(label = "test", backgroundColor = Colors.orange10)
-		cmds.button(label = "test", backgroundColor = Colors.orange50)
-		cmds.button(label = "test", backgroundColor = Colors.orange100)
+	def LayoutOverlappy(self, parentLayout):
+		self.frameOverlappy = cmds.frameLayout(parent = parentLayout, label = ovlp.Overlappy().title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindow.margin, marginHeight = GeneralWindow.margin)
+		ovlp.Overlappy().UILayout(self.frameOverlappy)
 	def LayoutCenterOfMass(self, parentLayout):
-		self.frameCenterOfMass = cmds.frameLayout(parent = parentLayout, label = "CENTER OF MASS", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = self.margin, marginHeight = self.margin)
+		self.frameCenterOfMass = cmds.frameLayout(parent = parentLayout, label = com.CenterOfMass().title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindow.margin, marginHeight = GeneralWindow.margin)
 		com.CenterOfMass().UILayout(self.frameCenterOfMass)
 	def LayoutExperimental(self, parentLayout):
-		self.frameExperimental = cmds.frameLayout(parent = parentLayout, label = "EXPERIMENTAL", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = self.margin, marginHeight = self.margin)
+		self.frameExperimental = cmds.frameLayout(parent = parentLayout, label = "EXPERIMENTAL", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindow.margin, marginHeight = GeneralWindow.margin)
 		countOffsets = 1
 		cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = self.windowWidthMargin / countOffsets)
 
@@ -133,28 +127,28 @@ class GeneralWindow:
 
 	# DOCKING
 	def DockCleanup(self):
-		dockExists = cmds.dockControl(self.dockName, query = True, exists = True)
+		dockExists = cmds.dockControl(GeneralWindow.dockName, query = True, exists = True)
 		if dockExists:
-			cmds.deleteUI(self.dockName, control = True)
+			cmds.deleteUI(GeneralWindow.dockName, control = True)
 			return True
 		else:
 			return False
 	def DockOff(self, *args): # TODO undick window without creation recreation
-		dockExists = cmds.dockControl(self.dockName, query = True, exists = True)
+		dockExists = cmds.dockControl(GeneralWindow.dockName, query = True, exists = True)
 		if dockExists:
-			cmds.deleteUI(self.dockName, control = True)
+			cmds.deleteUI(GeneralWindow.dockName, control = True)
 			self.CreateUI()
-			cmds.showWindow(self.nameWindow)
-			print("{0} undocked".format(self.titleText))
+			cmds.showWindow(GeneralWindow.windowName)
+			print("{0} undocked".format(self.title))
 		else:
 			cmds.warning("Window is not docked")
 	def DockSide(self, areaSide, *args):
-		dockExists = cmds.dockControl(self.dockName, query = True, exists = True)
+		dockExists = cmds.dockControl(GeneralWindow.dockName, query = True, exists = True)
 		if dockExists:
-			cmds.dockControl(self.dockName, edit = True, floating = False, area = areaSide)
+			cmds.dockControl(GeneralWindow.dockName, edit = True, floating = False, area = areaSide)
 		else:
-			cmds.dockControl(self.dockName, label = self.labelText, area = areaSide, content = self.nameWindow, allowedArea = self.dockAllowedAreas)
-		print("{0} docked {1}".format(self.titleText, areaSide))
+			cmds.dockControl(GeneralWindow.dockName, label = GeneralWindow.title, area = areaSide, content = GeneralWindow.windowName, allowedArea = GeneralWindow.dockAllowedAreas)
+		print("{0} docked {1}".format(self.title, areaSide))
 	
 	# FRAME COLLAPSE
 	def FrameCollapse(self, value, *args):
@@ -170,5 +164,5 @@ class GeneralWindow:
 			print("GETools window closed")
 			return
 		self.CreateUI()
-		self.DockSide(self.dockStartArea)
+		self.DockSide(GeneralWindow.dockStartArea)
 

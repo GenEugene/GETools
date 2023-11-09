@@ -13,29 +13,14 @@ from utils import Timeline
 from modules import GeneralWindow
 
 class Tools:
+	version = "v1.0.0"
+	title = "TOOLS" + " " + version
+	
 	def __init__(self):
-		### SETUP
-		# self.version = "v0.0.1"
-		# self.titleText = "TOOLS"
-		### WINDOW
-		# self.window_name = "windowTools"
-
-		### CHECKBOXES
 		self.checkboxLocatorHideParent = None
 		self.checkboxLocatorSubLocator = None
 		self.checkboxConstraintReverse = None
 		self.checkboxConstraintMaintain = None
-	def CreateUI(self): # TODO rework if needed
-		# WINDOW
-		if cmds.window(self.window_name, exists = True):
-			cmds.deleteUI(self.window_name)
-		cmds.window(self.window_name, title = self.titleText + " " + self.version, maximizeButton = False, sizeable = False, widthHeight = (windowWidthMargin, self.windowHeight))
-		# cmds.window(self.window_name, edit = True, resizeToFitChildren = True) # , widthHeight = (windowWidthMargin, self.windowHeight)
-		layoutMain = cmds.columnLayout(adjustableColumn = False, width = windowWidthMargin) # , h = self.windowHeight
-
-		self.UILayout(layoutMain)
-
-		cmds.showWindow(self.window_name)
 	def UILayout(self, layoutMain):
 		settings = GeneralWindow.GeneralWindow()
 		windowWidthMargin = settings.windowWidthMargin
@@ -179,7 +164,3 @@ class Tools:
 	def CopySkinWeightsFromLastMesh(self, *args):
 		Skinning.CopySkinWeightsFromLastMesh();
 
-
-	# EXECUTION
-	def RUN(self, *args):
-		self.CreateUI()

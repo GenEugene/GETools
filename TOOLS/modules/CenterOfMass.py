@@ -11,47 +11,31 @@ from utils import Locators
 from modules import GeneralWindow
 
 class CenterOfMass:
+	version = "v1.0.0"
+	title = "CENTER OF MASS" + " " + version
+
+	# CENTER OF MASS
+	COMRadius = 10
+	minMaxWeight = (0, 100)
+
+	# BODYPARTS MAPPING PERCENTAGE
+	partHead = ("head", 7.3)
+	partChest = ("chest", 35.8)
+	partAbdomen = ("abdomen", 10.1)
+	partShoulder = ("shoulder", 3.1)
+	partElbow = ("elbow", 1.7)
+	partHand = ("hand ", 0.8)
+	partThigh = ("thigh", 11.5)
+	partKnee = ("knee", 4.4)
+	partFoot = ("foot", 1.9)
+	#
+	partChestAbdomen = ("torso", 45.9)
+	partShoulderElbow = ("arm", 4.8)
+	partThighKnee = ("leg", 15.9)
+
 	def __init__(self):
-		### SETUP
-		# self.version = "v0.0.1"
-		# self.titleText = "CENTER OF MASS"
-		### WINDOW
-		# self.window_name = "windowCenterOfMass"
-
-		### CENTER OF MASS
-		self.COMRadius = 10
-		self.minMaxWeight = (0, 100)
-
-		### BODYPARTS MAPPING PERCENTAGE
-		self.partHead = ("head", 7.3)
-		self.partChest = ("chest", 35.8)
-		self.partAbdomen = ("abdomen", 10.1)
-		self.partShoulder = ("shoulder", 3.1)
-		self.partElbow = ("elbow", 1.7)
-		self.partHand = ("hand ", 0.8)
-		self.partThigh = ("thigh", 11.5)
-		self.partKnee = ("knee", 4.4)
-		self.partFoot = ("foot", 1.9)
-		#
-		self.partChestAbdomen = ("torso", 45.9)
-		self.partShoulderElbow = ("arm", 4.8)
-		self.partThighKnee = ("leg", 15.9)
-
-		### OBJECTS
 		self.COMObject = None
 		self.CachedSelectedObjects = None
-	
-	def CreateUI(self): # DEPRECATED # TODO rework if needed
-		## WINDOW
-		if cmds.window(self.window_name, exists = True):
-			cmds.deleteUI(self.window_name)
-		cmds.window(self.window_name, title = self.titleText + " " + self.version, maximizeButton = False, sizeable = False, widthHeight = (windowWidth, windowHeight))
-		# cmds.window(self.window_name, edit = True, resizeToFitChildren = True) # , widthHeight = (self.windowWidth, windowHeight)
-		layoutMain = cmds.columnLayout(adjustableColumn = False, width = windowWidth) # , h = windowHeight
-
-		self.UILayout(layoutMain)
-
-		cmds.showWindow(self.window_name)
 	def UILayout(self, layoutMain): # instance = None
 		settings = GeneralWindow.GeneralWindow()
 		windowWidthMargin = settings.windowWidthMargin
@@ -78,7 +62,7 @@ class CenterOfMass:
 		layoutWeights = cmds.frameLayout(parent = layoutMain, label = "WEIGHTS", collapsable = True) # , backgroundColor = Colors.blackWhite10
 		
 		# CUSTOM WEIGHTS
-		def PartButton(partInfo = ("", 0), minMaxValue = self.minMaxWeight, onlyValue = False): # TODO possibly has problems with folding
+		def PartButton(partInfo = ("", 0), minMaxValue = CenterOfMass.minMaxWeight, onlyValue = False): # TODO possibly has problems with folding
 			value = partInfo[1]
 			text = "{1}" if onlyValue else "{0} {1}"
 			colorValue = 1 - (value / (minMaxValue[1] - minMaxValue[0]))
@@ -113,24 +97,24 @@ class CenterOfMass:
 		#
 		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True)
 		# cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True, width = windowWidthMargin)
-		PartButton(self.partHead, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
-		PartButton(self.partChest, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
-		PartButton(self.partAbdomen, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
-		PartButton(self.partChestAbdomen, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partHead, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partChest, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partAbdomen, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partChestAbdomen, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
 		#
 		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True)
 		# cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True, width = windowWidthMargin)
-		PartButton(self.partShoulder, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
-		PartButton(self.partElbow, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
-		PartButton(self.partHand, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
-		PartButton(self.partShoulderElbow, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partShoulder, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partElbow, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partHand, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partShoulderElbow, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
 		#
 		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True)
 		# cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True, width = windowWidthMargin)
-		PartButton(self.partThigh, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
-		PartButton(self.partKnee, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
-		PartButton(self.partFoot, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
-		PartButton(self.partThighKnee, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partThigh, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partKnee, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partFoot, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
+		PartButton(CenterOfMass.partThighKnee, minMaxValue = (CenterOfMass.partHand[1], CenterOfMass.partChestAbdomen[1]))
 
 
 		## BAKING
@@ -152,7 +136,6 @@ class CenterOfMass:
 		cmds.button(label = "SELECT PARENT", command = self.SelectParent, backgroundColor = Colors.lightBlue50)
 		cmds.button(label = "BAKE ORIGINAL", command = self.BakeCached, backgroundColor = Colors.red50)
 
-
 	def COMObjectCheck(self, *args):
 		if (self.COMObject == None):
 			cmds.warning("Center of mass doesn't stored in the script memory. You need to create new COM object or select one in the scene and press \"Activate\" button")
@@ -166,12 +149,12 @@ class CenterOfMass:
 	def COMCreate(self, *args):
 		# self.centerOfMass = cmds.polySphere(name = "myCenterOfMass", subdivisionsX = 8, subdivisionsY = 6, radius = 10)
 		# self.centerOfMass = Locators.Create("locCenterOfMass", 5)
-		# self.COMObjectRef = cmds.polyPrimitive(name = "objCenterOfMass", radius = self.COMRadius, polyType = 0, constructionHistory = 0)
+		# self.COMObjectRef = cmds.polyPrimitive(name = "objCenterOfMass", radius = CenterOfMass.COMRadius, polyType = 0, constructionHistory = 0)
 		# cmds.polySoftEdge(angle = 0, constructionHistory = 0)
 		# self.COMGroupRef = cmds.group(name = "grpCenterOfMass")
 		
 		cmds.select(clear = True)
-		self.COMObject = cmds.joint(name = Text.SetUniqueFromText("objCenterOfMass"), radius = self.COMRadius / 3)
+		self.COMObject = cmds.joint(name = Text.SetUniqueFromText("objCenterOfMass"), radius = CenterOfMass.COMRadius / 3)
 		cmds.setAttr(self.COMObject + ".drawLabel", 1)
 		cmds.setAttr(self.COMObject + ".type", 18)
 		cmds.setAttr(self.COMObject + ".otherType", "Center Of Mass", type = "string")
@@ -195,7 +178,7 @@ class CenterOfMass:
 			return
 
 		name = "COM" + "Projection" + "xyz".replace(skipAxis, "").upper()
-		projection = cmds.polyPrimitive(name = Text.SetUniqueFromText(name), radius = self.COMRadius / 3, polyType = 0, constructionHistory = 0)
+		projection = cmds.polyPrimitive(name = Text.SetUniqueFromText(name), radius = CenterOfMass.COMRadius / 3, polyType = 0, constructionHistory = 0)
 		cmds.polySoftEdge(angle = 0, constructionHistory = 0)
 
 		cmds.setAttr(projection[0] + "Shape" + ".visibility", 0)
