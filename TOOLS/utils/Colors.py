@@ -1,3 +1,5 @@
+# Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
+
 blackWhite0 = (0, 0, 0)
 blackWhite10 = (0.1, 0.1, 0.1)
 blackWhite20 = (0.2, 0.2, 0.2)

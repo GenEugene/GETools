@@ -1,4 +1,5 @@
 ### DEPRECATED ###
+# Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
 
 # Overlappy v2.0.0 for Maya 2022
 # Author Eugene Gataulin (GenEugene) tek94@mail.ru tek942@gmail.com
