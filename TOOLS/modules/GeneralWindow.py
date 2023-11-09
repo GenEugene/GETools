@@ -3,7 +3,7 @@ import maya.cmds as cmds
 from functools import partial
 from utils import Colors
 from utils import Scene
-from scripts import CenterOfMass as com
+from modules import CenterOfMass as com
 
 class GeneralWindow:
 	def __init__(self):
@@ -13,7 +13,7 @@ class GeneralWindow:
 		self.windowWidth = 300
 		self.windowHeight = 100
 		# self.lineHeight = 20
-		# self.minMaxWeight = (0, 100)
+		self.minMaxWeight = (0, 100)
 		self.margin = 5
 
 		### WINDOW
@@ -111,7 +111,7 @@ class GeneralWindow:
 		cmds.button(label = "test", backgroundColor = Colors.orange50)
 	def LayoutCenterOfMass(self, parentLayout):
 		layoutCOM = cmds.frameLayout(parent = parentLayout, label = "CENTER OF MASS", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = self.margin, marginHeight = self.margin)
-		com.CenterOfMass().UILayout(layoutCOM)
+		com.CenterOfMass().UILayout(layoutCOM) # , instance = self
 
 
 	# DOCKING
@@ -128,7 +128,7 @@ class GeneralWindow:
 			cmds.deleteUI(self.dockName, control = True)
 			self.CreateUI()
 			cmds.showWindow(self.nameWindow)
-			cmds.warning("{0} undocked".format(self.titleText))
+			print("{0} undocked".format(self.titleText))
 		else:
 			cmds.warning("Window is not docked")
 	def DockSide(self, areaSide, *args):
@@ -137,7 +137,7 @@ class GeneralWindow:
 			cmds.dockControl(self.dockName, edit = True, floating = False, area = areaSide)
 		else:
 			cmds.dockControl(self.dockName, label = self.labelText, area = areaSide, content = self.nameWindow, allowedArea = self.dockAllowedAreas)
-		cmds.warning("{0} docked {1}".format(self.titleText, areaSide))
+		print("{0} docked {1}".format(self.titleText, areaSide))
 		
 		
 	# EXECUTION

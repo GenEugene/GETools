@@ -6,19 +6,15 @@ from utils import Selector
 from utils import Baker
 from utils import Constraints
 from utils import Locators
+from modules import GeneralWindow
 
 class CenterOfMass:
 	def __init__(self):
 		### SETUP
-		self.version = "v0.0.1"
-		self.titleText = "CENTER OF MASS"
-		self.windowWidth = 294
-		self.windowHeight = 10
-		self.lineHeight = 20
-		self.minMaxWeight = (0, 100)
-
+		# self.version = "v0.0.1"
+		# self.titleText = "CENTER OF MASS"
 		### WINDOW
-		self.window_name = "windowCenterOfMass"
+		# self.window_name = "windowCenterOfMass"
 
 		### CENTER OF MASS OBJECTS
 		self.COMRadius = 10
@@ -41,49 +37,47 @@ class CenterOfMass:
 		### OBJECTS
 		self.COMObject = None
 		self.CachedSelectedObjects = None
-	def CreateUI(self):
+	
+	def CreateUI(self): # DEPRECATED # TODO rework if needed
 		## WINDOW
 		if cmds.window(self.window_name, exists = True):
 			cmds.deleteUI(self.window_name)
-		cmds.window(self.window_name, title = self.titleText + " " + self.version, maximizeButton = False, sizeable = False, widthHeight = (self.windowWidth, self.windowHeight))
-		cmds.window(self.window_name, edit = True, resizeToFitChildren = True) # , widthHeight = (self.windowWidth, self.windowHeight)
-		layoutMain = cmds.columnLayout(adjustableColumn = False, width = self.windowWidth) # , h = self.windowHeight
+		cmds.window(self.window_name, title = self.titleText + " " + self.version, maximizeButton = False, sizeable = False, widthHeight = (windowWidth, windowHeight))
+		cmds.window(self.window_name, edit = True, resizeToFitChildren = True) # , widthHeight = (self.windowWidth, windowHeight)
+		layoutMain = cmds.columnLayout(adjustableColumn = False, width = windowWidth) # , h = windowHeight
 
 		self.UILayout(layoutMain)
 
 		cmds.showWindow(self.window_name)
-
-		return self.window_name # XXX
 	
-	def UILayout(self, layoutMain, mainWindow = None): # TODO get values from GeneralWindow
-		print("*****")
-		print(layoutMain)
-		# print(mainWindow)
-		print("*****")
+	def UILayout(self, layoutMain): # instance = None
+		settings = GeneralWindow.GeneralWindow()
+		windowWidthMargin = settings.windowWidthMargin
+		minMaxWeight = settings.minMaxWeight
 
 
 		## CENTER OF MASS LOCATOR
-		layoutCOM = cmds.frameLayout(parent = layoutMain, label = "SETUP", collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite10)
+		layoutCOM = cmds.frameLayout(parent = layoutMain, label = "SETUP", collapsable = True) # , backgroundColor = Colors.blackWhite10
 		#
 		COMButtons1 = 4
-		cmds.gridLayout(numberOfColumns = COMButtons1, cellWidth = self.windowWidth / COMButtons1)
+		cmds.gridLayout(numberOfColumns = COMButtons1, cellWidth = windowWidthMargin / COMButtons1)
 		cmds.button(label = "CREATE", command = self.COMCreate, backgroundColor = Colors.green50)
 		cmds.button(label = "ACTIVATE", command = self.COMActivate, backgroundColor = Colors.yellow50)
 		cmds.button(label = "SELECT", command = self.COMSelect, backgroundColor = Colors.lightBlue50)
 		cmds.button(label = "CLEAN", command = self.COMClean, backgroundColor = Colors.red50)
 		#
 		COMButtons2 = 3
-		cmds.gridLayout(parent = layoutCOM, numberOfColumns = COMButtons2, cellWidth = self.windowWidth / COMButtons2)
+		cmds.gridLayout(parent = layoutCOM, numberOfColumns = COMButtons2, cellWidth = windowWidthMargin / COMButtons2)
 		cmds.button(label = "PROJECTOR YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10)
 		cmds.button(label = "PROJECTOR XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10)
 		cmds.button(label = "PROJECTOR XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10)
 
 
 		## WEIGHTS
-		layoutWeights = cmds.frameLayout(parent = layoutMain, label = "WEIGHTS", collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite10)
+		layoutWeights = cmds.frameLayout(parent = layoutMain, label = "WEIGHTS", collapsable = True) # , backgroundColor = Colors.blackWhite10
 		
 		# CUSTOM WEIGHTS
-		def PartButton(partInfo=("", 0), minMaxValue = self.minMaxWeight, onlyValue=False):
+		def PartButton(partInfo = ("", 0), minMaxValue = minMaxWeight, onlyValue = False):
 			value = partInfo[1]
 			text = "{1}" if onlyValue else "{0} {1}"
 			colorValue = 1 - (value / (minMaxValue[1] - minMaxValue[0]))
@@ -91,8 +85,8 @@ class CenterOfMass:
 			cmds.button(label = text.format(partInfo[0], value), command = partial(self.COMConstrainToSelected, value), backgroundColor = colorFinal)
 
 		countCustom = 14
-		cmds.frameLayout(parent = layoutWeights, label = "Manual", collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite40)
-		cmds.gridLayout(numberOfColumns = countCustom, cellWidth = self.windowWidth / countCustom)
+		cmds.frameLayout(parent = layoutWeights, label = "Manual", collapsable = True) # , backgroundColor = Colors.blackWhite40
+		cmds.gridLayout(numberOfColumns = countCustom, cellWidth = windowWidthMargin / countCustom)
 		def CustomButton(value):
 			PartButton(("", value), onlyValue = True)
 		CustomButton(0)
@@ -113,22 +107,25 @@ class CenterOfMass:
 
 		# BODYPARTS
 		countBodyparts = 3
-		cmds.frameLayout(parent = layoutWeights, label = "Humanoid Bodyparts Percentage", collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite40)
-		layoutBodyGrid = cmds.gridLayout(numberOfColumns = countBodyparts, cellWidth = self.windowWidth / countBodyparts, cellHeight = 94)
+		cmds.frameLayout(parent = layoutWeights, label = "Humanoid Bodyparts Percentage", collapsable = True) # , backgroundColor = Colors.blackWhite40
+		layoutBodyGrid = cmds.gridLayout(numberOfColumns = countBodyparts, cellWidth = windowWidthMargin / countBodyparts, cellHeight = 94)
 		#
-		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True, width = self.windowWidth)
+		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True)
+		# cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True, width = windowWidthMargin)
 		PartButton(self.partHead, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
 		PartButton(self.partChest, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
 		PartButton(self.partAbdomen, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
 		PartButton(self.partChestAbdomen, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
 		#
-		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True, width = self.windowWidth)
+		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True)
+		# cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True, width = windowWidthMargin)
 		PartButton(self.partShoulder, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
 		PartButton(self.partElbow, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
 		PartButton(self.partHand, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
 		PartButton(self.partShoulderElbow, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
 		#
-		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True, width = self.windowWidth)
+		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True)
+		# cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True, width = windowWidthMargin)
 		PartButton(self.partThigh, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
 		PartButton(self.partKnee, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
 		PartButton(self.partFoot, minMaxValue = (self.partHand[1], self.partChestAbdomen[1]))
@@ -137,20 +134,20 @@ class CenterOfMass:
 
 		## BAKING
 		countBaking1 = 3
-		layoutBaking = cmds.frameLayout(parent = layoutMain, label = "BAKING", collapsable = True, borderVisible = True, backgroundColor = Colors.blackWhite10)
-		cmds.gridLayout(numberOfColumns = countBaking1, cellWidth = self.windowWidth / countBaking1)
+		layoutBaking = cmds.frameLayout(parent = layoutMain, label = "BAKING", collapsable = True) # , backgroundColor = Colors.blackWhite10
+		cmds.gridLayout(numberOfColumns = countBaking1, cellWidth = windowWidthMargin / countBaking1)
 		#
 		cmds.button(label = "BAKE TO LAST", command = self.BakeScenario1, backgroundColor = Colors.orange10)
 		cmds.button(label = "BAKE TO COM", command = self.BakeScenario2, backgroundColor = Colors.orange50)
 		cmds.button(label = "BAKE + LINK", command = self.BakeScenario3, backgroundColor = Colors.orange100)
 		#
 		countBaking2 = 2
-		cmds.gridLayout(parent = layoutBaking, numberOfColumns = countBaking2, cellWidth = self.windowWidth / countBaking2)
+		cmds.gridLayout(parent = layoutBaking, numberOfColumns = countBaking2, cellWidth = windowWidthMargin / countBaking2)
 		cmds.button(label = "LINK MATCH", command = partial(self.LinkCached, False), backgroundColor = Colors.yellow10)
 		cmds.button(label = "LINK OFFSET", command = partial(self.LinkCached, True), backgroundColor = Colors.yellow10)
 		#
 		countBaking3 = 2
-		cmds.gridLayout(parent = layoutBaking, numberOfColumns = countBaking3, cellWidth = self.windowWidth / countBaking3)
+		cmds.gridLayout(parent = layoutBaking, numberOfColumns = countBaking3, cellWidth = windowWidthMargin / countBaking3)
 		cmds.button(label = "SELECT PARENT", command = self.SelectParent, backgroundColor = Colors.lightBlue50)
 		cmds.button(label = "BAKE ORIGINAL", command = self.BakeCached, backgroundColor = Colors.red50)
 
@@ -304,7 +301,5 @@ class CenterOfMass:
 
 	# EXECUTION
 	def RUN(self, *args):
-		return CenterOfMass().CreateUI()
-
-
-# CenterOfMass().RUN()
+		self.CreateUI()
+	

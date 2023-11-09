@@ -33,16 +33,16 @@ if not os.path.exists("{path}"):
 if "{path}" not in sys.path:
 	sys.path.insert(0, "{path}")
 
-import main.GeneralWindow as gtwindow
+import modules.GeneralWindow as gtwindow
 gtwindow.GeneralWindow().RUN()
 
-# import scripts.old_GETools as oldget
+# import modules.old_GETools as oldget
 # oldget.GETOOLS_class().Start()
 
-# import scripts.Tools as tls
+# import modules.Tools as tls
 # tls.Tools().RUN()
 
-# import scripts.CenterOfMass as com
+# import modules.CenterOfMass as com
 # com.CenterOfMass().RUN()
 
 """.format(path = scriptPath)
