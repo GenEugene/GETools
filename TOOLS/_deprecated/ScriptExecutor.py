@@ -19,7 +19,7 @@ def OverlappyRun():
 
 
 def ToolsAddToShelf(*args):
-	Shelf.AddToShelf(
+	Shelf.AddToCurrentShelf(
 		function = """
 from modules import Tools as EugeneTools # TODO add existing method and not string duplicate
 EugeneTools.Tools().RUN()
@@ -28,7 +28,7 @@ EugeneTools.Tools().RUN()
 		annotation = "Bunch of different tools for locator creation, constraining and baking")
 
 def CenterOfMassAddToShelf(*args):
-	Shelf.AddToShelf(
+	Shelf.AddToCurrentShelf(
 		function = """
 from modules import CenterOfMass as EugeneCenterOfMass # TODO add existing method and not string duplicate
 EugeneCenterOfMass.CenterOfMass().RUN()

@@ -1,10 +1,10 @@
 import maya.cmds as cmds
 from functools import partial
+from utils import Baker
 from utils import Colors
+from utils import Constraints
 from utils import Text
 from utils import Selector
-from utils import Baker
-from utils import Constraints
 from utils import Locators
 from modules import GeneralWindow
 
@@ -16,8 +16,9 @@ class CenterOfMass:
 		### WINDOW
 		# self.window_name = "windowCenterOfMass"
 
-		### CENTER OF MASS OBJECTS
+		### CENTER OF MASS
 		self.COMRadius = 10
+		self.minMaxWeight = (0, 100)
 
 		### BODYPARTS MAPPING PERCENTAGE
 		self.partHead = ("head", 7.3)
@@ -43,17 +44,15 @@ class CenterOfMass:
 		if cmds.window(self.window_name, exists = True):
 			cmds.deleteUI(self.window_name)
 		cmds.window(self.window_name, title = self.titleText + " " + self.version, maximizeButton = False, sizeable = False, widthHeight = (windowWidth, windowHeight))
-		cmds.window(self.window_name, edit = True, resizeToFitChildren = True) # , widthHeight = (self.windowWidth, windowHeight)
+		# cmds.window(self.window_name, edit = True, resizeToFitChildren = True) # , widthHeight = (self.windowWidth, windowHeight)
 		layoutMain = cmds.columnLayout(adjustableColumn = False, width = windowWidth) # , h = windowHeight
 
 		self.UILayout(layoutMain)
 
 		cmds.showWindow(self.window_name)
-	
 	def UILayout(self, layoutMain): # instance = None
 		settings = GeneralWindow.GeneralWindow()
 		windowWidthMargin = settings.windowWidthMargin
-		minMaxWeight = settings.minMaxWeight
 
 
 		## CENTER OF MASS LOCATOR
@@ -77,7 +76,7 @@ class CenterOfMass:
 		layoutWeights = cmds.frameLayout(parent = layoutMain, label = "WEIGHTS", collapsable = True) # , backgroundColor = Colors.blackWhite10
 		
 		# CUSTOM WEIGHTS
-		def PartButton(partInfo = ("", 0), minMaxValue = minMaxWeight, onlyValue = False):
+		def PartButton(partInfo = ("", 0), minMaxValue = self.minMaxWeight, onlyValue = False): # TODO possibly has problems with folding
 			value = partInfo[1]
 			text = "{1}" if onlyValue else "{0} {1}"
 			colorValue = 1 - (value / (minMaxValue[1] - minMaxValue[0]))

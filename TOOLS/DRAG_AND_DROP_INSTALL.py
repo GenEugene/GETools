@@ -4,6 +4,8 @@
 import os
 import sys
 import maya.cmds as cmds
+from utils import Shelf
+from utils import Icons
 
 
 # Get script directory path
@@ -50,13 +52,10 @@ gtwindow.GeneralWindow().RUN()
 
 # Drag and Drop function with button creation on current shelf
 def onMayaDroppedPythonFile(*args, **kwargs):
-	currentShelf = cmds.shelfTabLayout("ShelfLayout", query = True, selectTab = True)
-	cmds.shelfButton(
+	Shelf.AddToCurrentShelf(
 		command = buttonCommand,
 		label = buttonLabel,
 		annotation = "GenEugene Animation Tools",
-		sourceType = 'Python',
-		image = scriptPath + "\icons\GET.png",
-		image1 = scriptPath + "\icons\GET.png",
-		parent = currentShelf
+		imagePath = scriptPath + Icons.get,
 	)
+

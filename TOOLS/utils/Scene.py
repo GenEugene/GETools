@@ -1,11 +1,11 @@
 import maya.cmds as cmds
 
 def Reload():
-	currentScene = cmds.file(q = True, sceneName = True)
+	currentScene = cmds.file(query = True, sceneName = True)
 	if(currentScene):
 		cmds.file(currentScene, open = True, force = True)
 	else:
-		cmds.file(new = 1, f = 1)
+		cmds.file(newFile = 1, force = 1)
 
 def ExitMaya():
 	cmds.quit(force = True)

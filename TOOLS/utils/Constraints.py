@@ -45,6 +45,3 @@ def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True,
 			# cmds.cutKey(objectChild, attribute = ("scaleX", "scaleY", "scaleZ"), clear = True, option = "keys")
 			cmds.scaleConstraint(objectParent, objectChild, maintainOffset = maintainOffset) # weight = weight
 		except: print("||||| Can't create scaleConstraint on {0}".format(objectChild))
-
-
-

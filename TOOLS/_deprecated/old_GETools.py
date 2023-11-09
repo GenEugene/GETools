@@ -1,3 +1,5 @@
+### DEPRECATED ###
+
 # GETools v0.1.3
 # Author Eugene (GenEugene) Gataulin tek94@mail.ru tek942@gmail.com
 # Maya 2017-2023

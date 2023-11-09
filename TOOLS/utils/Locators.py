@@ -5,7 +5,7 @@ from utils import Parent
 from utils import Baker
 from utils import Constraints
 
-def Create(name="myLoc", scale=1, hideParent=False, subLocators=False):
+def Create(name = "myLoc", scale = 1, hideParent = False, subLocators = False):
 	locatorCurrent = cmds.spaceLocator(name = Text.SetUniqueFromText(name))[0]
 	cmds.setAttr(locatorCurrent + "Shape.localScaleX", scale)
 	cmds.setAttr(locatorCurrent + "Shape.localScaleY", scale)
@@ -26,7 +26,7 @@ def Create(name="myLoc", scale=1, hideParent=False, subLocators=False):
 
 	return locatorCurrent
 
-def CreateOnSelected(name="myLocMatched", minSelectedCount=1, hideParent=False, subLocators=False):
+def CreateOnSelected(name = "myLocMatched", minSelectedCount = 1, hideParent = False, subLocators = False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minSelectedCount)
 	if (selectedList == None):
@@ -60,7 +60,8 @@ def CreateOnSelected(name="myLocMatched", minSelectedCount=1, hideParent=False, 
 		return selectedList, locatorsList, sublocatorsList
 	cmds.select(locatorsList)
 	return selectedList, locatorsList
-def CreateOnSelectedWithParentConstrain(name="myLocConstrained", minSelectedCount=1, hideParent=False, subLocators=False):
+
+def CreateOnSelectedWithParentConstrain(name = "myLocConstrained", minSelectedCount = 1, hideParent = False, subLocators = False):
 	func_CreateOnSelected = CreateOnSelected(name, minSelectedCount, hideParent, subLocators)
 	if (func_CreateOnSelected == None):
 		return None
@@ -81,7 +82,8 @@ def CreateOnSelectedWithParentConstrain(name="myLocConstrained", minSelectedCoun
 		return selectedList, locatorsList, sublocatorsList
 	cmds.select(locatorsList)
 	return selectedList, locatorsList
-def CreateOnSelectedAndBake(name="myLocBaked", minSelectedCount=1, hideParent=False, subLocators=False, parentToLastSelected=False):
+
+def CreateOnSelectedAndBake(name = "myLocBaked", minSelectedCount = 1, hideParent = False, subLocators = False, parentToLastSelected = False):
 	func_CreateOnSelectedWithParentConstrain = CreateOnSelectedWithParentConstrain(name, minSelectedCount, hideParent, subLocators)
 	if (func_CreateOnSelectedWithParentConstrain == None):
 		return None
@@ -109,7 +111,8 @@ def CreateOnSelectedAndBake(name="myLocBaked", minSelectedCount=1, hideParent=Fa
 		return selectedList, locatorsList, sublocatorsList
 	cmds.select(locatorsList)
 	return selectedList, locatorsList
-def CreateOnSelectedReverseConstraint(name="myLocReverse", minSelectedCount=1, hideParent=False, subLocators=False):
+
+def CreateOnSelectedReverseConstraint(name = "myLocReverse", minSelectedCount = 1, hideParent = False, subLocators = False):
 	func_CreateOnSelectedAndBake = CreateOnSelectedAndBake(name, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators)
 	if (func_CreateOnSelectedAndBake == None):
 		return None
@@ -134,7 +137,7 @@ def CreateOnSelectedReverseConstraint(name="myLocReverse", minSelectedCount=1, h
 	cmds.select(locatorsList)
 	return selectedList, locatorsList
 
-def BakeAsChildrenFromLastSelected(name="locBaked", minSelectedCount=2):
+def BakeAsChildrenFromLastSelected(name = "locBaked", minSelectedCount = 2):
 	objects = CreateOnSelectedAndBake(name = name, minSelectedCount = minSelectedCount, parentToLastSelected = True)
 	if (objects == None):
 		return None

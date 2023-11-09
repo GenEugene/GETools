@@ -3,7 +3,7 @@ from utils import Selector
 from utils import Timeline
 from utils import Constraints
 
-def BakeSelected(classic=True, preserveOutsideKeys=True):
+def BakeSelected(classic = True, preserveOutsideKeys = True):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
@@ -28,7 +28,7 @@ def BakeSelected(classic=True, preserveOutsideKeys=True):
 			cmds.setKeyframe(respectKeyable = True, animated = False, preserveCurveShape = True)
 		Timeline.SetTimeCurrent(timeCurrent)
 
-def BakeSelectedByLastObject(pairOnly=False):
+def BakeSelectedByLastObject(pairOnly = False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(2)
 	if (selectedList == None):

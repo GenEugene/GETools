@@ -1,10 +1,10 @@
 ### NEED TO FINISH THIS MODULE BEFORE USE ###
 
 import maya.cmds as cmds
-from utils import Colors
+# from utils import Colors
 
 class Window:
-	def __init__(self, titleText="My Window Name", windowWidth=150, windowHeight=50, nameWindow="myWindowDefault"):
+	def __init__(self, titleText = "My Window Name", windowWidth = 150, windowHeight = 50, nameWindow = "myWindowDefault"):
 		self.titleText = titleText
 		self.windowWidth = windowWidth
 		self.windowHeight = windowHeight
@@ -23,7 +23,7 @@ class Window:
 		cmds.showWindow(self.nameWindow)
 
 class Checkbox:
-	def __init__(self, label="label", value=False, command="pass", menuReset=True, enabled=True, ccResetAll="pass"):
+	def __init__(self, label = "label", value = False, command = "pass", menuReset = True, enabled = True, ccResetAll = "pass"):
 		self.value = value
 		self.checkbox = cmds.checkBox(label = label, value = value, changeCommand = command, enable = enabled)
 		
@@ -36,7 +36,7 @@ class Checkbox:
 	def Get(self, *args):
 		return cmds.checkBox(self.checkbox, query = True, value = True)
 	
-	def Set(self, value=None, *args):
+	def Set(self, value = None, *args):
 		cmds.checkBox(self.checkbox, edit = True, value = value)
 	
 	def Reset(self, *args):

@@ -6,7 +6,8 @@ def SetTimeCurrent(value):
 
 def GetTimeCurrent():
 	return cmds.currentTime(query = True)
-def GetTimeMinMax(inner=True):
+
+def GetTimeMinMax(inner = True):
 	if inner:
 		min = cmds.playbackOptions(query = True, min = True)
 		max = cmds.playbackOptions(query = True, max = True)
@@ -14,11 +15,12 @@ def GetTimeMinMax(inner=True):
 		min = cmds.playbackOptions(query = True, animationStartTime = True)
 		max = cmds.playbackOptions(query = True, animationEndTime = True)
 	return min, max
+
 def GetSelectedTimeRange():
 	timeSlider = mel.eval('$tmpVar=$gPlayBackSlider')
 	return cmds.timeControl(timeSlider, query = True, rangeArray = True)
 
-def SetTime(mode=0):
+def SetTime(mode = 0, *args):
 	if (mode == 1):
 		cmds.playbackOptions(min = GetTimeCurrent())
 	elif (mode == 2):

@@ -1,6 +1,6 @@
 import maya.cmds as cmds
 
-def ConvertSymbols(text, direction=True):
+def ConvertSymbols(text, direction = True):
 	replaceSymbol1 = ("|", "_RS1_")
 	replaceSymbol2 = (":", "_RS2_")
 
@@ -21,7 +21,7 @@ def SetUniqueFromText(baseName):
 		counter += 1
 	return resultName
 
-def GetShortName(objectWithName, removeSpaces=False):
+def GetShortName(objectWithName, removeSpaces = False):
 	result = objectWithName
 	result = result.split(":")[-1]
 

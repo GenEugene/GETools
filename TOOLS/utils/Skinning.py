@@ -1,7 +1,7 @@
 import maya.cmds as cmds
 from utils import Selector
 
-def CopySkinWeightsFromLastMesh(minSelectedCount=2):
+def CopySkinWeightsFromLastMesh(minSelectedCount = 2):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minSelectedCount)
 	if (selectedList == None):
