@@ -23,13 +23,12 @@ class Window: # TODO
 		cmds.showWindow(self.nameWindow)
 
 class Checkbox:
-	def __init__(self, label = "label", value = False, command = "pass", menuReset = True, enabled = True, ccResetAll = "pass"):
+	def __init__(self, label = "label", value = False, command = "pass", menuReset = True, enabled = True, ccResetAll = "pass", annotation = ""):
 		self.value = value
-		self.checkbox = cmds.checkBox(label = label, value = value, changeCommand = command, enable = enabled)
-		
-		cmds.popupMenu()
+		self.checkbox = cmds.checkBox(label = label, value = value, changeCommand = command, enable = enabled, annotation = annotation)
 		
 		if (menuReset):
+			cmds.popupMenu()
 			cmds.menuItem(label = "reset current", command = self.Reset)
 			cmds.menuItem(label = "reset all", command = ccResetAll)
 	

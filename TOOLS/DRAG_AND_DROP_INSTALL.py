@@ -21,6 +21,7 @@ if scriptPath not in sys.path:
 buttonLabel = "GETools"
 buttonCommand = """
 #########################################
+### Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
 ### GETools
 ### https://github.com/GenEugene/GETools
 #########################################

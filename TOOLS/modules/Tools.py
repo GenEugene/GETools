@@ -12,8 +12,31 @@ from utils import Skinning
 from utils import Timeline
 from modules import GeneralWindow
 
+class ToolsAnnotations:
+	_textReverseConstraint = "After that parent constrain original objects back to locators"
+
+	# Locators
+	hideParent = "Deactivate vsibility on parent locator. \nUsually better o use with \"subLocator\" checkbox activated"
+	subLocator = "Create an additional locator inside the main locator for additional local control"
+	locator = "Create new locator on the world origin"
+	locatorMatch = "Create and match locators to selected objects"
+	locatorParent = "Create and parent constraint locators to selected objects"
+	locatorsBake = "Create locators on selected objects and bake animation"
+	locatorsBakeReverse = "{bake}\n{reverse}".format(bake = locatorsBake, reverse = _textReverseConstraint)
+	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
+	locatorsRelativeReverse = "{relative}\n{reverse}".format(relative = locatorsRelative, reverse = _textReverseConstraint)
+
+	# Constraints
+	_textAllSelectedConstrainToLast = "All selected objects will be constrained to last selected object"
+	constraintReverse = "Reverse the direction of operation from last to first selected"
+	constraintMaintain = "Use maintain offset"
+	constraintParent = "Parent constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
+	constraintPoint = "Point constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
+	constraintOrient = "Orient constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
+	constraintScale = "Scale constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
+
 class Tools:
-	version = "v1.0.0"
+	version = "v0.1.0"
 	title = "TOOLS" + " " + version
 	
 	def __init__(self):
@@ -22,33 +45,33 @@ class Tools:
 		self.checkboxConstraintReverse = None
 		self.checkboxConstraintMaintain = None
 	def UILayout(self, layoutMain):
-		settings = GeneralWindow.GeneralWindow()
+		settings = GeneralWindow.GeneralWindowSettings
 		windowWidthMargin = settings.windowWidthMargin
-		
-		
+
+
 		# LOCATORS
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "CREATE LOCATORS", collapsable = True)
 		#
 		countOffsets = 3
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
-		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass")
-		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass")
+		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass", annotation = ToolsAnnotations.hideParent)
+		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass", annotation = ToolsAnnotations.subLocator)
 		#
 		countOffsets = 3
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
-		cmds.button(label = "Locator", command = self.CreateLocator, backgroundColor = Colors.green10)
-		cmds.button(label = "Locators match", command = self.CreateLocatorMatch, backgroundColor = Colors.green10)
-		cmds.button(label = "Locators parent", command = self.CreateLocatorParent, backgroundColor = Colors.green10)
+		cmds.button(label = "Locator", command = self.CreateLocator, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locator)
+		cmds.button(label = "Locators match", command = self.CreateLocatorMatch, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorMatch)
+		cmds.button(label = "Locators parent", command = self.CreateLocatorParent, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorParent)
 		#
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
-		cmds.button(label = "Locators bake", command = self.CreateLocatorBake, backgroundColor = Colors.orange10)
-		cmds.button(label = "Locators bake + reverse", command = self.CreateLocatorBakeReverse, backgroundColor = Colors.orange50)
+		cmds.button(label = "Locators bake", command = self.CreateLocatorBake, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorsBake)
+		cmds.button(label = "Locators bake + reverse", command = self.CreateLocatorBakeReverse, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.locatorsBakeReverse)
 		#
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
-		cmds.button(label = "Locators relative", command = self.BakeAsChildrenFromLastSelected, backgroundColor = Colors.blue10)
-		cmds.button(label = "Locators relative + reverse", command = self.BakeAsChildrenFromLastSelectedReverse, backgroundColor = Colors.blue50)
+		cmds.button(label = "Locators relative", command = self.BakeAsChildrenFromLastSelected, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsRelative)
+		cmds.button(label = "Locators relative + reverse", command = self.BakeAsChildrenFromLastSelectedReverse, backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsRelativeReverse)
 		
 
 		# CONSTRAINTS
@@ -57,15 +80,15 @@ class Tools:
 		countOffsets = 4
 		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
 		cmds.separator(style = "none")
-		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass")
-		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass")
+		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass", annotation = ToolsAnnotations.constraintReverse)
+		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass", annotation = ToolsAnnotations.constraintMaintain)
 		#
 		countOffsets = 4
 		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
-		cmds.button(label = "Parent", command = self.ConstrainParent, backgroundColor = Colors.red10)
-		cmds.button(label = "Point", command = self.ConstrainPoint, backgroundColor = Colors.red10)
-		cmds.button(label = "Orient", command = self.ConstrainOrient, backgroundColor = Colors.red10)
-		cmds.button(label = "Scale", command = self.ConstrainScale, backgroundColor = Colors.red10)
+		cmds.button(label = "Parent", command = self.ConstrainParent, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintParent)
+		cmds.button(label = "Point", command = self.ConstrainPoint, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintPoint)
+		cmds.button(label = "Orient", command = self.ConstrainOrient, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintOrient)
+		cmds.button(label = "Scale", command = self.ConstrainScale, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintScale)
 
 
 		# RIGGING
