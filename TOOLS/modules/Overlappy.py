@@ -100,7 +100,7 @@ class OverlappySettings:
 
 class Overlappy:
 	version = "v2.0.1"
-	title = "OVERLAPPY" + " " + version
+	title = "!!! IS NOT STABLE YET !!! " + "OVERLAPPY" + " " + version
 
 	### MAIN
 	def __init__(self):
