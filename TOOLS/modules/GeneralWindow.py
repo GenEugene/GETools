@@ -50,6 +50,8 @@ class GeneralWindow:
 
 		self.FrameCollapse(True)
 
+		cmds.help(popupMode = True) # turn on help popups to show descriptions when buttons hovered by mouse
+
 	# UI LAYOUTS
 	def LayoutMenu(self, parentLayout):
 		layoutMenu = cmds.columnLayout(parent = parentLayout, adjustableColumn = True, width = GeneralWindowSettings.windowWidthScroll)
