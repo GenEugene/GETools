@@ -8,6 +8,7 @@ from utils import Baker
 from utils import Colors
 from utils import Constraints
 from utils import Locators
+from utils import Selector
 from utils import Skinning
 from utils import Timeline
 from modules import GeneralWindow
@@ -37,13 +38,13 @@ class ToolsAnnotations:
 
 	# Rigging
 	copySkinWeights = "Copy skin weights from last selected object to all other selected objects"
-	_rotateOrder = " rotate order attribute in channel box for all selected objects"
+	_rotateOrder = "rotate order attribute in channel box for all selected objects"
 	rotateOrderShow = "Show {0}".format(_rotateOrder)
 	rotateOrderHide = "Hide {0}".format(_rotateOrder)
-	_scaleCompensate = " segment scale compensate attribute for all selected joints"
+	_scaleCompensate = "segment scale compensate attribute for all selected joints"
 	scaleCompensateOn = "Activate {0}".format(_scaleCompensate)
 	scaleCompensateOff = "Deactivate {0}".format(_scaleCompensate)
-	_jointDrawStyle = " joint draw style"
+	_jointDrawStyle = "selected joints draw style"
 	jointDrawStyleBone = "Bone {0}".format(_jointDrawStyle)
 	jointDrawStyleHidden = "Hidden {0}".format(_jointDrawStyle)
 
@@ -81,6 +82,13 @@ class Tools:
 		lineHeight = settings.lineHeight
 
 
+		# SELECT
+		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "SELECT", collapsable = True)
+		#
+		countOffsets = 1
+		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "Select Transform Hiererchy", command = Selector.SelectTransformHierarchy, backgroundColor = Colors.blue10) # , annotation = ToolsAnnotations.locator
+		
 		# LOCATORS
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "CREATE LOCATORS", collapsable = True)
 		#

@@ -143,7 +143,7 @@ class Overlappy:
 		self.sliderOffsetX = None
 		self.sliderOffsetY = None
 		self.sliderOffsetZ = None
-	def UICreate(self, layoutMain): # TODO
+	def UICreate(self, layoutMain):
 		settings = GeneralWindow.GeneralWindowSettings
 		windowWidthMargin = settings.windowWidthMargin
 		lineHeight = settings.lineHeight
