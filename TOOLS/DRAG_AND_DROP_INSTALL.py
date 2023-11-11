@@ -37,7 +37,8 @@ if "{path}" not in sys.path:
 	sys.path.insert(0, "{path}")
 
 import modules.GeneralWindow as gtwindow
-gtwindow.GeneralWindow().RUN()
+gtwindow.GeneralWindow().RUN_DOCKED()
+# gtwindow.GeneralWindow().RUN_UNDOCKED()
 
 # import modules.old_GETools as oldget
 # oldget.GETOOLS_class().Start()

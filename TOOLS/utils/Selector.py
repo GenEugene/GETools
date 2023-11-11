@@ -18,8 +18,14 @@ def MultipleObjects(minimalCount = 1):
 		return selectedList
 
 def SelectTransformHierarchy():
+	selected = MultipleObjects()
+	if (selected == None):
+		return False
+
 	cmds.select(hierarchy = True)
 	list = cmds.ls(selection = True, type = "transform", shapes = False)
 	cmds.select(clear = True)
 	for i in range(len(list)):
 		cmds.select(list[i], add = True)
+	
+	return True

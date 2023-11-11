@@ -36,23 +36,24 @@ class CenterOfMass:
 	def __init__(self):
 		self.COMObject = None
 		self.CachedSelectedObjects = None
-	def UILayout(self, layoutMain): # instance = None
+	def UICreate(self, layoutMain): # instance = None
 		settings = GeneralWindow.GeneralWindowSettings
 		windowWidthMargin = settings.windowWidthMargin
+		lineHeight = settings.lineHeight
 
 
 		## CENTER OF MASS LOCATOR
 		layoutCOM = cmds.frameLayout(parent = layoutMain, label = "SETUP", collapsable = True) # , backgroundColor = Colors.blackWhite10
 		#
 		COMButtons1 = 4
-		cmds.gridLayout(numberOfColumns = COMButtons1, cellWidth = windowWidthMargin / COMButtons1)
+		cmds.gridLayout(numberOfColumns = COMButtons1, cellWidth = windowWidthMargin / COMButtons1, cellHeight = lineHeight)
 		cmds.button(label = "CREATE", command = self.COMCreate, backgroundColor = Colors.green50)
 		cmds.button(label = "ACTIVATE", command = self.COMActivate, backgroundColor = Colors.yellow50)
 		cmds.button(label = "SELECT", command = self.COMSelect, backgroundColor = Colors.lightBlue50)
 		cmds.button(label = "CLEAN", command = self.COMClean, backgroundColor = Colors.red50)
 		#
 		COMButtons2 = 3
-		cmds.gridLayout(parent = layoutCOM, numberOfColumns = COMButtons2, cellWidth = windowWidthMargin / COMButtons2)
+		cmds.gridLayout(parent = layoutCOM, numberOfColumns = COMButtons2, cellWidth = windowWidthMargin / COMButtons2, cellHeight = lineHeight)
 		cmds.button(label = "PROJECTOR YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10)
 		cmds.button(label = "PROJECTOR XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10)
 		cmds.button(label = "PROJECTOR XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10)
@@ -71,7 +72,7 @@ class CenterOfMass:
 
 		countCustom = 14
 		cmds.frameLayout(parent = layoutWeights, label = "Manual", collapsable = True) # , backgroundColor = Colors.blackWhite40
-		cmds.gridLayout(numberOfColumns = countCustom, cellWidth = windowWidthMargin / countCustom)
+		cmds.gridLayout(numberOfColumns = countCustom, cellWidth = windowWidthMargin / countCustom, cellHeight = lineHeight)
 		def CustomButton(value):
 			PartButton(("", value), onlyValue = True)
 		CustomButton(0)
@@ -120,19 +121,19 @@ class CenterOfMass:
 		## BAKING
 		countBaking1 = 2
 		layoutBaking = cmds.frameLayout(parent = layoutMain, label = "BAKING", collapsable = True) # , backgroundColor = Colors.blackWhite10
-		cmds.gridLayout(numberOfColumns = countBaking1, cellWidth = windowWidthMargin / countBaking1)
+		cmds.gridLayout(numberOfColumns = countBaking1, cellWidth = windowWidthMargin / countBaking1, cellHeight = lineHeight)
 		#
 		# cmds.button(label = "BAKE TO LAST", command = self.BakeScenario1, backgroundColor = Colors.orange10)
 		cmds.button(label = "BAKE TO COM", command = self.BakeScenario2, backgroundColor = Colors.orange50)
 		cmds.button(label = "BAKE + LINK", command = self.BakeScenario3, backgroundColor = Colors.orange100)
 		#
 		countBaking2 = 2
-		cmds.gridLayout(parent = layoutBaking, numberOfColumns = countBaking2, cellWidth = windowWidthMargin / countBaking2)
+		cmds.gridLayout(parent = layoutBaking, numberOfColumns = countBaking2, cellWidth = windowWidthMargin / countBaking2, cellHeight = lineHeight)
 		cmds.button(label = "LINK MATCH", command = partial(self.LinkCached, False), backgroundColor = Colors.yellow10)
 		cmds.button(label = "LINK OFFSET", command = partial(self.LinkCached, True), backgroundColor = Colors.yellow10)
 		#
 		countBaking3 = 2
-		cmds.gridLayout(parent = layoutBaking, numberOfColumns = countBaking3, cellWidth = windowWidthMargin / countBaking3)
+		cmds.gridLayout(parent = layoutBaking, numberOfColumns = countBaking3, cellWidth = windowWidthMargin / countBaking3, cellHeight = lineHeight)
 		cmds.button(label = "SELECT ROOT", command = self.SelectParent, backgroundColor = Colors.lightBlue50)
 		cmds.button(label = "BAKE ORIGINAL", command = self.BakeCached, backgroundColor = Colors.red50)
 

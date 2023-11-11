@@ -75,32 +75,33 @@ class Tools:
 		self.checkboxLocatorSubLocator = None
 		self.checkboxConstraintReverse = None
 		self.checkboxConstraintMaintain = None
-	def UILayout(self, layoutMain):
+	def UICreate(self, layoutMain):
 		settings = GeneralWindow.GeneralWindowSettings
 		windowWidthMargin = settings.windowWidthMargin
+		lineHeight = settings.lineHeight
 
 
 		# LOCATORS
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "CREATE LOCATORS", collapsable = True)
 		#
 		countOffsets = 3
-		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
-		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass", annotation = ToolsAnnotations.hideParent)
-		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass", annotation = ToolsAnnotations.subLocator)
+		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, command = "pass", menuReset = False, enabled = True, commandResetAll = "pass", annotation = ToolsAnnotations.hideParent)
+		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, command = "pass", menuReset = False, enabled = True, commandResetAll = "pass", annotation = ToolsAnnotations.subLocator)
 		#
 		countOffsets = 3
-		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Locator", command = self.CreateLocator, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locator)
 		cmds.button(label = "Locators match", command = self.CreateLocatorMatch, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorMatch)
 		cmds.button(label = "Locators parent", command = self.CreateLocatorParent, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorParent)
 		#
 		countOffsets = 2
-		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Locators bake", command = self.CreateLocatorBake, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorsBake)
 		cmds.button(label = "Locators bake + reverse", command = self.CreateLocatorBakeReverse, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.locatorsBakeReverse)
 		#
 		countOffsets = 2
-		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Locators relative", command = self.BakeAsChildrenFromLastSelected, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsRelative)
 		cmds.button(label = "Locators relative + reverse", command = self.BakeAsChildrenFromLastSelectedReverse, backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsRelativeReverse)
 		
@@ -109,13 +110,13 @@ class Tools:
 		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = "CONSTRAINTS ( children --> parent )", collapsable = True)
 		#
 		countOffsets = 4
-		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.separator(style = "none")
-		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass", annotation = ToolsAnnotations.constraintReverse)
-		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, command = "pass", menuReset = False, enabled = True, ccResetAll = "pass", annotation = ToolsAnnotations.constraintMaintain)
+		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, command = "pass", menuReset = False, enabled = True, commandResetAll = "pass", annotation = ToolsAnnotations.constraintReverse)
+		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, command = "pass", menuReset = False, enabled = True, commandResetAll = "pass", annotation = ToolsAnnotations.constraintMaintain)
 		#
 		countOffsets = 4
-		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Parent", command = self.ConstrainParent, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintParent)
 		cmds.button(label = "Point", command = self.ConstrainPoint, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintPoint)
 		cmds.button(label = "Orient", command = self.ConstrainOrient, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintOrient)
@@ -126,11 +127,11 @@ class Tools:
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "RIGGING", collapsable = True)
 		#
 		countOffsets = 1
-		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Copy Skin Weights From Last Selected", command = self.CopySkinWeightsFromLastMesh, backgroundColor = Colors.blue50, annotation = ToolsAnnotations.copySkinWeights)
 		#
 		countOffsets = 2
-		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Rotate order - SHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = ToolsAnnotations.rotateOrderShow)
 		cmds.button(label = "Rotate order - HIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = ToolsAnnotations.rotateOrderHide)
 		cmds.button(label = "Scale Compensate - ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.scaleCompensateOn)
@@ -143,13 +144,13 @@ class Tools:
 		layoutBake = cmds.frameLayout(parent = layoutMain, label = "BAKE", collapsable = True)
 		#
 		countOffsets = 3
-		cmds.gridLayout(parent = layoutBake, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutBake, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Bake Classic", command = self.BakeSelectedClassic, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeClassic)
 		cmds.button(label = "Bake Classic Cut", command = self.BakeSelectedClassicCut, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeClassicCut)
 		cmds.button(label = "Bake Custom", command = self.BakeSelectedCustom, backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeCustom)
 		#
 		countOffsets = 1
-		cmds.gridLayout(parent = layoutBake, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutBake, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Bake Selected By Last Object", command = self.BakeSelectedByLastObject, backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast)
 		
 		
@@ -157,16 +158,16 @@ class Tools:
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "ANIMATION", collapsable = True)
 		#
 		countOffsets = 1
-		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Delete Nonkeyable Keys", command = Other.KeysNonkeyableDelete, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteNonkeyableKeys)
 		#
 		countOffsets = 2
-		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Delete Animation", command = Other.DeleteKeys, backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
 		cmds.button(label = "Delete Key Range", command = Other.DeleteKeyRange, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteKeyRange)
 		#
 		countOffsets = 7
-		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets)
+		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "<<", command = partial(Timeline.SetTime, 3), backgroundColor = Colors.green10, annotation = ToolsAnnotations.timelineSetMinOuter)
 		cmds.button(label = "<", command = partial(Timeline.SetTime, 1), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.timelineSetMinInner)
 		cmds.button(label = ">", command = partial(Timeline.SetTime, 2), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.timelineSetMaxInner)

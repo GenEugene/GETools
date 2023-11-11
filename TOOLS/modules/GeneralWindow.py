@@ -15,11 +15,14 @@ class GeneralWindowSettings:
 	dockAllowedAreas = ["left", "right"]
 	dockStartArea = dockAllowedAreas[0]
 	
-	windowHeight = 100
+	windowHeight = 50
 	windowWidth = 320
 	windowWidthScrollSpace = 16
-	# lineHeight = 20
-	margin = 5
+	lineHeight = 26
+	margin = 4
+
+	sliderWidth = (60, 60, 10)
+	sliderWidthMarker = 14
 
 	windowWidthScroll = windowWidth - windowWidthScrollSpace
 	windowWidthMargin = windowWidthScroll - margin * 2
@@ -40,7 +43,7 @@ class GeneralWindow:
 		
 		# layoutRoot = cmds.columnLayout(adjustableColumn = True, width = GeneralWindowSettings.windowWidth)
 		layoutRoot = cmds.menuBarLayout(width = GeneralWindowSettings.windowWidth)
-		self.LayoutMenu(layoutRoot)
+		self.LayoutMenuBar(layoutRoot)
 		
 		layoutScroll = cmds.scrollLayout(parent = layoutRoot, width = GeneralWindowSettings.windowWidth)
 		self.LayoutTools(layoutScroll)
@@ -48,18 +51,15 @@ class GeneralWindow:
 		self.LayoutCenterOfMass(layoutScroll)
 		self.LayoutExperimental(layoutScroll)
 
-		self.FrameCollapse(True)
-
-		cmds.help(popupMode = True) # turn on help popups to show descriptions when buttons hovered by mouse
 
 	# UI LAYOUTS
-	def LayoutMenu(self, parentLayout):
-		layoutMenu = cmds.columnLayout(parent = parentLayout, adjustableColumn = True, width = GeneralWindowSettings.windowWidthScroll)
-		cmds.menuBarLayout(parent = layoutMenu)
-		
-		cmds.menu(label = "File")
+	def LayoutMenuBar(self, parentLayout):
+		cmds.columnLayout("layoutMenuBar", parent = parentLayout, adjustableColumn = True, width = GeneralWindowSettings.windowWidthScroll)
+		cmds.menuBarLayout()
+
 		def SceneReload(self): Scene.Reload()
 		def ExitMaya(self): Scene.ExitMaya()
+		cmds.menu(label = "File")
 		cmds.menuItem(label = "Reload Scene (force)", command = SceneReload)
 		cmds.menuItem(label = "Exit Maya (force)", command = ExitMaya)
 		
@@ -71,8 +71,8 @@ class GeneralWindow:
 
 
 		cmds.menu(label = "Display")
-		cmds.menuItem(label = "Collapse All", command = partial(self.FrameCollapse, True))
-		cmds.menuItem(label = "Expand All", command = partial(self.FrameCollapse, False))
+		cmds.menuItem(label = "Collapse All", command = partial(self.FramesCollapse, True))
+		cmds.menuItem(label = "Expand All", command = partial(self.FramesCollapse, False))
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Dock Left", command = partial(self.DockSide, GeneralWindowSettings.dockAllowedAreas[0]))
 		cmds.menuItem(label = "Dock Right", command = partial(self.DockSide, GeneralWindowSettings.dockAllowedAreas[1]))
@@ -106,18 +106,21 @@ class GeneralWindow:
 		cmds.menuItem(label = "Share your Ideas", command = LinkShareIdeas)
 		cmds.menuItem(label = "Report a Problem", command = LinkReport)
 	def LayoutTools(self, parentLayout):
-		self.frameTools = cmds.frameLayout(parent = parentLayout, label = tls.Tools.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
-		tls.Tools().UILayout(self.frameTools)
+		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = tls.Tools.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
+		tls.Tools().UICreate(self.frameTools)
 	def LayoutOverlappy(self, parentLayout):
-		self.frameOverlappy = cmds.frameLayout(parent = parentLayout, label = ovlp.Overlappy.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
-		ovlp.Overlappy().UILayout(self.frameOverlappy)
+		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = ovlp.Overlappy.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
+		ovlp.Overlappy().UICreate(self.frameOverlappy)
 	def LayoutCenterOfMass(self, parentLayout):
-		self.frameCenterOfMass = cmds.frameLayout(parent = parentLayout, label = com.CenterOfMass.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
-		com.CenterOfMass().UILayout(self.frameCenterOfMass)
+		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = com.CenterOfMass.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
+		com.CenterOfMass().UICreate(self.frameCenterOfMass)
 	def LayoutExperimental(self, parentLayout):
-		self.frameExperimental = cmds.frameLayout(parent = parentLayout, label = "EXPERIMENTAL", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
+		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "EXPERIMENTAL", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
+		cmds.popupMenu()
+		cmds.menuItem(label = "Right-Click") # TODO
+		
 		countOffsets = 1
-		cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = GeneralWindowSettings.windowWidthMargin / countOffsets)
+		cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = GeneralWindowSettings.windowWidthMargin / countOffsets, cellHeight = GeneralWindowSettings.lineHeight)
 
 		cmds.button(label = "Motion Trail", command = MotionTrail.Create, backgroundColor = Colors.orange10)
 		cmds.popupMenu()
@@ -137,7 +140,7 @@ class GeneralWindow:
 		dockExists = cmds.dockControl(GeneralWindowSettings.dockName, query = True, exists = True)
 		if dockExists:
 			cmds.deleteUI(GeneralWindowSettings.dockName, control = True)
-			self.CreateUI()
+			self.RunUI()
 			cmds.showWindow(GeneralWindowSettings.windowName)
 			print("{0} undocked".format(GeneralWindow.title))
 		else:
@@ -151,18 +154,29 @@ class GeneralWindow:
 		print("{0} docked {1}".format(GeneralWindow.title, areaSide))
 	
 	# FRAME COLLAPSE
-	def FrameCollapse(self, value, *args):
+	def FramesCollapse(self, value, *args):
 		cmds.frameLayout(self.frameTools, edit = True, collapse = value)
 		cmds.frameLayout(self.frameOverlappy, edit = True, collapse = value)
 		cmds.frameLayout(self.frameCenterOfMass, edit = True, collapse = value)
 		cmds.frameLayout(self.frameExperimental, edit = True, collapse = value)
 		# TODO collapse function for sub frames
 
+
 	# EXECUTION
-	def RUN(self, *args):
-		if (self.DockCleanup()):
-			print("GETools window closed")
-			return
+	def RunUI(self, *args):
 		self.CreateUI()
+		self.FramesCollapse(True)
+	
+	def TryRunUI(self, *args):
+		self.DockCleanup()
+		self.RunUI()
+		cmds.help(popupMode = True) # turn on help popups to show descriptions when buttons hovered by mouse
+	
+	def RUN_DOCKED(self, *args): # use for shelf button
+		self.TryRunUI()
 		self.DockSide(GeneralWindowSettings.dockStartArea)
+	
+	def RUN_UNDOCKED(self, *args): # use for shelf button
+		self.TryRunUI()
+		cmds.showWindow(GeneralWindowSettings.windowName)
 
