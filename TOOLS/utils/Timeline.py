@@ -3,6 +3,32 @@
 import maya.cmds as cmds
 import maya.mel as mel
 
+class TimeRangeHandler:
+	def __init__(self):
+		self.values = [0, 0, 0, 0, 0] # current, minOuter, minInner, maxInner, maxOuter
+	
+	def Scan(self, *args):
+		self.values[0] = cmds.currentTime(query = True)
+		self.values[1] = cmds.playbackOptions(query = True, animationStartTime = True)
+		self.values[2] = cmds.playbackOptions(query = True, min = True)
+		self.values[3] = cmds.playbackOptions(query = True, max = True)
+		self.values[4] = cmds.playbackOptions(query = True, animationEndTime = True)
+	
+	def SetCurrent(self, value, *args):
+		cmds.currentTime(value)
+	
+	def SetCurrentCached(self, *args):
+		cmds.currentTime(self.values[0])
+	
+	def SetMin(self, value, *args):
+		cmds.playbackOptions(edit = True, min = value)
+	
+	def Reset(self): # , *args
+		cmds.playbackOptions(edit = True, animationStartTime = self.values[1], min = self.values[2], max = self.values[3], animationEndTime = self.values[4])
+		cmds.currentTime(self.values[2])
+
+
+# Utilities
 def SetTimeCurrent(value):
 	cmds.currentTime(value, edit = True, update = True)
 

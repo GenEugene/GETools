@@ -17,7 +17,7 @@ def MultipleObjects(minimalCount = 1):
 	else:
 		return selectedList
 
-def SelectTransformHierarchy():
+def SelectTransformHierarchy(*args):
 	selected = MultipleObjects()
 	if (selected == None):
 		return False

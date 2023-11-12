@@ -2,7 +2,7 @@
 
 import maya.cmds as cmds
 from utils import Colors
-from utils import Text
+from modules import GeneralWindow
 
 class Window: # TODO
 	def __init__(self, titleText = "My Window Name", windowWidth = 150, windowHeight = 50, nameWindow = "myWindowDefault"):
@@ -31,16 +31,16 @@ class Checkbox:
 			enabled = True,
 			annotation = "",
 			command = "pass",
-			commandResetAll = "pass",
-		):
+			# commandResetAll = "",
+			):
 		
-		self.value = value
+		self.valueDefault = value
 		self.checkbox = cmds.checkBox(label = label, value = value, changeCommand = command, enable = enabled, annotation = annotation)
-		
+
 		if (menuReset):
 			cmds.popupMenu()
-			cmds.menuItem(label = "reset current", command = self.Reset)
-			cmds.menuItem(label = "reset all", command = commandResetAll)
+			cmds.menuItem(label = "reset", command = self.Reset)
+			# cmds.menuItem(label = "reset all", command = commandResetAll)
 	
 	def Get(self, *args):
 		return cmds.checkBox(self.checkbox, query = True, value = True)
@@ -49,15 +49,12 @@ class Checkbox:
 		cmds.checkBox(self.checkbox, edit = True, value = value)
 	
 	def Reset(self, *args):
-		cmds.checkBox(self.checkbox, edit = True, value = self.value)
+		cmds.checkBox(self.checkbox, edit = True, value = self.valueDefault)
 
 class Slider:
 	def __init__(self,
 			parent = None,
 			label = "label",
-			startName = "slider",
-			attribute = "",
-			nameAdd = True,
 			value = 0,
 			minMax = [0, 1, 0, 1],
 			precision = 3,
@@ -65,25 +62,23 @@ class Slider:
 			widthMarker = 10,
 			columnWidth3 = (5, 5, 5),
 			menuReset = True,
-			command = "",
+			command = "pass",
 			):
 		
-		self.value = value
+		self.valueDefault = value
 		self.valueCached = 0;
-		self.attribute = attribute
-		self.startName = startName
-		self.addSelectedName = nameAdd
 		self.command = command
 		self.precision = precision
 		self.markerColorDefault = Colors.blackWhite50
 		self.markerColorChanged = Colors.blue50
 		
 		self.layoutFlow = cmds.flowLayout(parent = parent)
-		self.marker = cmds.button("sliderMarker", parent = self.layoutFlow, label = "", command = self.Reset, enable = 1, width = widthMarker, backgroundColor = self.markerColorDefault)
+		self.marker = cmds.button("sliderButtonMarker", parent = self.layoutFlow, label = "", command = self.Reset, width = widthMarker, backgroundColor = self.markerColorDefault)
 		self.slider = cmds.floatSliderGrp(
+			"slider",
 			parent = self.layoutFlow,
 			label = " " + label,
-			value = self.value,
+			value = self.valueDefault,
 			fieldMinValue = minMax[0],
 			fieldMaxValue = minMax[1],
 			minValue = minMax[2],
@@ -93,10 +88,13 @@ class Slider:
 			columnAlign = (1, "left"),
 			columnWidth3 = columnWidth3,
 			enableKeyboardFocus = True,
-			changeCommand = self.command,
-			dragCommand = self.command,
+			changeCommand = self.Set,
+			dragCommand = self.Set,
 			field = True,
 			)
+		
+		windowName = GeneralWindow.GeneralWindowSettings.windowName
+		self.slider = self.slider.replace(windowName + "|", "") # fix for docked window only. Don't know how to avoid issue
 		
 		if (menuReset):
 			cmds.popupMenu(parent = self.slider)
@@ -105,42 +103,25 @@ class Slider:
 	def Get(self, *args):
 		return cmds.floatSliderGrp(self.slider, query = True, value = True)
 	
-	def Set(self, value = None, *args): # FIXME
+	def Set(self, value = None, *args):
 		if (value == None):
 			_value = cmds.floatSliderGrp(self.slider, query = True, value = True)
 		else:
 			_value = value
 			cmds.floatSliderGrp(self.slider, edit = True, value = _value)
-			self.command()
+			# self.command()
 		
 		# Marker update
-		if (_value != self.value):
+		if (_value != self.valueDefault):
 			cmds.button(self.marker, edit = True, backgroundColor = self.markerColorChanged)
 		else:
 			cmds.button(self.marker, edit = True, backgroundColor = self.markerColorDefault)
 		
-		# # Check selected
-		# # _selectedName = _OVERLAPPY.selected
-		# # if (_selectedName == ""):
-		# # 	return
-		
-		# Add suffix or not
-		# _selectedName = Text.ConvertSymbols(_selectedName)
-		# if (self.addSelectedName):
-		# 	_selectedName = self.startName + _selectedName
-		# else:
-		# 	_selectedName = self.startName
-		
-		# Set attribute
-		# try:
-		# 	cmds.setAttr(_selectedName + self.attribute, _value)
-		# except:
-		# 	print("Can't set value")
-		# 	pass
+		self.command()
 	
-	def Reset(self, *args): # FIXME
+	def Reset(self, *args):
 		cmds.button(self.marker, edit = True, backgroundColor = self.markerColorDefault)
-		cmds.floatSliderGrp(self.slider, edit = True, value = self.value)
+		cmds.floatSliderGrp(self.slider, edit = True, value = self.valueDefault)
 		self.command()
 	
 	# def Scan(self, *args): # TODO rework or remove
@@ -161,7 +142,7 @@ class Slider:
 	# 		# print("Can't get value")
 	# 		return
 	# 	# Marker update
-	# 	if (round(_value, 3) != self.value):
+	# 	if (round(_value, 3) != self.valueDefault):
 	# 		cmds.button(self._marker, edit = True, backgroundColor = self.markerColorChanged)
 	# 	else:
 	# 		cmds.button(self._marker, edit = True, backgroundColor = self.markerColorDefault)

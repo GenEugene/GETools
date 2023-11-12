@@ -68,7 +68,7 @@ class ToolsAnnotations:
 	timelineFocusRange = "Set timeline inner range on selected range by mouse"
 
 class Tools:
-	version = "v0.1.0"
+	version = "v0.1.1"
 	title = "TOOLS" + " " + version
 	
 	def __init__(self):
@@ -94,8 +94,8 @@ class Tools:
 		#
 		countOffsets = 3
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, command = "pass", menuReset = False, enabled = True, commandResetAll = "pass", annotation = ToolsAnnotations.hideParent)
-		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, command = "pass", menuReset = False, enabled = True, commandResetAll = "pass", annotation = ToolsAnnotations.subLocator)
+		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.hideParent)
+		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.subLocator)
 		#
 		countOffsets = 3
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
@@ -120,8 +120,8 @@ class Tools:
 		countOffsets = 4
 		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.separator(style = "none")
-		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, command = "pass", menuReset = False, enabled = True, commandResetAll = "pass", annotation = ToolsAnnotations.constraintReverse)
-		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, command = "pass", menuReset = False, enabled = True, commandResetAll = "pass", annotation = ToolsAnnotations.constraintMaintain)
+		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.constraintReverse)
+		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.constraintMaintain)
 		#
 		countOffsets = 4
 		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
