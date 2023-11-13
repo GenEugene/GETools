@@ -14,7 +14,8 @@ from utils import Timeline
 from modules import GeneralWindow
 
 class ToolsAnnotations:
-	_textReverseConstraint = "After that parent constrain original objects back to locators"
+	# Other
+	selectTransformHiererchy = "Select all children \"transform\" objects. \nWorks with multiple selected objects"
 
 	# Locators
 	hideParent = "Deactivate vsibility on parent locator. \nUsually better o use with \"subLocator\" checkbox activated"
@@ -23,9 +24,10 @@ class ToolsAnnotations:
 	locatorMatch = "Create and match locators to selected objects"
 	locatorParent = "Create and parent constraint locators to selected objects"
 	locatorsBake = "Create locators on selected objects and bake animation"
-	locatorsBakeReverse = "{bake}\n{reverse}".format(bake = locatorsBake, reverse = _textReverseConstraint)
+	_reverseConstraint = "After that parent constrain original objects back to locators"
+	locatorsBakeReverse = "{bake}\n{reverse}".format(bake = locatorsBake, reverse = _reverseConstraint)
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
-	locatorsRelativeReverse = "{relative}\n{reverse}".format(relative = locatorsRelative, reverse = _textReverseConstraint)
+	locatorsRelativeReverse = "{relative}\n{reverse}".format(relative = locatorsRelative, reverse = _reverseConstraint)
 
 	# Constraints
 	_textAllSelectedConstrainToLast = "All selected objects will be constrained to last selected object"
@@ -88,7 +90,7 @@ class Tools:
 		#
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Select Transform Hiererchy", command = Selector.SelectTransformHierarchy, backgroundColor = Colors.blue10) # , annotation = ToolsAnnotations.locator
+		cmds.button(label = "Select Transform Hiererchy", command = Selector.SelectTransformHierarchy, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.selectTransformHiererchy)
 		
 		# LOCATORS
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "CREATE LOCATORS", collapsable = True)

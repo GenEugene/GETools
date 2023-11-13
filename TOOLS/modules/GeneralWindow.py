@@ -69,6 +69,7 @@ class GeneralWindow:
 		# cmds.menuItem(label = "Save Settings")
 		# cmds.menuItem(label = "Load Settings")
 		# cmds.menuItem(label = "Reset Settings")
+		# TODO reload script button
 
 
 		cmds.menu(label = "Display")

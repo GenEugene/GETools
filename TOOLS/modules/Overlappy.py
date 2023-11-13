@@ -13,44 +13,47 @@ from utils import Timeline
 from modules import GeneralWindow
 
 class OverlappyAnnotations:
-	goal_smooth_ann = "You can increase the maximum limit to 10.0 by entering the value manually"
-	time_scale_ann = "You can increase the maximum limit to 10.0 by entering the value manually"
-	goal_weight_ann = ""
-	
-	T_reset_ann = 'Reset all translation values'
-	R_reset_ann = 'Reset all rotation values'
-	CH1_reset_ann = 'Reset options'
-	resetAll_ann = 'Reset all values and options in script window'
-	
-	aim_reverse_ann = \
-	'Reorientation aim for rotation simulation. May be useful\
-	\nwhen rotation bake animation with incorrect flipped rotations.'
-	
-	cycle_checkbox_ann = \
-	'USE 60+ FPS\
-	\n\nStrong recomended to use animation minimum\
-	\nwith 1 phase before and after animation cycle.\
-	\n\nSimple way to do it just use pre and post infinity\
-	\nwith "Cycle" option in graph editor.\
-	\n\nAfter baking loop animation on layer will be set cycle infinity'
-	
-	hierarchyMode_checkbox_ann = \
-	'To use it, just select the root objects only.\n\
-	\nThe script will find all hierarchies of transforms inside the selected,\
-	\nand the simulation will process each chain separately'
-	
-	delete_ann = 'Delete main layer "OVERLAPPY" with all layers inside'
-	
-	hierarchy_ann = \
-	'Select transforms hierarchy (without shapes)\
-	\nIf you use this button, turn off Hierarchy checkbox'
-	
-	move_ann = \
-	'Move all keyed layers from "OVERLAPPY" layer to "SAVED_Overlaps".\
-	\n\nDELETE button cant delete saved layers.'
-	
-	loopFactor_ann = 'WARNING !!! More time will be spent to simulation loops\
-	\n\nNeed to increase value, if the first and the last frames dont match well enough'
+	# Setup
+	setup = "setup"
+	setupDelete = "setupDelete"
+
+	# Baking
+	translation = "translation"
+	translationWithOffset = "translationWithOffset"
+	rotation = "rotation"
+	comboTranslateRotate = "comboTranslateRotate"
+	comboRotateTranslate = "comboRotateTranslate"
+	scale = "scale"
+
+	# Layers
+	layerDeleteBase = "Delete BaseAnimation layer"
+	layerDeleteTemp = "Delete Temp layer"
+	layerDeleteSafe = "Delete Safe layer"
+	layerMoveTemp = "Move to Safe layer"
+	layerMoveSafe = "Move to Temp layer"
+
+	# Options
+	checkboxHierarchy = "Hierarchy"
+	checkboxLayer = "Layer"
+	checkboxLoop = "Loop"
+	checkboxClean = "Clean"
+
+	# Particle
+	particleRadius = "Radius"
+	particleConserve = "Conserve"
+	particleDrag = "Drag"
+	particleDamp = "Damp"
+	particleGoalSmooth = "G.Smooth"
+	particleGoalWeight = "G.Weight"
+	particleTimeScale = "Time Scale"
+
+	# Offset
+	offsetMirrorX = "Mirror X"
+	offsetMirrorY = "Mirror Y"
+	offsetMirrorZ = "Mirror Z"
+	offsetX = "Move X"
+	offsetY = "Move Y"
+	offsetZ = "Move Z"
 
 class OverlappySettings:
 	# NAMING
@@ -98,9 +101,9 @@ class OverlappySettings:
 	constraintsNames = ("parentConstraint", "pointConstraint", "orientConstraint", "scaleConstraint", "aimConstraint")
 
 class Overlappy:
-	version = "v2.0.1"
+	version = "v2.0.2"
 	name = "OVERLAPPY"
-	title = "[UNSTABLE] " + name + " " + version
+	title = name + " " + version
 
 	def __init__(self):
 		# VALUES
@@ -119,7 +122,6 @@ class Overlappy:
 		# LAYOUTS
 		self.windowMain = None
 		self.layoutButtons = None
-		# self.layoutBaking = None
 		self.layoutLayers = None
 		self.layoutOptions = None
 		self.layoutSimulation = None
@@ -181,9 +183,9 @@ class Overlappy:
 		count = 2
 		cmds.gridLayout(parent = self.layoutButtons, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 
-		cmds.button(label = "SETUP", command = self._SetupInit, backgroundColor = Colors.green10)
+		cmds.button(label = "SETUP", command = self._SetupInit, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
 		# cmds.button(label = "Scan setup into scene", command = self._SetupScan, backgroundColor = Colors.green10)
-		cmds.button(label = "Delete setup", command = self._SetupDelete, backgroundColor = Colors.green10)
+		cmds.button(label = "DELETE", command = self._SetupDelete, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupDelete)
 
 
 		# BAKING
@@ -191,35 +193,35 @@ class Overlappy:
 		count = 3
 		cmds.gridLayout(parent = self.layoutButtons, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 
-		cmds.button(label = "TRANSLATION", command = partial(self._BakeVariants, 1), backgroundColor = Colors.orange10)
+		cmds.button(label = "TRANSLATION", command = partial(self._BakeVariants, 1), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.translation)
 		cmds.popupMenu()
 		cmds.menuItem(label = "translate with offset", command = partial(self._BakeVariants, 2)) # TODO popup message if offsets are zero
 		
-		cmds.button(label = "ROTATION", command = partial(self._BakeVariants, 3), backgroundColor = Colors.orange10) # TODO popup message if offsets are zero
+		cmds.button(label = "ROTATION", command = partial(self._BakeVariants, 3), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.rotation) # TODO popup message if offsets are zero
 
-		cmds.button(label = "COMBO", command = partial(self._BakeVariants, 4), backgroundColor = Colors.orange10) # TODO popup message if offsets are zero
+		cmds.button(label = "COMBO", command = partial(self._BakeVariants, 4), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.comboTranslateRotate) # TODO popup message if offsets are zero
 		cmds.popupMenu()
 		cmds.menuItem(label = "rotate + translate", command = partial(self._BakeVariants, 5))
 
-		# cmds.button(label = "SCALE", command = partial(self._BakeVariants, 6), backgroundColor = Colors.orange10) # TODO implement scale simulation
+		# cmds.button(label = "SCALE", command = partial(self._BakeVariants, 6), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.scale) # TODO implement scale simulation
 		pass
 
 	def UILayoutLayers(self, layoutMain, windowWidthMargin, lineHeight):
 		self.layoutLayers = cmds.frameLayout("layoutLayers", label = "LAYERS", parent = layoutMain, collapsable = True)
 		
-		count = 2
-		cmds.gridLayout(parent = self.layoutLayers, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
-		cmds.button(label = "Delete Temp layer", command = partial(self._LayerDelete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10)
-		cmds.button(label = "Move to Safe layer", command = partial(self._LayerMoveToSafeOrTemp, True), backgroundColor = Colors.blue10)
-
 		count = 1
 		cmds.gridLayout(parent = self.layoutLayers, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
-		cmds.button(label = "Delete BaseAnimation layer", command = partial(self._LayerDelete, "BaseAnimation"), backgroundColor = Colors.red50)
+		cmds.button(label = "Delete BaseAnimation layer", command = partial(self._LayerDelete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteBase)
+
+		count = 2
+		cmds.gridLayout(parent = self.layoutLayers, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.button(label = "Delete Temp layer", command = partial(self._LayerDelete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
+		cmds.button(label = "Move to Safe layer", command = partial(self._LayerMoveToSafeOrTemp, True), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveTemp)
 		
 		count = 2
 		cmds.gridLayout(parent = self.layoutLayers, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
-		cmds.button(label = "Delete Safe layer", command = partial(self._LayerDelete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10)
-		cmds.button(label = "Move to Temp layer", command = partial(self._LayerMoveToSafeOrTemp, False), backgroundColor = Colors.blue10)
+		cmds.button(label = "Delete Safe layer", command = partial(self._LayerDelete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
+		cmds.button(label = "Move to Temp layer", command = partial(self._LayerMoveToSafeOrTemp, False), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveSafe)
 	
 	def UILayoutOptions(self, layoutMain, windowWidthMargin, lineHeight):
 		self.layoutOptions = cmds.frameLayout("layoutOptions", label = "OPTIONS", parent = layoutMain, collapsable = True)
@@ -229,10 +231,10 @@ class Overlappy:
 		
 		# _optionsResetAll = self._ResetOptions # , commandResetAll = _optionsResetAll
 		
-		self.checkboxHierarchy = UI.Checkbox(label = "Hierarchy", value = OverlappySettings.checkboxesOptions[0], menuReset = True)
-		self.checkboxLayer = UI.Checkbox(label = "Layer", value = OverlappySettings.checkboxesOptions[1], menuReset = True)
-		self.checkboxLoop = UI.Checkbox(label = "Loop", value = OverlappySettings.checkboxesOptions[2], menuReset = True) # FIXME make cycle infinity before bake
-		self.checkboxClean = UI.Checkbox(label = "Clean", value = OverlappySettings.checkboxesOptions[3], menuReset = True)
+		self.checkboxHierarchy = UI.Checkbox(label = "Hierarchy", value = OverlappySettings.checkboxesOptions[0], menuReset = True, annotation = OverlappyAnnotations.checkboxHierarchy)
+		self.checkboxLayer = UI.Checkbox(label = "Layer", value = OverlappySettings.checkboxesOptions[1], menuReset = True, annotation = OverlappyAnnotations.checkboxLayer)
+		self.checkboxLoop = UI.Checkbox(label = "Loop", value = OverlappySettings.checkboxesOptions[2], menuReset = True, annotation = OverlappyAnnotations.checkboxLoop) # FIXME make cycle infinity before bake
+		self.checkboxClean = UI.Checkbox(label = "Clean", value = OverlappySettings.checkboxesOptions[3], menuReset = True, annotation = OverlappyAnnotations.checkboxClean)
 	
 	def UILayoutParticleAttributes(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
 		self.layoutSimulation = cmds.frameLayout("layoutParticleSliders", label = "PARTICLE ATTRIBUTES", parent = layoutMain, collapsable = True)
@@ -249,6 +251,7 @@ class Overlappy:
 			columnWidth3 = sliderWidth,
 			command = commandDefault,
 			label = "Radius",
+			annotation = OverlappyAnnotations.particleRadius,
 			value = OverlappySettings.particleRadius,
 			minMax = OverlappySettings.rangePRadius,
 			menuReset = True,
@@ -265,6 +268,7 @@ class Overlappy:
 			columnWidth3 = sliderWidth,
 			command = commandDefault,
 			label = "Conserve",
+			annotation = OverlappyAnnotations.particleConserve,
 			value = OverlappySettings.particleConserve,
 			minMax = OverlappySettings.rangePConserve,
 			menuReset = True,
@@ -277,6 +281,7 @@ class Overlappy:
 			columnWidth3 = sliderWidth,
 			command = commandDefault,
 			label = "Drag",
+			annotation = OverlappyAnnotations.particleDrag,
 			value = OverlappySettings.particleDrag,
 			minMax = OverlappySettings.rangePDrag,
 			menuReset = True,
@@ -289,6 +294,7 @@ class Overlappy:
 			columnWidth3 = sliderWidth,
 			command = commandDefault,
 			label = "Damp",
+			annotation = OverlappyAnnotations.particleDamp,
 			value = OverlappySettings.particleDamp,
 			minMax = OverlappySettings.rangePDamp,
 			menuReset = True,
@@ -301,6 +307,7 @@ class Overlappy:
 			columnWidth3 = sliderWidth,
 			command = commandDefault,
 			label = "G.Smooth",
+			annotation = OverlappyAnnotations.particleGoalSmooth,
 			value = OverlappySettings.goalSmooth,
 			minMax = OverlappySettings.rangeGSmooth,
 			menuReset = True,
@@ -313,6 +320,7 @@ class Overlappy:
 			columnWidth3 = sliderWidth,
 			command = commandDefault,
 			label = "G.Weight",
+			annotation = OverlappyAnnotations.particleGoalWeight,
 			value = OverlappySettings.goalWeight,
 			minMax = OverlappySettings.rangeGWeight,
 			menuReset = True,
@@ -325,6 +333,7 @@ class Overlappy:
 			columnWidth3 = sliderWidth,
 			command = commandDefault,
 			label = "Time Scale",
+			annotation = OverlappyAnnotations.particleTimeScale,
 			value = OverlappySettings.nucleusTimeScale,
 			minMax = OverlappySettings.rangeNTimeScale,
 			menuReset = True,
@@ -339,9 +348,9 @@ class Overlappy:
 		cmds.gridLayout(parent = self.layoutOffset, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 		# cmds.separator()
 		# , commandResetAll = self._ResetOffsets
-		self.checkboxMirrorX = UI.Checkbox(label = "Mirror X", command = partial(self._OffsetsUpdate, True))
-		self.checkboxMirrorY = UI.Checkbox(label = "Mirror Y", command = partial(self._OffsetsUpdate, True))
-		self.checkboxMirrorZ = UI.Checkbox(label = "Mirror Z", command = partial(self._OffsetsUpdate, True))
+		self.checkboxMirrorX = UI.Checkbox(label = "Mirror X", command = partial(self._OffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorX)
+		self.checkboxMirrorY = UI.Checkbox(label = "Mirror Y", command = partial(self._OffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorY)
+		self.checkboxMirrorZ = UI.Checkbox(label = "Mirror Z", command = partial(self._OffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorZ)
 		
 
 		layoutSliders = cmds.gridLayout(parent = self.layoutOffset, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
@@ -354,7 +363,8 @@ class Overlappy:
 			widthMarker = sliderWidthMarker,
 			columnWidth3 = sliderWidth,
 			command = commandDefault,
-			label = "   Local X",
+			label = "   Move X",
+			annotation = OverlappyAnnotations.offsetX,
 			minMax = OverlappySettings.rangeOffsetX,
 			menuReset = True,
 		)
@@ -365,7 +375,8 @@ class Overlappy:
 			widthMarker = sliderWidthMarker,
 			columnWidth3 = sliderWidth,
 			command = commandDefault,
-			label = "   Local Y",
+			label = "   Move Y",
+			annotation = OverlappyAnnotations.offsetY,
 			minMax = OverlappySettings.rangeOffsetY,
 			menuReset = True,
 		)
@@ -376,7 +387,8 @@ class Overlappy:
 			widthMarker = sliderWidthMarker,
 			columnWidth3 = sliderWidth,
 			command = commandDefault,
-			label = "   Local Z",
+			label = "   Move Z",
+			annotation = OverlappyAnnotations.offsetZ,
 			minMax = OverlappySettings.rangeOffsetZ,
 			menuReset = True,
 		)

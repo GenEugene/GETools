@@ -3,7 +3,7 @@
 
 import os
 import sys
-import maya.cmds as cmds
+# import maya.cmds as cmds
 from utils import Shelf
 from utils import Icons
 
@@ -19,8 +19,8 @@ if scriptPath not in sys.path:
 
 # Button settings
 buttonLabel = "GETools"
-buttonCommand = """
-#########################################
+buttonCommand = \
+"""#########################################
 ### Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
 ### GETools
 ### https://github.com/GenEugene/GETools
@@ -38,17 +38,6 @@ if "{path}" not in sys.path:
 
 import modules.GeneralWindow as gtwindow
 gtwindow.GeneralWindow().RUN_DOCKED()
-# gtwindow.GeneralWindow().RUN_UNDOCKED()
-
-# import modules.old_GETools as oldget
-# oldget.GETOOLS_class().Start()
-
-# import modules.Tools as tls
-# tls.Tools().RUN()
-
-# import modules.CenterOfMass as com
-# com.CenterOfMass().RUN()
-
 """.format(path = scriptPath)
 
 

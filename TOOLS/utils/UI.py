@@ -55,6 +55,7 @@ class Slider:
 	def __init__(self,
 			parent = None,
 			label = "label",
+			annotation = "",
 			value = 0,
 			minMax = [0, 1, 0, 1],
 			precision = 3,
@@ -73,11 +74,12 @@ class Slider:
 		self.markerColorChanged = Colors.blue50
 		
 		self.layoutFlow = cmds.flowLayout(parent = parent)
-		self.marker = cmds.button("sliderButtonMarker", parent = self.layoutFlow, label = "", command = self.Reset, width = widthMarker, backgroundColor = self.markerColorDefault)
+		self.marker = cmds.button("sliderButtonMarker", parent = self.layoutFlow, label = "", command = self.Reset, width = widthMarker, backgroundColor = self.markerColorDefault, annotation = "Reset value")
 		self.slider = cmds.floatSliderGrp(
 			"slider",
 			parent = self.layoutFlow,
 			label = " " + label,
+			annotation = annotation,
 			value = self.valueDefault,
 			fieldMinValue = minMax[0],
 			fieldMaxValue = minMax[1],
