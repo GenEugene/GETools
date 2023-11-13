@@ -14,38 +14,38 @@ from modules import GeneralWindow
 
 class OverlappyAnnotations:
 	# Setup
-	setup = "setup"
-	setupDelete = "setupDelete"
+	setup = "Create particle rig for first selected object. Use this step for setup settings. \nSetup runs every time for each selected object."
+	setupDelete = "Delete particle rig if exists"
 
 	# Baking
-	translation = "translation"
-	translationWithOffset = "translationWithOffset"
-	rotation = "rotation"
-	comboTranslateRotate = "comboTranslateRotate"
-	comboRotateTranslate = "comboRotateTranslate"
-	scale = "scale"
+	translation = "Bake simulation for translation attributes"
+	translationWithOffset = "Bake simulation for translation attributes with offset"
+	rotation = "Bake simulation for rotation attributes"
+	comboTranslateRotate = "Bake translation and rotation in order"
+	comboRotateTranslate = "Bake rotation and translation in order"
+	scale = "Bake simulation for scale attributes"
 
 	# Layers
-	layerDeleteBase = "Delete BaseAnimation layer"
-	layerDeleteTemp = "Delete Temp layer"
-	layerDeleteSafe = "Delete Safe layer"
-	layerMoveTemp = "Move to Safe layer"
-	layerMoveSafe = "Move to Temp layer"
+	layerDeleteBase = "All animation layers will be deleted"
+	layerDeleteTemp = "Only Temp layer and child layers will be deleted"
+	layerDeleteSafe = "Only Safe layer and child layers will be deleted"
+	layerMoveTemp = "Move Temp layer sublayers to Safe layer"
+	layerMoveSafe = "Move Safe layer sublayers to Temp layer"
 
 	# Options
-	checkboxHierarchy = "Hierarchy"
-	checkboxLayer = "Layer"
-	checkboxLoop = "Loop"
-	checkboxClean = "Clean"
+	checkboxHierarchy = "Bake simulation for all child hierarhy of selected objects"
+	checkboxLayer = "Baki animation into override layers. \nIf turned off animation will be baked directly to selected objects"
+	checkboxLoop = "Use for cycles. \nImportant to have cycle constant animation curves"
+	checkboxClean = "Remove particle setup after baking end"
 
 	# Particle
 	particleRadius = "Radius"
 	particleConserve = "Conserve"
 	particleDrag = "Drag"
 	particleDamp = "Damp"
-	particleGoalSmooth = "G.Smooth"
-	particleGoalWeight = "G.Weight"
-	particleTimeScale = "Time Scale"
+	particleGoalSmooth = "Goal Smooth attribute"
+	particleGoalWeight = "Goal Weight attribute"
+	particleTimeScale = "Nucleus Time Scale"
 
 	# Offset
 	offsetMirrorX = "Mirror X"
