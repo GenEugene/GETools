@@ -69,7 +69,8 @@ class ToolsAnnotations:
 
 class Tools:
 	version = "v0.1.1"
-	title = "TOOLS" + " " + version
+	name = "TOOLS"
+	title = name + " " + version
 	
 	def __init__(self):
 		self.checkboxLocatorHideParent = None

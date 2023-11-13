@@ -4,7 +4,7 @@ import maya.cmds as cmds
 
 def MultipleObjects(minimalCount = 1):
 	# Save selected objects to variable
-	selectedList = cmds.ls(selection = True)
+	selectedList = cmds.ls(selection = True, type = "transform", shapes = False) # TODO test me
 
 	# Check selected objects
 	if (len(selectedList) < minimalCount):
@@ -20,12 +20,13 @@ def MultipleObjects(minimalCount = 1):
 def SelectTransformHierarchy(*args):
 	selected = MultipleObjects()
 	if (selected == None):
-		return False
+		return None
 
 	cmds.select(hierarchy = True)
 	list = cmds.ls(selection = True, type = "transform", shapes = False)
 	cmds.select(clear = True)
+	
 	for i in range(len(list)):
 		cmds.select(list[i], add = True)
 	
-	return True
+	return list

@@ -31,7 +31,8 @@ class CenterOfMassSettings:
 
 class CenterOfMass:
 	version = "v0.1.0"
-	title = "CENTER OF MASS" + " " + version
+	name = "CENTER OF MASS"
+	title = name + " " + version
 
 	def __init__(self):
 		self.COMObject = None

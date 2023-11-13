@@ -19,6 +19,15 @@ def JointDrawStyle(mode = 0, *args):
 	for i in range(len(selected)):
 		cmds.setAttr(selected[i] + ".drawStyle", mode)
 
+def DeleteKeys(*args):
+	if (Selector.MultipleObjects(1) == None):
+		return
+	cmds.cutKey()
+	print("Animation deleted")
+
+def DeleteKeyRange(*args):
+	mel.eval('timeSliderClearKey')
+
 def KeysNonkeyableDelete(*args):
 	objects = cmds.ls(selection = 1)
 	counter = 0
@@ -30,15 +39,12 @@ def KeysNonkeyableDelete(*args):
 				counter += 1
 	print ("\t{} nonkeyable detected and deleted".format(counter))
 
-def DeleteKeyRange(*args):
-	mel.eval('timeSliderClearKey')
-
-def DeleteKeys(*args):
-	if (Selector.MultipleObjects(1) == None):
-		return
-	cmds.cutKey()
-	print("Animation deleted")
-
 def SelectJointsInScene():
 	selectedJoints = cmds.ls(type = "joint")
 	cmds.select(selectedJoints)
+
+def SetInfinityConstant(selected):
+	cmds.setInfinity(selected, preInfinite = "constant", postInfinite = "constant")
+
+def SetInfinityCycle(selected):
+	cmds.setInfinity(selected, preInfinite = "cycle", postInfinite = "cycle")

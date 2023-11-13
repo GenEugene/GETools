@@ -29,7 +29,8 @@ class GeneralWindowSettings:
 
 class GeneralWindow:
 	version = "v0.0.4"
-	title = "GETools" + " " + version
+	name = "GETools"
+	title = name + " " + version
 
 	def __init__(self):
 		self.frameTools = None
