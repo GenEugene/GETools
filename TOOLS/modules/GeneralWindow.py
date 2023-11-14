@@ -28,7 +28,7 @@ class GeneralWindowSettings:
 	windowWidthMargin = windowWidthScroll - margin * 2
 
 class GeneralWindow:
-	version = "v0.0.4"
+	version = "v0.0.5"
 	name = "GETools"
 	title = name + " " + version
 

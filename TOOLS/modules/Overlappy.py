@@ -34,26 +34,26 @@ class OverlappyAnnotations:
 
 	# Options
 	checkboxHierarchy = "Bake simulation for all child hierarhy of selected objects"
-	checkboxLayer = "Baki animation into override layers. \nIf turned off animation will be baked directly to selected objects"
+	checkboxLayer = "Bake animation into override layers. \nIf turned off animation will be baked directly to selected objects"
 	checkboxLoop = "Use for cycles. \nImportant to have cycle constant animation curves"
 	checkboxClean = "Remove particle setup after baking end"
 
 	# Particle
-	particleRadius = "Radius"
-	particleConserve = "Conserve"
-	particleDrag = "Drag"
-	particleDamp = "Damp"
-	particleGoalSmooth = "Goal Smooth attribute"
-	particleGoalWeight = "Goal Weight attribute"
+	particleRadius = "Particle Radius"
+	particleConserve = "Particle Conserve"
+	particleDrag = "Particle Drag"
+	particleDamp = "Particle Damp"
+	particleGoalSmooth = "Particle Goal Smooth"
+	particleGoalWeight = "Particle Goal Weight"
 	particleTimeScale = "Nucleus Time Scale"
 
 	# Offset
-	offsetMirrorX = "Mirror X"
-	offsetMirrorY = "Mirror Y"
-	offsetMirrorZ = "Mirror Z"
-	offsetX = "Move X"
-	offsetY = "Move Y"
-	offsetZ = "Move Z"
+	offsetMirrorX = "Mirror particle offset value to opposite"
+	offsetMirrorY = offsetMirrorX
+	offsetMirrorZ = offsetMirrorX
+	offsetX = "Move particle from original object. Important to use offset for Rotation baking"
+	offsetY = offsetX
+	offsetZ = offsetX
 
 class OverlappySettings:
 	# NAMING
@@ -101,7 +101,7 @@ class OverlappySettings:
 	constraintsNames = ("parentConstraint", "pointConstraint", "orientConstraint", "scaleConstraint", "aimConstraint")
 
 class Overlappy:
-	version = "v2.0.2"
+	version = "v2.0.3"
 	name = "OVERLAPPY"
 	title = name + " " + version
 
@@ -182,27 +182,25 @@ class Overlappy:
 
 		count = 2
 		cmds.gridLayout(parent = self.layoutButtons, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
-
+		#
 		cmds.button(label = "SETUP", command = self._SetupInit, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
 		# cmds.button(label = "Scan setup into scene", command = self._SetupScan, backgroundColor = Colors.green10)
 		cmds.button(label = "DELETE", command = self._SetupDelete, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupDelete)
 
-
 		# BAKING
-		# self.layoutBaking = cmds.frameLayout("layoutBaking", label = "BAKING", parent = layoutMain, collapsable = True)
 		count = 3
 		cmds.gridLayout(parent = self.layoutButtons, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
-
+		#
 		cmds.button(label = "TRANSLATION", command = partial(self._BakeVariants, 1), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.translation)
 		cmds.popupMenu()
 		cmds.menuItem(label = "translate with offset", command = partial(self._BakeVariants, 2)) # TODO popup message if offsets are zero
-		
+		#
 		cmds.button(label = "ROTATION", command = partial(self._BakeVariants, 3), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.rotation) # TODO popup message if offsets are zero
-
+		#
 		cmds.button(label = "COMBO", command = partial(self._BakeVariants, 4), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.comboTranslateRotate) # TODO popup message if offsets are zero
 		cmds.popupMenu()
 		cmds.menuItem(label = "rotate + translate", command = partial(self._BakeVariants, 5))
-
+		#
 		# cmds.button(label = "SCALE", command = partial(self._BakeVariants, 6), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.scale) # TODO implement scale simulation
 		pass
 
@@ -218,8 +216,6 @@ class Overlappy:
 		cmds.button(label = "Delete Temp layer", command = partial(self._LayerDelete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
 		cmds.button(label = "Move to Safe layer", command = partial(self._LayerMoveToSafeOrTemp, True), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveTemp)
 		
-		count = 2
-		cmds.gridLayout(parent = self.layoutLayers, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 		cmds.button(label = "Delete Safe layer", command = partial(self._LayerDelete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
 		cmds.button(label = "Move to Temp layer", command = partial(self._LayerMoveToSafeOrTemp, False), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveSafe)
 	
