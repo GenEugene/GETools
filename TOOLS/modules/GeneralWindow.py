@@ -58,19 +58,17 @@ class GeneralWindow:
 		cmds.columnLayout("layoutMenuBar", parent = parentLayout, adjustableColumn = True, width = GeneralWindowSettings.windowWidthScroll)
 		cmds.menuBarLayout()
 
-		def SceneReload(self): Scene.Reload()
-		def ExitMaya(self): Scene.ExitMaya()
 		cmds.menu(label = "File")
-		cmds.menuItem(label = "Reload Scene (force)", command = SceneReload)
-		cmds.menuItem(label = "Exit Maya (force)", command = ExitMaya)
+		cmds.menuItem(label = "Reload Scene (force)", command = Scene.Reload)
+		cmds.menuItem(label = "Exit Maya (force)", command = Scene.ExitMaya)
 		
-
 		# cmds.menu(label = "Edit")
 		# cmds.menuItem(label = "Save Settings")
 		# cmds.menuItem(label = "Load Settings")
 		# cmds.menuItem(label = "Reset Settings")
-		# TODO reload script button
-
+		# cmds.menu(label = "DEV")
+		# cmds.menuItem(label = "Dev Tools toggle", checkBox = False) # , command = self.LayoutDevToolsToggle
+		# cmds.menuItem(label = "Reload Script") # , command = self.Restart # TODO reload script button
 
 		cmds.menu(label = "Display")
 		cmds.menuItem(label = "Collapse All", command = partial(self.FramesCollapse, True))
@@ -79,12 +77,6 @@ class GeneralWindow:
 		cmds.menuItem(label = "Dock Left", command = partial(self.DockSide, GeneralWindowSettings.dockAllowedAreas[0]))
 		cmds.menuItem(label = "Dock Right", command = partial(self.DockSide, GeneralWindowSettings.dockAllowedAreas[1]))
 		cmds.menuItem(label = "Undock", command = self.DockOff)
-
-
-		# cmds.menu(label = "DEV")
-		# cmds.menuItem(label = "Dev Tools toggle", checkBox = False) # , command = self.LayoutDevToolsToggle
-		# cmds.menuItem(label = "Reload Script") # , command = self.Restart
-
 
 		cmds.menu(label = "Help")
 		def LinkGithub(self): cmds.showHelp("https://github.com/GenEugene/GETools", absolute = True)
@@ -119,7 +111,7 @@ class GeneralWindow:
 	def LayoutExperimental(self, parentLayout):
 		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "EXPERIMENTAL", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
 		cmds.popupMenu()
-		cmds.menuItem(label = "Right-Click") # TODO
+		cmds.menuItem(label = "Right-Click")
 		
 		countOffsets = 1
 		cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = GeneralWindowSettings.windowWidthMargin / countOffsets, cellHeight = GeneralWindowSettings.lineHeight)
@@ -127,7 +119,6 @@ class GeneralWindow:
 		cmds.button(label = "Motion Trail", command = MotionTrail.Create, backgroundColor = Colors.orange10)
 		cmds.popupMenu()
 		cmds.menuItem(label = "Select", command = MotionTrail.Select)
-		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Delete", command = MotionTrail.Delete)
 
 	# DOCKING
