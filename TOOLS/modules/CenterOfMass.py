@@ -242,7 +242,7 @@ class CenterOfMass:
 			return
 		
 		selectedList.append(self.COMObject)
-		Constraints.ConstrainListToLastElement(reverse = True, selectedList = selectedList, maintainOffset = False, parent = False, point = True, weight = weight)
+		Constraints.ConstrainListToLastElement(reverse = True, selected = selectedList, maintainOffset = False, parent = False, point = True, weight = weight)
 	
 	# def COMRemove(self, weight, *args): # TODO
 	# 	if (self.COMObjectCheck()):

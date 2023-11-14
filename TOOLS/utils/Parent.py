@@ -10,14 +10,14 @@ def FirstToSecond(child, parent, maintainOffset = True):
 	
 def SelectedToLastObject():
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(2)
-	if (selectedList == None):
+	selected = Selector.MultipleObjects(2)
+	if (selected == None):
 		return
-	ListToLastObjects(selectedList)
+	ListToLastObjects(selected)
 
-def ListToLastObjects(selectedList, maintainOffset = True, reverse = False):
-	for i in range(len(selectedList)):
-		if (i == len(selectedList) - 1):
+def ListToLastObjects(selected, maintainOffset = True, reverse = False):
+	for i in range(len(selected)):
+		if (i == len(selected) - 1):
 			break
 		
 		if (reverse):
@@ -27,4 +27,4 @@ def ListToLastObjects(selectedList, maintainOffset = True, reverse = False):
 			index1 = i
 			index2 = -1
 		
-		FirstToSecond(selectedList[index1], selectedList[index2], maintainOffset)
+		FirstToSecond(selected[index1], selected[index2], maintainOffset)

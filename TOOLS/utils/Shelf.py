@@ -13,4 +13,4 @@ def AddToCurrentShelf(command = "", label = "label", imagePath = "pythonFamily.p
 		image = imagePath,
 		parent = GetCurrentShelf(),
 		sourceType = "Python",
-	)
+		)

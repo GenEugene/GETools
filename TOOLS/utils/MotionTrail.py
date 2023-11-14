@@ -3,31 +3,67 @@
 import maya.cmds as cmds
 from utils import Selector
 
-def Create(self, *args):
+def Create(*args):
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
 		return
-	_name = "MotionTrail_1"
-	_step = 1
-	_start = cmds.playbackOptions(query = True, minTime = True)
-	_end = cmds.playbackOptions(query = True, maxTime = True)
-	cmds.snapshot(name = _name, motionTrail = True, increment = _step, startTime = _start, endTime = _end)
-	_trails = cmds.ls(type = "motionTrail")
-	for item in _trails:
+	
+	name = "MotionTrail_1"
+	step = 1
+	start = cmds.playbackOptions(query = True, minTime = True)
+	end = cmds.playbackOptions(query = True, maxTime = True)
+	cmds.snapshot(name = name, motionTrail = True, increment = step, startTime = start, endTime = end)
+	selected = cmds.ls(type = "motionTrail")
+	
+	for item in selected:
 		cmds.setAttr(item + "Handle" + "Shape.trailDrawMode", 1)
 		cmds.setAttr(item + "Handle" + "Shape.template", 1)
 
-def Select(self, *args):
-	_trails = cmds.ls(type = "motionTrail")
-	if (len(_trails) == 0):
+def Select(*args):
+	selected = cmds.ls(type = "motionTrail")
+	if (len(selected) == 0):
 		return
+	
 	cmds.select(clear = True)
-	for item in _trails:
+	for item in selected:
 		cmds.select(item + "Handle", add = True)
 
-def Delete(self, *args):
-	_trails = cmds.ls(type = "motionTrail")
-	if (len(_trails) == 0):
+def Delete(*args):
+	selected = cmds.ls(type = "motionTrail")
+	if (len(selected) == 0):
 		return
-	for item in _trails:
+	
+	for item in selected:
 		cmds.delete(item + "Handle")
+
+def CreateCurveFromTrajectory(): # TODO rework tool and add to module
+	# Variables
+	step = 1
+	degree = 3
+	# Names
+	mtName = "newMotionTrail"
+	mtFinalName = mtName + "Handle"
+	curveName = "testCurve"
+
+
+	# Get time start/end
+	start = cmds.playbackOptions(q=1, min=1)
+	end = cmds.playbackOptions(q=1, max=1)
+	# Create motion trail
+	cmds.snapshot(n = mtName, mt=1, i=step, st = start, et = end)
+
+	# Get points from motion trail
+	cmds.select(mtFinalName, r=1)
+	selected = cmds.ls(sl=1, dag=1, et="snapshotShape")
+	pts = cmds.getAttr(selected[0] + ".pts")
+	size = len(pts)
+	for i in range(size):
+		pts[i] = pts[i][0:3]
+		#print "{0}: {1}".format(i, pts[i])
+
+	# Create curve
+	newCurve = cmds.curve(n = curveName, d = degree, p = pts)
+
+	# End
+	cmds.delete(mtFinalName)
+	cmds.select(cl=1)

@@ -30,3 +30,9 @@ def SelectTransformHierarchy(*args):
 		cmds.select(list[i], add = True)
 	
 	return list
+
+def PrintSelected(*args): # TODO update tool and add to module
+	selected = cmds.ls(selection = True)
+	for item in selected:
+		print(item)
+

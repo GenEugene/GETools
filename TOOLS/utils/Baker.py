@@ -41,7 +41,7 @@ def BakeSelectedByLastObject(pairOnly = False):
 		selectedList = (selectedList[-2], selectedList[-1])
 	
 	# Constrain objects to last object
-	Constraints.ConstrainListToLastElement(selectedList = selectedList)
+	Constraints.ConstrainListToLastElement(selected = selectedList)
 	
 	# Bake objects
 	cmds.select(selectedList)

@@ -45,12 +45,12 @@ import maya.cmds as cmds
 
 class ColorsCalibration:
 	def __init__(self):
-		### SETUP
 		self.window_name = "windowColorCalibration"
 		self.titleText = "Color Calibration"
 		self.windowWidth = 330
 		self.windowHeight = 10
 		self.lineHeight = 20
+	
 	def CreateUI(self):
 		# WINDOW
 		if cmds.window(self.window_name, exists = True):
