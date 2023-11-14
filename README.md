@@ -1,7 +1,7 @@
 # GETools
-Free animation tool for Autodesk Maya.
+Free animation tool for Autodesk Maya. Developed on 2023 version.
 
-You can find here different tools for specific cases, from simple tools for locator creation to complex tools for secondary animation generating and center of mass.
+Here you can find different tools for specific cases, from simple tools for locator creation to complex tools for secondary animation generating and center of mass.
 
 #### Read more in WIKI - https://github.com/GenEugene/GETools/wiki
 
