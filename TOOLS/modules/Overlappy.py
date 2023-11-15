@@ -392,8 +392,13 @@ class Overlappy:
 
 
 	### LOGIC
-	def _SetupInit(self, *args): # TODO rework
-		self._SetupDelete(False)
+	def _SetupInit(self, *args):
+		# Get min/max anim range time and reset time slider
+		self.time.Scan()
+		self.time.SetCurrent(self.time.values[2])
+		
+		# Remove previous setup if exists
+		self._SetupDelete(deselect = False)
 		
 		# Get selected objects
 		self.selectedObject = Selector.MultipleObjects()
@@ -402,10 +407,6 @@ class Overlappy:
 			return
 		
 		self.selectedObject = self.selectedObject[0]
-
-		# Get min/max anim range time and reset time slider
-		self.time.Scan()
-		self.time.SetCurrent(self.time.values[2])
 
 		# Create group
 		cmds.select(clear = True)
@@ -590,7 +591,7 @@ class Overlappy:
 		# self._GetOffsets()
 		pass
 	
-	def _SetupDelete(self, deselect = True, *args): # TODO rework
+	def _SetupDelete(self, deselect = True, *args):
 		self.selectedObject = ""
 		self.locGoalTarget = ["", ""]
 		self.locAim = ["", "", "", ""]
@@ -929,7 +930,7 @@ class Overlappy:
 			self.sliderOffsetZ.Set(_value3)
 			self._OffsetsUpdate(True)
 
-	def _BakeVariants(self, variant, *args): # TODO rework
+	def _BakeVariants(self, variant, *args):
 		_selected = Selector.MultipleObjects()
 		if (_selected == None):
 			return
