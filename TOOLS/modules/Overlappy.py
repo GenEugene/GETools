@@ -10,7 +10,6 @@ from utils import Baker
 from utils import Colors
 from utils import Selector
 from utils import Timeline
-from utils import MayaSettings
 from modules import GeneralWindow
 
 class OverlappyAnnotations:
@@ -102,7 +101,7 @@ class OverlappySettings:
 	constraintsNames = ("parentConstraint", "pointConstraint", "orientConstraint", "scaleConstraint", "aimConstraint")
 
 class Overlappy:
-	version = "v2.0.4"
+	version = "v2.0.3"
 	name = "OVERLAPPY"
 	title = name + " " + version
 
@@ -933,8 +932,6 @@ class Overlappy:
 		_selected = Selector.MultipleObjects()
 		if (_selected == None):
 			return
-
-		MayaSettings.CachedPlaybackDeactivate()
 
 		if (self.checkboxHierarchy.Get() == True):
 			_selected = Selector.SelectTransformHierarchy()

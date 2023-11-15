@@ -1,15 +1,17 @@
 GETools changelog
 
-v0.0.6
-- added Cached Playback auto deactivation for Overlappy v2.0.4
-- general window cleanup
 
-v0.0.5 - First released version
-- integrated Tools module
-- integrated Overlappy module
-- integrated Center Of Mass module
-- integrated utilities scripts
-- added annotations for most UI elements
-- added drag and drop installer
-- added docking window feature
-- general cleanup of all old files
+v0.0.5
+
+
+v0.0.4
+
+
+v0.0.3
+
+
+v0.0.2
+
+
+v0.0.1
+

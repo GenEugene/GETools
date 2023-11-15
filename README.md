@@ -13,6 +13,5 @@ Simply drag and drop GETools\TOOLS\DRAG_AND_DROP_INSTALL.py into Maya vieport
 ***
 
 # Known issues:
-- Overlappy simulation cause incorrect motion if nucleus node has skipped frames - https://github.com/GenEugene/GETools/issues/33
-- Undocking resets all values - https://github.com/GenEugene/GETools/issues/1
-
+- Overlappy doesn't work with Cached Playback
+- Undocking resets all values
