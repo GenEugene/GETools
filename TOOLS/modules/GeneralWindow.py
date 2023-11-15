@@ -5,6 +5,7 @@ from functools import partial
 from utils import Colors
 from utils import Scene
 from utils import MotionTrail
+from utils import MayaSettings
 from modules import Tools as tls
 from modules import Overlappy as ovlp
 from modules import CenterOfMass as com
@@ -28,7 +29,7 @@ class GeneralWindowSettings:
 	windowWidthMargin = windowWidthScroll - margin * 2
 
 class GeneralWindow:
-	version = "v0.0.5"
+	version = "v0.0.6"
 	name = "GETools"
 	title = name + " " + version
 
@@ -37,6 +38,7 @@ class GeneralWindow:
 		self.frameOverlappy = None
 		self.frameCenterOfMass = None
 		self.frameExperimental = None
+	
 	def CreateUI(self):
 		if cmds.window(GeneralWindowSettings.windowName, exists = True):
 			cmds.deleteUI(GeneralWindowSettings.windowName)
@@ -160,16 +162,12 @@ class GeneralWindow:
 		self.CreateUI()
 		self.FramesCollapse(True)
 	
-	def TryRunUI(self, *args):
+	def RUN_DOCKED(self, *args):
 		self.DockCleanup()
 		self.RunUI()
-		cmds.help(popupMode = True) # turn on help popups to show descriptions when buttons hovered by mouse
-	
-	def RUN_DOCKED(self, *args): # use for shelf button
-		self.TryRunUI()
+
 		self.DockSide(GeneralWindowSettings.dockStartArea)
-	
-	def RUN_UNDOCKED(self, *args): # use for shelf button
-		self.TryRunUI()
-		cmds.showWindow(GeneralWindowSettings.windowName)
+
+		MayaSettings.HelpPopupActivate()
+		MayaSettings.CachedPlaybackDeactivate()
 
