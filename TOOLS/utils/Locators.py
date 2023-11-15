@@ -7,7 +7,9 @@ from utils import Parent
 from utils import Baker
 from utils import Constraints
 
-def Create(name = "myLoc", scale = 1, hideParent = False, subLocators = False):
+# TODO think how to merge the same logic on each function. Looks like a lot of similar parts of code
+
+def Create(name = "myLoc", scale = 50, hideParent = False, subLocators = False):
 	locatorCurrent = cmds.spaceLocator(name = Text.SetUniqueFromText(name))[0]
 	cmds.setAttr(locatorCurrent + "Shape.localScaleX", scale)
 	cmds.setAttr(locatorCurrent + "Shape.localScaleY", scale)
@@ -25,8 +27,8 @@ def Create(name = "myLoc", scale = 1, hideParent = False, subLocators = False):
 		cmds.parent(subLocator, locatorCurrent)
 		cmds.select(subLocator)
 		return locatorCurrent, subLocator
-
-	return locatorCurrent
+	else:
+		return locatorCurrent
 
 def CreateOnSelected(name = "myLocMatched", minSelectedCount = 1, hideParent = False, subLocators = False):
 	# Check selected objects
@@ -60,21 +62,22 @@ def CreateOnSelected(name = "myLocMatched", minSelectedCount = 1, hideParent = F
 	if (subLocators):
 		cmds.select(sublocatorsList)
 		return selectedList, locatorsList, sublocatorsList
-	cmds.select(locatorsList)
-	return selectedList, locatorsList
+	else:
+		cmds.select(locatorsList)
+		return selectedList, locatorsList
 
 def CreateOnSelectedWithParentConstrain(name = "myLocConstrained", minSelectedCount = 1, hideParent = False, subLocators = False):
-	func_CreateOnSelected = CreateOnSelected(name, minSelectedCount, hideParent, subLocators)
-	if (func_CreateOnSelected == None):
+	objects = CreateOnSelected(name, minSelectedCount, hideParent, subLocators)
+	if (objects == None):
 		return None
 
 	# Get lists from function
-	selectedList = func_CreateOnSelected[0]
-	locatorsList = func_CreateOnSelected[1]
+	selectedList = objects[0]
+	locatorsList = objects[1]
 	if (subLocators):
-		sublocatorsList = func_CreateOnSelected[2]
+		sublocatorsList = objects[2]
 	
-	# Constraint locators
+	# Constrain locators
 	for i in range(len(selectedList)):
 		Constraints.ConstrainSecondToFirstObject(selectedList[i], locatorsList[i], maintainOffset = False)
 	
@@ -82,22 +85,29 @@ def CreateOnSelectedWithParentConstrain(name = "myLocConstrained", minSelectedCo
 	if (subLocators):
 		cmds.select(sublocatorsList)
 		return selectedList, locatorsList, sublocatorsList
-	cmds.select(locatorsList)
-	return selectedList, locatorsList
+	else:
+		cmds.select(locatorsList)
+		return selectedList, locatorsList
 
 def CreateOnSelectedAndBake(name = "myLocBaked", minSelectedCount = 1, hideParent = False, subLocators = False, parentToLastSelected = False):
-	func_CreateOnSelectedWithParentConstrain = CreateOnSelectedWithParentConstrain(name, minSelectedCount, hideParent, subLocators)
-	if (func_CreateOnSelectedWithParentConstrain == None):
+	objects = CreateOnSelectedWithParentConstrain(name, minSelectedCount, hideParent, subLocators)
+	if (objects == None):
 		return None
 
 	# Get lists from function
-	selectedList = func_CreateOnSelectedWithParentConstrain[0]
-	locatorsList = func_CreateOnSelectedWithParentConstrain[1]
+	selectedList = objects[0]
+	locatorsList = objects[1]
 	if (subLocators):
-		sublocatorsList = func_CreateOnSelectedWithParentConstrain[2]
+		sublocatorsList = objects[2]
 
+	# Parent locators to last or to last sublocator
 	if (parentToLastSelected):
-		Parent.ListToLastObjects(locatorsList)
+		if (subLocators):
+			locatorsListWithLastSub = locatorsList[:-1]
+			locatorsListWithLastSub.append(sublocatorsList[-1])
+			Parent.ListToLastObjects(locatorsListWithLastSub)
+		else:
+			Parent.ListToLastObjects(locatorsList)
 
 	# Bake locators and delete constraints
 	cmds.select(locatorsList)
@@ -111,21 +121,22 @@ def CreateOnSelectedAndBake(name = "myLocBaked", minSelectedCount = 1, hideParen
 	if (subLocators):
 		cmds.select(sublocatorsList)
 		return selectedList, locatorsList, sublocatorsList
-	cmds.select(locatorsList)
-	return selectedList, locatorsList
+	else:
+		cmds.select(locatorsList)
+		return selectedList, locatorsList
 
-def CreateOnSelectedReverseConstraint(name = "myLocReverse", minSelectedCount = 1, hideParent = False, subLocators = False):
-	func_CreateOnSelectedAndBake = CreateOnSelectedAndBake(name, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators)
-	if (func_CreateOnSelectedAndBake == None):
+def CreateOnSelectedReverseConstrain(name = "myLocReverse", minSelectedCount = 1, hideParent = False, subLocators = False):
+	objects = CreateOnSelectedAndBake(name, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators)
+	if (objects == None):
 		return None
 
 	# Get lists from function
-	selectedList = func_CreateOnSelectedAndBake[0]
-	locatorsList = func_CreateOnSelectedAndBake[1]
+	selectedList = objects[0]
+	locatorsList = objects[1]
 	if (subLocators):
-		sublocatorsList = func_CreateOnSelectedAndBake[2]
+		sublocatorsList = objects[2]
 
-	# Constraint objects to locators
+	# Constrain objects to locators
 	for i in range(len(selectedList)):
 		if (subLocators):
 			Constraints.ConstrainSecondToFirstObject(sublocatorsList[i], selectedList[i], maintainOffset = False)
@@ -136,25 +147,54 @@ def CreateOnSelectedReverseConstraint(name = "myLocReverse", minSelectedCount = 
 	if (subLocators):
 		cmds.select(sublocatorsList)
 		return selectedList, locatorsList, sublocatorsList
-	cmds.select(locatorsList)
-	return selectedList, locatorsList
+	else:
+		cmds.select(locatorsList)
+		return selectedList, locatorsList
 
-def BakeAsChildrenFromLastSelected(name = "locBaked", minSelectedCount = 2):
-	objects = CreateOnSelectedAndBake(name = name, minSelectedCount = minSelectedCount, parentToLastSelected = True)
-	if (objects == None):
-		return None
-	cmds.select(objects[1][-1])
-	return objects
-
-def BakeAsChildrenFromLastSelectedReverse():
-	objects = BakeAsChildrenFromLastSelected()
+def BakeAsChildrenFromLastSelected(minSelectedCount = 2, hideParent = False, subLocators = False):
+	objects = CreateOnSelectedAndBake(minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators, parentToLastSelected = True)
 	if (objects == None):
 		return None
 	
+	# Get lists from function
+	selectedList = objects[0]
+	locatorsList = objects[1]
+	if (subLocators):
+		sublocatorsList = objects[2]
+	
+	# Select objects and return
+	if (subLocators):
+		cmds.select(sublocatorsList[-1])
+		return selectedList, locatorsList, sublocatorsList
+	else:
+		cmds.select(locatorsList[-1])
+		return objects
+
+def BakeAsChildrenFromLastSelectedReverse(hideParent = False, subLocators = False, skipLastReverse = True):
+	objects = BakeAsChildrenFromLastSelected(hideParent = hideParent, subLocators = subLocators)
+	if (objects == None):
+		return None
+	
+	# Get lists from function
+	selectedList = objects[0]
+	locatorsList = objects[1]
+	if (subLocators):
+		sublocatorsList = objects[2]
+	
+	# Constrain objects to locators
 	for i in range(len(objects[0])):
-		# if (i == len(objects[0]) - 1): # TODO temporary disabled last object constrain ignoring, need to make as alternative bake mode
-		# 	break
-		Constraints.ConstrainSecondToFirstObject(objects[1][i], objects[0][i], maintainOffset = False)
+		if (skipLastReverse and i == len(selectedList) - 1):
+			break
+		if (subLocators):
+			Constraints.ConstrainSecondToFirstObject(sublocatorsList[i], selectedList[i], maintainOffset = False)
+		else:
+			Constraints.ConstrainSecondToFirstObject(locatorsList[i], selectedList[i], maintainOffset = False)
 	
-	cmds.select(objects[1][-1])
-	return objects
+	# Select objects and return
+	if (subLocators):
+		cmds.select(sublocatorsList[-1])
+		return selectedList, locatorsList, sublocatorsList
+	else:
+		cmds.select(locatorsList[-1])
+		return objects
+

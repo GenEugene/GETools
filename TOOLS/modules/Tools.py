@@ -27,7 +27,7 @@ class ToolsAnnotations:
 	_reverseConstraint = "After that parent constrain original objects back to locators"
 	locatorsBakeReverse = "{bake}\n{reverse}".format(bake = locatorsBake, reverse = _reverseConstraint)
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
-	locatorsRelativeReverse = "{relative}\n{reverse}".format(relative = locatorsRelative, reverse = _reverseConstraint)
+	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
 
 	# Constraints
 	_textAllSelectedConstrainToLast = "All selected objects will be constrained to last selected object"
@@ -94,15 +94,16 @@ class Tools:
 		cmds.button(label = "Select Transform Hiererchy", command = Selector.SelectTransformHierarchy, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.selectTransformHiererchy)
 		
 		# LOCATORS
-		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "CREATE LOCATORS", collapsable = True)
+		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "LOCATORS", collapsable = True)
 		#
 		countOffsets = 3
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.hideParent)
 		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.subLocator)
+		cmds.separator(style = "none")
 		#
-		countOffsets = 3
-		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		# countOffsets = 3
+		# cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Locator", command = self.CreateLocator, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locator)
 		cmds.button(label = "Locators match", command = self.CreateLocatorMatch, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorMatch)
 		cmds.button(label = "Locators parent", command = self.CreateLocatorParent, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorParent)
@@ -112,23 +113,26 @@ class Tools:
 		cmds.button(label = "Locators bake", command = self.CreateLocatorBake, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorsBake)
 		cmds.button(label = "Locators bake + reverse", command = self.CreateLocatorBakeReverse, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.locatorsBakeReverse)
 		#
-		countOffsets = 2
-		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		# countOffsets = 2
+		# cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Locators relative", command = self.BakeAsChildrenFromLastSelected, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsRelative)
 		cmds.button(label = "Locators relative + reverse", command = self.BakeAsChildrenFromLastSelectedReverse, backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsRelativeReverse)
+		cmds.popupMenu()
+		cmds.menuItem(label = "skip last object constrain", command = self.BakeAsChildrenFromLastSelectedReverseSkipLast)
 		
 
 		# CONSTRAINTS
-		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = "CONSTRAINTS ( children --> parent )", collapsable = True)
+		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = "CONSTRAINTS", collapsable = True)
 		#
 		countOffsets = 4
 		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.separator(style = "none")
 		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.constraintReverse)
 		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.constraintMaintain)
+		cmds.separator(style = "none")
 		#
-		countOffsets = 4
-		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		# countOffsets = 4
+		# cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Parent", command = self.ConstrainParent, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintParent)
 		cmds.button(label = "Point", command = self.ConstrainPoint, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintPoint)
 		cmds.button(label = "Orient", command = self.ConstrainOrient, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintOrient)
@@ -199,11 +203,13 @@ class Tools:
 	def CreateLocatorBake(self, *args):
 		Locators.CreateOnSelectedAndBake(hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get())
 	def CreateLocatorBakeReverse(self, *args):
-		Locators.CreateOnSelectedReverseConstraint(hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get()) # TODO constrain to sub locator if exists
+		Locators.CreateOnSelectedReverseConstrain(hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get())
 	def BakeAsChildrenFromLastSelected(self, *args):
-		Locators.BakeAsChildrenFromLastSelected()
+		Locators.BakeAsChildrenFromLastSelected(hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get())
+	def BakeAsChildrenFromLastSelectedReverseSkipLast(self, *args):
+		Locators.BakeAsChildrenFromLastSelectedReverse(hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get(), skipLastReverse = True)
 	def BakeAsChildrenFromLastSelectedReverse(self, *args):
-		Locators.BakeAsChildrenFromLastSelectedReverse()
+		Locators.BakeAsChildrenFromLastSelectedReverse(hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get(), skipLastReverse = False)
 	
 
 	# CONSTRAINTS
