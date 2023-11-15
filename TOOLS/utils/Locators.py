@@ -152,8 +152,8 @@ def BakeAsChildrenFromLastSelectedReverse():
 		return None
 	
 	for i in range(len(objects[0])):
-		if (i == len(objects[0]) - 1):
-			break
+		# if (i == len(objects[0]) - 1): # TODO temporary disabled last object constrain ignoring, need to make as alternative bake mode
+		# 	break
 		Constraints.ConstrainSecondToFirstObject(objects[1][i], objects[0][i], maintainOffset = False)
 	
 	cmds.select(objects[1][-1])

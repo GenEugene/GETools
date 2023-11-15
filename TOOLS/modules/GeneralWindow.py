@@ -29,7 +29,7 @@ class GeneralWindowSettings:
 	windowWidthMargin = windowWidthScroll - margin * 2
 
 class GeneralWindow:
-	version = "v0.0.6"
+	version = "v0.0.7"
 	name = "GETools"
 	title = name + " " + version
 
@@ -113,15 +113,18 @@ class GeneralWindow:
 	def LayoutExperimental(self, parentLayout):
 		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "EXPERIMENTAL", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
 		cmds.popupMenu()
-		cmds.menuItem(label = "Right-Click")
+		cmds.menuItem(label = "Right-Click test")
 		
-		countOffsets = 1
+		countOffsets = 3
 		cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = GeneralWindowSettings.windowWidthMargin / countOffsets, cellHeight = GeneralWindowSettings.lineHeight)
 
-		cmds.button(label = "Motion Trail", command = MotionTrail.Create, backgroundColor = Colors.orange10)
-		cmds.popupMenu()
-		cmds.menuItem(label = "Select", command = MotionTrail.Select)
-		cmds.menuItem(label = "Delete", command = MotionTrail.Delete)
+		cmds.button(label = "Trails Create", command = MotionTrail.Create, backgroundColor = Colors.orange10)
+		cmds.button(label = "Trails Select", command = MotionTrail.Select, backgroundColor = Colors.orange50)
+		cmds.button(label = "Trails Delete", command = MotionTrail.Delete, backgroundColor = Colors.orange100)
+		# cmds.popupMenu()
+		# cmds.menuItem(label = "Select", command = MotionTrail.Select)
+		# cmds.menuItem(label = "Delete", command = MotionTrail.Delete)
+		pass
 
 	# DOCKING
 	def DockCleanup(self):

@@ -70,7 +70,7 @@ class ToolsAnnotations:
 	timelineFocusRange = "Set timeline inner range on selected range by mouse"
 
 class Tools:
-	version = "v0.1.1"
+	version = "v0.1.2"
 	name = "TOOLS"
 	title = name + " " + version
 	
@@ -79,6 +79,7 @@ class Tools:
 		self.checkboxLocatorSubLocator = None
 		self.checkboxConstraintReverse = None
 		self.checkboxConstraintMaintain = None
+	
 	def UICreate(self, layoutMain):
 		settings = GeneralWindow.GeneralWindowSettings
 		windowWidthMargin = settings.windowWidthMargin
