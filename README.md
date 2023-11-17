@@ -8,7 +8,7 @@ Here you can find different tools for specific cases, from simple tools for loca
 ***
 
 # Install
-Simply drag and drop GETools\TOOLS\DRAG_AND_DROP_INSTALL.py into Maya vieport
+Simply drag and drop GETools\TOOLS\DRAG_AND_DROP_INSTALL.py into Maya viewport
 
 ***
 
