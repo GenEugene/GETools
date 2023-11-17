@@ -5,7 +5,7 @@ import maya.mel as mel
 from utils import Selector
 
 def RotateOrderVisibility(on = True, *args):
-	selected = cmds.ls(selection = True, long = 1)
+	selected = cmds.ls(selection = True, type = "transform")
 	for item in selected:
 		cmds.setAttr(item + ".rotateOrder", channelBox = on)
 
@@ -15,7 +15,7 @@ def SegmentScaleCompensate(value = 0, *args):
 		cmds.setAttr(item + ".segmentScaleCompensate", value)
 
 def JointDrawStyle(mode = 0, *args):
-	selected = cmds.ls(selection = True)
+	selected = cmds.ls(selection = True, type = "joint")
 	for item in selected:
 		cmds.setAttr(item + ".drawStyle", mode)
 
@@ -38,12 +38,12 @@ def KeysNonkeyableDelete(*args):
 				counter += 1
 	print ("{0} nonkeyable detected and deleted".format(counter))
 
-def SelectJointsInScene():
+def SelectJointsInScene(): # TODO make universal for other types
 	selected = cmds.ls(type = "joint")
 	cmds.select(selected)
 
-def SetInfinityConstant(selected):
+def SetInfinityConstant(selected): # TODO move to new animation class
 	cmds.setInfinity(selected, preInfinite = "constant", postInfinite = "constant")
 
-def SetInfinityCycle(selected):
+def SetInfinityCycle(selected): # TODO move to new animation class
 	cmds.setInfinity(selected, preInfinite = "cycle", postInfinite = "cycle")

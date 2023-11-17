@@ -19,7 +19,7 @@ class GeneralWindowSettings:
 	windowHeight = 50
 	windowWidth = 320
 	windowWidthScrollSpace = 16
-	lineHeight = 26
+	lineHeight = 30
 	margin = 4
 
 	sliderWidth = (60, 60, 10)

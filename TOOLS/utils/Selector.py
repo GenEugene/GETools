@@ -2,9 +2,12 @@
 
 import maya.cmds as cmds
 
-def MultipleObjects(minimalCount = 1):
+def MultipleObjects(minimalCount = 1, transformsOnly = True):
 	# Save selected objects to variable
-	selectedList = cmds.ls(selection = True, type = "transform", shapes = False) # TODO test me
+	if (transformsOnly):
+		selectedList = cmds.ls(selection = True, type = "transform", shapes = False)
+	else:
+		selectedList = cmds.ls(selection = True, shapes = False)
 
 	# Check selected objects
 	if (len(selectedList) < minimalCount):
@@ -31,8 +34,14 @@ def SelectTransformHierarchy(*args):
 	
 	return list
 
-def PrintSelected(*args): # TODO update tool and add to module
-	selected = cmds.ls(selection = True)
+def PrintSelected(*args):
+	selected = MultipleObjects(transformsOnly = False)
+	if (selected == None):
+		return
+
+	print("\t##### {0} items printed below:".format(len(selected)))
 	for item in selected:
 		print(item)
+	print("\t#####")
+	
 

@@ -16,6 +16,7 @@ from modules import GeneralWindow
 class ToolsAnnotations:
 	# Other
 	selectTransformHiererchy = "Select all children \"transform\" objects. \nWorks with multiple selected objects"
+	printSelectedToConsole = "Just print all selected objects to console and count them"
 
 	# Locators
 	hideParent = "Deactivate vsibility on parent locator. \nUsually better o use with \"subLocator\" checkbox activated"
@@ -37,9 +38,9 @@ class ToolsAnnotations:
 	constraintPoint = "Point constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
 	constraintOrient = "Orient constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
 	constraintScale = "Scale constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
+	constraintAim = "[IN DEVELOPMENT]\nAim constrain.".format(allToLast = _textAllSelectedConstrainToLast) # TODO
 
 	# Rigging
-	copySkinWeights = "Copy skin weights from last selected object to all other selected objects"
 	_rotateOrder = "rotate order attribute in channel box for all selected objects"
 	rotateOrderShow = "Show {0}".format(_rotateOrder)
 	rotateOrderHide = "Hide {0}".format(_rotateOrder)
@@ -49,11 +50,12 @@ class ToolsAnnotations:
 	_jointDrawStyle = "selected joints draw style"
 	jointDrawStyleBone = "Bone {0}".format(_jointDrawStyle)
 	jointDrawStyleHidden = "Hidden {0}".format(_jointDrawStyle)
+	copySkinWeights = "Copy skin weights from last selected object to all other selected objects"
 
 	# Bake
 	bakeClassic = "Regular maya bake \"Edit/Keys/Bake Simulation\""
 	bakeClassicCut = "{0}. Keys outside of time range will be removed".format(bakeClassic)
-	bakeCustom = "Alternative way to bake. The same if you just set key every frame on time range. \nAlso works with animation layers"
+	bakeCustom = "Alternative way to bake.\nThe same if you just set key every frame on time range.\nAlso works with animation layers."
 	bakeByLast = "Bake selected objects relative to the last selected object as if they were constrained"
 
 	# Animation
@@ -89,9 +91,10 @@ class Tools:
 		# SELECT
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "SELECT", collapsable = True)
 		#
-		countOffsets = 1
+		countOffsets = 2
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Select Transform Hiererchy", command = Selector.SelectTransformHierarchy, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.selectTransformHiererchy)
+		cmds.button(label = "Print Selected\nTo Console", command = Selector.PrintSelected, backgroundColor = Colors.blackWhite90, annotation = ToolsAnnotations.printSelectedToConsole)
+		cmds.button(label = "Select Transform\nHiererchy", command = Selector.SelectTransformHierarchy, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.selectTransformHiererchy)
 		
 		# LOCATORS
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "LOCATORS", collapsable = True)
@@ -102,21 +105,16 @@ class Tools:
 		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.subLocator)
 		cmds.separator(style = "none")
 		#
-		# countOffsets = 3
-		# cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Locator", command = self.CreateLocator, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locator)
 		cmds.button(label = "Locators match", command = self.CreateLocatorMatch, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorMatch)
 		cmds.button(label = "Locators parent", command = self.CreateLocatorParent, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorParent)
 		#
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Locators bake", command = self.CreateLocatorBake, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorsBake)
-		cmds.button(label = "Locators bake + reverse", command = self.CreateLocatorBakeReverse, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.locatorsBakeReverse)
-		#
-		# countOffsets = 2
-		# cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Locators relative", command = self.BakeAsChildrenFromLastSelected, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsRelative)
-		cmds.button(label = "Locators relative + reverse", command = self.BakeAsChildrenFromLastSelectedReverse, backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsRelativeReverse)
+		cmds.button(label = "Locators bake", command = self.CreateLocatorBake, backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.locatorsBake)
+		cmds.button(label = "Locators bake + reverse", command = self.CreateLocatorBakeReverse, backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverse)
+		cmds.button(label = "Locators relative", command = self.BakeAsChildrenFromLastSelected, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorsRelative)
+		cmds.button(label = "Locators relative + reverse", command = self.BakeAsChildrenFromLastSelectedReverse, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.locatorsRelativeReverse)
 		cmds.popupMenu()
 		cmds.menuItem(label = "skip last object constrain", command = self.BakeAsChildrenFromLastSelectedReverseSkipLast)
 		
@@ -131,56 +129,52 @@ class Tools:
 		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.constraintMaintain)
 		cmds.separator(style = "none")
 		#
-		# countOffsets = 4
-		# cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		countOffsets = 5
+		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Parent", command = self.ConstrainParent, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintParent)
 		cmds.button(label = "Point", command = self.ConstrainPoint, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintPoint)
 		cmds.button(label = "Orient", command = self.ConstrainOrient, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintOrient)
 		cmds.button(label = "Scale", command = self.ConstrainScale, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintScale)
+		cmds.button(label = "Aim", command = self.ConstrainParent, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintAim, enable = False) # TODO
 
 
 		# RIGGING
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "RIGGING", collapsable = True)
 		#
-		countOffsets = 1
-		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Copy Skin Weights From Last Selected", command = self.CopySkinWeightsFromLastMesh, backgroundColor = Colors.blue50, annotation = ToolsAnnotations.copySkinWeights)
-		#
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Rotate order - SHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = ToolsAnnotations.rotateOrderShow)
-		cmds.button(label = "Rotate order - HIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = ToolsAnnotations.rotateOrderHide)
-		cmds.button(label = "Scale Compensate - ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.scaleCompensateOn)
-		cmds.button(label = "Scale Compensate - OFF", command = partial(Other.SegmentScaleCompensate, False), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.scaleCompensateOff)
-		cmds.button(label = "Joint - BONE", command = partial(Other.JointDrawStyle, 0), backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.jointDrawStyleBone)
-		cmds.button(label = "Joint - HIDDEN", command = partial(Other.JointDrawStyle, 2), backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.jointDrawStyleHidden)
+		cmds.button(label = "Rotate order\nSHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = ToolsAnnotations.rotateOrderShow)
+		cmds.button(label = "Rotate order\nHIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = ToolsAnnotations.rotateOrderHide)
+		cmds.button(label = "Segment Scale\nCompensate ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.scaleCompensateOn)
+		cmds.button(label = "Segment Scale\nCompensate OFF", command = partial(Other.SegmentScaleCompensate, False), backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.scaleCompensateOff)
+		cmds.button(label = "Joint\nBONE", command = partial(Other.JointDrawStyle, 0), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.jointDrawStyleBone)
+		cmds.button(label = "Joint\nHIDDEN", command = partial(Other.JointDrawStyle, 2), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.jointDrawStyleHidden)
+		#
+		countOffsets = 1
+		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "Copy Skin Weights\nFrom Last Selected", command = self.CopySkinWeightsFromLastMesh, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.copySkinWeights)
+		# cmds.separator(style = "none")
 		
 		
 		# BAKE
 		layoutBake = cmds.frameLayout(parent = layoutMain, label = "BAKE", collapsable = True)
 		#
-		countOffsets = 3
+		countOffsets = 4
 		cmds.gridLayout(parent = layoutBake, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Bake Classic", command = self.BakeSelectedClassic, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeClassic)
-		cmds.button(label = "Bake Classic Cut", command = self.BakeSelectedClassicCut, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeClassicCut)
-		cmds.button(label = "Bake Custom", command = self.BakeSelectedCustom, backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeCustom)
-		#
-		countOffsets = 1
-		cmds.gridLayout(parent = layoutBake, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Bake Selected By Last Object", command = self.BakeSelectedByLastObject, backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast)
+		cmds.button(label = "Bake Classic", command = self.BakeSelectedClassic, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassic)
+		cmds.button(label = "Bake Classic\nCut Outer", command = self.BakeSelectedClassicCut, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassicCut)
+		cmds.button(label = "Bake Custom", command = self.BakeSelectedCustom, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeCustom)
+		cmds.button(label = "Bake Selected\nBy Last Object", command = self.BakeSelectedByLastObject, backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast)
 		
 		
 		# ANIMATION
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "ANIMATION", collapsable = True)
 		#
-		countOffsets = 1
+		countOffsets = 3
 		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Delete Nonkeyable Keys", command = Other.KeysNonkeyableDelete, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteNonkeyableKeys)
-		#
-		countOffsets = 2
-		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Delete Animation", command = Other.DeleteKeys, backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
-		cmds.button(label = "Delete Key Range", command = Other.DeleteKeyRange, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteKeyRange)
+		cmds.button(label = "Delete\nAnimation", command = Other.DeleteKeys, backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
+		cmds.button(label = "Delete\nKey Range", command = Other.DeleteKeyRange, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteKeyRange)
+		cmds.button(label = "Delete\nNonkeyable Keys", command = Other.KeysNonkeyableDelete, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteNonkeyableKeys)
 		#
 		countOffsets = 7
 		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)

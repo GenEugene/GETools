@@ -1,7 +1,16 @@
 GETools changelog
 
+v0.0.7
+- [UI] tweaked buttons order, colors and sizes
+- [UI] changed some buttons text to be more compact
+- [UI] updated help links, added version history link
+- [TOOLS] improved "Locators relative + reverse" function, added right click pop-up with alternative mode
+- [TOOLS] added "Print Selected To Console" button
+- [TOOLS] fixed small errors for RotateOrderVisibility and JointDrawStyle
+- [EXPERIMENTAL] improved Motion Trail buttons usability
+
 v0.0.6
-- added Cached Playback auto deactivation for Overlappy v2.0.4
+- [OVERLAPPY] added Cached Playback auto deactivation
 - general window cleanup
 
 v0.0.5 - First released version
