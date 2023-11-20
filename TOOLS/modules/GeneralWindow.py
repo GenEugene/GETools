@@ -16,7 +16,7 @@ class GeneralWindowSettings:
 	dockAllowedAreas = ["left", "right"]
 	dockStartArea = dockAllowedAreas[0]
 	
-	windowHeight = 50
+	windowHeight = 500 # used for vertical window size when undocked
 	windowWidth = 320
 	windowWidthScrollSpace = 16
 	lineHeight = 30
@@ -29,7 +29,7 @@ class GeneralWindowSettings:
 	windowWidthMargin = windowWidthScroll - margin * 2
 
 class GeneralWindow:
-	version = "v0.0.7"
+	version = "v0.0.8"
 	name = "GETools"
 	title = name + " " + version
 
@@ -38,7 +38,6 @@ class GeneralWindow:
 		self.frameOverlappy = None
 		self.frameCenterOfMass = None
 		self.frameExperimental = None
-	
 	def CreateUI(self):
 		if cmds.window(GeneralWindowSettings.windowName, exists = True):
 			cmds.deleteUI(GeneralWindowSettings.windowName)
@@ -53,7 +52,6 @@ class GeneralWindow:
 		self.LayoutOverlappy(layoutScroll)
 		self.LayoutCenterOfMass(layoutScroll)
 		self.LayoutExperimental(layoutScroll)
-
 
 	# UI LAYOUTS
 	def LayoutMenuBar(self, parentLayout):
@@ -76,8 +74,8 @@ class GeneralWindow:
 		cmds.menuItem(label = "Collapse All", command = partial(self.FramesCollapse, True))
 		cmds.menuItem(label = "Expand All", command = partial(self.FramesCollapse, False))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Dock Left", command = partial(self.DockSide, GeneralWindowSettings.dockAllowedAreas[0]))
-		cmds.menuItem(label = "Dock Right", command = partial(self.DockSide, GeneralWindowSettings.dockAllowedAreas[1]))
+		cmds.menuItem(label = "Dock Left", command = partial(self.DockToSide, GeneralWindowSettings.dockAllowedAreas[0]))
+		cmds.menuItem(label = "Dock Right", command = partial(self.DockToSide, GeneralWindowSettings.dockAllowedAreas[1]))
 		cmds.menuItem(label = "Undock", command = self.DockOff)
 
 		cmds.menu(label = "Help")
@@ -129,50 +127,67 @@ class GeneralWindow:
 		# cmds.menuItem(label = "Delete", command = MotionTrail.Delete)
 		pass
 
-	# DOCKING
-	def DockCleanup(self):
-		dockExists = cmds.dockControl(GeneralWindowSettings.dockName, query = True, exists = True)
-		if dockExists:
-			cmds.deleteUI(GeneralWindowSettings.dockName, control = True)
-			return True
-		else:
-			return False
-	def DockOff(self, *args): # TODO undick window without creation recreation
-		dockExists = cmds.dockControl(GeneralWindowSettings.dockName, query = True, exists = True)
-		if dockExists:
-			cmds.deleteUI(GeneralWindowSettings.dockName, control = True)
-			self.RunUI()
+	# WINDOW
+	def WindowCheck(self, *args):
+		return cmds.window(GeneralWindowSettings.windowName, exists = True)
+	def WindowShow(self, *args):
+		if self.WindowCheck():
 			cmds.showWindow(GeneralWindowSettings.windowName)
+			print("Window showed")
+		else:
+			print("No Window")
+	def WindowHide(self, *args):
+		if self.WindowCheck():
+			cmds.window(GeneralWindowSettings.windowName, edit = True, visible = False)
+			print("Window hidden")
+		else:
+			print("No Window")
+	def WindowDelete(self, *args):
+		if self.WindowCheck():
+			cmds.deleteUI(GeneralWindowSettings.windowName)
+			print("Window deleted")
+		else:
+			print("No Window")
+	def FramesCollapse(self, value, *args): # TODO collapse function for sub frames
+		if (self.frameTools != None):
+			cmds.frameLayout(self.frameTools, edit = True, collapse = value)
+		if (self.frameOverlappy != None):
+			cmds.frameLayout(self.frameOverlappy, edit = True, collapse = value)
+		if (self.frameCenterOfMass != None):
+			cmds.frameLayout(self.frameCenterOfMass, edit = True, collapse = value)
+		if (self.frameExperimental != None):
+			cmds.frameLayout(self.frameExperimental, edit = True, collapse = value)
+
+	# DOCKING
+	def DockCheck(self, *args):
+		return cmds.dockControl(GeneralWindowSettings.dockName, query = True, exists = True)
+	def DockDelete(self, *args):
+		if self.DockCheck():
+			cmds.deleteUI(GeneralWindowSettings.dockName, control = True)
+			print("Dock Control deleted")
+		else:
+			print("No Dock")
+	def DockOff(self, *args):
+		if self.DockCheck():
+			cmds.dockControl(GeneralWindowSettings.dockName, edit = True, floating = True, height = GeneralWindowSettings.windowHeight)
 			print("{0} undocked".format(GeneralWindow.title))
 		else:
-			cmds.warning("Window is not docked")
-	def DockSide(self, areaSide, *args):
-		dockExists = cmds.dockControl(GeneralWindowSettings.dockName, query = True, exists = True)
-		if dockExists:
+			cmds.warning("Dock Controls wasn't found")
+	def DockToSide(self, areaSide, *args):
+		if self.DockCheck():
 			cmds.dockControl(GeneralWindowSettings.dockName, edit = True, floating = False, area = areaSide)
 		else:
-			cmds.dockControl(GeneralWindowSettings.dockName, label = GeneralWindow.title, area = areaSide, content = GeneralWindowSettings.windowName, allowedArea = GeneralWindowSettings.dockAllowedAreas)
+			cmds.dockControl(GeneralWindowSettings.dockName, label = GeneralWindow.title, content = GeneralWindowSettings.windowName, area = areaSide, allowedArea = GeneralWindowSettings.dockAllowedAreas) # , backgroundColor = Colors.lightBlue10
 		print("{0} docked {1}".format(GeneralWindow.title, areaSide))
-	
-	# FRAME COLLAPSE
-	def FramesCollapse(self, value, *args):
-		cmds.frameLayout(self.frameTools, edit = True, collapse = value)
-		cmds.frameLayout(self.frameOverlappy, edit = True, collapse = value)
-		cmds.frameLayout(self.frameCenterOfMass, edit = True, collapse = value)
-		cmds.frameLayout(self.frameExperimental, edit = True, collapse = value)
-		# TODO collapse function for sub frames
-
 
 	# EXECUTION
-	def RunUI(self, *args):
+	def WindowCreate(self, *args):
 		self.CreateUI()
 		self.FramesCollapse(True)
-	
 	def RUN_DOCKED(self, *args):
-		self.DockCleanup()
-		self.RunUI()
-
-		self.DockSide(GeneralWindowSettings.dockStartArea)
+		self.DockDelete()
+		self.WindowCreate()
+		self.DockToSide(GeneralWindowSettings.dockStartArea)
 
 		MayaSettings.HelpPopupActivate()
 		MayaSettings.CachedPlaybackDeactivate()
