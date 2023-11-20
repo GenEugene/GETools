@@ -10,7 +10,7 @@ from GETOOLS_SOURCE.utils import Constraints
 
 # TODO think how to merge the same logic on each function. Looks like a lot of similar parts of code
 
-def Create(name = "myLoc", scale = 50, hideParent = False, subLocators = False):
+def Create(name = "myLoc", scale = 10, hideParent = False, subLocators = False):
 	locatorCurrent = cmds.spaceLocator(name = Text.SetUniqueFromText(name))[0]
 	cmds.setAttr(locatorCurrent + "Shape.localScaleX", scale)
 	cmds.setAttr(locatorCurrent + "Shape.localScaleY", scale)
