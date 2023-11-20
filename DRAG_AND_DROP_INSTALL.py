@@ -3,6 +3,7 @@
 
 import os
 import sys
+
 from GETOOLS_SOURCE.utils import Shelf
 from GETOOLS_SOURCE.utils import Icons
 

@@ -1,5 +1,11 @@
 GETools changelog
 
+v0.0.8 - required reinstall
+- [CRITICAL] fixed issue with importing modules to avoid namespace intersections with other scripts
+- [CRITICAL] restructured folders, changed root naming
+- [UI] reworked docking logic
+- updated shelf button installer
+
 v0.0.7
 - [UI] tweaked buttons order, colors and sizes
 - [UI] changed some buttons text to be more compact

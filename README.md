@@ -13,4 +13,4 @@ Simply drag and drop GETools\TOOLS\DRAG_AND_DROP_INSTALL.py into Maya viewport
 ***
 
 # Known issues:
-- Possible Namespace intersections with other Python packages https://github.com/GenEugene/GETools/issues/41
+-
