@@ -1,5 +1,5 @@
 # Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
-# Drag and Drop for Maya 2023 (other versions not tested)
+# Drag and Drop for Maya 2023
 
 import os
 import sys

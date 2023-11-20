@@ -1,6 +1,9 @@
 GETools changelog
 
-v0.0.8 - required reinstall
+v0.0.9
+-
+
+v0.0.8 - reinstall required
 - [CRITICAL] fixed issue with importing modules to avoid namespace intersections with other scripts
 - [CRITICAL] restructured folders, changed root naming
 - [UI] reworked docking logic

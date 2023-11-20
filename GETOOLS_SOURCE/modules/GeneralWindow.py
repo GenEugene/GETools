@@ -15,7 +15,7 @@ class GeneralWindowSettings:
 	windowName = "windowGETools"
 	dockName = "dockGETools"
 	dockAllowedAreas = ["left", "right"]
-	dockStartArea = dockAllowedAreas[0]
+	dockStartArea = dockAllowedAreas[0] # used for start docking state, 0 - left, 1 - right
 	
 	windowHeight = 500 # used for vertical window size when undocked
 	windowWidth = 320
@@ -30,7 +30,7 @@ class GeneralWindowSettings:
 	windowWidthMargin = windowWidthScroll - margin * 2
 
 class GeneralWindow:
-	version = "v0.0.8"
+	version = "v0.0.9"
 	name = "GETools"
 	title = name + " " + version
 
@@ -62,6 +62,9 @@ class GeneralWindow:
 		cmds.menu(label = "File")
 		cmds.menuItem(label = "Reload Scene (force)", command = Scene.Reload)
 		cmds.menuItem(label = "Exit Maya (force)", command = Scene.ExitMaya)
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Restart GETools", command = self.RUN_DOCKED)
+		cmds.menuItem(label = "Close GETools", command = self.DockDelete)
 		
 		# cmds.menu(label = "Edit")
 		# cmds.menuItem(label = "Save Settings")
