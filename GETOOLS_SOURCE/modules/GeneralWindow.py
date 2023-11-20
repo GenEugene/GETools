@@ -5,6 +5,8 @@ from functools import partial
 
 from GETOOLS_SOURCE.utils import Colors
 from GETOOLS_SOURCE.utils import Scene
+from GETOOLS_SOURCE.utils import Layers
+from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import MotionTrail
 from GETOOLS_SOURCE.utils import MayaSettings
 from GETOOLS_SOURCE.modules import Tools as tls
@@ -70,9 +72,6 @@ class GeneralWindow:
 		# cmds.menuItem(label = "Save Settings")
 		# cmds.menuItem(label = "Load Settings")
 		# cmds.menuItem(label = "Reset Settings")
-		# cmds.menu(label = "DEV")
-		# cmds.menuItem(label = "Dev Tools toggle", checkBox = False) # , command = self.LayoutDevToolsToggle
-		# cmds.menuItem(label = "Reload Script") # , command = self.Restart # TODO reload script button
 
 		cmds.menu(label = "Display")
 		cmds.menuItem(label = "Collapse All", command = partial(self.FramesCollapse, True))
@@ -106,6 +105,27 @@ class GeneralWindow:
 		cmds.menuItem(dividerLabel = "Support", divider = True)
 		cmds.menuItem(label = "Share your Ideas", command = LinkShareIdeas)
 		cmds.menuItem(label = "Report a Problem", command = LinkReport)
+
+
+		# DEBUG ZONE
+		def LayerCreate(*args):
+			Layers.LayerCreate("testLayer")
+		
+		def LayerCreateForSelected(*args):
+			selected = Selector.MultipleObjects()
+			if (selected == None):
+				return
+			Layers.LayerCreateForSelected(selected)
+		
+		def LayerDelete(*args):
+			Layers.LayerDelete("testLayer")
+
+		cmds.menu(label = "DEV")
+		cmds.menuItem(label = "Layer Create", command = LayerCreate)
+		cmds.menuItem(label = "Layer Create For Selected", command = LayerCreateForSelected)
+		cmds.menuItem(label = "Layer Delete", command = LayerDelete)
+		
+
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = tls.Tools.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
 		tls.Tools().UICreate(self.frameTools)
