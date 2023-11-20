@@ -3,9 +3,8 @@
 
 import os
 import sys
-# import maya.cmds as cmds
-from utils import Shelf
-from utils import Icons
+from GETOOLS_SOURCE.utils import Shelf
+from GETOOLS_SOURCE.utils import Icons
 
 
 # Get script directory path
@@ -36,7 +35,7 @@ if not os.path.exists("{path}"):
 if "{path}" not in sys.path:
 	sys.path.insert(0, "{path}")
 
-import modules.GeneralWindow as gtwindow
+import GETOOLS_SOURCE.modules.GeneralWindow as gtwindow
 gtwindow.GeneralWindow().RUN_DOCKED()
 """.format(path = scriptPath)
 

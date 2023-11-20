@@ -8,7 +8,11 @@ from utils import Baker
 from utils import Colors
 from utils import Constraints
 from utils import Locators
-from utils import Selector
+
+# from utils import Selector
+# from ..utils import Selector
+from TOOLS.utils import Selector
+
 from utils import Skinning
 from utils import Timeline
 from modules import GeneralWindow
