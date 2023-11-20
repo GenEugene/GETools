@@ -2,13 +2,14 @@
 
 import maya.cmds as cmds
 from functools import partial
-from utils import Colors
-from utils import Scene
-from utils import MotionTrail
-from utils import MayaSettings
-from modules import Tools as tls
-from modules import Overlappy as ovlp
-from modules import CenterOfMass as com
+
+from GETOOLS_SOURCE.utils import Colors
+from GETOOLS_SOURCE.utils import Scene
+from GETOOLS_SOURCE.utils import MotionTrail
+from GETOOLS_SOURCE.utils import MayaSettings
+from GETOOLS_SOURCE.modules import Tools as tls
+from GETOOLS_SOURCE.modules import Overlappy as ovlp
+from GETOOLS_SOURCE.modules import CenterOfMass as com
 
 class GeneralWindowSettings:
 	windowName = "windowGETools"
@@ -73,7 +74,7 @@ class GeneralWindow:
 		cmds.menu(label = "Display")
 		cmds.menuItem(label = "Collapse All", command = partial(self.FramesCollapse, True))
 		cmds.menuItem(label = "Expand All", command = partial(self.FramesCollapse, False))
-		cmds.menuItem(divider = True)
+		cmds.menuItem(dividerLabel = "Docking", divider = True)
 		cmds.menuItem(label = "Dock Left", command = partial(self.DockToSide, GeneralWindowSettings.dockAllowedAreas[0]))
 		cmds.menuItem(label = "Dock Right", command = partial(self.DockToSide, GeneralWindowSettings.dockAllowedAreas[1]))
 		cmds.menuItem(label = "Undock", command = self.DockOff)

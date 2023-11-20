@@ -3,15 +3,16 @@
 import maya.cmds as cmds
 from math import pow, sqrt
 from functools import partial
-from utils import UI
-from utils import Text
-from utils import Other
-from utils import Baker
-from utils import Colors
-from utils import Selector
-from utils import Timeline
-from utils import MayaSettings
-from modules import GeneralWindow
+
+from GETOOLS_SOURCE.utils import UI
+from GETOOLS_SOURCE.utils import Text
+from GETOOLS_SOURCE.utils import Other
+from GETOOLS_SOURCE.utils import Baker
+from GETOOLS_SOURCE.utils import Colors
+from GETOOLS_SOURCE.utils import Selector
+from GETOOLS_SOURCE.utils import Timeline
+from GETOOLS_SOURCE.utils import MayaSettings
+from GETOOLS_SOURCE.modules import GeneralWindow
 
 class OverlappyAnnotations:
 	# Setup

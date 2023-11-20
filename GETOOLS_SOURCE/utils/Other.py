@@ -2,7 +2,8 @@
 
 import maya.cmds as cmds
 import maya.mel as mel
-from utils import Selector
+
+from GETOOLS_SOURCE.utils import Selector
 
 def RotateOrderVisibility(on = True, *args):
 	selected = cmds.ls(selection = True, type = "transform")

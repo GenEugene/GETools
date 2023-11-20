@@ -1,8 +1,9 @@
 # Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
 
 import maya.cmds as cmds
-from utils import Colors
-from modules import GeneralWindow
+
+from GETOOLS_SOURCE.utils import Colors
+from GETOOLS_SOURCE.modules import GeneralWindow
 
 class Window: # TODO
 	def __init__(self, titleText = "My Window Name", windowWidth = 150, windowHeight = 50, nameWindow = "myWindowDefault"):

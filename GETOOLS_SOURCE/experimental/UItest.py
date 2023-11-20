@@ -1,5 +1,5 @@
 import maya.cmds as cmds
-from utils import UI
+from GETOOLS_SOURCE.utils import UI
 
 testUI = UI.Window(titleText = " TITLE")
 testUI.CreateWindow()

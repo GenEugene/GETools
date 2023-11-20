@@ -1,7 +1,8 @@
 # Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
 
 import maya.cmds as cmds
-from utils import Selector
+
+from GETOOLS_SOURCE.utils import Selector
 
 def CopySkinWeightsFromLastMesh(minSelectedCount = 2):
 	selected = Selector.MultipleObjects(minSelectedCount)

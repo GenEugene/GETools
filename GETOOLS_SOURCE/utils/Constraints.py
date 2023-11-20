@@ -1,7 +1,8 @@
 # Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
 
 import maya.cmds as cmds
-from utils import Selector
+
+from GETOOLS_SOURCE.utils import Selector
 
 def ConstrainSelectedToLastObject(reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, weight=1):
 	# Check selected objects

@@ -2,20 +2,17 @@
 
 import maya.cmds as cmds
 from functools import partial
-from utils import UI
-from utils import Other
-from utils import Baker
-from utils import Colors
-from utils import Constraints
-from utils import Locators
 
-# from utils import Selector
-# from ..utils import Selector
-from TOOLS.utils import Selector
-
-from utils import Skinning
-from utils import Timeline
-from modules import GeneralWindow
+from GETOOLS_SOURCE.utils import UI
+from GETOOLS_SOURCE.utils import Other
+from GETOOLS_SOURCE.utils import Baker
+from GETOOLS_SOURCE.utils import Colors
+from GETOOLS_SOURCE.utils import Constraints
+from GETOOLS_SOURCE.utils import Locators
+from GETOOLS_SOURCE.utils import Selector
+from GETOOLS_SOURCE.utils import Skinning
+from GETOOLS_SOURCE.utils import Timeline
+from GETOOLS_SOURCE.modules import GeneralWindow
 
 class ToolsAnnotations:
 	# Other
