@@ -61,19 +61,19 @@ class GeneralWindow:
 		cmds.columnLayout("layoutMenuBar", parent = parentLayout, adjustableColumn = True, width = GeneralWindowSettings.windowWidthScroll)
 		cmds.menuBarLayout()
 
-		cmds.menu(label = "File")
+		cmds.menu(label = "File", tearOff = True)
 		cmds.menuItem(label = "Reload Scene (force)", command = Scene.Reload)
 		cmds.menuItem(label = "Exit Maya (force)", command = Scene.ExitMaya)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Restart GETools", command = self.RUN_DOCKED)
 		cmds.menuItem(label = "Close GETools", command = self.DockDelete)
 		
-		# cmds.menu(label = "Edit")
+		# cmds.menu(label = "Edit", tearOff = True)
 		# cmds.menuItem(label = "Save Settings")
 		# cmds.menuItem(label = "Load Settings")
 		# cmds.menuItem(label = "Reset Settings")
 
-		cmds.menu(label = "Display")
+		cmds.menu(label = "Display", tearOff = True)
 		cmds.menuItem(label = "Collapse All", command = partial(self.FramesCollapse, True))
 		cmds.menuItem(label = "Expand All", command = partial(self.FramesCollapse, False))
 		cmds.menuItem(dividerLabel = "Docking", divider = True)
@@ -81,7 +81,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Dock Right", command = partial(self.DockToSide, GeneralWindowSettings.dockAllowedAreas[1]))
 		cmds.menuItem(label = "Undock", command = self.DockOff)
 
-		cmds.menu(label = "Help")
+		cmds.menu(label = "Help", helpMenu = True, tearOff = True)
 		def LinkVersionHistory(self): cmds.showHelp("https://github.com/GenEugene/GETools/blob/master/changelog.txt", absolute = True)
 		def LinkGithub(self): cmds.showHelp("https://github.com/GenEugene/GETools", absolute = True)
 		def LinkGumroad(self): cmds.showHelp("https://gumroad.com/l/iCNa", absolute = True)
@@ -109,23 +109,34 @@ class GeneralWindow:
 
 		# DEBUG ZONE
 		def LayerCreate(*args):
-			Layers.LayerCreate("testLayer")
+			Layers.Create("testLayer")
 		
 		def LayerCreateForSelected(*args):
 			selected = Selector.MultipleObjects()
 			if (selected == None):
 				return
-			Layers.LayerCreateForSelected(selected)
+			Layers.CreateForSelected(selected)
 		
 		def LayerDelete(*args):
-			Layers.LayerDelete("testLayer")
+			Layers.Delete("testLayer")
+		
+		def LayerGetSelected(*args):
+			Layers.GetSelected()
+		
+		def LayerMove(*args):
+			selected = Layers.GetSelected()
+			if (selected == None or len(selected) < 2):
+				cmds.warning("Need to select at least 2 layers")
+				return
+			Layers.MoveChildrenToParent(selected[:-1], selected[-1]) # FIXME main problem is layers have no selection order, they just listed from top to bottom
 
-		cmds.menu(label = "DEV")
+		cmds.menu(label = "DEV", tearOff = True)
 		cmds.menuItem(label = "Layer Create", command = LayerCreate)
 		cmds.menuItem(label = "Layer Create For Selected", command = LayerCreateForSelected)
 		cmds.menuItem(label = "Layer Delete", command = LayerDelete)
-		
-
+		cmds.menuItem(label = "Layer Get Selected", command = LayerGetSelected)
+		cmds.menuItem(label = "Layer Move", command = LayerMove)
+	
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = tls.Tools.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
 		tls.Tools().UICreate(self.frameTools)

@@ -9,6 +9,7 @@ from GETOOLS_SOURCE.utils import Text
 from GETOOLS_SOURCE.utils import Other
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Colors
+from GETOOLS_SOURCE.utils import Layers
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 from GETOOLS_SOURCE.utils import MayaSettings
@@ -103,7 +104,7 @@ class OverlappySettings:
 	constraintsNames = ("parentConstraint", "pointConstraint", "orientConstraint", "scaleConstraint", "aimConstraint")
 
 class Overlappy:
-	version = "v2.0.4"
+	version = "v2.0.5"
 	name = "OVERLAPPY"
 	title = name + " " + version
 
@@ -149,7 +150,6 @@ class Overlappy:
 		self.sliderOffsetX = None
 		self.sliderOffsetY = None
 		self.sliderOffsetZ = None
-	
 	def UICreate(self, layoutMain):
 		settings = GeneralWindow.GeneralWindowSettings
 		windowWidthMargin = settings.windowWidthMargin
@@ -163,21 +163,19 @@ class Overlappy:
 		self.UILayoutOptions(layoutMain, windowWidthMargin, lineHeight)
 		self.UILayoutParticleAttributes(layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker)
 		self.UILayoutParticleOffset(layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker)
-
 	def UILayoutMenuBar(self, layoutMain, windowWidthMargin):
 		cmds.columnLayout("layoutMenuBar", parent = layoutMain, adjustableColumn = True, width = windowWidthMargin)
 		cmds.menuBarLayout()
 
-		cmds.menu(label = "Edit")
+		cmds.menu(label = "Edit", tearOff = True)
 		cmds.menuItem(label = "Reset Settings", command = self._ResetAllValues)
 
-		cmds.menu(label = "Select")
+		cmds.menu(label = "Select", tearOff = True)
 		cmds.menuItem(label = "Object", command = self._SelectObject)
 		cmds.menuItem(label = "Particle", command = self._SelectParticle)
 		cmds.menuItem(label = "Nucleus", command = self._SelectNucleus)
 		cmds.menuItem(label = "Target locator", command = self._SelectTarget)
 		cmds.menuItem(label = "Aim locator", command = self._SelectAim)
-	
 	def UILayoutButtons(self, layoutMain, windowWidthMargin, lineHeight):
 		# SETUP
 		self.layoutButtons = cmds.frameLayout("layoutButtons", label = "BUTTONS", parent = layoutMain, collapsable = True)
@@ -205,22 +203,20 @@ class Overlappy:
 		#
 		# cmds.button(label = "SCALE", command = partial(self._BakeVariants, 6), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.scale) # TODO implement scale simulation
 		pass
-
 	def UILayoutLayers(self, layoutMain, windowWidthMargin, lineHeight):
 		self.layoutLayers = cmds.frameLayout("layoutLayers", label = "LAYERS", parent = layoutMain, collapsable = True)
 		
 		count = 1
 		cmds.gridLayout(parent = self.layoutLayers, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
-		cmds.button(label = "Delete BaseAnimation layer", command = partial(self._LayerDelete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteBase)
+		cmds.button(label = "Delete BaseAnimation layer", command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteBase)
 
 		count = 2
 		cmds.gridLayout(parent = self.layoutLayers, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
-		cmds.button(label = "Delete Temp layer", command = partial(self._LayerDelete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
+		cmds.button(label = "Delete Temp layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
 		cmds.button(label = "Move to Safe layer", command = partial(self._LayerMoveToSafeOrTemp, True), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveTemp)
 		
-		cmds.button(label = "Delete Safe layer", command = partial(self._LayerDelete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
+		cmds.button(label = "Delete Safe layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
 		cmds.button(label = "Move to Temp layer", command = partial(self._LayerMoveToSafeOrTemp, False), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveSafe)
-	
 	def UILayoutOptions(self, layoutMain, windowWidthMargin, lineHeight):
 		self.layoutOptions = cmds.frameLayout("layoutOptions", label = "OPTIONS", parent = layoutMain, collapsable = True)
 		
@@ -233,7 +229,6 @@ class Overlappy:
 		self.checkboxLayer = UI.Checkbox(label = "Layer", value = OverlappySettings.checkboxesOptions[1], menuReset = True, annotation = OverlappyAnnotations.checkboxLayer)
 		self.checkboxLoop = UI.Checkbox(label = "Loop", value = OverlappySettings.checkboxesOptions[2], menuReset = True, annotation = OverlappyAnnotations.checkboxLoop) # FIXME make cycle infinity before bake
 		self.checkboxClean = UI.Checkbox(label = "Clean", value = OverlappySettings.checkboxesOptions[3], menuReset = True, annotation = OverlappyAnnotations.checkboxClean)
-	
 	def UILayoutParticleAttributes(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
 		self.layoutSimulation = cmds.frameLayout("layoutParticleSliders", label = "PARTICLE ATTRIBUTES", parent = layoutMain, collapsable = True)
 		# cmds.popupMenu()
@@ -336,7 +331,6 @@ class Overlappy:
 			minMax = OverlappySettings.rangeNTimeScale,
 			menuReset = True,
 		)
-	
 	def UILayoutParticleOffset(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
 		self.layoutOffset = cmds.frameLayout("layoutParticleOffset", label = "PARTICLE OFFSET - use for baking rotation", parent = layoutMain, collapsable = True)
 		# cmds.popupMenu()
@@ -419,7 +413,6 @@ class Overlappy:
 		self._SetupCreate(self.selectedObject)
 		self._OffsetsUpdate(cacheReset = True)
 		cmds.select(self.selectedObject, replace = True)
-	
 	def _SetupCreate(self, objCurrent, *args): # TODO replace locators by locators class
 		# Names
 		_objConverted = Text.ConvertSymbols(objCurrent)
@@ -528,7 +521,6 @@ class Overlappy:
 		
 		if (self._LoftGetDistance() < OverlappySettings.loftMinDistance):
 			cmds.setAttr(self.loft[2] + ".visibility", 0)
-	
 	def _SetupScan(self, *args): # TODO rework
 		# Check overlappy group
 		if (not cmds.objExists(OverlappySettings.nameGroup)):
@@ -591,7 +583,6 @@ class Overlappy:
 		# self._GetSimulation()
 		# self._GetOffsets()
 		pass
-	
 	def _SetupDelete(self, deselect = True, *args):
 		self.selectedObject = ""
 		self.locGoalTarget = ["", ""]
@@ -610,7 +601,6 @@ class Overlappy:
 			cmds.delete(_nucleus)
 		if (deselect):
 			cmds.select(clear = True)
-	
 	def _OffsetsUpdate(self, cacheReset = False, *args): # TODO rework
 		if (type(cacheReset) is float):
 			cacheReset = False
@@ -729,7 +719,6 @@ class Overlappy:
 			resultName = startName + attributeName
 		
 		cmds.setAttr(resultName, sliderValue)
-	
 	def _UpdateParticleAttributes(self, *args):
 		self._SetParticleAttribute(self.sliderPRadius.Get(), OverlappySettings.nameParticle, "Shape.radius", True)
 		self._SetParticleAttribute(self.sliderPConserve.Get(), OverlappySettings.nameParticle, "Shape.conserve", True)
@@ -739,7 +728,6 @@ class Overlappy:
 		self._SetParticleAttribute(self.sliderGWeight.Get(), OverlappySettings.nameParticle, "Shape.goalWeight[0]", True)
 		self._SetParticleAttribute(self.sliderNTimeScale.Get(), self.nucleus, ".timeScale", False)
 		self._LoftUpdate()
-	
 	def _ValuesSetParticleOffset(self, *args):
 		self._SetParticleAttribute(self.sliderOffsetX.Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateX", True)
 		self._SetParticleAttribute(self.sliderOffsetY.Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateY", True)
@@ -762,7 +750,6 @@ class Overlappy:
 			cmds.setAttr(self.loft[2] + ".visibility", 0)
 		else:
 			cmds.setAttr(self.loft[2] + ".visibility", 1)
-	
 	def _LoftGetDistance(self, *args):
 		_vector = [0, 0, 0]
 		_vector[0] = self.sliderOffsetX.Get()
@@ -786,13 +773,11 @@ class Overlappy:
 		self._ResetOptions()
 		self._ResetSimulation(True)
 		self._ResetOffsets()
-	
 	def _ResetOptions(self, *args):
 		self.checkboxHierarchy.Reset()
 		self.checkboxLayer.Reset()
 		self.checkboxLoop.Reset()
 		self.checkboxClean.Reset()
-	
 	def _ResetSimulation(self, full = False, *args):
 		if (full):
 			self.sliderPRadius.Reset()
@@ -803,7 +788,6 @@ class Overlappy:
 		self.sliderGWeight.Reset()
 		self.sliderNTimeScale.Reset()
 		self._UpdateParticleAttributes()
-	
 	def _ResetOffsets(self, *args):
 		self.checkboxMirrorX.Reset()
 		self.checkboxMirrorY.Reset()
@@ -897,19 +881,29 @@ class Overlappy:
 		for child in _children:
 			cmds.delete(child)
 		
+
+
 		# Copy keys, check layer and paste keys
 		cmds.copyKey(_clone, time = (self.time.values[2], self.time.values[3]), attribute = _attributesFiltered)
+		
 		if (self.checkboxLayer.Get()):
 			_animLayer = self._LayerCreate(_item)
+			
 			_attrsLayer = []
+			
 			for item in _attributesFiltered:
 				_attrsLayer.append("{0}.{1}".format(_item, item))
+			
 			cmds.animLayer(_animLayer, edit = True, attribute = _attrsLayer)
 			cmds.pasteKey(_item, option = "replace", attribute = _attributesFiltered, animLayer = _animLayer)
+		
 		else:
 			cmds.pasteKey(_item, option = "replaceCompletely", attribute = _attributesFiltered)
+		
 		cmds.delete(_clone)
 		
+
+
 		# Set time range
 		if (self.checkboxLoop.Get()):
 			_startTime = self.time.values[2]
@@ -930,7 +924,6 @@ class Overlappy:
 			self.sliderOffsetY.Set(_value2)
 			self.sliderOffsetZ.Set(_value3)
 			self._OffsetsUpdate(True)
-
 	def _BakeVariants(self, variant, *args):
 		_selected = Selector.MultipleObjects()
 		if (_selected == None):
@@ -964,35 +957,41 @@ class Overlappy:
 
 
 	### LAYERS
-	def _LayerCreate(self, obj, *args): # TODO rework
+	def _LayerCreate(self, selected, *args): # TODO additional naming for translation and rotation
 		# Create main layer
 		if(not cmds.objExists(OverlappySettings.nameLayers[0])):
-			self.layers[0] = cmds.animLayer(OverlappySettings.nameLayers[0], override = True)
+			self.layers[0] = Layers.Create(layerName = OverlappySettings.nameLayers[0])
 		
 		# Create layers on selected
-		_name = OverlappySettings.nameLayers[2] + Text.ConvertSymbols(obj) + "_1"
-		return cmds.animLayer(_name, override = True, parent = self.layers[0])
-	
+		layerName = OverlappySettings.nameLayers[2] + Text.ConvertSymbols(selected) + "_1"
+		return Layers.Create(layerName = layerName, parent = self.layers[0])
 	def _LayerMoveToSafeOrTemp(self, safeLayer = True, *args): # TODO rework
 		_id = [0, 1]
-		if (not safeLayer): _id = [1, 0]
+		
+		if (not safeLayer):
+			_id = [1, 0]
+		
 		_layer1 = OverlappySettings.nameLayers[_id[0]]
 		_layer2 = OverlappySettings.nameLayers[_id[1]]
+
 
 		# Check source layer
 		if(not cmds.objExists(_layer1)):
 			cmds.warning("Layer \"{0}\" doesn't exist".format(_layer1))
 			return
 		
+
 		# Get selected layers
 		_selectedLayers = []
 		for animLayer in cmds.ls(type = "animLayer"):
 			if cmds.animLayer(animLayer, query = True, selected = True):
 				_selectedLayers.append(animLayer)
 		
+
 		# Check selected count
 		_children = cmds.animLayer(self.layers[_id[0]], query = True, children = True)
 		_filteredLayers = []
+		
 		if (len(_selectedLayers) == 0):
 			if (_children == None):
 				cmds.warning("Layer \"{0}\" is empty".format(_layer1))
@@ -1013,38 +1012,18 @@ class Overlappy:
 				cmds.warning("Nothing to move")
 				return
 		
+
 		# Create safe layer
 		if(not cmds.objExists(_layer2)):
 			self.layers[_id[1]] = cmds.animLayer(_layer2, override = True)
 		
+
 		# Move children or selected layers
 		for layer in _filteredLayers:
 			cmds.animLayer(layer, edit = True, parent = self.layers[_id[1]])
 		
+
 		# Delete TEMP layer if no children
 		if (len(_filteredLayers) == len(_children)):
-			self._LayerDelete(_layer1)
-	
-	def _LayerDelete(self, name, *args): # TODO rework
-		if(cmds.objExists(name)):
-			cmds.delete(name)
-			print("Layer \"{0}\" deleted".format(name))
-		else:
-			cmds.warning("Layer \"{0}\" doesn't exist".format(name))
-	
-	def _LayerCreate_TEST(self, *args): # XXX
-		# Check selected
-		_selected = cmds.ls(selection = True)
-		if (len(_selected) == 0):
-			cmds.warning("You must select at least 1 object")
-			return
-		
-		# Create main layer
-		if(not cmds.objExists(OverlappySettings.nameLayers[0])):
-			self.layers[0] = cmds.animLayer(OverlappySettings.nameLayers[0], override = True)
-		
-		# Create layers on selected
-		for item in _selected:
-			_name = OverlappySettings.nameLayers[2] + Text.ConvertSymbols(item) + "_1"
-			cmds.animLayer(_name, override = True, parent = self.layers[0])
+			Layers.Delete(_layer1)
 
