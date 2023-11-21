@@ -167,7 +167,7 @@ class Overlappy:
 		cmds.columnLayout("layoutMenuBar", parent = layoutMain, adjustableColumn = True, width = windowWidthMargin)
 		cmds.menuBarLayout()
 
-		cmds.menu(label = "Edit", tearOff = True)
+		cmds.menu(label = "Edit")
 		cmds.menuItem(label = "Reset Settings", command = self._ResetAllValues)
 
 		cmds.menu(label = "Select", tearOff = True)

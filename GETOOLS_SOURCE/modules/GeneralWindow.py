@@ -61,7 +61,7 @@ class GeneralWindow:
 		cmds.columnLayout("layoutMenuBar", parent = parentLayout, adjustableColumn = True, width = GeneralWindowSettings.windowWidthScroll)
 		cmds.menuBarLayout()
 
-		cmds.menu(label = "File", tearOff = True)
+		cmds.menu(label = "File")
 		cmds.menuItem(label = "Reload Scene (force)", command = Scene.Reload)
 		cmds.menuItem(label = "Exit Maya (force)", command = Scene.ExitMaya)
 		cmds.menuItem(divider = True)
@@ -81,7 +81,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Dock Right", command = partial(self.DockToSide, GeneralWindowSettings.dockAllowedAreas[1]))
 		cmds.menuItem(label = "Undock", command = self.DockOff)
 
-		cmds.menu(label = "Help", helpMenu = True, tearOff = True)
+		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
 		def LinkVersionHistory(self): cmds.showHelp("https://github.com/GenEugene/GETools/blob/master/changelog.txt", absolute = True)
 		def LinkGithub(self): cmds.showHelp("https://github.com/GenEugene/GETools", absolute = True)
 		def LinkGumroad(self): cmds.showHelp("https://gumroad.com/l/iCNa", absolute = True)
@@ -107,22 +107,18 @@ class GeneralWindow:
 		cmds.menuItem(label = "Report a Problem", command = LinkReport)
 
 
-		# DEBUG ZONE
+		# DEV ZONE
 		def LayerCreate(*args):
 			Layers.Create("testLayer")
-		
 		def LayerCreateForSelected(*args):
 			selected = Selector.MultipleObjects()
 			if (selected == None):
 				return
 			Layers.CreateForSelected(selected)
-		
 		def LayerDelete(*args):
 			Layers.Delete("testLayer")
-		
 		def LayerGetSelected(*args):
 			Layers.GetSelected()
-		
 		def LayerMove(*args):
 			selected = Layers.GetSelected()
 			if (selected == None or len(selected) < 2):
@@ -130,6 +126,7 @@ class GeneralWindow:
 				return
 			Layers.MoveChildrenToParent(selected[:-1], selected[-1]) # FIXME main problem is layers have no selection order, they just listed from top to bottom
 
+		cmds.menu(label = "---", enable = False)
 		cmds.menu(label = "DEV", tearOff = True)
 		cmds.menuItem(label = "Layer Create", command = LayerCreate)
 		cmds.menuItem(label = "Layer Create For Selected", command = LayerCreateForSelected)
