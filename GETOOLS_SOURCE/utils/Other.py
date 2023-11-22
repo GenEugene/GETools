@@ -43,8 +43,8 @@ def SelectJointsInScene(): # TODO make universal for other types
 	selected = cmds.ls(type = "joint")
 	cmds.select(selected)
 
-def SetInfinityConstant(selected): # TODO move to new animation class
+def SetInfinityConstant(selected): # TODO move to new animation class and expose
 	cmds.setInfinity(selected, preInfinite = "constant", postInfinite = "constant")
 
-def SetInfinityCycle(selected): # TODO move to new animation class
+def SetInfinityCycle(selected): # TODO move to new animation class and expose
 	cmds.setInfinity(selected, preInfinite = "cycle", postInfinite = "cycle")
