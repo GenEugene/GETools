@@ -5,7 +5,9 @@ from functools import partial
 
 from GETOOLS_SOURCE.utils import Colors
 from GETOOLS_SOURCE.utils import Scene
+from GETOOLS_SOURCE.utils import Shelf
 from GETOOLS_SOURCE.utils import Layers
+from GETOOLS_SOURCE.utils import Install
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import MotionTrail
 from GETOOLS_SOURCE.utils import MayaSettings
@@ -37,6 +39,7 @@ class GeneralWindow:
 	title = name + " " + version
 
 	def __init__(self):
+		self.directory = ""
 		self.frameTools = None
 		self.frameOverlappy = None
 		self.frameCenterOfMass = None
@@ -128,11 +131,15 @@ class GeneralWindow:
 
 		cmds.menu(label = "---", enable = False)
 		cmds.menu(label = "DEV", tearOff = True)
+		cmds.menuItem(dividerLabel = "Layers", divider = True)
 		cmds.menuItem(label = "Layer Create", command = LayerCreate)
 		cmds.menuItem(label = "Layer Create For Selected", command = LayerCreateForSelected)
 		cmds.menuItem(label = "Layer Delete", command = LayerDelete)
 		cmds.menuItem(label = "Layer Get Selected", command = LayerGetSelected)
 		cmds.menuItem(label = "Layer Move", command = LayerMove)
+		cmds.menuItem(dividerLabel = "Install to shelf", divider = True)
+		cmds.menuItem(label = "Install Select Hierarchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
+		
 	
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = tls.Tools.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
@@ -216,7 +223,9 @@ class GeneralWindow:
 	def WindowCreate(self, *args):
 		self.CreateUI()
 		self.FramesCollapse(True)
-	def RUN_DOCKED(self, *args):
+	def RUN_DOCKED(self, path = "", *args):
+		self.directory = path
+
 		self.DockDelete()
 		self.WindowCreate()
 		self.DockToSide(GeneralWindowSettings.dockStartArea)
