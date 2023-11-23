@@ -13,4 +13,4 @@ Simply drag and drop GETools\TOOLS\DRAG_AND_DROP_INSTALL.py into Maya viewport
 ***
 
 # Known issues:
-- Maya versions before 2022 doesn't supported
+-

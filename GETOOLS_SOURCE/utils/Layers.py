@@ -3,7 +3,6 @@
 import maya.cmds as cmds
 
 from GETOOLS_SOURCE.utils import Text
-from GETOOLS_SOURCE.utils import Types
 
 
 LayerBase = "BaseAnimation"

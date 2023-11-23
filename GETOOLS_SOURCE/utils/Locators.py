@@ -2,11 +2,11 @@
 
 import maya.cmds as cmds
 
-from GETOOLS_SOURCE.utils import Text
-from GETOOLS_SOURCE.utils import Selector
-from GETOOLS_SOURCE.utils import Parent
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Constraints
+from GETOOLS_SOURCE.utils import Parent
+from GETOOLS_SOURCE.utils import Selector
+from GETOOLS_SOURCE.utils import Text
 
 # TODO think how to merge the same logic on each function. Looks like a lot of similar parts of code
 

@@ -4,16 +4,17 @@ import maya.cmds as cmds
 from functools import partial
 
 from GETOOLS_SOURCE.utils import Colors
-from GETOOLS_SOURCE.utils import Scene
-from GETOOLS_SOURCE.utils import Layers
 from GETOOLS_SOURCE.utils import Install
-from GETOOLS_SOURCE.utils import Selector
+from GETOOLS_SOURCE.utils import Layers
 from GETOOLS_SOURCE.utils import MotionTrail
 from GETOOLS_SOURCE.utils import MayaSettings
+from GETOOLS_SOURCE.utils import Scene
+from GETOOLS_SOURCE.utils import Selector
+
+from GETOOLS_SOURCE.modules import CenterOfMass as com
+from GETOOLS_SOURCE.modules import Overlappy as ovlp
 from GETOOLS_SOURCE.modules import Settings
 from GETOOLS_SOURCE.modules import Tools as tls
-from GETOOLS_SOURCE.modules import Overlappy as ovlp
-from GETOOLS_SOURCE.modules import CenterOfMass as com
 
 class GeneralWindow:
 	version = "v0.0.9"

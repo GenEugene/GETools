@@ -1,7 +1,16 @@
 GETools changelog
 
-v0.0.9
--
+v0.0.9 - reinstall required
+- [CRITICAL] fixed support for Maya 2020, removed circular dependencies
+- [UI] added restart and close getools pop-ups
+- [UI] added tear off popup menus
+- updated drag and drop script
+- updated utils scripts structure
+- added test button for move commands to shelf
+- added Installer module
+- added Types library
+- added Layers module with base logic
+- added labelImage parameter to ShelfButton function
 
 v0.0.8 - reinstall required
 - [CRITICAL] fixed issue with importing modules to avoid namespace intersections with other scripts

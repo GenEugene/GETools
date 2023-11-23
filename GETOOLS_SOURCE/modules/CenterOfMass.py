@@ -6,9 +6,10 @@ from functools import partial
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Colors
 from GETOOLS_SOURCE.utils import Constraints
-from GETOOLS_SOURCE.utils import Text
-from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Locators
+from GETOOLS_SOURCE.utils import Selector
+from GETOOLS_SOURCE.utils import Text
+
 from GETOOLS_SOURCE.modules import Settings
 
 class CenterOfMassAnnotations:
