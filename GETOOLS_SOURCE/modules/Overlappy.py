@@ -13,7 +13,7 @@ from GETOOLS_SOURCE.utils import Layers
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 from GETOOLS_SOURCE.utils import MayaSettings
-from GETOOLS_SOURCE.modules import GeneralWindow
+from GETOOLS_SOURCE.modules import Settings
 
 class OverlappyAnnotations:
 	# Setup
@@ -151,11 +151,10 @@ class Overlappy:
 		self.sliderOffsetY = None
 		self.sliderOffsetZ = None
 	def UICreate(self, layoutMain):
-		settings = GeneralWindow.GeneralWindowSettings
-		windowWidthMargin = settings.windowWidthMargin
-		lineHeight = settings.lineHeight
-		sliderWidth = settings.sliderWidth
-		sliderWidthMarker = settings.sliderWidthMarker
+		windowWidthMargin = Settings.windowWidthMargin
+		lineHeight = Settings.lineHeight
+		sliderWidth = Settings.sliderWidth
+		sliderWidthMarker = Settings.sliderWidthMarker
 
 		self.UILayoutMenuBar(layoutMain, windowWidthMargin)
 		self.UILayoutButtons(layoutMain, windowWidthMargin, lineHeight)

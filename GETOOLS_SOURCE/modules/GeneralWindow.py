@@ -5,33 +5,15 @@ from functools import partial
 
 from GETOOLS_SOURCE.utils import Colors
 from GETOOLS_SOURCE.utils import Scene
-from GETOOLS_SOURCE.utils import Shelf
 from GETOOLS_SOURCE.utils import Layers
 from GETOOLS_SOURCE.utils import Install
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import MotionTrail
 from GETOOLS_SOURCE.utils import MayaSettings
+from GETOOLS_SOURCE.modules import Settings
 from GETOOLS_SOURCE.modules import Tools as tls
 from GETOOLS_SOURCE.modules import Overlappy as ovlp
 from GETOOLS_SOURCE.modules import CenterOfMass as com
-
-class GeneralWindowSettings:
-	windowName = "windowGETools"
-	dockName = "dockGETools"
-	dockAllowedAreas = ["left", "right"]
-	dockStartArea = dockAllowedAreas[0] # used for start docking state, 0 - left, 1 - right
-	
-	windowHeight = 500 # used for vertical window size when undocked
-	windowWidth = 320
-	windowWidthScrollSpace = 16
-	lineHeight = 30
-	margin = 4
-
-	sliderWidth = (60, 60, 10)
-	sliderWidthMarker = 14
-
-	windowWidthScroll = windowWidth - windowWidthScrollSpace
-	windowWidthMargin = windowWidthScroll - margin * 2
 
 class GeneralWindow:
 	version = "v0.0.9"
@@ -45,15 +27,15 @@ class GeneralWindow:
 		self.frameCenterOfMass = None
 		self.frameExperimental = None
 	def CreateUI(self):
-		if cmds.window(GeneralWindowSettings.windowName, exists = True):
-			cmds.deleteUI(GeneralWindowSettings.windowName)
-		cmds.window(GeneralWindowSettings.windowName, title = GeneralWindow.title, maximizeButton = False, sizeable = True, widthHeight = (GeneralWindowSettings.windowWidth, GeneralWindowSettings.windowHeight))
+		if cmds.window(Settings.windowName, exists = True):
+			cmds.deleteUI(Settings.windowName)
+		cmds.window(Settings.windowName, title = GeneralWindow.title, maximizeButton = False, sizeable = True, widthHeight = (Settings.windowWidth, Settings.windowHeight))
 		
-		# layoutRoot = cmds.columnLayout(adjustableColumn = True, width = GeneralWindowSettings.windowWidth)
-		layoutRoot = cmds.menuBarLayout(width = GeneralWindowSettings.windowWidth)
+		# layoutRoot = cmds.columnLayout(adjustableColumn = True, width = Settings.windowWidth)
+		layoutRoot = cmds.menuBarLayout(width = Settings.windowWidth)
 		self.LayoutMenuBar(layoutRoot)
 		
-		layoutScroll = cmds.scrollLayout(parent = layoutRoot, width = GeneralWindowSettings.windowWidth)
+		layoutScroll = cmds.scrollLayout(parent = layoutRoot, width = Settings.windowWidth)
 		self.LayoutTools(layoutScroll)
 		self.LayoutOverlappy(layoutScroll)
 		self.LayoutCenterOfMass(layoutScroll)
@@ -61,7 +43,7 @@ class GeneralWindow:
 
 	# UI LAYOUTS
 	def LayoutMenuBar(self, parentLayout):
-		cmds.columnLayout("layoutMenuBar", parent = parentLayout, adjustableColumn = True, width = GeneralWindowSettings.windowWidthScroll)
+		cmds.columnLayout("layoutMenuBar", parent = parentLayout, adjustableColumn = True, width = Settings.windowWidthScroll)
 		cmds.menuBarLayout()
 
 		cmds.menu(label = "File")
@@ -80,8 +62,8 @@ class GeneralWindow:
 		cmds.menuItem(label = "Collapse All", command = partial(self.FramesCollapse, True))
 		cmds.menuItem(label = "Expand All", command = partial(self.FramesCollapse, False))
 		cmds.menuItem(dividerLabel = "Docking", divider = True)
-		cmds.menuItem(label = "Dock Left", command = partial(self.DockToSide, GeneralWindowSettings.dockAllowedAreas[0]))
-		cmds.menuItem(label = "Dock Right", command = partial(self.DockToSide, GeneralWindowSettings.dockAllowedAreas[1]))
+		cmds.menuItem(label = "Dock Left", command = partial(self.DockToSide, Settings.dockAllowedAreas[0]))
+		cmds.menuItem(label = "Dock Right", command = partial(self.DockToSide, Settings.dockAllowedAreas[1]))
 		cmds.menuItem(label = "Undock", command = self.DockOff)
 
 		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
@@ -108,7 +90,6 @@ class GeneralWindow:
 		cmds.menuItem(dividerLabel = "Support", divider = True)
 		cmds.menuItem(label = "Share your Ideas", command = LinkShareIdeas)
 		cmds.menuItem(label = "Report a Problem", command = LinkReport)
-
 
 		# DEV ZONE
 		def LayerCreate(*args):
@@ -139,24 +120,23 @@ class GeneralWindow:
 		cmds.menuItem(label = "Layer Move", command = LayerMove)
 		cmds.menuItem(dividerLabel = "Install to shelf", divider = True)
 		cmds.menuItem(label = "Install Select Hierarchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
-		
 	
 	def LayoutTools(self, parentLayout):
-		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = tls.Tools.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
+		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = tls.Tools.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		tls.Tools().UICreate(self.frameTools)
 	def LayoutOverlappy(self, parentLayout):
-		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = ovlp.Overlappy.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
+		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = ovlp.Overlappy.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		ovlp.Overlappy().UICreate(self.frameOverlappy)
 	def LayoutCenterOfMass(self, parentLayout):
-		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = com.CenterOfMass.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
+		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = com.CenterOfMass.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		com.CenterOfMass().UICreate(self.frameCenterOfMass)
 	def LayoutExperimental(self, parentLayout):
-		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "EXPERIMENTAL", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = GeneralWindowSettings.margin, marginHeight = GeneralWindowSettings.margin)
+		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "EXPERIMENTAL", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		cmds.popupMenu()
 		cmds.menuItem(label = "Right-Click test")
 		
 		countOffsets = 3
-		cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = GeneralWindowSettings.windowWidthMargin / countOffsets, cellHeight = GeneralWindowSettings.lineHeight)
+		cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 
 		cmds.button(label = "Trails Create", command = MotionTrail.Create, backgroundColor = Colors.orange10)
 		cmds.button(label = "Trails Select", command = MotionTrail.Select, backgroundColor = Colors.orange50)
@@ -168,22 +148,22 @@ class GeneralWindow:
 
 	# WINDOW
 	def WindowCheck(self, *args):
-		return cmds.window(GeneralWindowSettings.windowName, exists = True)
+		return cmds.window(Settings.windowName, exists = True)
 	def WindowShow(self, *args):
 		if self.WindowCheck():
-			cmds.showWindow(GeneralWindowSettings.windowName)
+			cmds.showWindow(Settings.windowName)
 			print("Window showed")
 		else:
 			print("No Window")
 	def WindowHide(self, *args):
 		if self.WindowCheck():
-			cmds.window(GeneralWindowSettings.windowName, edit = True, visible = False)
+			cmds.window(Settings.windowName, edit = True, visible = False)
 			print("Window hidden")
 		else:
 			print("No Window")
 	def WindowDelete(self, *args):
 		if self.WindowCheck():
-			cmds.deleteUI(GeneralWindowSettings.windowName)
+			cmds.deleteUI(Settings.windowName)
 			print("Window deleted")
 		else:
 			print("No Window")
@@ -199,24 +179,24 @@ class GeneralWindow:
 
 	# DOCKING
 	def DockCheck(self, *args):
-		return cmds.dockControl(GeneralWindowSettings.dockName, query = True, exists = True)
+		return cmds.dockControl(Settings.dockName, query = True, exists = True)
 	def DockDelete(self, *args):
 		if self.DockCheck():
-			cmds.deleteUI(GeneralWindowSettings.dockName, control = True)
+			cmds.deleteUI(Settings.dockName, control = True)
 			print("Dock Control deleted")
 		else:
 			print("No Dock")
 	def DockOff(self, *args):
 		if self.DockCheck():
-			cmds.dockControl(GeneralWindowSettings.dockName, edit = True, floating = True, height = GeneralWindowSettings.windowHeight)
+			cmds.dockControl(Settings.dockName, edit = True, floating = True, height = Settings.windowHeight)
 			print("{0} undocked".format(GeneralWindow.title))
 		else:
 			cmds.warning("Dock Controls wasn't found")
 	def DockToSide(self, areaSide, *args):
 		if self.DockCheck():
-			cmds.dockControl(GeneralWindowSettings.dockName, edit = True, floating = False, area = areaSide)
+			cmds.dockControl(Settings.dockName, edit = True, floating = False, area = areaSide)
 		else:
-			cmds.dockControl(GeneralWindowSettings.dockName, label = GeneralWindow.title, content = GeneralWindowSettings.windowName, area = areaSide, allowedArea = GeneralWindowSettings.dockAllowedAreas) # , backgroundColor = Colors.lightBlue10
+			cmds.dockControl(Settings.dockName, label = GeneralWindow.title, content = Settings.windowName, area = areaSide, allowedArea = Settings.dockAllowedAreas) # , backgroundColor = Colors.lightBlue10
 		print("{0} docked {1}".format(GeneralWindow.title, areaSide))
 
 	# EXECUTION
@@ -228,7 +208,7 @@ class GeneralWindow:
 
 		self.DockDelete()
 		self.WindowCreate()
-		self.DockToSide(GeneralWindowSettings.dockStartArea)
+		self.DockToSide(Settings.dockStartArea)
 
 		MayaSettings.HelpPopupActivate()
 		MayaSettings.CachedPlaybackDeactivate()

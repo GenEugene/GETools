@@ -3,7 +3,7 @@
 import maya.cmds as cmds
 
 from GETOOLS_SOURCE.utils import Colors
-from GETOOLS_SOURCE.modules import GeneralWindow
+from GETOOLS_SOURCE.modules import Settings
 
 class Window: # TODO
 	def __init__(self, titleText = "My Window Name", windowWidth = 150, windowHeight = 50, nameWindow = "myWindowDefault"):
@@ -96,7 +96,7 @@ class Slider:
 			field = True,
 			)
 		
-		windowName = GeneralWindow.GeneralWindowSettings.windowName
+		windowName = Settings.windowName
 		self.slider = self.slider.replace(windowName + "|", "") # fix for docked window only. Don't know how to avoid issue
 		
 		if (menuReset):

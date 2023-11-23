@@ -12,7 +12,7 @@ from GETOOLS_SOURCE.utils import Locators
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Skinning
 from GETOOLS_SOURCE.utils import Timeline
-from GETOOLS_SOURCE.modules import GeneralWindow
+from GETOOLS_SOURCE.modules import Settings
 
 class ToolsAnnotations:
 	# Other
@@ -84,9 +84,8 @@ class Tools:
 		self.checkboxConstraintMaintain = None
 	
 	def UICreate(self, layoutMain):
-		settings = GeneralWindow.GeneralWindowSettings
-		windowWidthMargin = settings.windowWidthMargin
-		lineHeight = settings.lineHeight
+		windowWidthMargin = Settings.windowWidthMargin
+		lineHeight = Settings.lineHeight
 
 
 		# SELECT

@@ -9,7 +9,7 @@ from GETOOLS_SOURCE.utils import Constraints
 from GETOOLS_SOURCE.utils import Text
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Locators
-from GETOOLS_SOURCE.modules import GeneralWindow
+from GETOOLS_SOURCE.modules import Settings
 
 class CenterOfMassAnnotations:
 	# Setup
@@ -74,9 +74,8 @@ class CenterOfMass:
 		self.layoutBaking = None
 
 	def UICreate(self, layoutMain):
-		settings = GeneralWindow.GeneralWindowSettings
-		windowWidthMargin = settings.windowWidthMargin
-		lineHeight = settings.lineHeight
+		windowWidthMargin = Settings.windowWidthMargin
+		lineHeight = Settings.lineHeight
 
 		self.UILayoutSetup(layoutMain, windowWidthMargin, lineHeight)
 		self.UILayoutWeights(layoutMain, windowWidthMargin, lineHeight)
