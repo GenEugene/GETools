@@ -1,5 +1,9 @@
 GETools changelog
 
+v0.0.10
+- added custom bake cut outside logic
+-
+
 v0.0.9 - reinstall required
 - [CRITICAL] fixed support for Maya 2020, removed circular dependencies
 - [UI] added restart and close getools pop-ups

@@ -55,9 +55,11 @@ class ToolsAnnotations:
 	copySkinWeights = "Copy skin weights from last selected object to all other selected objects"
 
 	# Bake
+	_bakeCutOutside = "Keys outside of time range or selected range will be removed"
 	bakeClassic = "Regular maya bake \"Edit/Keys/Bake Simulation\""
-	bakeClassicCut = "{0}. Keys outside of time range will be removed".format(bakeClassic)
+	bakeClassicCut = "{0}.\n{1}".format(bakeClassic, _bakeCutOutside)
 	bakeCustom = "Alternative way to bake.\nThe same if you just set key every frame on time range.\nAlso works with animation layers."
+	bakeCustomCut = "{0}\n{1}".format(bakeCustom, _bakeCutOutside)
 	bakeByLast = "Bake selected objects relative to the last selected object as if they were constrained"
 
 	# Animation
@@ -74,7 +76,7 @@ class ToolsAnnotations:
 	timelineFocusRange = "Set timeline inner range on selected range by mouse"
 
 class Tools:
-	version = "v0.1.2"
+	version = "v0.1.3"
 	name = "TOOLS"
 	title = name + " " + version
 	
@@ -160,11 +162,12 @@ class Tools:
 		# BAKE
 		layoutBake = cmds.frameLayout(parent = layoutMain, label = "BAKE", collapsable = True)
 		#
-		countOffsets = 4
+		countOffsets = 2
 		cmds.gridLayout(parent = layoutBake, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Bake Classic", command = self.BakeSelectedClassic, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassic)
 		cmds.button(label = "Bake Classic\nCut Outer", command = self.BakeSelectedClassicCut, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassicCut)
 		cmds.button(label = "Bake Custom", command = self.BakeSelectedCustom, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeCustom)
+		cmds.button(label = "Bake Custom\nCut Outer", command = self.BakeSelectedCustomCut, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeCustomCut)
 		cmds.button(label = "Bake Selected\nBy Last Object", command = self.BakeSelectedByLastObject, backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast)
 		
 		
@@ -225,6 +228,8 @@ class Tools:
 		Baker.BakeSelected(classic = True, preserveOutsideKeys = False)
 	def BakeSelectedCustom(self, *args):
 		Baker.BakeSelected(classic = False, preserveOutsideKeys = True)
+	def BakeSelectedCustomCut(self, *args):
+		Baker.BakeSelected(classic = False, preserveOutsideKeys = False)
 	def BakeSelectedByLastObject(self, *args):
 		Baker.BakeSelectedByLastObject()
 	

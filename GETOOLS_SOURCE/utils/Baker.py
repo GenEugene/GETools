@@ -30,6 +30,9 @@ def BakeSelected(classic = True, preserveOutsideKeys = True):
 			Timeline.SetTimeCurrent(i)
 			cmds.setKeyframe(respectKeyable = True, animated = False, preserveCurveShape = True)
 		Timeline.SetTimeCurrent(timeCurrent)
+		if (not preserveOutsideKeys):
+			cmds.cutKey(time = (None, timeMinMax[0] - 1)) # to left
+			cmds.cutKey(time = (timeMinMax[1], None)) # to right
 
 def BakeSelectedByLastObject(pairOnly = False):
 	# Check selected objects
