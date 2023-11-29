@@ -1,7 +1,8 @@
 GETools changelog
 
 v0.0.10
-- added custom bake cut outside logic
+- [TOOLS] added custom bake cut outside logic
+- [TOOLS] added float field for locator scale
 -
 
 v0.0.9 - reinstall required

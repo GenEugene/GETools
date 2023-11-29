@@ -24,15 +24,41 @@ class Window: # TODO
 	def RunWindow(self):
 		cmds.showWindow(self.nameWindow)
 
+class FloatField:
+	def __init__(self,
+			value = 10,
+			precision = 3,
+			enabled = True,
+			annotation = "",
+			command = "pass",
+			menuReset = True,
+			):
+		
+		self.valueDefault = value
+		self.floatField = cmds.floatField(value = value, precision = precision, changeCommand = command, enable = enabled, annotation = annotation)
+
+		if (menuReset):
+			cmds.popupMenu()
+			cmds.menuItem(label = "reset", command = self.Reset)
+	
+	def Get(self, *args):
+		return cmds.floatField(self.floatField, query = True, value = True)
+	
+	def Set(self, value = 0, *args):
+		cmds.floatField(self.floatField, edit = True, value = value)
+	
+	def Reset(self, *args):
+		cmds.floatField(self.floatField, edit = True, value = self.valueDefault)
+
 class Checkbox:
 	def __init__(self,
 			label = "label",
 			value = False,
-			menuReset = True,
 			enabled = True,
 			annotation = "",
 			command = "pass",
 			# commandResetAll = "",
+			menuReset = True,
 			):
 		
 		self.valueDefault = value
@@ -63,8 +89,8 @@ class Slider:
 			widthWindow = 50,
 			widthMarker = 10,
 			columnWidth3 = (5, 5, 5),
-			menuReset = True,
 			command = "pass",
+			menuReset = True,
 			):
 		
 		self.valueDefault = value
