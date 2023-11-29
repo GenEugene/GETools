@@ -3,6 +3,7 @@ GETools changelog
 v0.0.10
 - [TOOLS] added custom bake cut outside logic
 - [TOOLS] added float field for locator scale
+- [UI] extracted rigging module from Tools and created new Rigging category
 -
 
 v0.0.9 - reinstall required

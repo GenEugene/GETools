@@ -5,11 +5,9 @@ from functools import partial
 
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Colors
-from GETOOLS_SOURCE.utils import Constraints
 from GETOOLS_SOURCE.utils import Locators
 from GETOOLS_SOURCE.utils import Other
 from GETOOLS_SOURCE.utils import Selector
-from GETOOLS_SOURCE.utils import Skinning
 from GETOOLS_SOURCE.utils import Timeline
 from GETOOLS_SOURCE.utils import UI
 
@@ -32,28 +30,6 @@ class ToolsAnnotations:
 	locatorsBakeReverse = "{bake}\n{reverse}".format(bake = locatorsBake, reverse = _reverseConstraint)
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
 	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
-
-	# Constraints
-	_textAllSelectedConstrainToLast = "All selected objects will be constrained to last selected object"
-	constraintReverse = "Reverse the direction of operation from last to first selected"
-	constraintMaintain = "Use maintain offset"
-	constraintParent = "Parent constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
-	constraintPoint = "Point constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
-	constraintOrient = "Orient constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
-	constraintScale = "Scale constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
-	constraintAim = "[IN DEVELOPMENT]\nAim constrain.".format(allToLast = _textAllSelectedConstrainToLast) # TODO
-
-	# Rigging
-	_rotateOrder = "rotate order attribute in channel box for all selected objects"
-	rotateOrderShow = "Show {0}".format(_rotateOrder)
-	rotateOrderHide = "Hide {0}".format(_rotateOrder)
-	_scaleCompensate = "segment scale compensate attribute for all selected joints"
-	scaleCompensateOn = "Activate {0}".format(_scaleCompensate)
-	scaleCompensateOff = "Deactivate {0}".format(_scaleCompensate)
-	_jointDrawStyle = "selected joints draw style"
-	jointDrawStyleBone = "Bone {0}".format(_jointDrawStyle)
-	jointDrawStyleHidden = "Hidden {0}".format(_jointDrawStyle)
-	copySkinWeights = "Copy skin weights from last selected object to all other selected objects"
 
 	# Bake
 	_bakeCutOutside = "Keys outside of time range or selected range will be removed"
@@ -85,8 +61,6 @@ class Tools:
 		self.checkboxLocatorHideParent = None
 		self.checkboxLocatorSubLocator = None
 		self.floatLocatorSize = None
-		self.checkboxConstraintReverse = None
-		self.checkboxConstraintMaintain = None
 	
 	def UICreate(self, layoutMain):
 		windowWidthMargin = Settings.windowWidthMargin
@@ -124,43 +98,6 @@ class Tools:
 		cmds.menuItem(label = "skip last object constrain", command = self.BakeAsChildrenFromLastSelectedReverseSkipLast)
 		
 
-		# CONSTRAINTS
-		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = "CONSTRAINTS", collapsable = True)
-		#
-		countOffsets = 4
-		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.separator(style = "none")
-		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.constraintReverse)
-		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, menuReset = False, enabled = True, annotation = ToolsAnnotations.constraintMaintain)
-		cmds.separator(style = "none")
-		#
-		countOffsets = 5
-		cmds.gridLayout(parent = layoutConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Parent", command = self.ConstrainParent, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintParent)
-		cmds.button(label = "Point", command = self.ConstrainPoint, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintPoint)
-		cmds.button(label = "Orient", command = self.ConstrainOrient, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintOrient)
-		cmds.button(label = "Scale", command = self.ConstrainScale, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintScale)
-		cmds.button(label = "Aim", command = self.ConstrainParent, backgroundColor = Colors.red10, annotation = ToolsAnnotations.constraintAim, enable = False) # TODO
-
-
-		# RIGGING
-		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "RIGGING", collapsable = True)
-		#
-		countOffsets = 2
-		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Rotate order\nSHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = ToolsAnnotations.rotateOrderShow)
-		cmds.button(label = "Rotate order\nHIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = ToolsAnnotations.rotateOrderHide)
-		cmds.button(label = "Segment Scale\nCompensate ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.scaleCompensateOn)
-		cmds.button(label = "Segment Scale\nCompensate OFF", command = partial(Other.SegmentScaleCompensate, False), backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.scaleCompensateOff)
-		cmds.button(label = "Joint\nBONE", command = partial(Other.JointDrawStyle, 0), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.jointDrawStyleBone)
-		cmds.button(label = "Joint\nHIDDEN", command = partial(Other.JointDrawStyle, 2), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.jointDrawStyleHidden)
-		#
-		countOffsets = 1
-		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Copy Skin Weights\nFrom Last Selected", command = self.CopySkinWeightsFromLastMesh, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.copySkinWeights)
-		# cmds.separator(style = "none")
-		
-		
 		# BAKE
 		layoutBake = cmds.frameLayout(parent = layoutMain, label = "BAKE", collapsable = True)
 		#
@@ -210,19 +147,8 @@ class Tools:
 		Locators.BakeAsChildrenFromLastSelectedReverse(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get(), skipLastReverse = True)
 	def BakeAsChildrenFromLastSelectedReverse(self, *args):
 		Locators.BakeAsChildrenFromLastSelectedReverse(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get(), skipLastReverse = False)
-	
 
-	# CONSTRAINTS
-	def ConstrainParent(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = True, point = False, orient = False, scale = False)
-	def ConstrainPoint(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = True, orient = False, scale = False)
-	def ConstrainOrient(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = True, scale = False)
-	def ConstrainScale(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = False, scale = True)
-	
-	
+
 	# BAKER
 	def BakeSelectedClassic(self, *args):
 		Baker.BakeSelected(classic = True, preserveOutsideKeys = True)
@@ -234,8 +160,4 @@ class Tools:
 		Baker.BakeSelected(classic = False, preserveOutsideKeys = False)
 	def BakeSelectedByLastObject(self, *args):
 		Baker.BakeSelectedByLastObject()
-	
-	# RIGGING
-	def CopySkinWeightsFromLastMesh(self, *args):
-		Skinning.CopySkinWeightsFromLastMesh();
 
