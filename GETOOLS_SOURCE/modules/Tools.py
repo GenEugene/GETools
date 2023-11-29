@@ -15,7 +15,7 @@ from GETOOLS_SOURCE.modules import Settings
 
 class ToolsAnnotations:
 	# Other
-	selectTransformHiererchy = "Select all children \"transform\" objects. \nWorks with multiple selected objects"
+	# selectTransformHiererchy = "Select all children \"transform\" objects. \nWorks with multiple selected objects"
 	printSelectedToConsole = "Just print all selected objects to console and count them"
 
 	# Locators
@@ -70,10 +70,10 @@ class Tools:
 		# SELECT
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "SELECT", collapsable = True)
 		#
-		countOffsets = 2
+		countOffsets = 1
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Print Selected\nTo Console", command = Selector.PrintSelected, backgroundColor = Colors.blackWhite90, annotation = ToolsAnnotations.printSelectedToConsole)
 		cmds.button(label = "Select Transform\nHiererchy", command = Selector.SelectTransformHierarchy, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.selectTransformHiererchy)
+		# cmds.separator(style = "none")
 		
 		# LOCATORS
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "LOCATORS", collapsable = True)

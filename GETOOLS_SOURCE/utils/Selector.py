@@ -39,8 +39,8 @@ def PrintSelected(*args):
 	if (selected == None):
 		return
 
-	print("\t##### {0} items printed below:".format(len(selected)))
+	print("***** {0} items printed below:".format(len(selected)))
 	for item in selected:
 		print(item)
-	print("\t#####")
+	print("*****")
 	

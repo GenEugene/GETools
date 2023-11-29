@@ -4,6 +4,7 @@ v0.0.10
 - [TOOLS] added custom bake cut outside logic
 - [TOOLS] added float field for locator scale
 - [UI] extracted rigging module from Tools and created new Rigging category
+- [UI] moved "Print selected objects to console" button from Tools/Select to Utils pop-up menu
 -
 
 v0.0.9 - reinstall required

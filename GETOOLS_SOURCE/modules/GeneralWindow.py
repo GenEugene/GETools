@@ -70,6 +70,9 @@ class GeneralWindow:
 		cmds.menuItem(label = "Dock Right", command = partial(self.DockToSide, Settings.dockAllowedAreas[1]))
 		cmds.menuItem(label = "Undock", command = self.DockOff)
 
+		cmds.menu(label = "Utils", tearOff = True)
+		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected)
+
 		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
 		def LinkVersionHistory(self): cmds.showHelp("https://github.com/GenEugene/GETools/blob/master/changelog.txt", absolute = True)
 		def LinkGithub(self): cmds.showHelp("https://github.com/GenEugene/GETools", absolute = True)
