@@ -15,8 +15,8 @@ from GETOOLS_SOURCE.modules import Settings
 
 class ToolsAnnotations:
 	# Other
-	# selectTransformHiererchy = "Select all children \"transform\" objects. \nWorks with multiple selected objects"
-	printSelectedToConsole = "Just print all selected objects to console and count them"
+	# printSelectedToConsole = "Just print all selected objects to console and count them"
+	selectTransformHiererchy = "Select all children \"transform\" objects. \nWorks with multiple selected objects"
 
 	# Locators
 	hideParent = "Deactivate vsibility on parent locator. \nUsually better o use with \"subLocator\" checkbox activated"

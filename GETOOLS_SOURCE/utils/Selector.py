@@ -15,7 +15,7 @@ def MultipleObjects(minimalCount = 1, transformsOnly = True):
 			ending = ""
 		else:
 			ending = "s"
-		cmds.warning("You need to select at least {0} object{1} !!!".format(minimalCount, ending))
+		cmds.warning("You need to select at least {0} object{1}".format(minimalCount, ending))
 		return None
 	else:
 		return selectedList
@@ -39,8 +39,9 @@ def PrintSelected(*args):
 	if (selected == None):
 		return
 
-	print("***** {0} items printed below:".format(len(selected)))
+	print("\nSelected Objects Printed Below: {0}".format(len(selected)))
+	print("-------------------------------")
 	for item in selected:
 		print(item)
-	print("*****")
-	
+	print("")
+

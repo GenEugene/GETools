@@ -37,7 +37,7 @@ def KeysNonkeyableDelete(*args):
 			for j in range(len(attributes)):
 				cmds.cutKey(item + "." + attributes[j])
 				counter += 1
-	print ("{0} nonkeyable detected and deleted".format(counter))
+	print ("\nNonkeyable attributes deleted: {0}".format(counter))
 
 def SelectJointsInScene(): # TODO make universal for other types
 	selected = cmds.ls(type = "joint")
