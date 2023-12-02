@@ -7,11 +7,17 @@ Here you can find different tools for specific cases, from simple tools for loca
 
 ***
 
-# Install
+# How to install
 Simply drag and drop GETools\TOOLS\DRAG_AND_DROP_INSTALL.py into Maya viewport
 
 ***
 
+# Update to new version
+1. Remove the old folder and paste new instead. It's important to completely remove all old files.
+2. If something doesn't work after version update just try to reinstall shelf button by drag and drop again.
+
+***
+
 # Known issues:
-- Window redocking sometimes causes maya crash, rare bug
+1. Window redocking sometimes causes maya crash
 
