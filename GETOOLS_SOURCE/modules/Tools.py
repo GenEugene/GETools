@@ -19,8 +19,8 @@ class ToolsAnnotations:
 	selectTransformHiererchy = "Select all children \"transform\" objects. \nWorks with multiple selected objects"
 
 	# Locators
-	hideParent = "Deactivate vsibility on parent locator. \nUsually better o use with \"subLocator\" checkbox activated"
-	subLocator = "Create an additional locator inside the main locator for additional local control"
+	hideParent = "Deactivate visibility on parent locator. \nUsually better to use with \"Sub Locator\" checkbox activated"
+	subLocator = "Create an extra locator inside the main locator for additional local control"
 	locatorSize = "Initial size of locator"
 	locator = "Create new locator on the world origin"
 	locatorMatch = "Create and match locators to selected objects"
