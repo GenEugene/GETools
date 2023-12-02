@@ -14,3 +14,4 @@ Simply drag and drop GETools\TOOLS\DRAG_AND_DROP_INSTALL.py into Maya viewport
 
 # Known issues:
 - Window redocking sometimes causes maya crash, rare bug
+

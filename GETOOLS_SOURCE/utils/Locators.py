@@ -10,7 +10,9 @@ from GETOOLS_SOURCE.utils import Text
 
 # TODO think how to merge the same logic on each function. Looks like a lot of similar parts of code
 
-def Create(name = "myLoc", scale = 10, hideParent = False, subLocators = False):
+scale = 1.0
+
+def Create(name = "myLoc", scale = scale, hideParent = False, subLocators = False):
 	locatorCurrent = cmds.spaceLocator(name = Text.SetUniqueFromText(name))[0]
 	cmds.setAttr(locatorCurrent + "Shape.localScaleX", scale)
 	cmds.setAttr(locatorCurrent + "Shape.localScaleY", scale)
@@ -31,7 +33,7 @@ def Create(name = "myLoc", scale = 10, hideParent = False, subLocators = False):
 	else:
 		return locatorCurrent
 
-def CreateOnSelected(name = "myLocMatched", minSelectedCount = 1, hideParent = False, subLocators = False):
+def CreateOnSelected(name = "myLocMatched", scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minSelectedCount)
 	if (selectedList == None):
@@ -42,7 +44,7 @@ def CreateOnSelected(name = "myLocMatched", minSelectedCount = 1, hideParent = F
 	sublocatorsList = []
 	for item in selectedList:
 		nameCurrent = Text.GetShortName(item, removeSpaces = True) + name
-		created = Create(name = nameCurrent, hideParent = hideParent, subLocators = subLocators)
+		created = Create(name = nameCurrent, scale = scale, hideParent = hideParent, subLocators = subLocators)
 
 		if (subLocators):
 			locatorsList.append(created[0])
@@ -67,8 +69,8 @@ def CreateOnSelected(name = "myLocMatched", minSelectedCount = 1, hideParent = F
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
 
-def CreateOnSelectedWithParentConstrain(name = "myLocConstrained", minSelectedCount = 1, hideParent = False, subLocators = False):
-	objects = CreateOnSelected(name, minSelectedCount, hideParent, subLocators)
+def CreateOnSelectedWithParentConstrain(name = "myLocConstrained", scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False):
+	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators)
 	if (objects == None):
 		return None
 
@@ -90,8 +92,8 @@ def CreateOnSelectedWithParentConstrain(name = "myLocConstrained", minSelectedCo
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
 
-def CreateOnSelectedAndBake(name = "myLocBaked", minSelectedCount = 1, hideParent = False, subLocators = False, parentToLastSelected = False):
-	objects = CreateOnSelectedWithParentConstrain(name, minSelectedCount, hideParent, subLocators)
+def CreateOnSelectedAndBake(name = "myLocBaked", scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False, parentToLastSelected = False):
+	objects = CreateOnSelectedWithParentConstrain(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators)
 	if (objects == None):
 		return None
 
@@ -126,8 +128,8 @@ def CreateOnSelectedAndBake(name = "myLocBaked", minSelectedCount = 1, hideParen
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
 
-def CreateOnSelectedReverseConstrain(name = "myLocReverse", minSelectedCount = 1, hideParent = False, subLocators = False):
-	objects = CreateOnSelectedAndBake(name, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators)
+def CreateOnSelectedReverseConstrain(name = "myLocReverse", scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False):
+	objects = CreateOnSelectedAndBake(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators)
 	if (objects == None):
 		return None
 
@@ -152,8 +154,8 @@ def CreateOnSelectedReverseConstrain(name = "myLocReverse", minSelectedCount = 1
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
 
-def BakeAsChildrenFromLastSelected(minSelectedCount = 2, hideParent = False, subLocators = False):
-	objects = CreateOnSelectedAndBake(minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators, parentToLastSelected = True)
+def BakeAsChildrenFromLastSelected(scale = scale, minSelectedCount = 2, hideParent = False, subLocators = False):
+	objects = CreateOnSelectedAndBake(scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators, parentToLastSelected = True)
 	if (objects == None):
 		return None
 	
@@ -171,8 +173,8 @@ def BakeAsChildrenFromLastSelected(minSelectedCount = 2, hideParent = False, sub
 		cmds.select(locatorsList[-1])
 		return objects
 
-def BakeAsChildrenFromLastSelectedReverse(hideParent = False, subLocators = False, skipLastReverse = True):
-	objects = BakeAsChildrenFromLastSelected(hideParent = hideParent, subLocators = subLocators)
+def BakeAsChildrenFromLastSelectedReverse(scale = scale, hideParent = False, subLocators = False, skipLastReverse = True):
+	objects = BakeAsChildrenFromLastSelected(scale = scale, hideParent = hideParent, subLocators = subLocators)
 	if (objects == None):
 		return None
 	

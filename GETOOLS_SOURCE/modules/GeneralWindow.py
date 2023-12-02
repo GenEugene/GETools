@@ -13,17 +13,19 @@ from GETOOLS_SOURCE.utils import Selector
 
 from GETOOLS_SOURCE.modules import CenterOfMass as com
 from GETOOLS_SOURCE.modules import Overlappy as ovlp
+from GETOOLS_SOURCE.modules import Rigging as rig
 from GETOOLS_SOURCE.modules import Settings
 from GETOOLS_SOURCE.modules import Tools as tls
 
 class GeneralWindow:
-	version = "v0.0.9"
+	version = "v0.0.10"
 	name = "GETools"
 	title = name + " " + version
 
 	def __init__(self):
 		self.directory = ""
 		self.frameTools = None
+		self.frameRigging = None
 		self.frameOverlappy = None
 		self.frameCenterOfMass = None
 		self.frameExperimental = None
@@ -38,6 +40,7 @@ class GeneralWindow:
 		
 		layoutScroll = cmds.scrollLayout(parent = layoutRoot, width = Settings.windowWidth)
 		self.LayoutTools(layoutScroll)
+		self.LayoutRigging(layoutScroll)
 		self.LayoutOverlappy(layoutScroll)
 		self.LayoutCenterOfMass(layoutScroll)
 		self.LayoutExperimental(layoutScroll)
@@ -66,6 +69,9 @@ class GeneralWindow:
 		cmds.menuItem(label = "Dock Left", command = partial(self.DockToSide, Settings.dockAllowedAreas[0]))
 		cmds.menuItem(label = "Dock Right", command = partial(self.DockToSide, Settings.dockAllowedAreas[1]))
 		cmds.menuItem(label = "Undock", command = self.DockOff)
+
+		cmds.menu(label = "Utils", tearOff = True)
+		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected)
 
 		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
 		def LinkVersionHistory(self): cmds.showHelp("https://github.com/GenEugene/GETools/blob/master/changelog.txt", absolute = True)
@@ -125,6 +131,9 @@ class GeneralWindow:
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = tls.Tools.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		tls.Tools().UICreate(self.frameTools)
+	def LayoutRigging(self, parentLayout):
+		self.frameRigging = cmds.frameLayout("layoutRigging", parent = parentLayout, label = rig.Rigging.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		rig.Rigging().UICreate(self.frameRigging)
 	def LayoutOverlappy(self, parentLayout):
 		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = ovlp.Overlappy.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		ovlp.Overlappy().UICreate(self.frameOverlappy)
@@ -171,6 +180,8 @@ class GeneralWindow:
 	def FramesCollapse(self, value, *args): # TODO collapse function for sub frames
 		if (self.frameTools != None):
 			cmds.frameLayout(self.frameTools, edit = True, collapse = value)
+		if (self.frameRigging != None):
+			cmds.frameLayout(self.frameRigging, edit = True, collapse = value)
 		if (self.frameOverlappy != None):
 			cmds.frameLayout(self.frameOverlappy, edit = True, collapse = value)
 		if (self.frameCenterOfMass != None):
