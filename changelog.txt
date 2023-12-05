@@ -1,5 +1,11 @@
 GETools changelog
 
+v0.0.11
+- [UI] added Color Palette window for colors analysis
+- in progress | [TOOLS] added Locators baking to Aim space
+- in progress | [RIGGING] added Aim Constraint logic
+- updated UI module
+
 v0.0.10
 - [TOOLS] added custom bake cut outside logic
 - [TOOLS] added float field for locator scale

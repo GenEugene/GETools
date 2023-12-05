@@ -30,6 +30,8 @@ class ToolsAnnotations:
 	locatorsBakeReverse = "{bake}\n{reverse}".format(bake = locatorsBake, reverse = _reverseConstraint)
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
 	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
+	locatorsBakeAim = "[IN DEVELOPMENT]\nLocators Bake Aim" # TODO
+	locatorAimDistance = "[IN DEVELOPMENT]\nLocator Aim distance from original object. Need to use non-zero value" # TODO
 
 	# Bake
 	_bakeCutOutside = "Keys outside of time range or selected range will be removed"
@@ -52,30 +54,39 @@ class ToolsAnnotations:
 	timelineExpandInner = "Expand timeline range to inner range"
 	timelineFocusRange = "Set timeline inner range on selected range by mouse"
 
+class ToolsSettings:
+	# SLIDERS (field min/max, slider min/max)
+	rangeLocatorAimOffset = (0, float("inf"), 0, 200)
+
 class Tools:
-	version = "v0.1.3"
+	version = "v0.1.4"
 	name = "TOOLS"
 	title = name + " " + version
-	
+
 	def __init__(self):
 		self.checkboxLocatorHideParent = None
 		self.checkboxLocatorSubLocator = None
 		self.floatLocatorSize = None
-	
+		self.floatLocatorAimOffset = None
 	def UICreate(self, layoutMain):
 		windowWidthMargin = Settings.windowWidthMargin
 		lineHeight = Settings.lineHeight
+		sliderWidth = Settings.sliderWidth
+		sliderWidthMarker = Settings.sliderWidthMarker
 
-
-		# SELECT
+		self.UILayoutSelect(layoutMain, windowWidthMargin, lineHeight)
+		self.UILayoutLocators(layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker)
+		self.UILayoutBake(layoutMain, windowWidthMargin, lineHeight)
+		self.UILayoutAnimation(layoutMain, windowWidthMargin, lineHeight)
+	def UILayoutSelect(self, layoutMain, windowWidthMargin, lineHeight):
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "SELECT", collapsable = True)
 		#
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Select Transform\nHiererchy", command = Selector.SelectTransformHierarchy, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.selectTransformHiererchy)
 		# cmds.separator(style = "none")
-		
-		# LOCATORS
+		pass
+	def UILayoutLocators(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "LOCATORS", collapsable = True)
 		#
 		countOffsets = 3
@@ -96,9 +107,29 @@ class Tools:
 		cmds.button(label = "Locators relative + reverse", command = self.BakeAsChildrenFromLastSelectedReverse, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.locatorsRelativeReverse)
 		cmds.popupMenu()
 		cmds.menuItem(label = "skip last object constrain", command = self.BakeAsChildrenFromLastSelectedReverseSkipLast)
-		
-
-		# BAKE
+		#
+		layoutAim = cmds.gridLayout(parent = layoutLocators, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
+		countOffsets = 6
+		cmds.gridLayout(parent = layoutAim, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "X-", command = partial(self.CreateLocatorBakeAim, 1), backgroundColor = Colors.red10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "X+", command = partial(self.CreateLocatorBakeAim, 2), backgroundColor = Colors.red50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "Y-", command = partial(self.CreateLocatorBakeAim, 3), backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "Y+", command = partial(self.CreateLocatorBakeAim, 4), backgroundColor = Colors.green50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "Z-", command = partial(self.CreateLocatorBakeAim, 5), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "Z+", command = partial(self.CreateLocatorBakeAim, 6), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		self.floatLocatorAimOffset = UI.Slider(
+			parent = layoutAim,
+			widthWindow = windowWidthMargin,
+			widthMarker = sliderWidthMarker,
+			columnWidth3 = sliderWidth,
+			# command = ,
+			label = "Distance",
+			annotation = ToolsAnnotations.locatorAimDistance,
+			value = 100,
+			minMax = ToolsSettings.rangeLocatorAimOffset,
+			menuReset = True,
+		)
+	def UILayoutBake(self, layoutMain, windowWidthMargin, lineHeight):
 		layoutBake = cmds.frameLayout(parent = layoutMain, label = "BAKE", collapsable = True)
 		#
 		countOffsets = 2
@@ -108,9 +139,7 @@ class Tools:
 		cmds.button(label = "Bake Custom", command = self.BakeSelectedCustom, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeCustom)
 		cmds.button(label = "Bake Custom\nCut Outer", command = self.BakeSelectedCustomCut, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeCustomCut)
 		cmds.button(label = "Bake Selected\nBy Last Object", command = self.BakeSelectedByLastObject, backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast)
-		
-		
-		# ANIMATION
+	def UILayoutAnimation(self, layoutMain, windowWidthMargin, lineHeight):
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "ANIMATION", collapsable = True)
 		#
 		countOffsets = 3
@@ -147,6 +176,20 @@ class Tools:
 		Locators.BakeAsChildrenFromLastSelectedReverse(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get(), skipLastReverse = True)
 	def BakeAsChildrenFromLastSelectedReverse(self, *args):
 		Locators.BakeAsChildrenFromLastSelectedReverse(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get(), skipLastReverse = False)
+	def CreateLocatorBakeAim(self, axis, *args): # TODO
+		axisString = ""
+		scale = self.floatLocatorSize.Get()
+		distance = self.floatLocatorAimOffset.Get()
+
+		if (axis == 1): axisString = "X-"
+		elif (axis == 2): axisString = "X+"
+		elif (axis == 3): axisString = "Y-"
+		elif (axis == 4): axisString = "Y+"
+		elif (axis == 5): axisString = "Z-"
+		elif (axis == 6): axisString = "Z+"
+		print(f"Axis = {axisString} | Distance = {distance}")
+
+		Locators.CreateAim(scale = scale, hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get())
 
 
 	# BAKER

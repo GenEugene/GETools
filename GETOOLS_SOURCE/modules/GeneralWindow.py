@@ -18,7 +18,7 @@ from GETOOLS_SOURCE.modules import Settings
 from GETOOLS_SOURCE.modules import Tools as tls
 
 class GeneralWindow:
-	version = "v0.0.10"
+	version = "v0.0.11"
 	name = "GETools"
 	title = name + " " + version
 
@@ -70,8 +70,12 @@ class GeneralWindow:
 		cmds.menuItem(label = "Dock Right", command = partial(self.DockToSide, Settings.dockAllowedAreas[1]))
 		cmds.menuItem(label = "Undock", command = self.DockOff)
 
+		def ColorsPalette(*args):
+			colorCalibration = Colors.ColorsPalette()
+			colorCalibration.CreateUI()
 		cmds.menu(label = "Utils", tearOff = True)
 		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected)
+		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette)
 
 		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
 		def LinkVersionHistory(self): cmds.showHelp("https://github.com/GenEugene/GETools/blob/master/changelog.txt", absolute = True)

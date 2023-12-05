@@ -201,3 +201,8 @@ def BakeAsChildrenFromLastSelectedReverse(scale = scale, hideParent = False, sub
 		cmds.select(locatorsList[-1])
 		return objects
 
+def CreateAim(name = "myLocAim", scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False): # TODO
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(minSelectedCount)
+	if (selectedList == None):
+		return None

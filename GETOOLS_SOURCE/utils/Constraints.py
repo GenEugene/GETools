@@ -4,14 +4,13 @@ import maya.cmds as cmds
 
 from GETOOLS_SOURCE.utils import Selector
 
-def ConstrainSelectedToLastObject(reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, weight=1):
-	# Check selected objects
+def ConstrainSelectedToLastObject(reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
 	selected = Selector.MultipleObjects(2)
 	if (selected == None):
 		return
-	ConstrainListToLastElement(reverse, selected, maintainOffset, parent, point, orient, scale, weight)
+	ConstrainListToLastElement(reverse, selected, maintainOffset, parent, point, orient, scale, aim, weight)
 
-def ConstrainListToLastElement(reverse=False, selected=None, maintainOffset=True, parent=True, point=False, orient=False, scale=False, weight=1):
+def ConstrainListToLastElement(reverse=False, selected=None, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
 	if (selected == None):
 		cmds.warning("### WARNING ### selected = None")
 		return
@@ -27,15 +26,14 @@ def ConstrainListToLastElement(reverse=False, selected=None, maintainOffset=True
 			index1 = -1
 			index2 = i
 		
-		ConstrainSecondToFirstObject(selected[index1], selected[index2], maintainOffset, parent, point, orient, scale, weight = weight)
+		ConstrainSecondToFirstObject(selected[index1], selected[index2], maintainOffset, parent, point, orient, scale, aim, weight = weight)
 
-def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True, parent=True, point=False, orient=False, scale=False, weight=1):
+def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
 	if parent:
 		try:
 			cmds.parentConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight)
 		except:
 			print("||||| Can't create parentConstraint on {0}".format(objectChild))
-	
 	else:
 		if point:
 			try:
@@ -55,4 +53,11 @@ def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True,
 			cmds.scaleConstraint(objectParent, objectChild, maintainOffset = maintainOffset) # weight = weight
 		except:
 			print("||||| Can't create scaleConstraint on {0}".format(objectChild))
+	
+	if aim:
+		ConstrainAim(objectParent, objectChild, maintainOffset, weight) # TODO
+
+def ConstrainAim(objectParent, objectChild, maintainOffset = True, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "none", worldUpVector = (0, 1, 0), worldUpObject = ""):
+	# "scene" "object" "objectrotation" "vector" "none"
+	cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = worldUpType, worldUpVector = worldUpVector, worldUpObject = worldUpObject)
 

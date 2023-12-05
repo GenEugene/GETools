@@ -43,10 +43,10 @@ purple100 = (0.75, 0.3, 1)
 
 import maya.cmds as cmds
 
-class ColorsCalibration:
+class ColorsPalette:
 	def __init__(self):
 		self.window_name = "windowColorCalibration"
-		self.titleText = "Color Calibration"
+		self.titleText = "Colors Palette"
 		self.windowWidth = 330
 		self.windowHeight = 10
 		self.lineHeight = 20
@@ -110,5 +110,3 @@ class ColorsCalibration:
 		# RUN WINDOW
 		cmds.showWindow(self.window_name)
 
-# colorCalibration = ColorsCalibration()
-# colorCalibration.CreateUI()
