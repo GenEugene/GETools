@@ -16,7 +16,7 @@ from GETOOLS_SOURCE.modules import Settings
 class ToolsAnnotations:
 	# Other
 	# printSelectedToConsole = "Just print all selected objects to console and count them"
-	selectTransformHiererchy = "Select all children \"transform\" objects. \nWorks with multiple selected objects"
+	# selectTransformHiererchy = "Select all children \"transform\" objects. \nWorks with multiple selected objects"
 
 	# Locators
 	hideParent = "Deactivate visibility on parent locator. \nUsually better to use with \"Sub Locator\" checkbox activated"
@@ -74,18 +74,9 @@ class Tools:
 		sliderWidth = Settings.sliderWidth
 		sliderWidthMarker = Settings.sliderWidthMarker
 
-		self.UILayoutSelect(layoutMain, windowWidthMargin, lineHeight)
 		self.UILayoutLocators(layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker)
 		self.UILayoutBaking(layoutMain, windowWidthMargin, lineHeight)
 		self.UILayoutAnimation(layoutMain, windowWidthMargin, lineHeight)
-	def UILayoutSelect(self, layoutMain, windowWidthMargin, lineHeight):
-		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "SELECT", collapsable = True)
-		#
-		countOffsets = 1
-		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Select Transform\nHiererchy", command = Selector.SelectTransformHierarchy, backgroundColor = Colors.blue10, annotation = ToolsAnnotations.selectTransformHiererchy)
-		# cmds.separator(style = "none")
-		pass
 	def UILayoutLocators(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "LOCATORS / SPACE SWITCHING", collapsable = True)
 		#

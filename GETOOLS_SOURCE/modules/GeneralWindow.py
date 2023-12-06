@@ -74,7 +74,9 @@ class GeneralWindow:
 			colorCalibration = Colors.ColorsPalette()
 			colorCalibration.CreateUI()
 		cmds.menu(label = "Utils", tearOff = True)
+		cmds.menuItem(label = "Select Transform Hiererchy", command = Selector.SelectTransformHierarchy)
 		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected)
+		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette)
 
 		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
