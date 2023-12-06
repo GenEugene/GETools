@@ -49,7 +49,7 @@ def CreateOnSelected(name = nameMatched, scale = scale, minSelectedCount = 1, hi
 	locatorsList = []
 	sublocatorsList = []
 	for item in selectedList:
-		nameCurrent = name + "_" + Text.GetShortName(item, removeSpaces = True)
+		nameCurrent = Text.GetShortName(item, removeSpaces = True) + "_" + name
 		created = Create(name = nameCurrent, scale = scale, hideParent = hideParent, subLocators = subLocators)
 
 		if (subLocators):

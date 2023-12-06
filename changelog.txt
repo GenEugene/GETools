@@ -4,9 +4,7 @@ v0.0.11
 - [UI] added Color Palette window for colors analysis
 - in progress | [TOOLS] added Locators baking to Aim space
 - in progress | [RIGGING] added Aim Constraint logic
-- [TOOLS] changed locator naming order (then "objectName" + "suffix", now "suffix_" + "objectName")
 - updated UI module
--
 
 v0.0.10
 - [TOOLS] added custom bake cut outside logic
