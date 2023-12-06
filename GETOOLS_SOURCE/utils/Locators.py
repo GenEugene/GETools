@@ -10,9 +10,15 @@ from GETOOLS_SOURCE.utils import Text
 
 # TODO think how to merge the same logic on each function. Looks like a lot of similar parts of code
 
+nameBase = "gLoc"
+nameMatched = f"{nameBase}Matched"
+nameConstrained = f"{nameBase}Constrained"
+nameBaked = f"{nameBase}Baked"
+nameReverse = f"{nameBase}Reverse"
+nameAim = f"{nameBase}Aim"
 scale = 1.0
 
-def Create(name = "myLoc", scale = scale, hideParent = False, subLocators = False):
+def Create(name = nameBase, scale = scale, hideParent = False, subLocators = False):
 	locatorCurrent = cmds.spaceLocator(name = Text.SetUniqueFromText(name))[0]
 	cmds.setAttr(locatorCurrent + "Shape.localScaleX", scale)
 	cmds.setAttr(locatorCurrent + "Shape.localScaleY", scale)
@@ -33,7 +39,7 @@ def Create(name = "myLoc", scale = scale, hideParent = False, subLocators = Fals
 	else:
 		return locatorCurrent
 
-def CreateOnSelected(name = "myLocMatched", scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False):
+def CreateOnSelected(name = nameMatched, scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minSelectedCount)
 	if (selectedList == None):
@@ -43,7 +49,7 @@ def CreateOnSelected(name = "myLocMatched", scale = scale, minSelectedCount = 1,
 	locatorsList = []
 	sublocatorsList = []
 	for item in selectedList:
-		nameCurrent = Text.GetShortName(item, removeSpaces = True) + name
+		nameCurrent = name + "_" + Text.GetShortName(item, removeSpaces = True)
 		created = Create(name = nameCurrent, scale = scale, hideParent = hideParent, subLocators = subLocators)
 
 		if (subLocators):
@@ -69,7 +75,7 @@ def CreateOnSelected(name = "myLocMatched", scale = scale, minSelectedCount = 1,
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
 
-def CreateOnSelectedWithParentConstrain(name = "myLocConstrained", scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False):
+def CreateOnSelectedWithParentConstrain(name = nameConstrained, scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False):
 	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators)
 	if (objects == None):
 		return None
@@ -92,7 +98,7 @@ def CreateOnSelectedWithParentConstrain(name = "myLocConstrained", scale = scale
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
 
-def CreateOnSelectedAndBake(name = "myLocBaked", scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False, parentToLastSelected = False):
+def CreateOnSelectedAndBake(name = nameBaked, scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False, parentToLastSelected = False):
 	objects = CreateOnSelectedWithParentConstrain(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators)
 	if (objects == None):
 		return None
@@ -128,7 +134,7 @@ def CreateOnSelectedAndBake(name = "myLocBaked", scale = scale, minSelectedCount
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
 
-def CreateOnSelectedReverseConstrain(name = "myLocReverse", scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False):
+def CreateOnSelectedReverseConstrain(name = nameReverse, scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False):
 	objects = CreateOnSelectedAndBake(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators)
 	if (objects == None):
 		return None
@@ -201,8 +207,33 @@ def BakeAsChildrenFromLastSelectedReverse(scale = scale, hideParent = False, sub
 		cmds.select(locatorsList[-1])
 		return objects
 
-def CreateAim(name = "myLocAim", scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False): # TODO
-	# Check selected objects
-	selectedList = Selector.MultipleObjects(minSelectedCount)
-	if (selectedList == None):
+def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = 1, hideParent = False, subLocators = False): # TODO
+	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocators = subLocators)
+	if (objects == None):
 		return None
+	
+	# Get lists from function
+	selectedList = objects[0]
+	locatorsList = objects[1]
+	if (subLocators):
+		sublocatorsList = objects[2]
+	
+	# Main cycle
+	for i in range(len(selectedList)): # TODO
+		# root locator
+		# 	offset locator
+		# target locator
+
+		print(selectedList[i])
+	
+
+	# cmds.group(empty = True, name = ) # TODO add each root locator to this group
+
+	# Select objects and return
+	if (subLocators):
+		cmds.select(sublocatorsList)
+		return selectedList, locatorsList, sublocatorsList
+	else:
+		cmds.select(locatorsList)
+		return selectedList, locatorsList
+

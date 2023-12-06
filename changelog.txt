@@ -4,14 +4,15 @@ v0.0.11
 - [UI] added Color Palette window for colors analysis
 - in progress | [TOOLS] added Locators baking to Aim space
 - in progress | [RIGGING] added Aim Constraint logic
+- [TOOLS] changed locator naming order (then "objectName" + "suffix", now "suffix_" + "objectName")
 - updated UI module
+-
 
 v0.0.10
 - [TOOLS] added custom bake cut outside logic
 - [TOOLS] added float field for locator scale
 - [UI] extracted rigging module from Tools and created new Rigging category
 - [UI] moved "Print selected objects to console" button from Tools/Select to Utils pop-up menu
--
 
 v0.0.9 - reinstall required
 - [CRITICAL] fixed support for Maya 2020, removed circular dependencies

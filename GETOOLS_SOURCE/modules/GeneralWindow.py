@@ -6,8 +6,8 @@ from functools import partial
 from GETOOLS_SOURCE.utils import Colors
 from GETOOLS_SOURCE.utils import Install
 from GETOOLS_SOURCE.utils import Layers
-from GETOOLS_SOURCE.utils import MotionTrail
 from GETOOLS_SOURCE.utils import MayaSettings
+from GETOOLS_SOURCE.utils import MotionTrail
 from GETOOLS_SOURCE.utils import Scene
 from GETOOLS_SOURCE.utils import Selector
 

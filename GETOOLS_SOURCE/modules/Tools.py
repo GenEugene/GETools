@@ -61,7 +61,7 @@ class ToolsSettings:
 class Tools:
 	version = "v0.1.4"
 	name = "TOOLS"
-	title = name + " " + version
+	title = f"{name} {version}"
 
 	def __init__(self):
 		self.checkboxLocatorHideParent = None
@@ -76,7 +76,7 @@ class Tools:
 
 		self.UILayoutSelect(layoutMain, windowWidthMargin, lineHeight)
 		self.UILayoutLocators(layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker)
-		self.UILayoutBake(layoutMain, windowWidthMargin, lineHeight)
+		self.UILayoutBaking(layoutMain, windowWidthMargin, lineHeight)
 		self.UILayoutAnimation(layoutMain, windowWidthMargin, lineHeight)
 	def UILayoutSelect(self, layoutMain, windowWidthMargin, lineHeight):
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "SELECT", collapsable = True)
@@ -87,7 +87,7 @@ class Tools:
 		# cmds.separator(style = "none")
 		pass
 	def UILayoutLocators(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
-		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "LOCATORS", collapsable = True)
+		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "LOCATORS / SPACE SWITCHING", collapsable = True)
 		#
 		countOffsets = 3
 		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
@@ -111,12 +111,12 @@ class Tools:
 		layoutAim = cmds.gridLayout(parent = layoutLocators, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
 		countOffsets = 6
 		cmds.gridLayout(parent = layoutAim, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "X-", command = partial(self.CreateLocatorBakeAim, 1), backgroundColor = Colors.red10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
-		cmds.button(label = "X+", command = partial(self.CreateLocatorBakeAim, 2), backgroundColor = Colors.red50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
-		cmds.button(label = "Y-", command = partial(self.CreateLocatorBakeAim, 3), backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
-		cmds.button(label = "Y+", command = partial(self.CreateLocatorBakeAim, 4), backgroundColor = Colors.green50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
-		cmds.button(label = "Z-", command = partial(self.CreateLocatorBakeAim, 5), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
-		cmds.button(label = "Z+", command = partial(self.CreateLocatorBakeAim, 6), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "-X", command = partial(self.CreateLocatorBakeAim, 1), backgroundColor = Colors.red10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "+X", command = partial(self.CreateLocatorBakeAim, 2), backgroundColor = Colors.red50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "-Y", command = partial(self.CreateLocatorBakeAim, 3), backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "+Y", command = partial(self.CreateLocatorBakeAim, 4), backgroundColor = Colors.green50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "-Z", command = partial(self.CreateLocatorBakeAim, 5), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "+Z", command = partial(self.CreateLocatorBakeAim, 6), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
 		self.floatLocatorAimOffset = UI.Slider(
 			parent = layoutAim,
 			widthWindow = windowWidthMargin,
@@ -127,10 +127,11 @@ class Tools:
 			annotation = ToolsAnnotations.locatorAimDistance,
 			value = 100,
 			minMax = ToolsSettings.rangeLocatorAimOffset,
+			precision = 3,
 			menuReset = True,
 		)
-	def UILayoutBake(self, layoutMain, windowWidthMargin, lineHeight):
-		layoutBake = cmds.frameLayout(parent = layoutMain, label = "BAKE", collapsable = True)
+	def UILayoutBaking(self, layoutMain, windowWidthMargin, lineHeight):
+		layoutBake = cmds.frameLayout(parent = layoutMain, label = "BAKING", collapsable = True)
 		#
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutBake, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
@@ -181,15 +182,18 @@ class Tools:
 		scale = self.floatLocatorSize.Get()
 		distance = self.floatLocatorAimOffset.Get()
 
-		if (axis == 1): axisString = "X-"
-		elif (axis == 2): axisString = "X+"
-		elif (axis == 3): axisString = "Y-"
-		elif (axis == 4): axisString = "Y+"
-		elif (axis == 5): axisString = "Z-"
-		elif (axis == 6): axisString = "Z+"
+		if (axis == 1): axisString = "-X"
+		elif (axis == 2): axisString = "+X"
+		elif (axis == 3): axisString = "-Y"
+		elif (axis == 4): axisString = "+Y"
+		elif (axis == 5): axisString = "-Z"
+		elif (axis == 6): axisString = "+Z"
 		print(f"Axis = {axisString} | Distance = {distance}")
 
-		Locators.CreateAim(scale = scale, hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get())
+		Locators.CreateOnSelectedAim(scale = scale, hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get()) # TODO
+
+		if (distance == 0):
+			cmds.warning("Aim distance is 0. Hihgly recomended to use non-zero value.")
 
 
 	# BAKER

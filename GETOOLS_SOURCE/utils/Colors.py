@@ -59,8 +59,7 @@ class ColorsPalette:
 		cmds.window(self.window_name, edit = True, resizeToFitChildren = True)
 		layoutMain = cmds.columnLayout(adjustableColumn = False, width = self.windowWidth)
 
-
-		# CENTER OF MASS LOCATOR
+		# TODO add color console print on button press
 		buttonsBlackWhite = 11
 		cmds.gridLayout(parent = layoutMain, numberOfColumns = buttonsBlackWhite, cellWidth = self.windowWidth / buttonsBlackWhite)
 		#

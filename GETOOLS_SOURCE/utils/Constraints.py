@@ -55,9 +55,12 @@ def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True,
 			print("||||| Can't create scaleConstraint on {0}".format(objectChild))
 	
 	if aim:
-		ConstrainAim(objectParent, objectChild, maintainOffset, weight) # TODO
+		ConstrainAim(objectParent, objectChild, maintainOffset, weight) # TODO add customization logic
 
-def ConstrainAim(objectParent, objectChild, maintainOffset = True, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "none", worldUpVector = (0, 1, 0), worldUpObject = ""):
+def ConstrainAim(objectParent, objectChild, maintainOffset = True, weight = 1, aimVector = (0, 0, 1), upVector = (0, 1, 0), worldUpVector = (0, 1, 0), worldUpObject = None):
 	# "scene" "object" "objectrotation" "vector" "none"
-	cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = worldUpType, worldUpVector = worldUpVector, worldUpObject = worldUpObject)
+	if (worldUpObject == None):
+		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = "vector", worldUpVector = worldUpVector)
+	else:
+		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = worldUpVector, worldUpObject = worldUpObject)
 
