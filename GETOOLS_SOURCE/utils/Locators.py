@@ -11,11 +11,11 @@ from GETOOLS_SOURCE.utils import Text
 # TODO think how to merge the same logic on each function. Looks like a lot of similar parts of code
 
 nameBase = "gLoc"
-nameMatched = f"{nameBase}Matched"
-nameConstrained = f"{nameBase}Constrained"
-nameBaked = f"{nameBase}Baked"
-nameReverse = f"{nameBase}Reverse"
-nameAim = f"{nameBase}Aim"
+nameMatched = "{0}Matched".format(nameBase)
+nameConstrained = "{0}Constrained".format(nameBase)
+nameBaked = "{0}Baked".format(nameBase)
+nameReverse = "{0}Reverse".format(nameBase)
+nameAim = "{0}Aim".format(nameBase)
 scale = 1.0
 
 def Create(name = nameBase, scale = scale, hideParent = False, subLocators = False):

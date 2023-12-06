@@ -61,7 +61,7 @@ class ToolsSettings:
 class Tools:
 	version = "v0.1.4"
 	name = "TOOLS"
-	title = f"{name} {version}"
+	title = "{0} {1}".format(name, version)
 
 	def __init__(self):
 		self.checkboxLocatorHideParent = None
@@ -188,7 +188,7 @@ class Tools:
 		elif (axis == 4): axisString = "+Y"
 		elif (axis == 5): axisString = "-Z"
 		elif (axis == 6): axisString = "+Z"
-		print(f"Axis = {axisString} | Distance = {distance}")
+		print("Axis = {0} | Distance = {1}".format(axisString, distance))
 
 		Locators.CreateOnSelectedAim(scale = scale, hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get()) # TODO
 
