@@ -106,19 +106,19 @@ class Tools:
 		cmds.button(label = "-X", command = partial(self.CreateLocatorBakeAim, 1, True), backgroundColor = Colors.red10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
 		cmds.popupMenu()
 		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 1, False))
-		cmds.button(label = "+X", command = partial(self.CreateLocatorBakeAim, 2), backgroundColor = Colors.red50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "+X", command = partial(self.CreateLocatorBakeAim, 2, True), backgroundColor = Colors.red50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
 		cmds.popupMenu()
 		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 2, False))
-		cmds.button(label = "-Y", command = partial(self.CreateLocatorBakeAim, 3), backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "-Y", command = partial(self.CreateLocatorBakeAim, 3, True), backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
 		cmds.popupMenu()
 		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 3, False))
-		cmds.button(label = "+Y", command = partial(self.CreateLocatorBakeAim, 4), backgroundColor = Colors.green50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "+Y", command = partial(self.CreateLocatorBakeAim, 4, True), backgroundColor = Colors.green50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
 		cmds.popupMenu()
 		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 4, False))
-		cmds.button(label = "-Z", command = partial(self.CreateLocatorBakeAim, 5), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "-Z", command = partial(self.CreateLocatorBakeAim, 5, True), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
 		cmds.popupMenu()
 		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 5, False))
-		cmds.button(label = "+Z", command = partial(self.CreateLocatorBakeAim, 6), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "+Z", command = partial(self.CreateLocatorBakeAim, 6, True), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
 		cmds.popupMenu()
 		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 6, False))
 		self.floatLocatorAimOffset = UI.Slider(

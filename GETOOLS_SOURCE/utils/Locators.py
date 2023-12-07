@@ -208,7 +208,7 @@ def BakeAsChildrenFromLastSelectedReverse(scale = scale, hideParent = False, sub
 		cmds.select(locatorsList[-1])
 		return objects
 
-def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = 1, hideParent = False, subLocator = False, aimVector = (1, 0, 0), distance = 100, reverse = False):
+def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = 1, hideParent = False, subLocator = False, aimVector = (1, 0, 0), distance = 100, reverse = True):
 	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator)
 	if (objects == None):
 		return None
