@@ -1,15 +1,17 @@
 GETools changelog
 
-v0.0.11
-- [UI] moved Select Transform Hierarchy button to Utils menu and remove SELECT category in TOOLS module
-- [UI] added Color Palette window for colors analysis
-- [UI] improved spacing between ui elements
-- [TOOLS] added Locators baking to Aim space
-- [TOOLS] added animation curve infinity buttons
+Backlog:
 - in progress | [RIGGING] added constraint offset object
 - in progress | [RIGGING] added Aim Constraint logic
+
+v0.0.11
+- [UI] moved Select Transform Hierarchy button to Utils menu and remove SELECT category in TOOLS module
+- [UI] changed window width, margins and spacing between ui elements
+- [UI] added Color Palette window for colors analysis
+- [TOOLS] added Locators baking to Aim space
+- [TOOLS] added Infinity buttons for animation curves
+- [TOOLS] added delete static curves button
 - extracted Animation functions from Other module into separate module
-- changed window width and margins
 - improved baking speed
 
 v0.0.10

@@ -29,8 +29,8 @@ class ToolsAnnotations:
 	locatorsBakeReverse = "{bake}\n{reverse}".format(bake = locatorsBake, reverse = _reverseConstraint)
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
 	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
-	locatorsBakeAim = "Locators Bake Aim" # TODO
-	locatorAimDistance = "Locator Aim distance from original object. Need to use non-zero value" # TODO
+	locatorsBakeAim = "Bake locators for Aim Space Switching"
+	locatorAimDistance = "Locator Aim distance from original object. Need to use non-zero value"
 
 	# Bake
 	_bakeCutOutside = "Keys outside of time range or selected range will be removed"
@@ -41,9 +41,10 @@ class ToolsAnnotations:
 	bakeByLast = "Bake selected objects relative to the last selected object as if they were constrained"
 
 	# Animation
-	deleteNonkeyableKeys = "Delete animation on all nonkeyable attributes of selected objects"
 	deleteAnimation = "Delete all animation from selected objects"
 	deleteKeyRange = "Delete selected time range keys of selected objects. \nAlso works with selected attributes in Channel Box"
+	deleteNonkeyableKeys = "Delete animation on all nonkeyable attributes of selected objects"
+	deleteStaticCurves = "Delete all static curves on selected"
 	animationCurveInfinity = "Curve Infinity"
 
 	timelineSetMinOuter = "Set minimal outer timeline value"
@@ -150,6 +151,13 @@ class Tools:
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "ANIMATION", collapsable = True)
 		layoutColumn = cmds.columnLayout(parent = layoutRigging, adjustableColumn = True)
 		#
+		countOffsets = 4
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "Delete\nAnimation", command = Animation.DeleteKeys, backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
+		cmds.button(label = "Delete\nKey Range", command = Animation.DeleteKeyRange, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteKeyRange)
+		cmds.button(label = "Delete\nNonkeyable", command = Animation.DeleteKeysNonkeyable, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteNonkeyableKeys)
+		cmds.button(label = "Delete\nStatic", command = Animation.DeleteStaticCurves, backgroundColor = Colors.blackWhite80, annotation = ToolsAnnotations.deleteStaticCurves)
+		#
 		countOffsets = 5
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Constant", command = partial(Animation.SetInfinity, 1, None), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.animationCurveInfinity)
@@ -157,12 +165,6 @@ class Tools:
 		cmds.button(label = "Cycle", command = partial(Animation.SetInfinity, 3, None), backgroundColor = Colors.green10, annotation = ToolsAnnotations.animationCurveInfinity)
 		cmds.button(label = "Offset", command = partial(Animation.SetInfinity, 4, None), backgroundColor = Colors.green10, annotation = ToolsAnnotations.animationCurveInfinity)
 		cmds.button(label = "Oscillate", command = partial(Animation.SetInfinity, 5, None), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.animationCurveInfinity)
-		#
-		countOffsets = 3
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Delete\nAnimation", command = Animation.DeleteKeys, backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
-		cmds.button(label = "Delete\nKey Range", command = Animation.DeleteKeyRange, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteKeyRange)
-		cmds.button(label = "Delete\nNonkeyable Keys", command = Animation.KeysNonkeyableDelete, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteNonkeyableKeys)
 		#
 		countOffsets = 7
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)

@@ -14,7 +14,7 @@ def DeleteKeys(*args):
 def DeleteKeyRange(*args):
 	mel.eval('timeSliderClearKey')
 
-def KeysNonkeyableDelete(*args):
+def DeleteKeysNonkeyable(*args):
 	selected = cmds.ls(selection = True)
 	counter = 0
 	for item in selected:
@@ -25,6 +25,8 @@ def KeysNonkeyableDelete(*args):
 				counter += 1
 	print ("\nNonkeyable attributes deleted: {0}".format(counter))
 
+def DeleteStaticCurves(*args):
+	cmds.delete(staticChannels = True)
 
 def SetInfinity(mode, items = None, *args):
 	result = ""

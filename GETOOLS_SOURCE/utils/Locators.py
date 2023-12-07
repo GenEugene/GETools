@@ -2,6 +2,7 @@
 
 import maya.cmds as cmds
 
+from GETOOLS_SOURCE.utils import Animation
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Constraints
 from GETOOLS_SOURCE.utils import Other
@@ -122,10 +123,8 @@ def CreateOnSelectedAndBake(name = nameBaked, scale = scale, minSelectedCount = 
 	# Bake locators and delete constraints
 	cmds.select(locatorsList)
 	Baker.BakeSelected()
-	for locator in locatorsList:
-		children = cmds.listRelatives(locator, type = "constraint")
-		for child in children:
-			cmds.delete(child)
+	Animation.DeleteStaticCurves()
+	Other.DeleteConstraints(locatorsList)
 	
 	# Select objects and return
 	if subLocator:
@@ -257,7 +256,7 @@ def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = 1, hid
 	Baker.BakeSelected()
 	Other.DeleteConstraints(locatorsRootList)
 	Other.DeleteConstraints(locatorsTargetsList)
-	cmds.delete(staticChannels = True)
+	Animation.DeleteStaticCurves()
 
 	# Create aim constraint
 	for i in range(len(selectedList)):
@@ -267,7 +266,7 @@ def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = 1, hid
 			upVector = (0, 1, 0)
 		cmds.aimConstraint(locatorsTargetsList[i], locatorsOffsetsList[i], maintainOffset = True, weight = 1, aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = upVector, worldUpObject = locatorsRootList[i])
 	
-	# Reverse constrain
+	# Reverse constrain # TODO move constraint to temp group
 	if (reverse):
 		for i in range(len(selectedList)):
 			parentObject = None
