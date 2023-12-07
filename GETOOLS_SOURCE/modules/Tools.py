@@ -29,8 +29,8 @@ class ToolsAnnotations:
 	locatorsBakeReverse = "{bake}\n{reverse}".format(bake = locatorsBake, reverse = _reverseConstraint)
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
 	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
-	locatorsBakeAim = "[IN DEVELOPMENT]\nLocators Bake Aim" # TODO
-	locatorAimDistance = "[IN DEVELOPMENT]\nLocator Aim distance from original object. Need to use non-zero value" # TODO
+	locatorsBakeAim = "Locators Bake Aim" # TODO
+	locatorAimDistance = "Locator Aim distance from original object. Need to use non-zero value" # TODO
 
 	# Bake
 	_bakeCutOutside = "Keys outside of time range or selected range will be removed"
@@ -140,6 +140,7 @@ class Tools:
 		#
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutBake, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		# TODO classic bake to new override layer
 		cmds.button(label = "Bake Classic", command = self.BakeSelectedClassic, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassic)
 		cmds.button(label = "Bake Classic\nCut Outer", command = self.BakeSelectedClassicCut, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassicCut)
 		cmds.button(label = "Bake Custom", command = self.BakeSelectedCustom, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeCustom)
