@@ -24,7 +24,7 @@ def BakeSelected(classic = True, preserveOutsideKeys = True):
 	
 	cmds.refresh(suspend = True)
 	if (classic):
-		cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True)
+		cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True)
 	else:
 		timeCurrent = Timeline.GetTimeCurrent()
 		timeMinMax[1] = timeMinMax[1] + 1

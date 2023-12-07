@@ -3,11 +3,10 @@
 import maya.cmds as cmds
 from functools import partial
 
+from GETOOLS_SOURCE.utils import Animation
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Colors
 from GETOOLS_SOURCE.utils import Locators
-from GETOOLS_SOURCE.utils import Other
-from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 from GETOOLS_SOURCE.utils import UI
 
@@ -45,6 +44,7 @@ class ToolsAnnotations:
 	deleteNonkeyableKeys = "Delete animation on all nonkeyable attributes of selected objects"
 	deleteAnimation = "Delete all animation from selected objects"
 	deleteKeyRange = "Delete selected time range keys of selected objects. \nAlso works with selected attributes in Channel Box"
+	animationCurveInfinity = "Curve Infinity"
 
 	timelineSetMinOuter = "Set minimal outer timeline value"
 	timelineSetMinInner = "Set minimal inner timeline value"
@@ -61,7 +61,7 @@ class ToolsSettings:
 class Tools:
 	version = "v0.1.4"
 	name = "TOOLS"
-	title = "{0} {1}".format(name, version)
+	title = name + " " + version
 
 	def __init__(self):
 		self.checkboxLocatorHideParent = None
@@ -79,9 +79,10 @@ class Tools:
 		self.UILayoutAnimation(layoutMain, windowWidthMargin, lineHeight)
 	def UILayoutLocators(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "LOCATORS / SPACE SWITCHING", collapsable = True)
+		layoutColumn = cmds.columnLayout(parent = layoutLocators, adjustableColumn = True)
 		#
 		countOffsets = 3
-		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, menuReset = False, annotation = ToolsAnnotations.hideParent)
 		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, menuReset = False, annotation = ToolsAnnotations.subLocator)
 		self.floatLocatorSize = UI.FloatField(value = 5, precision = 3, annotation = ToolsAnnotations.locatorSize)
@@ -91,7 +92,7 @@ class Tools:
 		cmds.button(label = "Locators parent", command = self.CreateLocatorParent, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorParent)
 		#
 		countOffsets = 2
-		cmds.gridLayout(parent = layoutLocators, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Locators bake", command = self.CreateLocatorBake, backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.locatorsBake)
 		cmds.button(label = "Locators bake + reverse", command = self.CreateLocatorBakeReverse, backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverse)
 		cmds.button(label = "Locators relative", command = self.BakeAsChildrenFromLastSelected, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorsRelative)
@@ -99,7 +100,7 @@ class Tools:
 		cmds.popupMenu()
 		cmds.menuItem(label = "skip last object constrain", command = self.BakeAsChildrenFromLastSelectedReverseSkipLast)
 		#
-		layoutAim = cmds.gridLayout(parent = layoutLocators, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
+		layoutAim = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
 		countOffsets = 6
 		labelLocalSpace = "without reverse constraint"
 		cmds.gridLayout(parent = layoutAim, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
@@ -146,15 +147,24 @@ class Tools:
 		cmds.button(label = "Bake Selected\nBy Last Object", command = self.BakeSelectedByLastObject, backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast)
 	def UILayoutAnimation(self, layoutMain, windowWidthMargin, lineHeight):
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "ANIMATION", collapsable = True)
+		layoutColumn = cmds.columnLayout(parent = layoutRigging, adjustableColumn = True)
+		#
+		countOffsets = 5
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "Constant", command = partial(Animation.SetInfinity, 1, None), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.animationCurveInfinity)
+		cmds.button(label = "Linear", command = partial(Animation.SetInfinity, 2, None), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.animationCurveInfinity)
+		cmds.button(label = "Cycle", command = partial(Animation.SetInfinity, 3, None), backgroundColor = Colors.green10, annotation = ToolsAnnotations.animationCurveInfinity)
+		cmds.button(label = "Offset", command = partial(Animation.SetInfinity, 4, None), backgroundColor = Colors.green10, annotation = ToolsAnnotations.animationCurveInfinity)
+		cmds.button(label = "Oscillate", command = partial(Animation.SetInfinity, 5, None), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.animationCurveInfinity)
 		#
 		countOffsets = 3
-		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Delete\nAnimation", command = Other.DeleteKeys, backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
-		cmds.button(label = "Delete\nKey Range", command = Other.DeleteKeyRange, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteKeyRange)
-		cmds.button(label = "Delete\nNonkeyable Keys", command = Other.KeysNonkeyableDelete, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteNonkeyableKeys)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "Delete\nAnimation", command = Animation.DeleteKeys, backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
+		cmds.button(label = "Delete\nKey Range", command = Animation.DeleteKeyRange, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteKeyRange)
+		cmds.button(label = "Delete\nNonkeyable Keys", command = Animation.KeysNonkeyableDelete, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteNonkeyableKeys)
 		#
 		countOffsets = 7
-		cmds.gridLayout(parent = layoutRigging, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "<<", command = partial(Timeline.SetTime, 3), backgroundColor = Colors.green10, annotation = ToolsAnnotations.timelineSetMinOuter)
 		cmds.button(label = "<", command = partial(Timeline.SetTime, 1), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.timelineSetMinInner)
 		cmds.button(label = ">", command = partial(Timeline.SetTime, 2), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.timelineSetMaxInner)
@@ -181,7 +191,6 @@ class Tools:
 		Locators.BakeAsChildrenFromLastSelectedReverse(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), skipLastReverse = True)
 	def BakeAsChildrenFromLastSelectedReverse(self, *args):
 		Locators.BakeAsChildrenFromLastSelectedReverse(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), skipLastReverse = False)
-	
 	def CreateLocatorBakeAim(self, axis, reverse, *args):
 		scale = self.floatLocatorSize.Get()
 		distance = self.floatLocatorAimOffset.Get()
@@ -201,7 +210,7 @@ class Tools:
 			cmds.warning("Aim distance is 0. Hihgly recomended to use non-zero value.")
 
 
-	# BAKER
+	# BAKING
 	def BakeSelectedClassic(self, *args):
 		Baker.BakeSelected(classic = True, preserveOutsideKeys = True)
 	def BakeSelectedClassicCut(self, *args):

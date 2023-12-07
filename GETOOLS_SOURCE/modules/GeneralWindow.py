@@ -133,7 +133,6 @@ class GeneralWindow:
 		cmds.menuItem(label = "Layer Move", command = LayerMove)
 		cmds.menuItem(dividerLabel = "Install to shelf", divider = True)
 		cmds.menuItem(label = "Install Select Hierarchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
-	
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = tls.Tools.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		tls.Tools().UICreate(self.frameTools)

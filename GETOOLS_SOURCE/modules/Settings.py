@@ -7,9 +7,9 @@ dockStartArea = dockAllowedAreas[0] # used for start docking state, 0 - left, 1 
 
 windowHeight = 500 # used for vertical window size when undocked
 windowWidth = 320
-windowWidthScrollSpace = 16
+windowWidthScrollSpace = 20
 lineHeight = 30
-margin = 4
+margin = 2
 
 sliderWidth = (60, 60, 10)
 sliderWidthMarker = 14

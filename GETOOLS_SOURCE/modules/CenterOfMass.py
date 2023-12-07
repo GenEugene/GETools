@@ -73,7 +73,6 @@ class CenterOfMass:
 		self.layoutSetup = None
 		self.layoutWeights = None
 		self.layoutBaking = None
-
 	def UICreate(self, layoutMain):
 		windowWidthMargin = Settings.windowWidthMargin
 		lineHeight = Settings.lineHeight
@@ -81,25 +80,25 @@ class CenterOfMass:
 		self.UILayoutSetup(layoutMain, windowWidthMargin, lineHeight)
 		self.UILayoutWeights(layoutMain, windowWidthMargin, lineHeight)
 		self.UILayoutBaking(layoutMain, windowWidthMargin, lineHeight)
-
 	def UILayoutSetup(self, layoutMain, windowWidthMargin, lineHeight):
 		self.layoutSetup = cmds.frameLayout(parent = layoutMain, label = "SETUP", collapsable = True) # , backgroundColor = Colors.blackWhite10
+		layoutColumn = cmds.columnLayout(parent = self.layoutSetup, adjustableColumn = True)
 		#
 		COMButtons1 = 4
-		cmds.gridLayout(parent = self.layoutSetup, numberOfColumns = COMButtons1, cellWidth = windowWidthMargin / COMButtons1, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = COMButtons1, cellWidth = windowWidthMargin / COMButtons1, cellHeight = lineHeight)
 		cmds.button(label = "CREATE", command = self.COMCreate, backgroundColor = Colors.green50, annotation = CenterOfMassAnnotations.create)
 		cmds.button(label = "ACTIVATE", command = self.COMActivate, backgroundColor = Colors.yellow50, annotation = CenterOfMassAnnotations.activate)
 		cmds.button(label = "SELECT", command = self.COMSelect, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.select)
 		cmds.button(label = "CLEAN", command = self.COMClean, backgroundColor = Colors.red50, annotation = CenterOfMassAnnotations.clean)
 		#
 		COMButtons2 = 3
-		cmds.gridLayout(parent = self.layoutSetup, numberOfColumns = COMButtons2, cellWidth = windowWidthMargin / COMButtons2, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = COMButtons2, cellWidth = windowWidthMargin / COMButtons2, cellHeight = lineHeight)
 		cmds.button(label = "PROJECTOR YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.projectorYZ)
 		cmds.button(label = "PROJECTOR XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
 		cmds.button(label = "PROJECTOR XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
-	
 	def UILayoutWeights(self, layoutMain, windowWidthMargin, lineHeight):
 		self.layoutWeights = cmds.frameLayout(parent = layoutMain, label = "WEIGHTS", collapsable = True)
+		layoutColumn = cmds.columnLayout(parent = self.layoutWeights, adjustableColumn = True)
 		
 		def PartButton(partInfo = ("", 0), minMaxValue = CenterOfMassSettings.weightMinMax, onlyValue = False, annotation = ""):
 			value = partInfo[1]
@@ -110,7 +109,7 @@ class CenterOfMass:
 
 		# WEIGHTS PALETTE
 		count = 14
-		cmds.gridLayout(parent = self.layoutWeights, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 		
 		def CustomButton(value): PartButton(("", value), onlyValue = True, annotation = CenterOfMassAnnotations.weightsCustom)
 		CustomButton(0)
@@ -130,7 +129,7 @@ class CenterOfMass:
 
 		# BODYPARTS
 		count = 3
-		layoutBodyGrid = cmds.gridLayout(parent = self.layoutWeights, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = 70) # 23.5 per 1 button
+		layoutBodyGrid = cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = 70) # 23.5 per 1 button
 		
 		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True)
 		PartButton(CenterOfMassSettings.partHead, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightHead)
@@ -146,7 +145,6 @@ class CenterOfMass:
 		PartButton(CenterOfMassSettings.partThigh, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightThigh)
 		PartButton(CenterOfMassSettings.partKnee, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightKnee)
 		PartButton(CenterOfMassSettings.partFoot, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightFoot)
-	
 	def UILayoutBaking(self, layoutMain, windowWidthMargin, lineHeight):
 		self.layoutBaking = cmds.frameLayout(parent = layoutMain, label = "BAKING", collapsable = True)
 
