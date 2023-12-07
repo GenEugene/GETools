@@ -227,10 +227,10 @@ class Overlappy:
 		
 		# _optionsResetAll = self._ResetOptions # , commandResetAll = _optionsResetAll
 		
-		self.checkboxHierarchy = UI.Checkbox(label = "Hierarchy", value = OverlappySettings.checkboxesOptions[0], menuReset = True, annotation = OverlappyAnnotations.checkboxHierarchy)
-		self.checkboxLayer = UI.Checkbox(label = "Layer", value = OverlappySettings.checkboxesOptions[1], menuReset = True, annotation = OverlappyAnnotations.checkboxLayer)
-		self.checkboxLoop = UI.Checkbox(label = "Loop", value = OverlappySettings.checkboxesOptions[2], menuReset = True, annotation = OverlappyAnnotations.checkboxLoop) # FIXME make cycle infinity before bake
-		self.checkboxClean = UI.Checkbox(label = "Clean", value = OverlappySettings.checkboxesOptions[3], menuReset = True, annotation = OverlappyAnnotations.checkboxClean)
+		self.checkboxHierarchy = UI.Checkbox(label = "Hierarchy", value = OverlappySettings.checkboxesOptions[0], annotation = OverlappyAnnotations.checkboxHierarchy)
+		self.checkboxLayer = UI.Checkbox(label = "Layer", value = OverlappySettings.checkboxesOptions[1], annotation = OverlappyAnnotations.checkboxLayer)
+		self.checkboxLoop = UI.Checkbox(label = "Loop", value = OverlappySettings.checkboxesOptions[2], annotation = OverlappyAnnotations.checkboxLoop) # FIXME make cycle infinity before bake
+		self.checkboxClean = UI.Checkbox(label = "Clean", value = OverlappySettings.checkboxesOptions[3], annotation = OverlappyAnnotations.checkboxClean)
 	def UILayoutParticleAttributes(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
 		self.layoutSimulation = cmds.frameLayout("layoutParticleSliders", label = "PARTICLE ATTRIBUTES", parent = layoutMain, collapsable = True)
 		layoutColumn = cmds.columnLayout(parent = self.layoutSimulation, adjustableColumn = True)

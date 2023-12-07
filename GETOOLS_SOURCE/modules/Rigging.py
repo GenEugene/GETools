@@ -16,6 +16,7 @@ class RiggingAnnotations:
 	_textAllSelectedConstrainToLast = "All selected objects will be constrained to last selected object"
 	constraintReverse = "Reverse the direction of operation from last to first selected"
 	constraintMaintain = "Use maintain offset"
+	constraintOffset = "[IN DEVELOPMENT]\nAdd extra locators structure with ability to make offset animation"
 	constraintParent = "Parent constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
 	constraintPoint = "Point constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
 	constraintOrient = "Orient constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
@@ -42,6 +43,7 @@ class Rigging:
 	def __init__(self):
 		self.checkboxConstraintReverse = None
 		self.checkboxConstraintMaintain = None
+		self.checkboxConstraintOffset = None
 	
 	def UICreate(self, layoutMain):
 		windowWidthMargin = Settings.windowWidthMargin
@@ -54,8 +56,9 @@ class Rigging:
 		countOffsets = 4
 		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.separator(style = "none")
-		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, menuReset = False, enabled = True, annotation = RiggingAnnotations.constraintReverse)
-		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, menuReset = False, enabled = True, annotation = RiggingAnnotations.constraintMaintain)
+		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, annotation = RiggingAnnotations.constraintReverse)
+		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, annotation = RiggingAnnotations.constraintMaintain)
+		# self.checkboxConstraintOffset = UI.Checkbox(label = "Offset", value = False, annotation = RiggingAnnotations.constraintOffset)
 		cmds.separator(style = "none")
 		#
 		countOffsets = 5
@@ -64,7 +67,7 @@ class Rigging:
 		cmds.button(label = "Point", command = self.ConstrainPoint, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintPoint)
 		cmds.button(label = "Orient", command = self.ConstrainOrient, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintOrient)
 		cmds.button(label = "Scale", command = self.ConstrainScale, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintScale)
-		cmds.button(label = "Aim", command = self.ConstrainAim, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintAim)
+		cmds.button(label = "Aim", command = self.ConstrainAim, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintAim, enable = False)
 
 
 		# UTILS

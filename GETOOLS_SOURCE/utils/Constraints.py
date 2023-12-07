@@ -2,6 +2,7 @@
 
 import maya.cmds as cmds
 
+# from GETOOLS_SOURCE.utils import Locators
 from GETOOLS_SOURCE.utils import Selector
 
 def ConstrainSelectedToLastObject(reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
@@ -57,7 +58,7 @@ def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True,
 	if aim:
 		ConstrainAim(objectParent, objectChild, maintainOffset, weight) # TODO add customization logic
 
-def ConstrainAim(objectParent, objectChild, maintainOffset = True, weight = 1, aimVector = (0, 0, 1), upVector = (0, 1, 0), worldUpVector = (0, 1, 0), worldUpObject = None):
+def ConstrainAim(objectParent, objectChild, maintainOffset = True, weight = 1, aimVector = (0, 0, 1), upVector = (0, 1, 0), worldUpVector = (0, 1, 0), worldUpObject = None): # TODO complete aim logic
 	# "scene" "object" "objectrotation" "vector" "none"
 	if (worldUpObject == None):
 		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = "vector", worldUpVector = worldUpVector)
