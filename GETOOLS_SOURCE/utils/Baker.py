@@ -3,6 +3,7 @@
 import maya.cmds as cmds
 
 from GETOOLS_SOURCE.utils import Constraints
+from GETOOLS_SOURCE.utils import Other
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 
@@ -21,6 +22,7 @@ def BakeSelected(classic = True, preserveOutsideKeys = True):
 	
 	print(timeMinMax)
 	
+	cmds.refresh(suspend = True)
 	if (classic):
 		cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True)
 	else:
@@ -33,6 +35,7 @@ def BakeSelected(classic = True, preserveOutsideKeys = True):
 		if (not preserveOutsideKeys):
 			cmds.cutKey(time = (None, timeMinMax[0] - 1)) # to left
 			cmds.cutKey(time = (timeMinMax[1], None)) # to right
+	cmds.refresh(suspend = False)
 
 def BakeSelectedByLastObject(pairOnly = False):
 	# Check selected objects
@@ -53,12 +56,7 @@ def BakeSelectedByLastObject(pairOnly = False):
 	BakeSelected()
 
 	# Delete constraints
-	for i in range(len(selectedList)):
-		if (i == len(selectedList) - 1):
-			break
-		children = cmds.listRelatives(selectedList[i], type = "constraint")
-		for child in children:
-			cmds.delete(child)
+	Other.DeleteConstraints(selectedList, skipLast = True)
 
 	cmds.select(selectedList)
 	return selectedList

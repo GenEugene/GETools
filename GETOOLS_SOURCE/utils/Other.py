@@ -48,3 +48,15 @@ def SetInfinityConstant(selected): # TODO move to new animation class and expose
 
 def SetInfinityCycle(selected): # TODO move to new animation class and expose
 	cmds.setInfinity(selected, preInfinite = "cycle", postInfinite = "cycle")
+
+def DeleteConstraints(selected, skipLast = False):
+	count = len(selected)
+
+	for i in range(count):
+		if (skipLast and i == count - 1):
+			break
+		
+		children = cmds.listRelatives(selected[i], type = "constraint")
+		for child in children:
+			cmds.delete(child)
+

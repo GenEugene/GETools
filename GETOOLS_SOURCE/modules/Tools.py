@@ -101,13 +101,26 @@ class Tools:
 		#
 		layoutAim = cmds.gridLayout(parent = layoutLocators, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
 		countOffsets = 6
+		labelLocalSpace = "without reverse constraint"
 		cmds.gridLayout(parent = layoutAim, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "-X", command = partial(self.CreateLocatorBakeAim, 1), backgroundColor = Colors.red10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.button(label = "-X", command = partial(self.CreateLocatorBakeAim, 1, True), backgroundColor = Colors.red10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.popupMenu()
+		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 1, False))
 		cmds.button(label = "+X", command = partial(self.CreateLocatorBakeAim, 2), backgroundColor = Colors.red50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.popupMenu()
+		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 2, False))
 		cmds.button(label = "-Y", command = partial(self.CreateLocatorBakeAim, 3), backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.popupMenu()
+		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 3, False))
 		cmds.button(label = "+Y", command = partial(self.CreateLocatorBakeAim, 4), backgroundColor = Colors.green50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.popupMenu()
+		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 4, False))
 		cmds.button(label = "-Z", command = partial(self.CreateLocatorBakeAim, 5), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.popupMenu()
+		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 5, False))
 		cmds.button(label = "+Z", command = partial(self.CreateLocatorBakeAim, 6), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsBakeAim) # TODO
+		cmds.popupMenu()
+		cmds.menuItem(label = labelLocalSpace, command = partial(self.CreateLocatorBakeAim, 6, False))
 		self.floatLocatorAimOffset = UI.Slider(
 			parent = layoutAim,
 			widthWindow = windowWidthMargin,
@@ -153,35 +166,36 @@ class Tools:
 
 	# LOCATORS
 	def CreateLocator(self, *args):
-		Locators.Create(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get())
+		Locators.Create(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get())
 	def CreateLocatorMatch(self, *args):
-		Locators.CreateOnSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get())
+		Locators.CreateOnSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get())
 	def CreateLocatorParent(self, *args):
-		Locators.CreateOnSelectedWithParentConstrain(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get())
+		Locators.CreateOnSelectedWithParentConstrain(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get())
 	def CreateLocatorBake(self, *args):
-		Locators.CreateOnSelectedAndBake(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get())
+		Locators.CreateOnSelectedAndBake(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get())
 	def CreateLocatorBakeReverse(self, *args):
-		Locators.CreateOnSelectedReverseConstrain(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get())
+		Locators.CreateOnSelectedReverseConstrain(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get())
 	def BakeAsChildrenFromLastSelected(self, *args):
-		Locators.BakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get())
+		Locators.BakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get())
 	def BakeAsChildrenFromLastSelectedReverseSkipLast(self, *args):
-		Locators.BakeAsChildrenFromLastSelectedReverse(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get(), skipLastReverse = True)
+		Locators.BakeAsChildrenFromLastSelectedReverse(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), skipLastReverse = True)
 	def BakeAsChildrenFromLastSelectedReverse(self, *args):
-		Locators.BakeAsChildrenFromLastSelectedReverse(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get(), skipLastReverse = False)
-	def CreateLocatorBakeAim(self, axis, *args): # TODO
-		axisString = ""
+		Locators.BakeAsChildrenFromLastSelectedReverse(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), skipLastReverse = False)
+	
+	def CreateLocatorBakeAim(self, axis, reverse, *args):
 		scale = self.floatLocatorSize.Get()
 		distance = self.floatLocatorAimOffset.Get()
+		hideParent = self.checkboxLocatorHideParent.Get()
+		subLocators = self.checkboxLocatorSubLocator.Get()
 
-		if (axis == 1): axisString = "-X"
-		elif (axis == 2): axisString = "+X"
-		elif (axis == 3): axisString = "-Y"
-		elif (axis == 4): axisString = "+Y"
-		elif (axis == 5): axisString = "-Z"
-		elif (axis == 6): axisString = "+Z"
-		print("Axis = {0} | Distance = {1}".format(axisString, distance))
+		if (axis == 1): axisVector = (-1, 0, 0)
+		elif (axis == 2): axisVector = (1, 0, 0)
+		elif (axis == 3): axisVector = (0, -1, 0)
+		elif (axis == 4): axisVector = (0, 1, 0)
+		elif (axis == 5): axisVector = (0, 0, -1)
+		elif (axis == 6): axisVector = (0, 0, 1)
 
-		Locators.CreateOnSelectedAim(scale = scale, hideParent = self.checkboxLocatorHideParent.Get(), subLocators = self.checkboxLocatorSubLocator.Get()) # TODO
+		Locators.CreateOnSelectedAim(scale = scale, hideParent = hideParent, subLocator = subLocators, aimVector = axisVector, distance = distance, reverse = reverse)
 
 		if (distance == 0):
 			cmds.warning("Aim distance is 0. Hihgly recomended to use non-zero value.")
