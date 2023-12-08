@@ -8,6 +8,7 @@ v0.0.11
 - [UI] moved Select Transform Hierarchy button to Utils menu and remove SELECT category in TOOLS module
 - [UI] changed window width, margins and spacing between ui elements
 - [UI] added Color Palette window for colors analysis
+- [UI] added toggling for script window execution. Press the same button to open/close script (reset all parameters changes)
 - [TOOLS] added Locators baking to Aim space
 - [TOOLS] added Infinity buttons for animation curves
 - [TOOLS] added delete static curves button

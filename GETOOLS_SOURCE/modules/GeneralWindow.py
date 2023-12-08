@@ -223,6 +223,10 @@ class GeneralWindow:
 	def RUN_DOCKED(self, path = "", *args):
 		self.directory = path
 
+		if (self.DockCheck()): # for script toggling. Comment these 3 lines if you need to deactivate toggling
+			self.DockDelete()
+			return
+
 		self.DockDelete()
 		self.WindowCreate()
 		self.DockToSide(Settings.dockStartArea)
