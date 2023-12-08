@@ -12,6 +12,7 @@ v0.0.11
 - [TOOLS] added Infinity buttons for animation curves
 - [TOOLS] added delete static curves button
 - [TOOLS] added curve euler filter
+- [RIGGING] added Delete Constraints button
 - extracted Animation functions from Other module into separate module
 - improved baking speed
 

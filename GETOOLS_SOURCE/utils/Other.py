@@ -24,14 +24,3 @@ def SelectJointsInScene(): # TODO make universal for other types
 	selected = cmds.ls(type = "joint")
 	cmds.select(selected)
 
-def DeleteConstraints(selected, skipLast = False):
-	count = len(selected)
-
-	for i in range(count):
-		if (skipLast and i == count - 1):
-			break
-		
-		children = cmds.listRelatives(selected[i], type = "constraint")
-		for child in children:
-			cmds.delete(child)
-

@@ -5,7 +5,6 @@ import maya.cmds as cmds
 from GETOOLS_SOURCE.utils import Animation
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Constraints
-from GETOOLS_SOURCE.utils import Other
 from GETOOLS_SOURCE.utils import Parent
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Text
@@ -124,7 +123,7 @@ def CreateOnSelectedAndBake(name = nameBaked, scale = scale, minSelectedCount = 
 	cmds.select(locatorsList)
 	Baker.BakeSelected()
 	Animation.DeleteStaticCurves()
-	Other.DeleteConstraints(locatorsList)
+	Constraints.DeleteConstraints(locatorsList)
 	
 	# Select objects and return
 	if subLocator:
@@ -254,8 +253,8 @@ def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = 1, hid
 	# Bake animation from original objects
 	cmds.select(locatorsRootList + locatorsTargetsList, replace = True)
 	Baker.BakeSelected()
-	Other.DeleteConstraints(locatorsRootList)
-	Other.DeleteConstraints(locatorsTargetsList)
+	Constraints.DeleteConstraints(locatorsRootList)
+	Constraints.DeleteConstraints(locatorsTargetsList)
 	Animation.DeleteStaticCurves()
 
 	# Create aim constraint

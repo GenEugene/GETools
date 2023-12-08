@@ -6,6 +6,7 @@ from functools import partial
 from GETOOLS_SOURCE.utils import Colors
 from GETOOLS_SOURCE.utils import Constraints
 from GETOOLS_SOURCE.utils import Other
+from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Skinning
 from GETOOLS_SOURCE.utils import UI
 
@@ -22,6 +23,7 @@ class RiggingAnnotations:
 	constraintOrient = "Orient constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
 	constraintScale = "Scale constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
 	constraintAim = "[IN DEVELOPMENT]\nAim constrain.".format(allToLast = _textAllSelectedConstrainToLast) # TODO
+	constraintDelete = "Delete all constraints on selected objects"
 
 	# Utils
 	_rotateOrder = "rotate order attribute in channel box for all selected objects"
@@ -44,7 +46,6 @@ class Rigging:
 		self.checkboxConstraintReverse = None
 		self.checkboxConstraintMaintain = None
 		self.checkboxConstraintOffset = None
-	
 	def UICreate(self, layoutMain):
 		windowWidthMargin = Settings.windowWidthMargin
 		lineHeight = Settings.lineHeight
@@ -68,6 +69,10 @@ class Rigging:
 		cmds.button(label = "Orient", command = self.ConstrainOrient, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintOrient)
 		cmds.button(label = "Scale", command = self.ConstrainScale, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintScale)
 		cmds.button(label = "Aim", command = self.ConstrainAim, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintAim, enable = False)
+		#
+		countOffsets = 1
+		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "Delete Constraints", command = self.DeleteConstraints, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDelete)
 
 
 		# UTILS
@@ -99,4 +104,10 @@ class Rigging:
 		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = False, scale = True, aim = False)
 	def ConstrainAim(self, *args): # TODO
 		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = False, scale = False, aim = True)
+
+	def DeleteConstraints(self, *args):
+		selectedList = Selector.MultipleObjects(1)
+		if (selectedList == None):
+			return
+		Constraints.DeleteConstraints(selectedList)
 

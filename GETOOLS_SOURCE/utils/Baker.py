@@ -3,7 +3,6 @@
 import maya.cmds as cmds
 
 from GETOOLS_SOURCE.utils import Constraints
-from GETOOLS_SOURCE.utils import Other
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 
@@ -56,7 +55,7 @@ def BakeSelectedByLastObject(pairOnly = False):
 	BakeSelected()
 
 	# Delete constraints
-	Other.DeleteConstraints(selectedList, skipLast = True)
+	Constraints.DeleteConstraints(selectedList, skipLast = True)
 
 	cmds.select(selectedList)
 	return selectedList

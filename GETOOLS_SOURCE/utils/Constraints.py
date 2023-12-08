@@ -65,3 +65,15 @@ def ConstrainAim(objectParent, objectChild, maintainOffset = True, weight = 1, a
 	else:
 		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = worldUpVector, worldUpObject = worldUpObject)
 
+def DeleteConstraints(selected, skipLast = False):
+	count = len(selected)
+
+	for i in range(count):
+		if (skipLast and i == count - 1):
+			break
+		
+		children = cmds.listRelatives(selected[i], type = "constraint")
+		if (children != None):
+			for child in children:
+				cmds.delete(child)
+
