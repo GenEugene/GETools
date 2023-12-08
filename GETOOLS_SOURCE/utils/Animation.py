@@ -28,6 +28,9 @@ def DeleteKeysNonkeyable(*args):
 def DeleteStaticCurves(*args):
 	cmds.delete(staticChannels = True)
 
+def FilterCurve(*args):
+	cmds.filterCurve()
+
 def SetInfinity(mode, items = None, *args):
 	result = ""
 	if (mode == 1):

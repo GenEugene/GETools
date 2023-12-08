@@ -11,6 +11,7 @@ v0.0.11
 - [TOOLS] added Locators baking to Aim space
 - [TOOLS] added Infinity buttons for animation curves
 - [TOOLS] added delete static curves button
+- [TOOLS] added curve euler filter
 - extracted Animation functions from Other module into separate module
 - improved baking speed
 
