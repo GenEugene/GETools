@@ -54,7 +54,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Reload Scene (force)", command = Scene.Reload)
 		cmds.menuItem(label = "Exit Maya (force)", command = Scene.ExitMaya)
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Restart GETools", command = self.RUN_DOCKED)
+		cmds.menuItem(label = "Restart GETools", command = partial(self.RUN_DOCKED, "", True))
 		cmds.menuItem(label = "Close GETools", command = self.DockDelete)
 		
 		# cmds.menu(label = "Edit", tearOff = True)
@@ -220,10 +220,10 @@ class GeneralWindow:
 	def WindowCreate(self, *args):
 		self.CreateUI()
 		self.FramesCollapse(True)
-	def RUN_DOCKED(self, path = "", *args):
+	def RUN_DOCKED(self, path = "", forced = False, *args):
 		self.directory = path
 
-		if (self.DockCheck()): # for script toggling. Comment these 3 lines if you need to deactivate toggling
+		if (forced == False and self.DockCheck()): # for script toggling. Comment these 3 lines if you need to deactivate toggling
 			self.DockDelete()
 			return
 
