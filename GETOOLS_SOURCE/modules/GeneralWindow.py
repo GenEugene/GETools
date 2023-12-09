@@ -200,9 +200,10 @@ class GeneralWindow:
 	def DockDelete(self, *args):
 		if self.DockCheck():
 			cmds.deleteUI(Settings.dockName, control = True)
-			print("Dock Control deleted")
-		else:
-			print("No Dock")
+			# print("Dock Control deleted")
+		# else:
+		# 	print("No Dock")
+		pass
 	def DockOff(self, *args):
 		if self.DockCheck():
 			cmds.dockControl(Settings.dockName, edit = True, floating = True, height = Settings.windowHeight)
@@ -214,7 +215,7 @@ class GeneralWindow:
 			cmds.dockControl(Settings.dockName, edit = True, floating = False, area = areaSide)
 		else:
 			cmds.dockControl(Settings.dockName, label = GeneralWindow.title, content = Settings.windowName, area = areaSide, allowedArea = Settings.dockAllowedAreas) # , backgroundColor = Colors.lightBlue10
-		print("{0} docked {1}".format(GeneralWindow.title, areaSide))
+		print("{0} docked to {1}".format(GeneralWindow.title, areaSide))
 
 	# EXECUTION
 	def WindowCreate(self, *args):
@@ -225,6 +226,7 @@ class GeneralWindow:
 
 		if (forced == False and self.DockCheck()): # for script toggling. Comment these 3 lines if you need to deactivate toggling
 			self.DockDelete()
+			print("{0} closed".format(GeneralWindow.title))
 			return
 
 		self.DockDelete()
