@@ -41,11 +41,11 @@ class ToolsAnnotations:
 	bakeByLast = "Bake selected objects relative to the last selected object as if they were constrained"
 
 	# Animation
-	filterCurve = "Filter curve by euler filter. Fix some curve issues"
 	deleteAnimation = "Delete all animation from selected objects"
 	deleteKeyRange = "Delete selected time range keys of selected objects. \nAlso works with selected attributes in Channel Box"
 	deleteNonkeyableKeys = "Delete animation on all nonkeyable attributes of selected objects"
 	deleteStaticCurves = "Delete all static curves on selected"
+	filterCurve = "Filter curve by euler filter. Fix some curve issues"
 	animationCurveInfinity = "Curve Infinity"
 
 	timelineSetMinOuter = "Set minimal outer timeline value"
