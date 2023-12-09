@@ -4,11 +4,11 @@ import maya.cmds as cmds
 from math import pow, sqrt
 from functools import partial
 
+from GETOOLS_SOURCE.utils import Animation
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Colors
 from GETOOLS_SOURCE.utils import Layers
 from GETOOLS_SOURCE.utils import MayaSettings
-from GETOOLS_SOURCE.utils import Other
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Text
 from GETOOLS_SOURCE.utils import Timeline
@@ -179,9 +179,10 @@ class Overlappy:
 	def UILayoutButtons(self, layoutMain, windowWidthMargin, lineHeight):
 		# SETUP
 		self.layoutButtons = cmds.frameLayout("layoutButtons", label = "BUTTONS", parent = layoutMain, collapsable = True)
+		layoutColumn = cmds.columnLayout(parent = self.layoutButtons, adjustableColumn = True)
 
 		count = 2
-		cmds.gridLayout(parent = self.layoutButtons, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 		#
 		cmds.button(label = "SETUP", command = self._SetupInit, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
 		# cmds.button(label = "Scan setup into scene", command = self._SetupScan, backgroundColor = Colors.green10)
@@ -189,7 +190,7 @@ class Overlappy:
 
 		# BAKING
 		count = 3
-		cmds.gridLayout(parent = self.layoutButtons, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 		#
 		cmds.button(label = "TRANSLATION", command = partial(self._BakeVariants, 1), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.translation)
 		cmds.popupMenu()
@@ -205,13 +206,14 @@ class Overlappy:
 		pass
 	def UILayoutLayers(self, layoutMain, windowWidthMargin, lineHeight):
 		self.layoutLayers = cmds.frameLayout("layoutLayers", label = "LAYERS", parent = layoutMain, collapsable = True)
+		layoutColumn = cmds.columnLayout(parent = self.layoutLayers, adjustableColumn = True)
 		
 		count = 1
-		cmds.gridLayout(parent = self.layoutLayers, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 		cmds.button(label = "Delete BaseAnimation layer", command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteBase)
 
 		count = 2
-		cmds.gridLayout(parent = self.layoutLayers, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 		cmds.button(label = "Delete Temp layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
 		cmds.button(label = "Move to Safe layer", command = partial(self._LayerMoveToSafeOrTemp, True), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveTemp)
 		
@@ -225,18 +227,19 @@ class Overlappy:
 		
 		# _optionsResetAll = self._ResetOptions # , commandResetAll = _optionsResetAll
 		
-		self.checkboxHierarchy = UI.Checkbox(label = "Hierarchy", value = OverlappySettings.checkboxesOptions[0], menuReset = True, annotation = OverlappyAnnotations.checkboxHierarchy)
-		self.checkboxLayer = UI.Checkbox(label = "Layer", value = OverlappySettings.checkboxesOptions[1], menuReset = True, annotation = OverlappyAnnotations.checkboxLayer)
-		self.checkboxLoop = UI.Checkbox(label = "Loop", value = OverlappySettings.checkboxesOptions[2], menuReset = True, annotation = OverlappyAnnotations.checkboxLoop) # FIXME make cycle infinity before bake
-		self.checkboxClean = UI.Checkbox(label = "Clean", value = OverlappySettings.checkboxesOptions[3], menuReset = True, annotation = OverlappyAnnotations.checkboxClean)
+		self.checkboxHierarchy = UI.Checkbox(label = "Hierarchy", value = OverlappySettings.checkboxesOptions[0], annotation = OverlappyAnnotations.checkboxHierarchy)
+		self.checkboxLayer = UI.Checkbox(label = "Layer", value = OverlappySettings.checkboxesOptions[1], annotation = OverlappyAnnotations.checkboxLayer)
+		self.checkboxLoop = UI.Checkbox(label = "Loop", value = OverlappySettings.checkboxesOptions[2], annotation = OverlappyAnnotations.checkboxLoop) # FIXME make cycle infinity before bake
+		self.checkboxClean = UI.Checkbox(label = "Clean", value = OverlappySettings.checkboxesOptions[3], annotation = OverlappyAnnotations.checkboxClean)
 	def UILayoutParticleAttributes(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
 		self.layoutSimulation = cmds.frameLayout("layoutParticleSliders", label = "PARTICLE ATTRIBUTES", parent = layoutMain, collapsable = True)
+		layoutColumn = cmds.columnLayout(parent = self.layoutSimulation, adjustableColumn = True)
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click") # TODO add reset all function
 
 		commandDefault = self._UpdateParticleAttributes
 
-		layoutSliders1 = cmds.gridLayout(parent = self.layoutSimulation, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
+		layoutSliders1 = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
 		self.sliderPRadius = UI.Slider(
 			parent = layoutSliders1,
 			widthWindow = windowWidthMargin,
@@ -251,9 +254,9 @@ class Overlappy:
 		)
 
 		# cmds.separator(parent = self.layoutSimulation, style = "in", height = 1)
-		cmds.separator(parent = self.layoutSimulation, style = "in")
+		cmds.separator(parent = layoutColumn, style = "in")
 		
-		layoutSliders2 = cmds.gridLayout(parent = self.layoutSimulation, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
+		layoutSliders2 = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
 		self.sliderPConserve = UI.Slider(
 			parent = layoutSliders2,
 			widthWindow = windowWidthMargin,
@@ -333,11 +336,12 @@ class Overlappy:
 		)
 	def UILayoutParticleOffset(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
 		self.layoutOffset = cmds.frameLayout("layoutParticleOffset", label = "PARTICLE OFFSET - use for baking rotation", parent = layoutMain, collapsable = True)
+		layoutColumn = cmds.columnLayout(parent = self.layoutOffset, adjustableColumn = True)
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click") # TODO add reset all function
 
 		count = 3
-		cmds.gridLayout(parent = self.layoutOffset, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 		# cmds.separator()
 		# , commandResetAll = self._ResetOffsets
 		self.checkboxMirrorX = UI.Checkbox(label = "Mirror X", command = partial(self._OffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorX)
@@ -345,7 +349,7 @@ class Overlappy:
 		self.checkboxMirrorZ = UI.Checkbox(label = "Mirror Z", command = partial(self._OffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorZ)
 		
 
-		layoutSliders = cmds.gridLayout(parent = self.layoutOffset, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
+		layoutSliders = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
 
 		commandDefault = self._OffsetsUpdate
 
@@ -909,9 +913,9 @@ class Overlappy:
 			_startTime = self.time.values[2]
 			cmds.setAttr(self.nucleus + ".startFrame", _startTime)
 			self.time.Reset()
-			Other.SetInfinityCycle(_item)
+			Animation.SetInfinityCycle(_item)
 		else:
-			Other.SetInfinityConstant(_item)
+			Animation.SetInfinityConstant(_item)
 		
 		# Delete setup
 		if (self.checkboxClean.Get()):

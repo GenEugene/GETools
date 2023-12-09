@@ -6,8 +6,8 @@ from functools import partial
 from GETOOLS_SOURCE.utils import Colors
 from GETOOLS_SOURCE.utils import Install
 from GETOOLS_SOURCE.utils import Layers
-from GETOOLS_SOURCE.utils import MotionTrail
 from GETOOLS_SOURCE.utils import MayaSettings
+from GETOOLS_SOURCE.utils import MotionTrail
 from GETOOLS_SOURCE.utils import Scene
 from GETOOLS_SOURCE.utils import Selector
 
@@ -18,7 +18,7 @@ from GETOOLS_SOURCE.modules import Settings
 from GETOOLS_SOURCE.modules import Tools as tls
 
 class GeneralWindow:
-	version = "v0.0.10"
+	version = "v0.0.11"
 	name = "GETools"
 	title = name + " " + version
 
@@ -54,7 +54,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Reload Scene (force)", command = Scene.Reload)
 		cmds.menuItem(label = "Exit Maya (force)", command = Scene.ExitMaya)
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Restart GETools", command = self.RUN_DOCKED)
+		cmds.menuItem(label = "Restart GETools", command = partial(self.RUN_DOCKED, "", True))
 		cmds.menuItem(label = "Close GETools", command = self.DockDelete)
 		
 		# cmds.menu(label = "Edit", tearOff = True)
@@ -70,8 +70,14 @@ class GeneralWindow:
 		cmds.menuItem(label = "Dock Right", command = partial(self.DockToSide, Settings.dockAllowedAreas[1]))
 		cmds.menuItem(label = "Undock", command = self.DockOff)
 
+		def ColorsPalette(*args):
+			colorCalibration = Colors.ColorsPalette()
+			colorCalibration.CreateUI()
 		cmds.menu(label = "Utils", tearOff = True)
+		cmds.menuItem(label = "Select Transform Hiererchy", command = Selector.SelectTransformHierarchy)
 		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected)
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette)
 
 		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
 		def LinkVersionHistory(self): cmds.showHelp("https://github.com/GenEugene/GETools/blob/master/changelog.txt", absolute = True)
@@ -127,7 +133,6 @@ class GeneralWindow:
 		cmds.menuItem(label = "Layer Move", command = LayerMove)
 		cmds.menuItem(dividerLabel = "Install to shelf", divider = True)
 		cmds.menuItem(label = "Install Select Hierarchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
-	
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = tls.Tools.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		tls.Tools().UICreate(self.frameTools)
@@ -195,9 +200,10 @@ class GeneralWindow:
 	def DockDelete(self, *args):
 		if self.DockCheck():
 			cmds.deleteUI(Settings.dockName, control = True)
-			print("Dock Control deleted")
-		else:
-			print("No Dock")
+			# print("Dock Control deleted")
+		# else:
+		# 	print("No Dock")
+		pass
 	def DockOff(self, *args):
 		if self.DockCheck():
 			cmds.dockControl(Settings.dockName, edit = True, floating = True, height = Settings.windowHeight)
@@ -209,14 +215,19 @@ class GeneralWindow:
 			cmds.dockControl(Settings.dockName, edit = True, floating = False, area = areaSide)
 		else:
 			cmds.dockControl(Settings.dockName, label = GeneralWindow.title, content = Settings.windowName, area = areaSide, allowedArea = Settings.dockAllowedAreas) # , backgroundColor = Colors.lightBlue10
-		print("{0} docked {1}".format(GeneralWindow.title, areaSide))
+		print("{0} docked to {1}".format(GeneralWindow.title, areaSide))
 
 	# EXECUTION
 	def WindowCreate(self, *args):
 		self.CreateUI()
 		self.FramesCollapse(True)
-	def RUN_DOCKED(self, path = "", *args):
+	def RUN_DOCKED(self, path = "", forced = False, *args):
 		self.directory = path
+
+		if (forced == False and self.DockCheck()): # for script toggling. Comment these 3 lines if you need to deactivate toggling
+			self.DockDelete()
+			print("{0} closed".format(GeneralWindow.title))
+			return
 
 		self.DockDelete()
 		self.WindowCreate()

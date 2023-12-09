@@ -54,7 +54,7 @@ class Checkbox:
 	def __init__(self,
 			label = "label",
 			value = False,
-			enabled = True,
+			enable = True,
 			annotation = "",
 			command = "pass",
 			# commandResetAll = "",
@@ -62,7 +62,7 @@ class Checkbox:
 			):
 		
 		self.valueDefault = value
-		self.checkbox = cmds.checkBox(label = label, value = value, changeCommand = command, enable = enabled, annotation = annotation)
+		self.checkbox = cmds.checkBox(label = label, value = value, changeCommand = command, enable = enable, annotation = annotation)
 
 		if (menuReset):
 			cmds.popupMenu()
@@ -146,12 +146,14 @@ class Slider:
 		else:
 			cmds.button(self.marker, edit = True, backgroundColor = self.markerColorDefault)
 		
-		self.command()
+		if(self.command != "pass"):
+			self.command()
 	
 	def Reset(self, *args):
 		cmds.button(self.marker, edit = True, backgroundColor = self.markerColorDefault)
 		cmds.floatSliderGrp(self.slider, edit = True, value = self.valueDefault)
-		self.command()
+		if(self.command != "pass"):
+			self.command()
 	
 	# def Scan(self, *args): # TODO rework or remove
 	# 	_firstName = _OVERLAPPY.selected

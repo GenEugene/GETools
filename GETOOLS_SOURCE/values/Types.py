@@ -58,3 +58,11 @@ right = "right"
 ".template"
 "snapshotShape"
 ".pts"
+
+# Animation curve infinity
+infinityConstant = "constant"
+infinityLinear = "linear"
+infinityCycle = "cycle"
+infinityCycleRelative = "cycleRelative"
+infinityOscillate = "oscillate"
+

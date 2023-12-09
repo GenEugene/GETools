@@ -5,8 +5,8 @@ import os
 
 from GETOOLS_SOURCE.values import Icons
 
-from GETOOLS_SOURCE.utils import Shelf
 from GETOOLS_SOURCE.utils import Install
+from GETOOLS_SOURCE.utils import Shelf
 
 
 # Get script directory path

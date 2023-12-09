@@ -1,11 +1,27 @@
 GETools changelog
 
+Backlog:
+- in progress | [RIGGING] added constraint offset object
+- in progress | [RIGGING] added Aim Constraint logic
+
+v0.0.11
+- [UI] moved Select Transform Hierarchy button to Utils menu and remove SELECT category in TOOLS module
+- [UI] changed window width, margins and spacing between ui elements
+- [UI] added Color Palette window for colors analysis
+- [UI] added toggling for script window execution. Press the same button to open/close script (reset all parameters changes)
+- [TOOLS] added Locators baking to Aim space
+- [TOOLS] added Infinity buttons for animation curves
+- [TOOLS] added delete static curves button
+- [TOOLS] added curve euler filter
+- [RIGGING] added Delete Constraints button
+- extracted Animation functions from Other module into separate module
+- improved baking speed
+
 v0.0.10
 - [TOOLS] added custom bake cut outside logic
 - [TOOLS] added float field for locator scale
 - [UI] extracted rigging module from Tools and created new Rigging category
 - [UI] moved "Print selected objects to console" button from Tools/Select to Utils pop-up menu
--
 
 v0.0.9 - reinstall required
 - [CRITICAL] fixed support for Maya 2020, removed circular dependencies
