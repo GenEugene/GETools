@@ -195,6 +195,8 @@ class GeneralWindow:
 			cmds.frameLayout(self.frameExperimental, edit = True, collapse = value)
 
 	# DOCKING
+	def DockCheckVisible(self, *args):
+		return cmds.dockControl(Settings.dockName, query = True, visible = True)
 	def DockCheck(self, *args):
 		return cmds.dockControl(Settings.dockName, query = True, exists = True)
 	def DockDelete(self, *args):
@@ -225,9 +227,10 @@ class GeneralWindow:
 		self.directory = path
 
 		if (forced == False and self.DockCheck()): # for script toggling. Comment these 3 lines if you need to deactivate toggling
-			self.DockDelete()
-			print("{0} closed".format(GeneralWindow.title))
-			return
+			if (self.DockCheckVisible()):
+				self.DockDelete()
+				print("{0} closed".format(GeneralWindow.title))
+				return
 
 		self.DockDelete()
 		self.WindowCreate()
