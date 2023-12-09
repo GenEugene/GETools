@@ -4,9 +4,6 @@ Backlog:
 - in progress | [RIGGING] added constraint offset object
 - in progress | [RIGGING] added Aim Constraint logic
 
-v0.0.12
-- [UI] fixed window toggling when hidden
-
 v0.0.11
 - [UI] moved Select Transform Hierarchy button to Utils menu and remove SELECT category in TOOLS module
 - [UI] changed window width, margins and spacing between ui elements
