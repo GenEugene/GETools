@@ -38,7 +38,7 @@ class RiggingAnnotations:
 	copySkinWeights = "Copy skin weights from last selected object to all other selected objects"
 
 class Rigging:
-	version = "v0.0.2"
+	version = "v0.0.3"
 	name = "RIGGING"
 	title = name + " " + version
 
@@ -73,6 +73,7 @@ class Rigging:
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Delete Constraints", command = self.DeleteConstraints, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDelete)
+		cmds.button(label = "Delete Element From Constraint", command = self.DeleteElementFromConstraint, backgroundColor = Colors.yellow50)
 
 
 		# UTILS
@@ -110,4 +111,9 @@ class Rigging:
 		if (selectedList == None):
 			return
 		Constraints.DeleteConstraints(selectedList)
+	def DeleteElementFromConstraint(self, *args): # TODO
+		selectedList = Selector.MultipleObjects(2)
+		if (selectedList == None):
+			return
+		Constraints.DeleteElementFromConstraint(selectedList)
 

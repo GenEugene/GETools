@@ -7,6 +7,7 @@ from functools import partial
 from GETOOLS_SOURCE.utils import Animation
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Colors
+from GETOOLS_SOURCE.utils import Constraints
 from GETOOLS_SOURCE.utils import Layers
 from GETOOLS_SOURCE.utils import MayaSettings
 from GETOOLS_SOURCE.utils import Selector
@@ -105,7 +106,7 @@ class OverlappySettings:
 	constraintsNames = ("parentConstraint", "pointConstraint", "orientConstraint", "scaleConstraint", "aimConstraint")
 
 class Overlappy:
-	version = "v2.0.5"
+	version = "v2.0.6"
 	name = "OVERLAPPY"
 	title = name + " " + version
 
@@ -525,7 +526,7 @@ class Overlappy:
 		
 		if (self._LoftGetDistance() < OverlappySettings.loftMinDistance):
 			cmds.setAttr(self.loft[2] + ".visibility", 0)
-	def _SetupScan(self, *args): # TODO rework
+	def _SetupScan(self, *args): # TODO rework or delete
 		# Check overlappy group
 		if (not cmds.objExists(OverlappySettings.nameGroup)):
 			cmds.warning("Overlappy object doesn't exists")
@@ -881,12 +882,8 @@ class Overlappy:
 		
 		# Bake
 		Baker.BakeSelected(classic = True, preserveOutsideKeys = True)
-		_children = cmds.listRelatives(_clone, type = "constraint")
-		for child in _children:
-			cmds.delete(child)
+		Constraints.DeleteConstraints(_clone)
 		
-
-
 		# Copy keys, check layer and paste keys
 		cmds.copyKey(_clone, time = (self.time.values[2], self.time.values[3]), attribute = _attributesFiltered)
 		

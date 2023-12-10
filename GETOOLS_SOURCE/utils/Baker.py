@@ -55,7 +55,7 @@ def BakeSelectedByLastObject(pairOnly = False):
 	BakeSelected()
 
 	# Delete constraints
-	Constraints.DeleteConstraints(selectedList, skipLast = True)
+	Constraints.DeleteConstraints(selectedList[:-1])
 
 	cmds.select(selectedList)
 	return selectedList

@@ -45,3 +45,9 @@ def PrintSelected(*args):
 		print(item)
 	print("")
 
+def GetChildrenOfType(selected, type = ""):
+	result = []
+	for item in selected:
+		result.append(cmds.listRelatives(item, type = type))
+	return result
+

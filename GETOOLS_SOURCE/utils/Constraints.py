@@ -2,8 +2,9 @@
 
 import maya.cmds as cmds
 
-# from GETOOLS_SOURCE.utils import Locators
 from GETOOLS_SOURCE.utils import Selector
+
+from GETOOLS_SOURCE.values import Enums
 
 def ConstrainSelectedToLastObject(reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
 	selected = Selector.MultipleObjects(2)
@@ -65,15 +66,40 @@ def ConstrainAim(objectParent, objectChild, maintainOffset = True, weight = 1, a
 	else:
 		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = worldUpVector, worldUpObject = worldUpObject)
 
-def DeleteConstraints(selected, skipLast = False):
+def DeleteConstraints(selected):
+	children = Selector.GetChildrenOfType(selected, type = Enums.Types.constraint)
 	count = len(selected)
-
 	for i in range(count):
-		if (skipLast and i == count - 1):
-			break
-		
-		children = cmds.listRelatives(selected[i], type = "constraint")
-		if (children != None):
-			for child in children:
+		if (children[i] != None):
+			for child in children[i]:
 				cmds.delete(child)
+
+def DeleteElementFromConstraint(selected): # TODO complete # what if constraint object is outside of regular location?
+	constraints = Selector.GetChildrenOfType(selected, type = Enums.Types.constraint)
+
+	if (constraints[-1] == None):
+		cmds.warning("No constraints inside last selected object")
+		return
+
+	for constraint in constraints[-1]:
+		print(constraint)
+		# if (constraint == None):
+		# 	continue
+		# for child in constraint:
+		# 	cmds.pointConstraint(child, selected[-1], edit = True, remove = True)
+		# 	print("child = {0}, last = {1}".format(child, selected[-1]))
+
+		
+	
+
+	#name = "objCenterOfMass_pointConstraint1"
+	#targets = cmds.pointConstraint(name, query=True, targetList=True)
+	#print(targets)
+
+	# cmds.pointConstraint("pCube1", "objCenterOfMass", edit = True, remove = True)
+
+
+
+
+	pass
 
