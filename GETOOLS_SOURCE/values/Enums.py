@@ -34,6 +34,13 @@ class Attributes:
 	drawStyle = "drawStyle"
 	segmentScaleCompensate = "segmentScaleCompensate"
 
+class Constraints:
+	parentConstraint = "parentConstraint"
+	pointConstraint = "pointConstraint"
+	orientConstraint = "orientConstraint"
+	scaleConstraint = "scaleConstraint"
+	aimConstraint = "aimConstraint"
+
 class Infinity:
 	infinityConstant = "constant"
 	infinityLinear = "linear"

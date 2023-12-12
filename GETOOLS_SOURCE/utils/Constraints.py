@@ -67,39 +67,50 @@ def ConstrainAim(objectParent, objectChild, maintainOffset = True, weight = 1, a
 		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = worldUpVector, worldUpObject = worldUpObject)
 
 def DeleteConstraints(selected):
+	# First pass
+	connections = Selector.GetConnectionsOfType(selected, type = Enums.Types.constraint, source = True, destination = False)
+	for item in connections:
+		if (item == None):
+			continue
+		for connection in item:
+			if (cmds.objExists(connection) == False):
+				continue
+			if Enums.Constraints.parentConstraint\
+			or Enums.Constraints.pointConstraint\
+			or Enums.Constraints.orientConstraint\
+			or Enums.Constraints.scaleConstraint\
+			or Enums.Constraints.aimConstraint in connection:
+				cmds.delete(connection)
+
+	# Second pass with checking child objects (if constraint exists but not connected)
 	children = Selector.GetChildrenOfType(selected, type = Enums.Types.constraint)
-	count = len(selected)
-	for i in range(count):
+	for i in range(len(selected)):
 		if (children[i] != None):
 			for child in children[i]:
 				cmds.delete(child)
 
-def DeleteElementFromConstraint(selected): # TODO complete # what if constraint object is outside of regular location?
-	constraints = Selector.GetChildrenOfType(selected, type = Enums.Types.constraint)
+def DeleteElementFromConstraint(selected): # TODO
+	# constraints = Selector.GetChildrenOfType(selected, type = Enums.Types.constraint)
+	# connections = Selector.GetConnectionsOfType(selected, type = Enums.Types.constraint, source = True, destination = False)
 
-	if (constraints[-1] == None):
-		cmds.warning("No constraints inside last selected object")
-		return
+	# if (constraints[-1] == None):
+	# 	cmds.warning("No constraints inside last selected object")
+	# 	return
 
-	for constraint in constraints[-1]:
-		print(constraint)
+	# for constraint in constraints[-1]:
+	# 	print(constraint)
+
 		# if (constraint == None):
 		# 	continue
 		# for child in constraint:
 		# 	cmds.pointConstraint(child, selected[-1], edit = True, remove = True)
 		# 	print("child = {0}, last = {1}".format(child, selected[-1]))
 
-		
-	
-
 	#name = "objCenterOfMass_pointConstraint1"
 	#targets = cmds.pointConstraint(name, query=True, targetList=True)
 	#print(targets)
 
 	# cmds.pointConstraint("pCube1", "objCenterOfMass", edit = True, remove = True)
-
-
-
 
 	pass
 
