@@ -3,10 +3,10 @@
 windowName = "windowGETools"
 dockName = "dockGETools"
 dockAllowedAreas = ["left", "right"]
-dockStartArea = dockAllowedAreas[0] # used for start docking state, 0 - left, 1 - right
+dockStartArea = dockAllowedAreas[0] # start docking state, 0 - left, 1 - right
 
-windowHeight = 500 # used for vertical window size when undocked
-windowWidth = 320
+windowHeight = 500 # vertical window size when undocked
+windowWidth = 280
 windowWidthScrollSpace = 20
 lineHeight = 30
 margin = 2

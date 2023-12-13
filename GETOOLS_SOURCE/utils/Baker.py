@@ -6,7 +6,7 @@ from GETOOLS_SOURCE.utils import Constraints
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 
-def BakeSelected(classic = True, preserveOutsideKeys = True):
+def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0): # TODO sampleBy for custom bake
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
@@ -23,7 +23,7 @@ def BakeSelected(classic = True, preserveOutsideKeys = True):
 	
 	cmds.refresh(suspend = True)
 	if (classic):
-		cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True)
+		cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy)
 	else:
 		timeCurrent = Timeline.GetTimeCurrent()
 		timeMinMax[1] = timeMinMax[1] + 1
@@ -36,7 +36,7 @@ def BakeSelected(classic = True, preserveOutsideKeys = True):
 			cmds.cutKey(time = (timeMinMax[1], None)) # to right
 	cmds.refresh(suspend = False)
 
-def BakeSelectedByLastObject(pairOnly = False):
+def BakeSelectedByLastObject(pairOnly = False, sampleBy = 1):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(2)
 	if (selectedList == None):
@@ -52,7 +52,7 @@ def BakeSelectedByLastObject(pairOnly = False):
 	# Bake objects
 	cmds.select(selectedList)
 	cmds.select(selectedList[-1], deselect = True)
-	BakeSelected()
+	BakeSelected(sampleBy = sampleBy)
 
 	# Delete constraints
 	Constraints.DeleteConstraints(selectedList[:-1])

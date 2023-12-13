@@ -116,7 +116,8 @@ class CenterOfMass:
 		count = 14
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 		
-		def CustomButton(value): PartButton(("", value), onlyValue = True, annotation = CenterOfMassAnnotations.weightsCustom)
+		def CustomButton(value):
+			PartButton(("", value), onlyValue = True, annotation = CenterOfMassAnnotations.weightsCustom)
 		CustomButton(0)
 		CustomButton(1)
 		CustomButton(2)

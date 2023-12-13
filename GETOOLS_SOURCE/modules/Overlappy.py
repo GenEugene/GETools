@@ -336,7 +336,7 @@ class Overlappy:
 			menuReset = True,
 		)
 	def UILayoutParticleOffset(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
-		self.layoutOffset = cmds.frameLayout("layoutParticleOffset", label = "PARTICLE OFFSET - use for baking rotation", parent = layoutMain, collapsable = True)
+		self.layoutOffset = cmds.frameLayout("layoutParticleOffset", label = "PARTICLE OFFSET", parent = layoutMain, collapsable = True)
 		layoutColumn = cmds.columnLayout(parent = self.layoutOffset, adjustableColumn = True)
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click") # TODO add reset all function
