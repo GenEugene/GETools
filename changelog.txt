@@ -6,19 +6,23 @@ Backlog:
 - [RIGGING] added Rebake IK from selected objects
 
 v0.0.12
-- [UI] decreased window size
-- [UI] renamed some text
+- [UI] decreased window size and rename some labels
+- [UI] changed Locators buttons layout
+- [UI] moved some rarely used buttons to right click menus
 - [TOOLS] added bake sample rate value buttons
 - [TOOLS] added Disconnection from Center of mass logic
+- [TOOLS] separated baked locator constraining to position and rotation
 - [RIGGING] reworked "Delete Constraints" logic
 - [RIGGING] added "Disconnect Targets From Constraint"
 - [CENTER OF MASS] added Disconnect from COM object button
-- improved some modules
+- improved different modules
 
+
+- in progress | Get selected attributes
 - in progress | [TOOLS] added locators size controller
 -
 -
--
+
 
 v0.0.11
 - [UI] moved Select Transform Hierarchy button to Utils menu and remove SELECT category in TOOLS module

@@ -133,7 +133,7 @@ def CreateOnSelectedAndBake(name = nameBaked, scale = scale, minSelectedCount = 
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
 
-def CreateOnSelectedReverseConstrain(name = nameReverse, scale = scale, minSelectedCount = 1, hideParent = False, subLocator = False):
+def CreateOnSelectedReverseConstrain(name = nameReverse, scale = scale, minSelectedCount = 1, hideParent = False, subLocator = False, constrainTranslate = True, constrainRotate = True):
 	objects = CreateOnSelectedAndBake(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator)
 	if (objects == None):
 		return None
@@ -147,10 +147,12 @@ def CreateOnSelectedReverseConstrain(name = nameReverse, scale = scale, minSelec
 	# Constrain objects to locators
 	for i in range(len(selectedList)):
 		if subLocator:
-			Constraints.ConstrainSecondToFirstObject(sublocatorsList[i], selectedList[i], maintainOffset = False)
+			firstObject = sublocatorsList[i]
 		else:
-			Constraints.ConstrainSecondToFirstObject(locatorsList[i], selectedList[i], maintainOffset = False)
-	
+			firstObject = locatorsList[i]
+		
+		Constraints.ConstrainSecondToFirstObject(firstObject, selectedList[i], maintainOffset = False, parent = constrainTranslate and constrainRotate, point = constrainTranslate, orient = constrainRotate)
+
 	# Select objects and return
 	if subLocator:
 		cmds.select(sublocatorsList)

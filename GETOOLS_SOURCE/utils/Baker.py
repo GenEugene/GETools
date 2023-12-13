@@ -6,7 +6,7 @@ from GETOOLS_SOURCE.utils import Constraints
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 
-def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0): # TODO sampleBy for custom bake
+def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
