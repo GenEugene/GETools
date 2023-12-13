@@ -1,13 +1,21 @@
 GETools changelog
 
 Backlog:
-- in progress | [RIGGING] added constraint offset object
 - in progress | [RIGGING] added Aim Constraint logic
+- [RIGGING] added constraint offset object
+- [RIGGING] added Rebake IK from selected objects
 
 v0.0.12
-- [RIGGING] updated "Constraints.DeleteConstraints" function
-- added "GetChildrenOfType" function
--
+- [UI] decreased window size
+- [UI] renamed some text
+- [TOOLS] added bake sample rate value buttons
+- [TOOLS] added Disconnection from Center of mass logic
+- [RIGGING] reworked "Delete Constraints" logic
+- [RIGGING] added "Disconnect Targets From Constraint"
+- [CENTER OF MASS] added Disconnect from COM object button
+- improved some modules
+
+- in progress | [TOOLS] added locators size controller
 -
 -
 -
