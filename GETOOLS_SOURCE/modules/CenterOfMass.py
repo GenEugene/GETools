@@ -249,6 +249,7 @@ class CenterOfMass:
 		
 		selectedList.append(self.COMObject)
 		Constraints.DisconnectTargetsFromConstraint(selectedList)
+		cmds.select(selectedList[:-1], replace = True)
 
 
 	# Baking

@@ -11,17 +11,14 @@ class Types:
 	motionTrail = "motionTrail"
 
 class Attributes:
-	translateX = "translateX"
-	translateY = "translateY"
-	translateZ = "translateZ"
+	translateShort = ("tx", "ty", "tz")
+	translateLong = ("translateX", "translateY", "translateZ")
 
-	rotateX = "rotateX"
-	rotateY = "rotateY"
-	rotateZ = "rotateZ"
+	rotateShort = ("rx", "ry", "rz")
+	rotateLong = ("rotateX", "rotateY", "rotateZ")
 
-	scaleX = "scaleX"
-	scaleY = "scaleY"
-	scaleZ = "scaleZ"
+	scaleShort = ("sx", "sy", "sz")
+	scaleLong = ("scaleX", "scaleY", "scaleZ")
 
 	visibility = "visibility"
 
@@ -40,6 +37,7 @@ class Constraints:
 	orientConstraint = "orientConstraint"
 	scaleConstraint = "scaleConstraint"
 	aimConstraint = "aimConstraint"
+	list = (parentConstraint, pointConstraint, orientConstraint, scaleConstraint, aimConstraint)
 
 class Infinity:
 	infinityConstant = "constant"

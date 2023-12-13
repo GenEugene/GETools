@@ -76,6 +76,7 @@ class GeneralWindow:
 		cmds.menu(label = "Utils", tearOff = True)
 		cmds.menuItem(label = "Select Transform Hiererchy", command = Selector.SelectTransformHierarchy)
 		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected)
+		cmds.menuItem(label = "Print channel box selected attributes", command = Selector.GetChannelBoxAttributes)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette)
 

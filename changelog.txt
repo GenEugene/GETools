@@ -9,6 +9,7 @@ v0.0.12
 - [UI] decreased window size and rename some labels
 - [UI] changed Locators buttons layout
 - [UI] moved some rarely used buttons to right click menus
+- [UTILS] added Printing selected attributes from channel box to Utils
 - [TOOLS] added bake sample rate value buttons
 - [TOOLS] added Disconnection from Center of mass logic
 - [TOOLS] separated baked locator constraining to position and rotation
@@ -16,11 +17,9 @@ v0.0.12
 - [RIGGING] added "Disconnect Targets From Constraint"
 - [CENTER OF MASS] added Disconnect from COM object button
 - improved different modules
-
-
+-
 - in progress | Get selected attributes
 - in progress | [TOOLS] added locators size controller
--
 -
 
 
