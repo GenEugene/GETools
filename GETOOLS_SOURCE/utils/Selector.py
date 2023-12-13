@@ -65,6 +65,5 @@ def GetConnectionsOfType(selected, type = "", source = True, destination = True)
 
 def GetChannelBoxAttributes(*args):
 	selected = cmds.channelBox("mainChannelBox", query = True, selectedMainAttributes = True) # selectedHistoryAttributes # selectedMainAttributes # selectedOutputAttributes # selectedShapeAttributes
-	print(selected)
 	return selected
 

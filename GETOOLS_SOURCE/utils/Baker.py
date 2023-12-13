@@ -6,7 +6,7 @@ from GETOOLS_SOURCE.utils import Constraints
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 
-def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0):
+def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, channelBox = False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
@@ -19,11 +19,16 @@ def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0):
 	else:
 		timeMinMax = list(Timeline.GetTimeMinMax())
 	
-	print(timeMinMax)
-	
 	cmds.refresh(suspend = True)
 	if (classic):
-		cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy)
+		bakeRegular = True
+		selectedAttributes = Selector.GetChannelBoxAttributes()
+		if (channelBox == True):
+			bakeRegular = selectedAttributes == None
+		if (bakeRegular):
+			cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy)
+		else:
+			cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy, attribute = selectedAttributes)
 	else:
 		timeCurrent = Timeline.GetTimeCurrent()
 		timeMinMax[1] = timeMinMax[1] + 1

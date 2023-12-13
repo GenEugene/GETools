@@ -272,13 +272,13 @@ class Tools:
 		
 		self.fieldBakingSamples.Set(value)
 	def BakeSelectedClassic(self, *args):
-		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = self.fieldBakingSamples.Get())
+		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = self.fieldBakingSamples.Get(), channelBox = True)
 	def BakeSelectedClassicCut(self, *args):
-		Baker.BakeSelected(classic = True, preserveOutsideKeys = False, sampleBy = self.fieldBakingSamples.Get())
+		Baker.BakeSelected(classic = True, preserveOutsideKeys = False, sampleBy = self.fieldBakingSamples.Get(), channelBox = True)
 	def BakeSelectedCustom(self, *args): # TODO , sampleBy = self.fieldBakingStep.Get()
-		Baker.BakeSelected(classic = False, preserveOutsideKeys = True)
+		Baker.BakeSelected(classic = False, preserveOutsideKeys = True, channelBox = True)
 	def BakeSelectedCustomCut(self, *args): # TODO , sampleBy = self.fieldBakingStep.Get()
-		Baker.BakeSelected(classic = False, preserveOutsideKeys = False)
+		Baker.BakeSelected(classic = False, preserveOutsideKeys = False, channelBox = True)
 	def BakeSelectedByLastObject(self, *args):
 		Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get())
 
