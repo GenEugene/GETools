@@ -23,7 +23,7 @@ class RiggingAnnotations:
 	constraintOrient = "Orient constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
 	constraintScale = "Scale constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
 	constraintAim = "[IN DEVELOPMENT]\nAim constrain.".format(allToLast = _textAllSelectedConstrainToLast) # TODO
-	constraintDisconnectSelected = "Disconnect targets objects from last selected object. They will be deleted from constrain attributes."
+	constraintDisconnectSelected = "Disconnect targets objects from last selected object. They will be deleted from constraint attributes."
 	constraintDelete = "Delete all constraints on selected objects"
 
 	# Utils

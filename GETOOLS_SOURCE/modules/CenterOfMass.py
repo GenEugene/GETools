@@ -26,7 +26,7 @@ class CenterOfMassAnnotations:
 
 	# Weights
 	disconnectTargets = "Disconnect selected objects from Center Of Mass"
-	weightsCustom = "Custom weight"
+	weightsCustom = "Custom weights"
 	_weightInfo = "Approximate weight as percentage. In sum all weights should give 100%."
 	_weightSymmetry = "Select objects on both sides and activate button."
 	weightHead = _weightInfo
@@ -49,7 +49,7 @@ class CenterOfMassAnnotations:
 
 class CenterOfMassSettings:
 	COMRadius = 10 / 3
-	weightMinMax = (0, 100)
+	weightMinMax = (1, 10)
 
 	# BODYPARTS MAPPING PERCENTAGE
 	partHead = ("head", 7.3)
@@ -113,25 +113,21 @@ class CenterOfMass:
 			cmds.button(label = text.format(partInfo[0], value), command = partial(self.COMConstrainToSelected, value), backgroundColor = colorFinal, annotation = annotation)
 
 		# WEIGHTS PALETTE
-		count = 14
+		count = 10
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 		
 		def CustomButton(value):
 			PartButton(("", value), onlyValue = True, annotation = CenterOfMassAnnotations.weightsCustom)
-		CustomButton(0)
 		CustomButton(1)
 		CustomButton(2)
+		CustomButton(3)
+		CustomButton(4)
 		CustomButton(5)
+		CustomButton(6)
+		CustomButton(7)
+		CustomButton(8)
+		CustomButton(9)
 		CustomButton(10)
-		CustomButton(20)
-		CustomButton(30)
-		CustomButton(40)
-		CustomButton(50)
-		CustomButton(60)
-		CustomButton(70)
-		CustomButton(80)
-		CustomButton(90)
-		CustomButton(100)
 
 		# BODYPARTS
 		count = 3

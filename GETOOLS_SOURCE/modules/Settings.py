@@ -11,7 +11,7 @@ windowWidthScrollSpace = 20
 lineHeight = 30
 margin = 2
 
-sliderWidth = (60, 60, 10)
+sliderWidth = (60, 54, 10)
 sliderWidthMarker = 14
 
 windowWidthScroll = windowWidth - windowWidthScrollSpace
