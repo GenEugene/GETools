@@ -23,6 +23,7 @@ class RiggingAnnotations:
 	constraintOrient = "Orient constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
 	constraintScale = "Scale constrain.\n{allToLast}".format(allToLast = _textAllSelectedConstrainToLast)
 	constraintAim = "[IN DEVELOPMENT]\nAim constrain.".format(allToLast = _textAllSelectedConstrainToLast) # TODO
+	constraintDisconnectSelected = "Disconnect targets objects from last selected object. They will be deleted from constrain attributes."
 	constraintDelete = "Delete all constraints on selected objects"
 
 	# Utils
@@ -50,6 +51,7 @@ class Rigging:
 		windowWidthMargin = Settings.windowWidthMargin
 		lineHeight = Settings.lineHeight
 
+
 		# CONSTRAINTS
 		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = "CONSTRAINTS", collapsable = True)
 		layoutColumnConstraints = cmds.columnLayout(parent = layoutConstraints, adjustableColumn = True)
@@ -70,10 +72,10 @@ class Rigging:
 		cmds.button(label = "Scale", command = self.ConstrainScale, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintScale)
 		cmds.button(label = "Aim", command = self.ConstrainAim, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintAim, enable = False)
 		#
-		countOffsets = 1
+		countOffsets = 2
 		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "Disconnect", command = self.DisconnectTargetsFromConstraint, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDisconnectSelected)
 		cmds.button(label = "Delete Constraints", command = self.DeleteConstraints, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDelete)
-		cmds.button(label = "Delete Element From Constraint", command = self.DeleteElementFromConstraint, backgroundColor = Colors.yellow50)
 
 
 		# UTILS
@@ -111,9 +113,9 @@ class Rigging:
 		if (selectedList == None):
 			return
 		Constraints.DeleteConstraints(selectedList)
-	def DeleteElementFromConstraint(self, *args): # TODO
+	def DisconnectTargetsFromConstraint(self, *args):
 		selectedList = Selector.MultipleObjects(2)
 		if (selectedList == None):
 			return
-		Constraints.DeleteElementFromConstraint(selectedList)
+		Constraints.DisconnectTargetsFromConstraint(selectedList)
 

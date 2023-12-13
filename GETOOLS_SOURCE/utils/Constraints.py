@@ -89,28 +89,40 @@ def DeleteConstraints(selected):
 			for child in children[i]:
 				cmds.delete(child)
 
-def DeleteElementFromConstraint(selected): # TODO
-	# constraints = Selector.GetChildrenOfType(selected, type = Enums.Types.constraint)
-	# connections = Selector.GetConnectionsOfType(selected, type = Enums.Types.constraint, source = True, destination = False)
+def DisconnectTargetsFromConstraint(selected):
+	connections = Selector.GetConnectionsOfType(selected, type = Enums.Types.constraint, source = True, destination = False)
+	
+	if (connections[-1] == None):
+		cmds.warning("No constraints detected inside the last selected object")
+		return
+	
+	for connection in connections[-1]:
+		for item in selected[:-1]:
+			if (cmds.objExists(connection) == False):
+					continue
 
-	# if (constraints[-1] == None):
-	# 	cmds.warning("No constraints inside last selected object")
-	# 	return
-
-	# for constraint in constraints[-1]:
-	# 	print(constraint)
-
-		# if (constraint == None):
-		# 	continue
-		# for child in constraint:
-		# 	cmds.pointConstraint(child, selected[-1], edit = True, remove = True)
-		# 	print("child = {0}, last = {1}".format(child, selected[-1]))
-
-	#name = "objCenterOfMass_pointConstraint1"
-	#targets = cmds.pointConstraint(name, query=True, targetList=True)
-	#print(targets)
-
-	# cmds.pointConstraint("pCube1", "objCenterOfMass", edit = True, remove = True)
-
-	pass
+			if Enums.Constraints.parentConstraint in connection:
+				targets = cmds.parentConstraint(connection, query = True, targetList = True)
+				if (item in targets):
+					cmds.parentConstraint(item, selected[-1], edit = True, remove = True)
+			
+			elif Enums.Constraints.pointConstraint in connection:
+				targets = cmds.pointConstraint(connection, query = True, targetList = True)
+				if (item in targets):
+					cmds.pointConstraint(item, selected[-1], edit = True, remove = True)
+			
+			elif Enums.Constraints.orientConstraint in connection:
+				targets = cmds.orientConstraint(connection, query = True, targetList = True)
+				if (item in targets):
+					cmds.orientConstraint(item, selected[-1], edit = True, remove = True)
+			
+			elif Enums.Constraints.scaleConstraint in connection:
+				targets = cmds.scaleConstraint(connection, query = True, targetList = True)
+				if (item in targets):
+					cmds.scaleConstraint(item, selected[-1], edit = True, remove = True)
+			
+			elif Enums.Constraints.aimConstraint in connection:
+				targets = cmds.aimConstraint(connection, query = True, targetList = True)
+				if (item in targets):
+					cmds.aimConstraint(item, selected[-1], edit = True, remove = True)
 
