@@ -2,8 +2,9 @@
 
 import maya.cmds as cmds
 
-# from GETOOLS_SOURCE.utils import Locators
 from GETOOLS_SOURCE.utils import Selector
+
+from GETOOLS_SOURCE.values import Enums
 
 def ConstrainSelectedToLastObject(reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
 	selected = Selector.MultipleObjects(2)
@@ -65,15 +66,66 @@ def ConstrainAim(objectParent, objectChild, maintainOffset = True, weight = 1, a
 	else:
 		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = worldUpVector, worldUpObject = worldUpObject)
 
-def DeleteConstraints(selected, skipLast = False):
-	count = len(selected)
+def DeleteConstraints(selected):
+	# First pass
+	connections = Selector.GetConnectionsOfType(selected, type = Enums.Types.constraint, source = True, destination = False)
+	for item in connections:
+		if (item == None):
+			continue
+		for connection in item:
+			if (cmds.objExists(connection) == False):
+				continue
+			for constraint in Enums.Constraints.list:
+				if constraint in connection:
+					cmds.delete(connection)
 
-	for i in range(count):
-		if (skipLast and i == count - 1):
-			break
-		
-		children = cmds.listRelatives(selected[i], type = "constraint")
-		if (children != None):
-			for child in children:
+	# Second pass with checking child objects (if constraint exists but not connected)
+	children = Selector.GetChildrenOfType(selected, type = Enums.Types.constraint)
+	for i in range(len(selected)):
+		if (children[i] != None):
+			for child in children[i]:
 				cmds.delete(child)
+
+def DisconnectTargetsFromConstraint(selected):
+	connections = Selector.GetConnectionsOfType(selected, type = Enums.Types.constraint, source = True, destination = False)
+	
+	if (connections[-1] == None):
+		cmds.warning("No constraints detected inside the last selected object")
+		return
+	
+	# 1. Maya function, no documentation
+	cmds.select(selected, replace = True)
+	cmds.RemoveConstraintTarget(selected[-1], selected[:-1])
+	
+	# 2. Custom
+	# for connection in connections[-1]:
+	# 	for item in selected[:-1]:
+	# 		if (cmds.objExists(connection) == False):
+	# 				continue
+
+	# 		if Enums.Constraints.parentConstraint in connection:
+	# 			targets = cmds.parentConstraint(connection, query = True, targetList = True)
+	# 			if (item in targets):
+	# 				cmds.parentConstraint(item, selected[-1], edit = True, remove = True)
+			
+	# 		elif Enums.Constraints.pointConstraint in connection:
+	# 			targets = cmds.pointConstraint(connection, query = True, targetList = True)
+	# 			if (item in targets):
+	# 				cmds.pointConstraint(item, selected[-1], edit = True, remove = True)
+			
+	# 		elif Enums.Constraints.orientConstraint in connection:
+	# 			targets = cmds.orientConstraint(connection, query = True, targetList = True)
+	# 			if (item in targets):
+	# 				cmds.orientConstraint(item, selected[-1], edit = True, remove = True)
+			
+	# 		elif Enums.Constraints.scaleConstraint in connection:
+	# 			targets = cmds.scaleConstraint(connection, query = True, targetList = True)
+	# 			if (item in targets):
+	# 				cmds.scaleConstraint(item, selected[-1], edit = True, remove = True)
+			
+	# 		elif Enums.Constraints.aimConstraint in connection:
+	# 			targets = cmds.aimConstraint(connection, query = True, targetList = True)
+	# 			if (item in targets):
+	# 				cmds.aimConstraint(item, selected[-1], edit = True, remove = True)
+	pass
 

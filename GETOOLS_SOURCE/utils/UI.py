@@ -24,6 +24,49 @@ class Window: # TODO
 	def RunWindow(self):
 		cmds.showWindow(self.nameWindow)
 
+class FloatFieldButtons: # TODO test
+	def __init__(self,
+			# parent = None,
+			value = 10,
+			precision = 3,
+			enabled = True,
+			annotation = "",
+			command = "pass",
+			menuReset = True,
+			width = 20,
+			height = 10,
+			commandUp = "pass",
+			commandDown = "pass",
+			backgroundColor = Colors.blackWhite70,
+			):
+		
+		buttonsWidth = width / 2
+		cmds.rowLayout(numberOfColumns = 2, columnWidth2 = (buttonsWidth, buttonsWidth), columnAttach = [(1, 'both', 0), (2, 'both', 0)] )
+
+		self.floatLocatorSize = FloatField(value = value, precision = precision, annotation = annotation, enabled = enabled, command = command, menuReset = menuReset)
+
+		ButtonLeftRight(width = buttonsWidth * 0.9, height = height, annotation = annotation, commandLeft = commandUp, commandRight = commandDown, backgroundColor = backgroundColor) # TODO
+
+		cmds.setParent('..')
+		cmds.setParent('..')
+
+class ButtonLeftRight:
+	def __init__(self,
+			# parent = None, # TODO
+			width = 20,
+			height = 10,
+			annotation = "",
+			commandLeft = "pass",
+			commandRight = "pass",
+			backgroundColor = Colors.blackWhite70,
+			):
+		
+		buttonsWidth = width / 2
+		cmds.rowLayout(numberOfColumns = 2, columnWidth2 = (buttonsWidth, buttonsWidth), columnAttach = [(1, 'both', 0), (2, 'both', 0)] )
+		cmds.button(label = "<", height = height, command = commandLeft, annotation = annotation, backgroundColor = backgroundColor)
+		cmds.button(label = ">", height = height, command = commandRight, annotation = annotation, backgroundColor = backgroundColor)
+		cmds.setParent('..')
+
 class FloatField:
 	def __init__(self,
 			value = 10,
@@ -32,10 +75,12 @@ class FloatField:
 			annotation = "",
 			command = "pass",
 			menuReset = True,
+			minValue = float("-inf"),
+			maxValue = float("inf"),
 			):
 		
 		self.valueDefault = value
-		self.floatField = cmds.floatField(value = value, precision = precision, changeCommand = command, enable = enabled, annotation = annotation)
+		self.floatField = cmds.floatField(value = value, precision = precision, changeCommand = command, enable = enabled, annotation = annotation, minValue = minValue, maxValue = maxValue)
 
 		if (menuReset):
 			cmds.popupMenu()
@@ -52,6 +97,7 @@ class FloatField:
 
 class Checkbox:
 	def __init__(self,
+			# parent = None, # TODO
 			label = "label",
 			value = False,
 			enable = True,
@@ -146,13 +192,13 @@ class Slider:
 		else:
 			cmds.button(self.marker, edit = True, backgroundColor = self.markerColorDefault)
 		
-		if(self.command != "pass"):
+		if (self.command != "pass"):
 			self.command()
 	
 	def Reset(self, *args):
 		cmds.button(self.marker, edit = True, backgroundColor = self.markerColorDefault)
 		cmds.floatSliderGrp(self.slider, edit = True, value = self.valueDefault)
-		if(self.command != "pass"):
+		if (self.command != "pass"):
 			self.command()
 	
 	# def Scan(self, *args): # TODO rework or remove

@@ -1,8 +1,23 @@
 GETools changelog
 
 Backlog:
-- in progress | [RIGGING] added constraint offset object
-- in progress | [RIGGING] added Aim Constraint logic
+- not completed | [RIGGING] added Aim Constraint logic
+- [TOOLS] added locators size controller
+- [RIGGING] added constraint offset object
+- [RIGGING] added Rebake IK from selected objects
+
+v0.0.12
+- [UI] Decreased window size and renamed some labels.
+- [UI] Moved some rarely used buttons to right-click menus (cursor changes while hovering over buttons with pop-up lists).
+- [UTILS] Added Printing selected attributes from channel box to Utils.
+- [TOOLS] Added buttons for setting the bake sample rate value.
+- [TOOLS] Added baking for selected attributes in the channel box.
+- [TOOLS] Separated Locator Bake into "PIN," "Pin POS," and "Pin ROT."
+- [TOOLS] Changed Locators Relative to Relative; added a right-click menu for options.
+- [RIGGING] Added "Disconnect Targets from Constraint."
+- [RIGGING] Improved logic for "Delete Constraints."
+- [CENTER OF MASS] Added "Disconnect from Center of Mass" button.
+- Improved various modules and overall quality.
 
 v0.0.11
 - [UI] moved Select Transform Hierarchy button to Utils menu and remove SELECT category in TOOLS module

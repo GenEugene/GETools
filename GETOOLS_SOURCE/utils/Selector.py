@@ -45,3 +45,25 @@ def PrintSelected(*args):
 		print(item)
 	print("")
 
+def GetChildrenOfType(selected, type = ""):
+	result = []
+	for item in selected:
+		if (cmds.objExists(item)):
+			result.append(cmds.listRelatives(item, type = type))
+		else:
+			result.append(None)
+	return result
+
+def GetConnectionsOfType(selected, type = "", source = True, destination = True):
+	result = []
+	for item in selected:
+		if (cmds.objExists(item)):
+			result.append(cmds.listConnections(item, type = type, source = source, destination = destination))
+		else:
+			result.append(None)
+	return result
+
+def GetChannelBoxAttributes(*args):
+	selected = cmds.channelBox("mainChannelBox", query = True, selectedMainAttributes = True) # selectedHistoryAttributes # selectedMainAttributes # selectedOutputAttributes # selectedShapeAttributes
+	return selected
+

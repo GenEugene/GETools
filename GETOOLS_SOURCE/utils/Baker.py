@@ -6,7 +6,7 @@ from GETOOLS_SOURCE.utils import Constraints
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 
-def BakeSelected(classic = True, preserveOutsideKeys = True):
+def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, channelBox = False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
@@ -19,11 +19,16 @@ def BakeSelected(classic = True, preserveOutsideKeys = True):
 	else:
 		timeMinMax = list(Timeline.GetTimeMinMax())
 	
-	print(timeMinMax)
-	
 	cmds.refresh(suspend = True)
 	if (classic):
-		cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True)
+		bakeRegular = True
+		selectedAttributes = Selector.GetChannelBoxAttributes()
+		if (channelBox == True):
+			bakeRegular = selectedAttributes == None
+		if (bakeRegular):
+			cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy)
+		else:
+			cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy, attribute = selectedAttributes)
 	else:
 		timeCurrent = Timeline.GetTimeCurrent()
 		timeMinMax[1] = timeMinMax[1] + 1
@@ -36,7 +41,7 @@ def BakeSelected(classic = True, preserveOutsideKeys = True):
 			cmds.cutKey(time = (timeMinMax[1], None)) # to right
 	cmds.refresh(suspend = False)
 
-def BakeSelectedByLastObject(pairOnly = False):
+def BakeSelectedByLastObject(pairOnly = False, sampleBy = 1):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(2)
 	if (selectedList == None):
@@ -52,10 +57,10 @@ def BakeSelectedByLastObject(pairOnly = False):
 	# Bake objects
 	cmds.select(selectedList)
 	cmds.select(selectedList[-1], deselect = True)
-	BakeSelected()
+	BakeSelected(sampleBy = sampleBy)
 
 	# Delete constraints
-	Constraints.DeleteConstraints(selectedList, skipLast = True)
+	Constraints.DeleteConstraints(selectedList[:-1])
 
 	cmds.select(selectedList)
 	return selectedList

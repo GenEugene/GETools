@@ -4,9 +4,12 @@ import maya.cmds as cmds
 from math import pow, sqrt
 from functools import partial
 
+from GETOOLS_SOURCE.values import Enums
+
 from GETOOLS_SOURCE.utils import Animation
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Colors
+from GETOOLS_SOURCE.utils import Constraints
 from GETOOLS_SOURCE.utils import Layers
 from GETOOLS_SOURCE.utils import MayaSettings
 from GETOOLS_SOURCE.utils import Selector
@@ -98,14 +101,8 @@ class OverlappySettings:
 	rangeOffsetY = (float("-inf"), float("inf"), 0, 100)
 	rangeOffsetZ = (float("-inf"), float("inf"), 0, 100)
 	
-	# CONSTANTS
-	attributesT = ("tx", "ty", "tz")
-	attributesR = ("rx", "ry", "rz")
-	attributesS = ("sx", "sy", "sz")
-	constraintsNames = ("parentConstraint", "pointConstraint", "orientConstraint", "scaleConstraint", "aimConstraint")
-
 class Overlappy:
-	version = "v2.0.5"
+	version = "v2.0.6"
 	name = "OVERLAPPY"
 	title = name + " " + version
 
@@ -335,7 +332,7 @@ class Overlappy:
 			menuReset = True,
 		)
 	def UILayoutParticleOffset(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
-		self.layoutOffset = cmds.frameLayout("layoutParticleOffset", label = "PARTICLE OFFSET - use for baking rotation", parent = layoutMain, collapsable = True)
+		self.layoutOffset = cmds.frameLayout("layoutParticleOffset", label = "PARTICLE OFFSET", parent = layoutMain, collapsable = True)
 		layoutColumn = cmds.columnLayout(parent = self.layoutOffset, adjustableColumn = True)
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click") # TODO add reset all function
@@ -525,7 +522,7 @@ class Overlappy:
 		
 		if (self._LoftGetDistance() < OverlappySettings.loftMinDistance):
 			cmds.setAttr(self.loft[2] + ".visibility", 0)
-	def _SetupScan(self, *args): # TODO rework
+	def _SetupScan(self, *args): # TODO rework or delete
 		# Check overlappy group
 		if (not cmds.objExists(OverlappySettings.nameGroup)):
 			cmds.warning("Overlappy object doesn't exists")
@@ -808,9 +805,9 @@ class Overlappy:
 		_item = self.selectedObject
 		
 		if (translation):
-			_attributesType = OverlappySettings.attributesT
+			_attributesType = Enums.Attributes.translateShort
 		else:
-			_attributesType = OverlappySettings.attributesR
+			_attributesType = Enums.Attributes.rotateShort
 		_attrs = ["", "", ""]
 		
 		for i in range(len(_attrs)):
@@ -833,7 +830,7 @@ class Overlappy:
 			if(_connections):
 				for item in _connections:
 					_type = cmds.nodeType(item)
-					if(_type in OverlappySettings.constraintsNames):
+					if(_type in Enums.Constraints.list):
 						_constrained = True
 			
 			if(not _locked and _keyable and _settable and not _constrained):
@@ -870,10 +867,10 @@ class Overlappy:
 		_name = "_rebake_" + Text.ConvertSymbols(_item)
 		_clone = cmds.duplicate(_item, name = _name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)
 		
-		for attr in OverlappySettings.attributesT:
+		for attr in Enums.Attributes.translateShort:
 			cmds.setAttr(_clone[0] + "." + attr, lock = False)
 		
-		for attr in OverlappySettings.attributesR:
+		for attr in Enums.Attributes.rotateShort:
 			cmds.setAttr(_clone[0] + "." + attr, lock = False)
 		
 		cmds.parentConstraint(parent, _clone, maintainOffset = True) # skipTranslate
@@ -881,12 +878,8 @@ class Overlappy:
 		
 		# Bake
 		Baker.BakeSelected(classic = True, preserveOutsideKeys = True)
-		_children = cmds.listRelatives(_clone, type = "constraint")
-		for child in _children:
-			cmds.delete(child)
+		Constraints.DeleteConstraints(_clone)
 		
-
-
 		# Copy keys, check layer and paste keys
 		cmds.copyKey(_clone, time = (self.time.values[2], self.time.values[3]), attribute = _attributesFiltered)
 		

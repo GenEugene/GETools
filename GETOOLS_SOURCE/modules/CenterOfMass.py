@@ -25,7 +25,8 @@ class CenterOfMassAnnotations:
 	projectorXY = _projector + " XY plane"
 
 	# Weights
-	weightsCustom = "Custom weight"
+	disconnectTargets = "Disconnect selected objects from Center Of Mass"
+	weightsCustom = "Custom weights"
 	_weightInfo = "Approximate weight as percentage. In sum all weights should give 100%."
 	_weightSymmetry = "Select objects on both sides and activate button."
 	weightHead = _weightInfo
@@ -48,7 +49,7 @@ class CenterOfMassAnnotations:
 
 class CenterOfMassSettings:
 	COMRadius = 10 / 3
-	weightMinMax = (0, 100)
+	weightMinMax = (1, 10)
 
 	# BODYPARTS MAPPING PERCENTAGE
 	partHead = ("head", 7.3)
@@ -62,7 +63,7 @@ class CenterOfMassSettings:
 	partFoot = ("foot", 1.9)
 
 class CenterOfMass:
-	version = "v0.1.1"
+	version = "v0.1.2"
 	name = "CENTER OF MASS"
 	title = name + " " + version
 
@@ -99,6 +100,10 @@ class CenterOfMass:
 	def UILayoutWeights(self, layoutMain, windowWidthMargin, lineHeight):
 		self.layoutWeights = cmds.frameLayout(parent = layoutMain, label = "WEIGHTS", collapsable = True)
 		layoutColumn = cmds.columnLayout(parent = self.layoutWeights, adjustableColumn = True)
+
+		count = 1
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.button(label = "Disconnect from Center Of Mass", command = self.COMDisconnectTargets, backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.disconnectTargets)
 		
 		def PartButton(partInfo = ("", 0), minMaxValue = CenterOfMassSettings.weightMinMax, onlyValue = False, annotation = ""):
 			value = partInfo[1]
@@ -108,24 +113,21 @@ class CenterOfMass:
 			cmds.button(label = text.format(partInfo[0], value), command = partial(self.COMConstrainToSelected, value), backgroundColor = colorFinal, annotation = annotation)
 
 		# WEIGHTS PALETTE
-		count = 14
+		count = 10
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
 		
-		def CustomButton(value): PartButton(("", value), onlyValue = True, annotation = CenterOfMassAnnotations.weightsCustom)
-		CustomButton(0)
+		def CustomButton(value):
+			PartButton(("", value), onlyValue = True, annotation = CenterOfMassAnnotations.weightsCustom)
 		CustomButton(1)
 		CustomButton(2)
+		CustomButton(3)
+		CustomButton(4)
 		CustomButton(5)
+		CustomButton(6)
+		CustomButton(7)
+		CustomButton(8)
+		CustomButton(9)
 		CustomButton(10)
-		CustomButton(20)
-		CustomButton(30)
-		CustomButton(40)
-		CustomButton(50)
-		CustomButton(60)
-		CustomButton(70)
-		CustomButton(80)
-		CustomButton(90)
-		CustomButton(100)
 
 		# BODYPARTS
 		count = 3
@@ -171,7 +173,6 @@ class CenterOfMass:
 			else:
 				cmds.warning("Center of mass stored in the script memory, but doesn't exist in the scene. You need to create new COM object or select one in the scene and press \"Activate\" button")
 				return False
-	
 	def COMCreate(self, *args):
 		# self.centerOfMass = cmds.polySphere(name = "myCenterOfMass", subdivisionsX = 8, subdivisionsY = 6, radius = 10)
 		# self.centerOfMass = Locators.Create("locCenterOfMass", 5)
@@ -185,24 +186,20 @@ class CenterOfMass:
 		cmds.setAttr(self.COMObject + ".type", 18)
 		cmds.setAttr(self.COMObject + ".otherType", "Center Of Mass", type = "string")
 		cmds.select(self.COMObject)
-	
 	def COMActivate(self, *args):
 		# Check selected objects
 		selectedList = Selector.MultipleObjects(1)
 		if (selectedList == None):
 			return
 		self.COMObject = selectedList[0]
-	
 	def COMSelect(self, *args):
 		if (self.COMObjectCheck()):
 			cmds.select(self.COMObject)
-	
 	def COMClean(self, *args):
 		if (self.COMObjectCheck()):
 			cmds.delete(self.COMObject)
 			self.COMObject = None
 			cmds.warning("Last active center of mass object was deleted")
-	
 	def COMFloorProjection(self, skipAxis = "y", *args):
 		if (not self.COMObjectCheck()):
 			return
@@ -230,7 +227,6 @@ class CenterOfMass:
 		cmds.parent(joint1, projection)
 
 		cmds.select(clear = True)
-
 	def COMConstrainToSelected(self, weight, *args):
 		if (not self.COMObjectCheck()):
 			return
@@ -242,18 +238,18 @@ class CenterOfMass:
 		
 		selectedList.append(self.COMObject)
 		Constraints.ConstrainListToLastElement(reverse = True, selected = selectedList, maintainOffset = False, parent = False, point = True, weight = weight)
-	
-	# def COMRemove(self, weight, *args): # TODO
-	# 	if (self.COMObjectCheck()):
-	# 		# Check selected objects
-	# 		selectedList = Selector.MultipleObjects(1)
-	# 		if (selectedList == None):
-	# 			return
+	def COMDisconnectTargets(self, *args):
+		if (self.COMObject == None or cmds.objExists(self.COMObject) == False):
+			cmds.warning("Center Of Mass object is not connected to script. Please select Center Of Mass object and press Activate button before")
+			return
+
+		selectedList = Selector.MultipleObjects(1)
+		if (selectedList == None):
+			return
 		
-		# children = cmds.listRelatives(self.COMObjectRef, type = "constraint")
-		# if (children > 0):
-		# 	attributes = cmds.listAttr(children[0])
-		# pass
+		selectedList.append(self.COMObject)
+		Constraints.DisconnectTargetsFromConstraint(selectedList)
+		cmds.select(selectedList[:-1], replace = True)
 
 
 	# Baking
@@ -272,7 +268,6 @@ class CenterOfMass:
 		# return self.BakeAsChildrenFromLastSelected(minSelectedCount = 1)
 		self.CachedSelectedObjects = Locators.BakeAsChildrenFromLastSelected()
 		return self.CachedSelectedObjects
-	
 	def BakeScenario3(self, *args):
 		objects = self.BakeScenario2()
 		if (objects == None):
@@ -281,16 +276,14 @@ class CenterOfMass:
 		self.LinkCached(maintainOffset = False)
 		
 		return objects
-	
-	def SelectParent(self, *args):
+	def BakeCached(self, *args):
 		if (self.CachedSelectedObjects == None):
 			cmds.warning("No cached objects yet, operation cancelled")
 			return
-		try:
-			cmds.select(self.CachedSelectedObjects[1][-1])
-		except:
-			cmds.warning("Cached object not found")
-
+		
+		cmds.select(self.CachedSelectedObjects[0][0:-1])
+		Baker.BakeSelected()
+		cmds.delete(self.CachedSelectedObjects[1][-1])
 	
 	def LinkCached(self, maintainOffset = False, *args):
 		if (self.CachedSelectedObjects == None):
@@ -301,13 +294,12 @@ class CenterOfMass:
 			if (i == len(self.CachedSelectedObjects[0]) - 1):
 				return
 			Constraints.ConstrainSecondToFirstObject(self.CachedSelectedObjects[1][i], self.CachedSelectedObjects[0][i], maintainOffset = maintainOffset)
-	
-	def BakeCached(self, *args):
+	def SelectParent(self, *args):
 		if (self.CachedSelectedObjects == None):
 			cmds.warning("No cached objects yet, operation cancelled")
 			return
-		
-		cmds.select(self.CachedSelectedObjects[0][0:-1])
-		Baker.BakeSelected()
-		cmds.delete(self.CachedSelectedObjects[1][-1])
+		try:
+			cmds.select(self.CachedSelectedObjects[1][-1])
+		except:
+			cmds.warning("Cached object not found")
 

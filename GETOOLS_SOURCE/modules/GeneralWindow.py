@@ -18,7 +18,7 @@ from GETOOLS_SOURCE.modules import Settings
 from GETOOLS_SOURCE.modules import Tools as tls
 
 class GeneralWindow:
-	version = "v0.0.11"
+	version = "v0.0.12"
 	name = "GETools"
 	title = name + " " + version
 
@@ -73,9 +73,12 @@ class GeneralWindow:
 		def ColorsPalette(*args):
 			colorCalibration = Colors.ColorsPalette()
 			colorCalibration.CreateUI()
+		def PrintChannelBoxAttributes(*args):
+			print(Selector.GetChannelBoxAttributes())
 		cmds.menu(label = "Utils", tearOff = True)
 		cmds.menuItem(label = "Select Transform Hiererchy", command = Selector.SelectTransformHierarchy)
 		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected)
+		cmds.menuItem(label = "Print channel box selected attributes", command = PrintChannelBoxAttributes)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette)
 
