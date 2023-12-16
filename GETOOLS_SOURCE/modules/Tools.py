@@ -27,8 +27,8 @@ class ToolsAnnotations:
 	locatorsBake = "Create locators on selected objects and bake animation"
 	_reverseConstraint = "After that parent constrain original objects back to locators"
 	locatorsBakeReverse = "{bake}\n{reverse}".format(bake = locatorsBake, reverse = _reverseConstraint)
-	locatorsBakeReversePos = "{bake}\nOnly for Translation".format(bake = locatorsBakeReverse)
-	locatorsBakeReverseRot = "{bake}\nOnly for Rotation".format(bake = locatorsBakeReverse)
+	locatorsBakeReversePos = "Only for Translation\n{bake}".format(bake = locatorsBakeReverse)
+	locatorsBakeReverseRot = "Only for Rotation\n{bake}".format(bake = locatorsBakeReverse)
 	
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
 	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
