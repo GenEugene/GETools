@@ -19,6 +19,18 @@ nameReverse = "{0}Reverse".format(nameBase)
 nameAim = "{0}Aim".format(nameBase)
 scale = 1.0
 
+def GetSize(): # TODO
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return None
+	pass
+
+def SetSize(value = 1.0): # TODO
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return None
+	pass
+
 def Create(name = nameBase, scale = scale, hideParent = False, subLocator = False):
 	locatorCurrent = cmds.spaceLocator(name = Text.SetUniqueFromText(name))[0]
 	cmds.setAttr(locatorCurrent + "Shape.localScaleX", scale)

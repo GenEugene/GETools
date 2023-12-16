@@ -18,7 +18,7 @@ from GETOOLS_SOURCE.modules import Settings
 from GETOOLS_SOURCE.modules import Tools as tls
 
 class GeneralWindow:
-	version = "v0.0.12"
+	version = "v0.0.13"
 	name = "GETools"
 	title = name + " " + version
 

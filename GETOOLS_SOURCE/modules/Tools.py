@@ -36,7 +36,7 @@ class ToolsAnnotations:
 	locatorAimDistance = "Locator Aim distance from original object. Need to use non-zero value"
 
 	# Bake
-	bakeSamples = "Baking sample rate.\nDefault value is 1.\nMinimal value is 0.001"
+	bakeSamples = "Baking sample rate, keys will be baked with each N key.\nDefault value is 1.\nMinimal value is 0.001."
 	_bakeCutOutside = "Keys outside of time range or selected range will be removed"
 	bakeClassic = "Regular maya bake \"Edit/Keys/Bake Simulation\".\nUse sample rate."
 	bakeClassicCut = "{0}.\n{1}".format(bakeClassic, _bakeCutOutside)
@@ -65,7 +65,7 @@ class ToolsSettings:
 	rangeLocatorAimOffset = (0, float("inf"), 0, 200)
 
 class Tools:
-	version = "v0.1.5"
+	version = "v0.1.6"
 	name = "TOOLS"
 	title = name + " " + version
 
@@ -88,9 +88,17 @@ class Tools:
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "LOCATORS / SPACE SWITCHING", collapsable = True)
 		layoutColumn = cmds.columnLayout(parent = layoutLocators, adjustableColumn = True)
 		#
+		countOffsets = 6
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "25%", backgroundColor = Colors.red10) # TODO
+		cmds.button(label = "50%", backgroundColor = Colors.red10) # TODO
+		cmds.button(label = "99%", backgroundColor = Colors.red10) # TODO
+		cmds.button(label = "101%", backgroundColor = Colors.green10) # TODO
+		cmds.button(label = "150%", backgroundColor = Colors.green10) # TODO
+		cmds.button(label = "200%", backgroundColor = Colors.green10) # TODO
+		#
 		countOffsets = 3
-		cellWidth = windowWidthMargin / countOffsets
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = cellWidth, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, annotation = ToolsAnnotations.hideParent)
 		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, annotation = ToolsAnnotations.subLocator)
 		self.floatLocatorSize = UI.FloatField(value = 10, precision = 3, annotation = ToolsAnnotations.locatorSize)
