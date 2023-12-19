@@ -24,3 +24,10 @@ def SelectJointsInScene(): # TODO make universal for other types
 	selected = cmds.ls(type = "joint")
 	cmds.select(selected)
 
+def CheckShapeType(element, type):
+	elementShape = element + "Shape"
+	if (cmds.objExists(elementShape)):
+		return cmds.objectType(elementShape) == type
+	else:
+		return False
+

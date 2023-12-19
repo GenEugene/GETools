@@ -3,8 +3,11 @@
 class Types:
 	transform = "transform"
 	joint = "joint"
+	locator = "locator"
 	constraint = "constraint"
 	animLayer = "animLayer"
+
+	shape = "Shape"
 
 	reference = "reference"
 	skinCluster = "skinCluster"
@@ -22,9 +25,7 @@ class Attributes:
 
 	visibility = "visibility"
 
-	localScaleX = "localScaleX"
-	localScaleY = "localScaleY"
-	localScaleZ = "localScaleZ"
+	scaleLocal = ("localScaleX", "localScaleY", "localScaleZ")
 
 	rotateOrder = "rotateOrder"
 	startFrame = "startFrame"

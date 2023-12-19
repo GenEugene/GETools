@@ -7,20 +7,27 @@ from GETOOLS_SOURCE.utils import Animation
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Colors
 from GETOOLS_SOURCE.utils import Locators
+from GETOOLS_SOURCE.utils import Other
+from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 from GETOOLS_SOURCE.utils import UI
 
 from GETOOLS_SOURCE.modules import Settings
+from GETOOLS_SOURCE.values import Enums
 
 class ToolsAnnotations:
-	# Other
-	# printSelectedToConsole = "Just print all selected objects to console and count them"
-	# selectTransformHiererchy = "Select all children \"transform\" objects. \nWorks with multiple selected objects"
-
 	# Locators
+	locatorScale = "Multiply scale of selected locators by"
+	locatorScale50 = "{0} 0.5".format(locatorScale)
+	locatorScale90 = "{0} 0.9".format(locatorScale)
+	locatorScale110 = "{0} 1.1".format(locatorScale)
+	locatorScale200 = "{0} 2.0".format(locatorScale)
+	locatorSizeGet = "Get approximated size of all selected locators"
+	locatorSizeSet = "Set size to all selected locators"
+	locatorSize = "Size of locator"
+	#
 	hideParent = "Deactivate visibility on parent locator. \nUsually better to use with \"Sub Locator\" checkbox activated"
 	subLocator = "Create an extra locator inside the main locator for additional local control"
-	locatorSize = "Initial size of locator"
 	locator = "Create new locator on the world origin"
 	locatorMatch = "Create and match locators to selected objects"
 	locatorParent = "Create and parent constraint locators to selected objects"
@@ -29,7 +36,7 @@ class ToolsAnnotations:
 	locatorsBakeReverse = "{bake}\n{reverse}".format(bake = locatorsBake, reverse = _reverseConstraint)
 	locatorsBakeReversePos = "Only for Translation\n{bake}".format(bake = locatorsBakeReverse)
 	locatorsBakeReverseRot = "Only for Rotation\n{bake}".format(bake = locatorsBakeReverse)
-	
+	#
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
 	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
 	locatorsBakeAim = "Bake locators for Aim Space Switching"
@@ -89,13 +96,14 @@ class Tools:
 		layoutColumn = cmds.columnLayout(parent = layoutLocators, adjustableColumn = True)
 		#
 		countOffsets = 6
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "25%", backgroundColor = Colors.red10) # TODO
-		cmds.button(label = "50%", backgroundColor = Colors.red10) # TODO
-		cmds.button(label = "99%", backgroundColor = Colors.red10) # TODO
-		cmds.button(label = "101%", backgroundColor = Colors.green10) # TODO
-		cmds.button(label = "150%", backgroundColor = Colors.green10) # TODO
-		cmds.button(label = "200%", backgroundColor = Colors.green10) # TODO
+		cellWidth = windowWidthMargin / countOffsets
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = cellWidth, cellHeight = lineHeight)
+		cmds.button(label = "50%", command = partial(self.SelectedLocatorsScaleSize, 0.50), backgroundColor = Colors.blackWhite50, annotation = ToolsAnnotations.locatorScale50)
+		cmds.button(label = "90%", command = partial(self.SelectedLocatorsScaleSize, 0.90), backgroundColor = Colors.blackWhite50, annotation = ToolsAnnotations.locatorScale90)
+		cmds.button(label = "110%", command = partial(self.SelectedLocatorsScaleSize, 1.10), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.locatorScale110)
+		cmds.button(label = "200%", command = partial(self.SelectedLocatorsScaleSize, 2.00), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.locatorScale200)
+		cmds.button(label = "GET", command = self.GetLocatorSize, backgroundColor = Colors.blackWhite100, annotation = ToolsAnnotations.locatorSizeGet)
+		cmds.button(label = "SET", command = self.SelectedLocatorsSetScale, backgroundColor = Colors.blackWhite100, annotation = ToolsAnnotations.locatorSizeSet)
 		#
 		countOffsets = 3
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
@@ -216,6 +224,51 @@ class Tools:
 
 
 	# LOCATORS
+	def GetLocatorSize(self, *args):
+		selectedList = Selector.MultipleObjects(1)
+		if (selectedList == None):
+			return None
+
+		values = []
+		for item in selectedList:
+			check = Other.CheckShapeType(element = item, type = Enums.Types.locator)
+			if (check):
+				values.append(Locators.GetSize(item))
+		
+		count = len(values)
+		approximate = [0, 0, 0]
+		for i in range(count):
+			approximate[0] = approximate[0] + values[i][0]
+			approximate[1] = approximate[1] + values[i][1]
+			approximate[2] = approximate[2] + values[i][2]
+			pass
+
+		approximate[0] = approximate[0] / count
+		approximate[1] = approximate[1] / count
+		approximate[2] = approximate[2] / count
+
+		result = (approximate[0] + approximate[1] + approximate[2]) / 3
+		self.floatLocatorSize.Set(value = result)
+	def SelectedLocatorsScaleSize(self, value, *args):
+		selectedList = Selector.MultipleObjects(1)
+		if (selectedList == None):
+			return None
+		for item in selectedList:
+			check = Other.CheckShapeType(element = item, type = Enums.Types.locator)
+			if (check):
+				Locators.ScaleSize(item, value, value, value)
+	def SelectedLocatorsSetScale(self, *args):
+		selectedList = Selector.MultipleObjects(1)
+		if (selectedList == None):
+			return None
+
+		value = self.floatLocatorSize.Get()
+		
+		for item in selectedList:
+			check = Other.CheckShapeType(element = item, type = Enums.Types.locator)
+			if (check):
+				Locators.SetSize(item, value, value, value)
+		
 	def CreateLocator(self, *args):
 		Locators.Create(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get())
 	def CreateLocatorMatch(self, *args):

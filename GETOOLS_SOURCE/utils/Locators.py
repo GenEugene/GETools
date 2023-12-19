@@ -9,6 +9,8 @@ from GETOOLS_SOURCE.utils import Parent
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Text
 
+from GETOOLS_SOURCE.values import Enums
+
 # TODO think how to merge the same logic on each function. Looks like a lot of similar parts of code
 
 nameBase = "gLoc"
@@ -19,33 +21,35 @@ nameReverse = "{0}Reverse".format(nameBase)
 nameAim = "{0}Aim".format(nameBase)
 scale = 1.0
 
-def GetSize(): # TODO
-	selectedList = Selector.MultipleObjects(1)
-	if (selectedList == None):
-		return None
-	pass
-
-def SetSize(value = 1.0): # TODO
-	selectedList = Selector.MultipleObjects(1)
-	if (selectedList == None):
-		return None
-	pass
+def GetSize(locator):
+	return (
+	cmds.getAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[0]),
+	cmds.getAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[1]),
+	cmds.getAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[2]))
+def SetSize(locator, valueX, valueY, valueZ):
+	if (valueX == 0 or valueY == 0 or valueZ == 0):
+		cmds.warning("Target locator scale is ZERO. The lLocator scaler may have problems.")
+	cmds.setAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[0], valueX)
+	cmds.setAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[1], valueY)
+	cmds.setAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[2], valueZ)
+def ScaleSize(locator, valueX, valueY, valueZ):
+	size = GetSize(locator)
+	sizeX = size[0] * valueX
+	sizeY = size[1] * valueY
+	sizeZ = size[2] * valueZ
+	SetSize(locator, sizeX, sizeY, sizeZ)
 
 def Create(name = nameBase, scale = scale, hideParent = False, subLocator = False):
 	locatorCurrent = cmds.spaceLocator(name = Text.SetUniqueFromText(name))[0]
-	cmds.setAttr(locatorCurrent + "Shape.localScaleX", scale)
-	cmds.setAttr(locatorCurrent + "Shape.localScaleY", scale)
-	cmds.setAttr(locatorCurrent + "Shape.localScaleZ", scale)
+	SetSize(locatorCurrent, scale, scale, scale)
 	cmds.select(locatorCurrent)
 
 	if hideParent:
-		cmds.setAttr(locatorCurrent + "Shape" + ".visibility", 0)
+		cmds.setAttr(locatorCurrent + Enums.Types.shape + "." + Enums.Attributes.visibility, 0)
 	
 	if subLocator:
 		subLocator = Create(locatorCurrent + "Secondary")
-		cmds.setAttr(subLocator + "Shape.localScaleX", scale)
-		cmds.setAttr(subLocator + "Shape.localScaleY", scale)
-		cmds.setAttr(subLocator + "Shape.localScaleZ", scale)
+		SetSize(subLocator, scale, scale, scale)
 		cmds.parent(subLocator, locatorCurrent)
 		cmds.select(subLocator)
 		return locatorCurrent, subLocator
