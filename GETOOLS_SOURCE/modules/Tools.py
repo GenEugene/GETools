@@ -17,13 +17,14 @@ from GETOOLS_SOURCE.values import Enums
 
 class ToolsAnnotations:
 	# Locators
+	_rightClick = "Right click for more options."
 	locatorScale = "Multiply scale of selected locators by"
-	locatorScale50 = "{0} 0.5".format(locatorScale)
-	locatorScale90 = "{0} 0.9".format(locatorScale)
-	locatorScale110 = "{0} 1.1".format(locatorScale)
-	locatorScale200 = "{0} 2.0".format(locatorScale)
+	locatorScale50 = "{0} 0.5\n{1}".format(locatorScale, _rightClick)
+	locatorScale90 = "{0} 0.9\n{1}".format(locatorScale, _rightClick)
+	locatorScale110 = "{0} 1.1\n{1}".format(locatorScale, _rightClick)
+	locatorScale200 = "{0} 2.0\n{1}".format(locatorScale, _rightClick)
 	locatorSizeGet = "Get approximated size of all selected locators"
-	locatorSizeSet = "Set size to all selected locators"
+	locatorSizeSet = "Set size to all selected locators.\nRight click for specific scale values"
 	locatorSize = "Size of locator"
 	#
 	hideParent = "Deactivate visibility on parent locator. \nUsually better to use with \"Sub Locator\" checkbox activated"
@@ -98,12 +99,40 @@ class Tools:
 		countOffsets = 6
 		cellWidth = windowWidthMargin / countOffsets
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = cellWidth, cellHeight = lineHeight)
-		cmds.button(label = "50%", command = partial(self.SelectedLocatorsScaleSize, 0.50), backgroundColor = Colors.blackWhite50, annotation = ToolsAnnotations.locatorScale50)
-		cmds.button(label = "90%", command = partial(self.SelectedLocatorsScaleSize, 0.90), backgroundColor = Colors.blackWhite50, annotation = ToolsAnnotations.locatorScale90)
-		cmds.button(label = "110%", command = partial(self.SelectedLocatorsScaleSize, 1.10), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.locatorScale110)
-		cmds.button(label = "200%", command = partial(self.SelectedLocatorsScaleSize, 2.00), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.locatorScale200)
+		cmds.button(label = "50%", command = partial(self.SelectedLocatorsScaleSize, 0.5), backgroundColor = Colors.blackWhite50, annotation = ToolsAnnotations.locatorScale50)
+		cmds.popupMenu()
+		cmds.menuItem(label = "10%", command = partial(self.SelectedLocatorsScaleSize, 0.1))
+		cmds.menuItem(label = "20%", command = partial(self.SelectedLocatorsScaleSize, 0.2))
+		cmds.menuItem(label = "30%", command = partial(self.SelectedLocatorsScaleSize, 0.3))
+		cmds.menuItem(label = "40%", command = partial(self.SelectedLocatorsScaleSize, 0.4))
+		cmds.button(label = "90%", command = partial(self.SelectedLocatorsScaleSize, 0.9), backgroundColor = Colors.blackWhite50, annotation = ToolsAnnotations.locatorScale90)
+		cmds.popupMenu()
+		cmds.menuItem(label = "99%", command = partial(self.SelectedLocatorsScaleSize, 0.99))
+		cmds.button(label = "110%", command = partial(self.SelectedLocatorsScaleSize, 1.1), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.locatorScale110)
+		cmds.popupMenu()
+		cmds.menuItem(label = "101%", command = partial(self.SelectedLocatorsScaleSize, 1.01))
+		cmds.button(label = "200%", command = partial(self.SelectedLocatorsScaleSize, 2), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.locatorScale200)
+		cmds.popupMenu()
+		cmds.menuItem(label = "500%", command = partial(self.SelectedLocatorsScaleSize, 5))
+		cmds.menuItem(label = "1000%", command = partial(self.SelectedLocatorsScaleSize, 10))
+		cmds.menuItem(label = "2000%", command = partial(self.SelectedLocatorsScaleSize, 20))
 		cmds.button(label = "GET", command = self.GetLocatorSize, backgroundColor = Colors.blackWhite100, annotation = ToolsAnnotations.locatorSizeGet)
-		cmds.button(label = "SET", command = self.SelectedLocatorsSetScale, backgroundColor = Colors.blackWhite100, annotation = ToolsAnnotations.locatorSizeSet)
+		cmds.button(label = "SET", command = self.SelectedLocatorsSetScaleValue, backgroundColor = Colors.blackWhite100, annotation = ToolsAnnotations.locatorSizeSet)
+		cmds.popupMenu()
+		cmds.menuItem(label = "0.1", command = partial(self.SelectedLocatorsSetScale, 0.1))
+		cmds.menuItem(label = "0.5", command = partial(self.SelectedLocatorsSetScale, 0.5))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "1", command = partial(self.SelectedLocatorsSetScale, 1))
+		cmds.menuItem(label = "5", command = partial(self.SelectedLocatorsSetScale, 5))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "10", command = partial(self.SelectedLocatorsSetScale, 10))
+		cmds.menuItem(label = "50", command = partial(self.SelectedLocatorsSetScale, 50))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "100", command = partial(self.SelectedLocatorsSetScale, 100))
+		cmds.menuItem(label = "500", command = partial(self.SelectedLocatorsSetScale, 500))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "1000", command = partial(self.SelectedLocatorsSetScale, 1000))
+		cmds.menuItem(label = "5000", command = partial(self.SelectedLocatorsSetScale, 5000))
 		#
 		countOffsets = 3
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
@@ -257,17 +286,17 @@ class Tools:
 			check = Other.CheckShapeType(element = item, type = Enums.Types.locator)
 			if (check):
 				Locators.ScaleSize(item, value, value, value)
-	def SelectedLocatorsSetScale(self, *args):
+	def SelectedLocatorsSetScale(self, value, *args):
 		selectedList = Selector.MultipleObjects(1)
 		if (selectedList == None):
 			return None
 
-		value = self.floatLocatorSize.Get()
-		
 		for item in selectedList:
 			check = Other.CheckShapeType(element = item, type = Enums.Types.locator)
 			if (check):
 				Locators.SetSize(item, value, value, value)
+	def SelectedLocatorsSetScaleValue(self, *args):
+		self.SelectedLocatorsSetScale(value = self.floatLocatorSize.Get())
 		
 	def CreateLocator(self, *args):
 		Locators.Create(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get())
