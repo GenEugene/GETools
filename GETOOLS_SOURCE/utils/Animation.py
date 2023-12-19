@@ -4,14 +4,30 @@ import maya.cmds as cmds
 import maya.mel as mel
 
 from GETOOLS_SOURCE.utils import Selector
+from GETOOLS_SOURCE.utils import Timeline
 
-
-def DeleteKeys(*args):
+def DeleteKeys(channelBox = False, *args):
 	if (Selector.MultipleObjects(1) == None):
 		return
-	cmds.cutKey()
 
-def DeleteKeyRange(*args):
+	# Calculate time range if range highlighted
+	timeRange = [None, None]
+	if (Timeline.CheckHighlighting()):
+		timeRange = [Timeline.GetSelectedTimeRange()[0], Timeline.GetSelectedTimeRange()[1] - 1]
+
+	# Check channel box attributes
+	selectedAttributes = Selector.GetChannelBoxAttributes()
+	# TODO move logic pattern to separate function
+	cutAll = True
+	if (channelBox == True):
+		cutAll = selectedAttributes == None
+	if (cutAll):
+		cmds.cutKey(time = (timeRange[0], timeRange[1]))
+	else:
+		cmds.cutKey(time = (timeRange[0], timeRange[1]), attribute = selectedAttributes)
+	
+
+def DeleteKeyRange(*args): # XXX unused function
 	mel.eval('timeSliderClearKey')
 
 def DeleteKeysNonkeyable(*args):

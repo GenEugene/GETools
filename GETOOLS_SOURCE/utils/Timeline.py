@@ -44,9 +44,12 @@ def GetTimeMinMax(inner = True):
 		max = cmds.playbackOptions(query = True, animationEndTime = True)
 	return min, max
 
+def FetchTimeline():
+	return mel.eval('$tmpVar=$gPlayBackSlider')
+def CheckHighlighting():
+	return cmds.timeControl(FetchTimeline(), query = True, rangeVisible = True)
 def GetSelectedTimeRange():
-	timeSlider = mel.eval('$tmpVar=$gPlayBackSlider')
-	return cmds.timeControl(timeSlider, query = True, rangeArray = True)
+	return cmds.timeControl(FetchTimeline(), query = True, rangeArray = True)
 
 def SetTime(mode = 0, *args):
 	if (mode == 1):

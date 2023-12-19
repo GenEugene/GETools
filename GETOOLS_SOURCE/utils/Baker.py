@@ -21,6 +21,7 @@ def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, cha
 	
 	cmds.refresh(suspend = True)
 	if (classic):
+		# TODO move logic pattern to separate function
 		bakeRegular = True
 		selectedAttributes = Selector.GetChannelBoxAttributes()
 		if (channelBox == True):

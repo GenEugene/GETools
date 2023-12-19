@@ -53,8 +53,8 @@ class ToolsAnnotations:
 	bakeByLast = "Bake selected objects relative to the last selected object as if they were constrained.\nUse sample rate."
 
 	# Animation
-	deleteAnimation = "Delete all animation from selected objects"
-	deleteKeyRange = "Delete selected time range keys of selected objects. \nAlso works with selected attributes in Channel Box"
+	deleteAnimation = "Delete animation from selected objects.\nHighligh channel box attributes to delete them.\nHighlight key range in timeline to delete only specific range.\nIf timeline is not highlighted then all animation will be removed"
+	# deleteKeyRange = "Delete selected time range keys of selected objects. \nAlso works with selected attributes in Channel Box"
 	deleteNonkeyableKeys = "Delete animation on all nonkeyable attributes of selected objects"
 	deleteStaticCurves = "Delete all static curves on selected"
 	filterCurve = "Filter curve by euler filter. Fix some curve issues"
@@ -222,12 +222,11 @@ class Tools:
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "ANIMATION", collapsable = True)
 		layoutColumn = cmds.columnLayout(parent = layoutRigging, adjustableColumn = True)
 		#
-		countOffsets = 4
+		countOffsets = 3
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Delete\nAnimation", command = Animation.DeleteKeys, backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
-		cmds.button(label = "Delete\nKey Range", command = Animation.DeleteKeyRange, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteKeyRange)
-		cmds.button(label = "Delete\nNonkeyable", command = Animation.DeleteKeysNonkeyable, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteNonkeyableKeys)
-		cmds.button(label = "Delete\nStatic", command = Animation.DeleteStaticCurves, backgroundColor = Colors.blackWhite80, annotation = ToolsAnnotations.deleteStaticCurves)
+		cmds.button(label = "Delete\nAnimation", command = partial(Animation.DeleteKeys, True), backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
+		cmds.button(label = "Delete\nNonkeyable", command = Animation.DeleteKeysNonkeyable, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteNonkeyableKeys)
+		cmds.button(label = "Delete\nStatic", command = Animation.DeleteStaticCurves, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteStaticCurves)
 		#
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
