@@ -3,10 +3,11 @@
 import maya.cmds as cmds
 
 from GETOOLS_SOURCE.utils import Constraints
+from GETOOLS_SOURCE.utils import Locators
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 
-def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, selectedRange = False, channelBox = False):
+def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, selectedRange = False, channelBox = False, attributes = None):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
@@ -29,7 +30,10 @@ def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, sel
 		if (channelBox == True):
 			bakeRegular = selectedAttributes == None
 		if (bakeRegular):
-			cmds.bakeResults(time = (timeRange[0], timeRange[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy)
+			if (attributes == None):
+				cmds.bakeResults(time = (timeRange[0], timeRange[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy)
+			else:
+				cmds.bakeResults(time = (timeRange[0], timeRange[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy, attribute = attributes)
 		else:
 			cmds.bakeResults(time = (timeRange[0], timeRange[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy, attribute = selectedAttributes)
 	else:
@@ -44,7 +48,7 @@ def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, sel
 			cmds.cutKey(time = (timeRange[1], None)) # to right
 	cmds.refresh(suspend = False)
 
-def BakeSelectedByLastObject(pairOnly = False, sampleBy = 1):
+def BakeSelectedByLastObject(pairOnly = False, sampleBy = 1.0, selectedRange = False, channelBox = False, attributes = None):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(2)
 	if (selectedList == None):
@@ -60,7 +64,7 @@ def BakeSelectedByLastObject(pairOnly = False, sampleBy = 1):
 	# Bake objects
 	cmds.select(selectedList)
 	cmds.select(selectedList[-1], deselect = True)
-	BakeSelected(sampleBy = sampleBy)
+	BakeSelected(sampleBy = sampleBy, selectedRange = selectedRange, channelBox = channelBox, attributes = attributes)
 
 	# Delete constraints
 	Constraints.DeleteConstraints(selectedList[:-1])
@@ -68,6 +72,17 @@ def BakeSelectedByLastObject(pairOnly = False, sampleBy = 1):
 	cmds.select(selectedList)
 	return selectedList
 
+def BakeSelectedByWorld(sampleBy = 1.0, selectedRange = False, channelBox = False, attributes = None):
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return
+	
+	world = Locators.Create()
+	selectedList.append(world)
+	cmds.select(selectedList, replace = True)
+	BakeSelectedByLastObject(sampleBy = sampleBy, selectedRange = selectedRange, channelBox = channelBox, attributes = attributes)
+	cmds.delete(world)
 
 # def BakeReverseParentOnPair(): # TODO add child locator on parent object (OPTIONAL)
 # 	selectedList = BakeSelectedByLastObject(pairOnly = True)

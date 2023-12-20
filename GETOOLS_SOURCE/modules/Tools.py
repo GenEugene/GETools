@@ -60,13 +60,13 @@ class ToolsAnnotations:
 	filterCurve = "Filter curve by euler filter. Fix some curve issues"
 	animationCurveInfinity = "Curve Infinity"
 
-	timelineSetMinOuter = "Set minimal outer timeline value"
-	timelineSetMinInner = "Set minimal inner timeline value"
-	timelineSetMaxInner = "Set maximum inner timeline value"
-	timelineSetMaxOuter = "Set maximum outer timeline value"
-	timelineExpandOuter = "Expand timeline range to outer range"
-	timelineExpandInner = "Expand timeline range to inner range"
-	timelineFocusRange = "Set timeline inner range on selected range by mouse"
+	timelineSetMinOut = "Set minimal outer timeline value"
+	timelineSetMinIn = "Set minimal inner timeline value"
+	timelineSetMaxIn = "Set maximum inner timeline value"
+	timelineSetMaxOut = "Set maximum outer timeline value"
+	timelineExpandOut = "Expand timeline range to outer range"
+	timelineExpandIn = "Expand timeline range to inner range"
+	timelineSetRange = "Set timeline inner range on selected range by mouse"
 
 class ToolsSettings:
 	# SLIDERS (field min/max, slider min/max)
@@ -146,7 +146,7 @@ class Tools:
 		cmds.button(label = "Locator", command = self.CreateLocator, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locator)
 		cmds.button(label = "Match", command = self.CreateLocatorMatch, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorMatch)
 		cmds.button(label = "Parent", command = self.CreateLocatorParent, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorParent)
-		cmds.button(label = "PIN", command = partial(self.CreateLocatorBakeReverse, True, True), backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.locatorsBakeReverse)
+		cmds.button(label = "Pin", command = partial(self.CreateLocatorBakeReverse, True, True), backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.locatorsBakeReverse)
 		cmds.popupMenu()
 		cmds.menuItem(label = "without reverse constraint", command = self.CreateLocatorBake)
 		cmds.button(label = "Pin\nPOS", command = partial(self.CreateLocatorBakeReverse, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReversePos)
@@ -215,9 +215,12 @@ class Tools:
 		cmds.button(label = "Bake Custom", command = self.BakeSelectedCustom, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeCustom)
 		cmds.button(label = "Bake Custom\nCut Outer", command = self.BakeSelectedCustomCut, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeCustomCut)
 		#
-		countOffsets = 1
+		countOffsets = 4
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Bake Selected\nBy Last Object", command = self.BakeSelectedByLastObject, backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast) # TODO rework
+		cmds.button(label = "By Last", command = self.BakeSelectedByLastObject, backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast)
+		cmds.button(label = "World", command = partial(self.BakeSelectedByWorld, True, True), backgroundColor = Colors.yellow10) # TODO
+		cmds.button(label = "World\nPOS", command = partial(self.BakeSelectedByWorld, True, False), backgroundColor = Colors.yellow50) # TODO
+		cmds.button(label = "World\nROT", command = partial(self.BakeSelectedByWorld, False, True), backgroundColor = Colors.yellow50) # TODO
 	def UILayoutAnimation(self, layoutMain, windowWidthMargin, lineHeight):
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "ANIMATION", collapsable = True)
 		layoutColumn = cmds.columnLayout(parent = layoutRigging, adjustableColumn = True)
@@ -242,13 +245,13 @@ class Tools:
 		#
 		countOffsets = 7
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "<<", command = partial(Timeline.SetTime, 3), backgroundColor = Colors.green10, annotation = ToolsAnnotations.timelineSetMinOuter)
-		cmds.button(label = "<", command = partial(Timeline.SetTime, 1), backgroundColor = Colors.green50, annotation = ToolsAnnotations.timelineSetMinInner)
-		cmds.button(label = ">", command = partial(Timeline.SetTime, 2), backgroundColor = Colors.green50, annotation = ToolsAnnotations.timelineSetMaxInner)
-		cmds.button(label = ">>", command = partial(Timeline.SetTime, 4), backgroundColor = Colors.green10, annotation = ToolsAnnotations.timelineSetMaxOuter)
-		cmds.button(label = "OUTER", command = partial(Timeline.SetTime, 5), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineExpandOuter)
-		cmds.button(label = "INNER", command = partial(Timeline.SetTime, 6), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineExpandInner)
-		cmds.button(label = "FOCUS", command = partial(Timeline.SetTime, 7), backgroundColor = Colors.orange50, annotation = ToolsAnnotations.timelineFocusRange)
+		cmds.button(label = "<<", command = partial(Timeline.SetTime, 3), backgroundColor = Colors.green10, annotation = ToolsAnnotations.timelineSetMinOut)
+		cmds.button(label = "<", command = partial(Timeline.SetTime, 1), backgroundColor = Colors.green50, annotation = ToolsAnnotations.timelineSetMinIn)
+		cmds.button(label = ">", command = partial(Timeline.SetTime, 2), backgroundColor = Colors.green50, annotation = ToolsAnnotations.timelineSetMaxIn)
+		cmds.button(label = ">>", command = partial(Timeline.SetTime, 4), backgroundColor = Colors.green10, annotation = ToolsAnnotations.timelineSetMaxOut)
+		cmds.button(label = "OUT", command = partial(Timeline.SetTime, 5), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineExpandOut)
+		cmds.button(label = "IN", command = partial(Timeline.SetTime, 6), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineExpandIn)
+		cmds.button(label = "SET", command = partial(Timeline.SetTime, 7), backgroundColor = Colors.orange50, annotation = ToolsAnnotations.timelineSetRange)
 
 
 	# LOCATORS
@@ -370,4 +373,11 @@ class Tools:
 		Baker.BakeSelected(classic = False, preserveOutsideKeys = False, selectedRange = True, channelBox = True)
 	def BakeSelectedByLastObject(self, *args):
 		Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get())
+	def BakeSelectedByWorld(self, translate = True, rotate = True, *args):
+		if (translate and rotate):
+			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True)
+		elif (translate and not rotate):
+			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateShort)
+		elif (not translate and rotate):
+			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateShort)
 
