@@ -16,6 +16,9 @@ from GETOOLS_SOURCE.modules import Settings
 from GETOOLS_SOURCE.values import Enums
 
 class ToolsAnnotations:
+	_onlyForTranslation = "Only for Translation"
+	_onlyForRotation = "Only for Rotation"
+
 	# Locators
 	_rightClick = "Right click for more options."
 	locatorScale = "Multiply scale of selected locators by"
@@ -35,8 +38,8 @@ class ToolsAnnotations:
 	locatorsBake = "Create locators on selected objects and bake animation"
 	_reverseConstraint = "After that parent constrain original objects back to locators"
 	locatorsBakeReverse = "{bake}\n{reverse}".format(bake = locatorsBake, reverse = _reverseConstraint)
-	locatorsBakeReversePos = "Only for Translation\n{bake}".format(bake = locatorsBakeReverse)
-	locatorsBakeReverseRot = "Only for Rotation\n{bake}".format(bake = locatorsBakeReverse)
+	locatorsBakeReversePos = "{0}.\n{1}".format(_onlyForTranslation, locatorsBakeReverse)
+	locatorsBakeReverseRot = "{0}.\n{1}".format(_onlyForRotation, locatorsBakeReverse)
 	#
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
 	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
@@ -46,11 +49,16 @@ class ToolsAnnotations:
 	# Bake
 	bakeSamples = "Baking sample rate, keys will be baked with each N key.\nDefault value is 1.\nMinimal value is 0.001."
 	_bakeCutOutside = "Keys outside of time range or selected range will be removed"
-	bakeClassic = "Regular maya bake \"Edit/Keys/Bake Simulation\".\nUse sample rate."
+	bakeClassic = "Regular maya bake \"Edit/Keys/Bake Simulation\"."
 	bakeClassicCut = "{0}.\n{1}".format(bakeClassic, _bakeCutOutside)
-	bakeCustom = "Alternative way to bake. Doesn't support Sample Rate.\nThe same if you just set key every frame on time range.\nAlso works with animation layers."
-	bakeCustomCut = "{0}\n{1}".format(bakeCustom, _bakeCutOutside)
-	bakeByLast = "Bake selected objects relative to the last selected object as if they were constrained.\nUse sample rate."
+	# bakeCustom = "Alternative way to bake. Doesn't support Sample Rate.\nThe same if you just set key every frame on time range.\nAlso works with animation layers."
+	# bakeCustomCut = "{0}\n{1}".format(bakeCustom, _bakeCutOutside)
+	bakeByLast = "Bake selected objects relative to the last selected object as if they were constrained."
+	bakeByLastPos = "{0}.\n{1}".format(_onlyForTranslation, bakeByLast)
+	bakeByLastRot = "{0}.\n{1}".format(_onlyForRotation, bakeByLast)
+	bakeByWorld = "Bake selected objects relative to the world."
+	bakeByWorldPos = "{0}.\n{1}".format(_onlyForTranslation, bakeByWorld)
+	bakeByWorldRot = "{0}.\n{1}".format(_onlyForRotation, bakeByWorld)
 
 	# Animation
 	deleteAnimation = "Delete animation from selected objects.\nHighligh channel box attributes to delete them.\nHighlight key range in timeline to delete only specific range.\nIf timeline is not highlighted then all animation will be removed"
@@ -146,7 +154,7 @@ class Tools:
 		cmds.button(label = "Locator", command = self.CreateLocator, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locator)
 		cmds.button(label = "Match", command = self.CreateLocatorMatch, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorMatch)
 		cmds.button(label = "Parent", command = self.CreateLocatorParent, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorParent)
-		cmds.button(label = "Pin", command = partial(self.CreateLocatorBakeReverse, True, True), backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.locatorsBakeReverse)
+		cmds.button(label = "Pin", command = partial(self.CreateLocatorBakeReverse, True, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverse)
 		cmds.popupMenu()
 		cmds.menuItem(label = "without reverse constraint", command = self.CreateLocatorBake)
 		cmds.button(label = "Pin\nPOS", command = partial(self.CreateLocatorBakeReverse, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReversePos)
@@ -211,16 +219,20 @@ class Tools:
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Bake Classic", command = self.BakeSelectedClassic, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassic)
+		cmds.popupMenu()
+		cmds.menuItem(label = "Custom", command = self.BakeSelectedCustom)
 		cmds.button(label = "Bake Classic\nCut Outer", command = self.BakeSelectedClassicCut, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassicCut)
-		cmds.button(label = "Bake Custom", command = self.BakeSelectedCustom, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeCustom)
-		cmds.button(label = "Bake Custom\nCut Outer", command = self.BakeSelectedCustomCut, backgroundColor = Colors.orange50, annotation = ToolsAnnotations.bakeCustomCut)
+		cmds.popupMenu()
+		cmds.menuItem(label = "Custom", command = self.BakeSelectedCustomCut)
 		#
-		countOffsets = 4
+		countOffsets = 6
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "By Last", command = self.BakeSelectedByLastObject, backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast)
-		cmds.button(label = "World", command = partial(self.BakeSelectedByWorld, True, True), backgroundColor = Colors.yellow10) # TODO
-		cmds.button(label = "World\nPOS", command = partial(self.BakeSelectedByWorld, True, False), backgroundColor = Colors.yellow50) # TODO
-		cmds.button(label = "World\nROT", command = partial(self.BakeSelectedByWorld, False, True), backgroundColor = Colors.yellow50) # TODO
+		cmds.button(label = "By Last", command = partial(self.BakeSelectedByLastObject, True, True), backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast)
+		cmds.button(label = "By Last\nPOS", command = partial(self.BakeSelectedByLastObject, True, False), backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLastPos)
+		cmds.button(label = "By Last\nROT", command = partial(self.BakeSelectedByLastObject, False, True), backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLastRot)
+		cmds.button(label = "World", command = partial(self.BakeSelectedByWorld, True, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.bakeByWorld)
+		cmds.button(label = "World\nPOS", command = partial(self.BakeSelectedByWorld, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.bakeByWorldPos)
+		cmds.button(label = "World\nROT", command = partial(self.BakeSelectedByWorld, False, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.bakeByWorldRot)
 	def UILayoutAnimation(self, layoutMain, windowWidthMargin, lineHeight):
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "ANIMATION", collapsable = True)
 		layoutColumn = cmds.columnLayout(parent = layoutRigging, adjustableColumn = True)
@@ -371,8 +383,13 @@ class Tools:
 		Baker.BakeSelected(classic = False, preserveOutsideKeys = True, selectedRange = True, channelBox = True)
 	def BakeSelectedCustomCut(self, *args): # TODO , sampleBy = self.fieldBakingStep.Get()
 		Baker.BakeSelected(classic = False, preserveOutsideKeys = False, selectedRange = True, channelBox = True)
-	def BakeSelectedByLastObject(self, *args):
-		Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get())
+	def BakeSelectedByLastObject(self, translate = True, rotate = True, *args):
+		if (translate and rotate):
+			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True)
+		elif (translate and not rotate):
+			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateShort)
+		elif (not translate and rotate):
+			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateShort)
 	def BakeSelectedByWorld(self, translate = True, rotate = True, *args):
 		if (translate and rotate):
 			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True)
