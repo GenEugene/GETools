@@ -6,40 +6,42 @@ from GETOOLS_SOURCE.utils import Constraints
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 
-def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, channelBox = False):
+def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, selectedRange = False, channelBox = False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
 		return
 	
-	selectedRange = Timeline.GetSelectedTimeRange()
-	if (selectedRange[1] - selectedRange[0] > 1):
-		timeMinMax = selectedRange
-		timeMinMax[1] = timeMinMax[1] - 1
+	# Calculate time range if range highlighted
+	if (selectedRange and Timeline.CheckHighlighting()):
+		rangeCurrent = Timeline.GetSelectedTimeRange()
+		timeRange = [rangeCurrent[0], rangeCurrent[1] - 1]
 	else:
-		timeMinMax = list(Timeline.GetTimeMinMax())
-	
+		rangeCurrent = Timeline.GetTimeMinMax()
+		timeRange = [rangeCurrent[0], rangeCurrent[1]]
+
 	cmds.refresh(suspend = True)
 	if (classic):
+		# Check channel box attributes
 		# TODO move logic pattern to separate function
 		bakeRegular = True
 		selectedAttributes = Selector.GetChannelBoxAttributes()
 		if (channelBox == True):
 			bakeRegular = selectedAttributes == None
 		if (bakeRegular):
-			cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy)
+			cmds.bakeResults(time = (timeRange[0], timeRange[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy)
 		else:
-			cmds.bakeResults(time = (timeMinMax[0], timeMinMax[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy, attribute = selectedAttributes)
+			cmds.bakeResults(time = (timeRange[0], timeRange[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy, attribute = selectedAttributes)
 	else:
 		timeCurrent = Timeline.GetTimeCurrent()
-		timeMinMax[1] = timeMinMax[1] + 1
-		for i in range(int(timeMinMax[0]), int(timeMinMax[1])):
+		timeRange[1] = timeRange[1] + 1
+		for i in range(int(timeRange[0]), int(timeRange[1])):
 			Timeline.SetTimeCurrent(i)
 			cmds.setKeyframe(respectKeyable = True, animated = False, preserveCurveShape = True)
 		Timeline.SetTimeCurrent(timeCurrent)
 		if (not preserveOutsideKeys):
-			cmds.cutKey(time = (None, timeMinMax[0] - 1)) # to left
-			cmds.cutKey(time = (timeMinMax[1], None)) # to right
+			cmds.cutKey(time = (None, timeRange[0] - 1)) # to left
+			cmds.cutKey(time = (timeRange[1], None)) # to right
 	cmds.refresh(suspend = False)
 
 def BakeSelectedByLastObject(pairOnly = False, sampleBy = 1):

@@ -42,7 +42,7 @@ def GetTimeMinMax(inner = True):
 	else:
 		min = cmds.playbackOptions(query = True, animationStartTime = True)
 		max = cmds.playbackOptions(query = True, animationEndTime = True)
-	return min, max
+	return (min, max)
 
 def FetchTimeline():
 	return mel.eval('$tmpVar=$gPlayBackSlider')
@@ -64,7 +64,7 @@ def SetTime(mode = 0, *args):
 		minMaxOuter = GetTimeMinMax(False)
 		cmds.playbackOptions(min = minMaxOuter[0], max = minMaxOuter[1])
 	elif (mode == 6):
-		minMaxInner = GetTimeMinMax()
+		minMaxInner = GetTimeMinMax(True)
 		cmds.playbackOptions(animationStartTime = minMaxInner[0], animationEndTime = minMaxInner[1])
 	elif (mode == 7):
 		selectedTime = GetSelectedTimeRange()
