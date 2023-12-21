@@ -72,7 +72,7 @@ class OverlappySettings:
 	nameLocAim = (prefix + "LocAimBase", prefix + "LocAimHidden", prefix + "LocAim", prefix + "LocAimUp")
 	nameParticle = prefix + "Particle"
 	nameLoft = (prefix + "LoftStart", prefix + "LoftEnd", prefix + "LoftShape")
-	nameLayers = (prefixLayer + "TEMP_", prefixLayer + "SAFE_", prefixLayer + "_", prefixLayer + "Pos_", prefixLayer + "Rot_") # TODO use pos and rot prefixes
+	nameLayers = (prefixLayer + "TEMP_", prefixLayer + "SAFE_", "pos_", "rot_")
 	
 	# LOFT
 	loftFactor = 0.9
@@ -102,7 +102,7 @@ class OverlappySettings:
 	rangeOffsetZ = (float("-inf"), float("inf"), 0, 100)
 	
 class Overlappy:
-	version = "v2.0.6"
+	version = "v2.0.7"
 	name = "OVERLAPPY"
 	title = name + " " + version
 
@@ -860,7 +860,6 @@ class Overlappy:
 			_startTime = self.time.values[2] - self.time.values[3] * OverlappySettings.loopOffset
 			self.time.SetMin(_startTime)
 			self.time.SetCurrent(_startTime)
-
 		cmds.setAttr(self.nucleus + ".startFrame", _startTime) # TODO bug when select ovlp objects
 		
 		# Start logic
@@ -869,7 +868,6 @@ class Overlappy:
 		
 		for attr in Enums.Attributes.translateShort:
 			cmds.setAttr(_clone[0] + "." + attr, lock = False)
-		
 		for attr in Enums.Attributes.rotateShort:
 			cmds.setAttr(_clone[0] + "." + attr, lock = False)
 		
@@ -880,27 +878,26 @@ class Overlappy:
 		Baker.BakeSelected(classic = True, preserveOutsideKeys = True)
 		Constraints.DeleteConstraints(_clone)
 		
-		# Copy keys, check layer and paste keys
+		# Copy keys, create layers and paste keys
 		cmds.copyKey(_clone, time = (self.time.values[2], self.time.values[3]), attribute = _attributesFiltered)
 		
 		if (self.checkboxLayer.Get()):
-			_animLayer = self._LayerCreate(_item)
+			if (translation):
+				name = OverlappySettings.nameLayers[2] + _item
+			else:
+				name = OverlappySettings.nameLayers[3] + _item
+			_animLayer = self._LayerCreate(name)
 			
 			_attrsLayer = []
-			
 			for item in _attributesFiltered:
 				_attrsLayer.append("{0}.{1}".format(_item, item))
 			
 			cmds.animLayer(_animLayer, edit = True, attribute = _attrsLayer)
 			cmds.pasteKey(_item, option = "replace", attribute = _attributesFiltered, animLayer = _animLayer)
-		
 		else:
 			cmds.pasteKey(_item, option = "replaceCompletely", attribute = _attributesFiltered)
-		
 		cmds.delete(_clone)
 		
-
-
 		# Set time range
 		if (self.checkboxLoop.Get()):
 			_startTime = self.time.values[2]
@@ -954,13 +951,13 @@ class Overlappy:
 
 
 	### LAYERS
-	def _LayerCreate(self, selected, *args): # TODO additional naming for translation and rotation
+	def _LayerCreate(self, name, *args): # TODO additional naming for translation and rotation
 		# Create main layer
 		if(not cmds.objExists(OverlappySettings.nameLayers[0])):
 			self.layers[0] = Layers.Create(layerName = OverlappySettings.nameLayers[0])
 		
 		# Create layers on selected
-		layerName = OverlappySettings.nameLayers[2] + Text.ConvertSymbols(selected) + "_1"
+		layerName = Text.ConvertSymbols(name) + "_1"
 		return Layers.Create(layerName = layerName, parent = self.layers[0])
 	def _LayerMoveToSafeOrTemp(self, safeLayer = True, *args): # TODO rework
 		_id = [0, 1]
