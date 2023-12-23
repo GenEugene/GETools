@@ -264,6 +264,15 @@ class Tools:
 		cmds.button(label = "OUT", command = partial(Timeline.SetTime, 5), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineExpandOut)
 		cmds.button(label = "IN", command = partial(Timeline.SetTime, 6), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineExpandIn)
 		cmds.button(label = "SET", command = partial(Timeline.SetTime, 7), backgroundColor = Colors.orange50, annotation = ToolsAnnotations.timelineSetRange)
+		#
+		countOffsets = 6
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "<<<=", command = partial(self.AnimationOffset, -1, 3), backgroundColor = Colors.purple100) # TODO
+		cmds.button(label = "<<=", command = partial(self.AnimationOffset, -1, 2), backgroundColor = Colors.purple50) # TODO
+		cmds.button(label = "<=", command = partial(self.AnimationOffset, -1, 1), backgroundColor = Colors.purple10) # TODO
+		cmds.button(label = "=>", command = partial(self.AnimationOffset, 1, 1), backgroundColor = Colors.purple10) # TODO
+		cmds.button(label = "=>>", command = partial(self.AnimationOffset, 1, 2), backgroundColor = Colors.purple50) # TODO
+		cmds.button(label = "=>>>", command = partial(self.AnimationOffset, 1, 3), backgroundColor = Colors.purple100) # TODO
 
 
 	# LOCATORS
@@ -397,4 +406,9 @@ class Tools:
 			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateShort)
 		elif (not translate and rotate):
 			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateShort)
+
+
+	# ANIMATION
+	def AnimationOffset(self, direction = 1, step = 1, *args):
+		Animation.OffsetObjects(direction, step)
 

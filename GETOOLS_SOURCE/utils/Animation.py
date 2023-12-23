@@ -25,11 +25,8 @@ def DeleteKeys(channelBox = False, *args):
 		cmds.cutKey(time = (timeRange[0], timeRange[1]))
 	else:
 		cmds.cutKey(time = (timeRange[0], timeRange[1]), attribute = selectedAttributes)
-	
-
 def DeleteKeyRange(*args): # XXX unused function
 	mel.eval('timeSliderClearKey')
-
 def DeleteKeysNonkeyable(*args):
 	selected = cmds.ls(selection = True)
 	counter = 0
@@ -40,7 +37,6 @@ def DeleteKeysNonkeyable(*args):
 				cmds.cutKey(item + "." + attributes[j])
 				counter += 1
 	print ("\nNonkeyable attributes deleted: {0}".format(counter))
-
 def DeleteStaticCurves(*args):
 	cmds.delete(staticChannels = True)
 
@@ -67,4 +63,23 @@ def SetInfinityConstant(selected):
 	SetInfinity(mode = 1, items = selected)
 def SetInfinityCycle(selected):
 	SetInfinity(mode = 2, items = selected)
+
+def Offset(selected, time, attributes = None):
+	if (attributes == None):
+		cmds.keyframe(selected, edit = True, relative = True, option = "over", includeUpperBound = True, timeChange = time)
+	else:
+		cmds.keyframe(selected, edit = True, relative = True, option = "over", includeUpperBound = True, timeChange = time, attribute = attributes)
+
+def OffsetObjects(direction = 1, step = 1): # TODO
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(2)
+	if (selectedList == None):
+		return
+	
+	time = step * direction
+	attributes = None # TODO
+
+	for i in range(len(selectedList)):
+		timeCurrent = i * time
+		Offset(selectedList[i], timeCurrent, attributes)
 
