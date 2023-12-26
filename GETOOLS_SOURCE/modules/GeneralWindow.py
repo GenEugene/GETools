@@ -138,19 +138,19 @@ class GeneralWindow:
 		cmds.menuItem(dividerLabel = "Install to shelf", divider = True)
 		cmds.menuItem(label = "Install Select Hierarchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
 	def LayoutTools(self, parentLayout):
-		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = tls.Tools.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = "1. " + tls.Tools.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		tls.Tools().UICreate(self.frameTools)
 	def LayoutRigging(self, parentLayout):
-		self.frameRigging = cmds.frameLayout("layoutRigging", parent = parentLayout, label = rig.Rigging.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		self.frameRigging = cmds.frameLayout("layoutRigging", parent = parentLayout, label = "2. " + rig.Rigging.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		rig.Rigging().UICreate(self.frameRigging)
 	def LayoutOverlappy(self, parentLayout):
-		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = ovlp.Overlappy.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = "3. " + ovlp.Overlappy.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		ovlp.Overlappy().UICreate(self.frameOverlappy)
 	def LayoutCenterOfMass(self, parentLayout):
-		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = com.CenterOfMass.title, collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = "4. " + com.CenterOfMass.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		com.CenterOfMass().UICreate(self.frameCenterOfMass)
 	def LayoutExperimental(self, parentLayout):
-		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "EXPERIMENTAL", collapsable = True, backgroundColor = Colors.blackWhite10, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "5. " + "EXPERIMENTAL", collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		cmds.popupMenu()
 		cmds.menuItem(label = "Right-Click test")
 		

@@ -107,7 +107,6 @@ def CreateOnSelected(name = nameBase, scale = scale, minSelectedCount = minSelec
 	else:
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
-
 def CreateAndBakeAsChildrenFromLastSelected(scale = scale, minSelectedCount = 2, hideParent = False, subLocator = False, constraintReverse = False, skipLastReverse = True):
 	# Check selected objects
 	objects = CreateOnSelected(scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator, constraint = True, bake = True, parentToLastSelected = True)
@@ -130,7 +129,6 @@ def CreateAndBakeAsChildrenFromLastSelected(scale = scale, minSelectedCount = 2,
 	else:
 		cmds.select(objects[1][-1])
 	return objects
-
 def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = minSelectedCount, hideParent = False, subLocator = False, aimVector = (1, 0, 0), distance = 100, reverse = True):
 	# Check selected objects
 	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator)

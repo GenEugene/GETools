@@ -1,6 +1,6 @@
 # Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
 
-blackWhite0 = (0, 0, 0)
+blackWhite00 = (0, 0, 0)
 blackWhite10 = (0.1, 0.1, 0.1)
 blackWhite20 = (0.2, 0.2, 0.2)
 blackWhite30 = (0.3, 0.3, 0.3)
@@ -63,7 +63,7 @@ class ColorsPalette:
 		buttonsBlackWhite = 11
 		cmds.gridLayout(parent = layoutMain, numberOfColumns = buttonsBlackWhite, cellWidth = self.windowWidth / buttonsBlackWhite)
 		#
-		cmds.button(label = "0", backgroundColor = blackWhite0)
+		cmds.button(label = "0", backgroundColor = blackWhite00)
 		cmds.button(label = "10", backgroundColor = blackWhite10)
 		cmds.button(label = "20", backgroundColor = blackWhite20)
 		cmds.button(label = "30", backgroundColor = blackWhite30)

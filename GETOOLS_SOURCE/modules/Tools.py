@@ -102,8 +102,9 @@ class Tools:
 		self.UILayoutLocators(layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker)
 		self.UILayoutBaking(layoutMain, windowWidthMargin, lineHeight)
 		self.UILayoutAnimation(layoutMain, windowWidthMargin, lineHeight)
+		self.UILayoutTimeline(layoutMain, windowWidthMargin, lineHeight)
 	def UILayoutLocators(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
-		layoutLocators = cmds.frameLayout(parent = layoutMain, label = "LOCATORS / SPACE SWITCHING", collapsable = True)
+		layoutLocators = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "LOCATORS / SPACE SWITCHING", collapsable = True, backgroundColor = Settings.frames2Color)
 		layoutColumn = cmds.columnLayout(parent = layoutLocators, adjustableColumn = True)
 		#
 		countOffsets = 6
@@ -159,8 +160,8 @@ class Tools:
 		cmds.button(label = "Pin", command = partial(self.LocatorsBakeReverse, True, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverse)
 		cmds.popupMenu()
 		cmds.menuItem(label = "without reverse constraint", command = self.LocatorsBake)
-		cmds.button(label = "Pin\nPOS", command = partial(self.LocatorsBakeReverse, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReversePos)
-		cmds.button(label = "Pin\nROT", command = partial(self.LocatorsBakeReverse, False, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverseRot)
+		cmds.button(label = "P-POS", command = partial(self.LocatorsBakeReverse, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReversePos)
+		cmds.button(label = "P-ROT", command = partial(self.LocatorsBakeReverse, False, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverseRot)
 		#
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
@@ -205,7 +206,7 @@ class Tools:
 			menuReset = True,
 		)
 	def UILayoutBaking(self, layoutMain, windowWidthMargin, lineHeight):
-		layoutBake = cmds.frameLayout(parent = layoutMain, label = "BAKING", collapsable = True)
+		layoutBake = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color)
 		layoutColumn = cmds.columnLayout(parent = layoutBake, adjustableColumn = True)
 		#
 		countOffsets = 6
@@ -223,27 +224,27 @@ class Tools:
 		cmds.button(label = "Bake Classic", command = self.BakeSelectedClassic, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassic)
 		cmds.popupMenu()
 		cmds.menuItem(label = "Custom", command = self.BakeSelectedCustom)
-		cmds.button(label = "Bake Classic\nCut Outer", command = self.BakeSelectedClassicCut, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassicCut)
+		cmds.button(label = "Bake Classic Cut Out", command = self.BakeSelectedClassicCut, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassicCut)
 		cmds.popupMenu()
 		cmds.menuItem(label = "Custom", command = self.BakeSelectedCustomCut)
 		#
 		countOffsets = 6
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "By Last", command = partial(self.BakeSelectedByLastObject, True, True), backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast)
-		cmds.button(label = "By Last\nPOS", command = partial(self.BakeSelectedByLastObject, True, False), backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLastPos)
-		cmds.button(label = "By Last\nROT", command = partial(self.BakeSelectedByLastObject, False, True), backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLastRot)
+		cmds.button(label = "BL-POS", command = partial(self.BakeSelectedByLastObject, True, False), backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLastPos)
+		cmds.button(label = "BL-ROT", command = partial(self.BakeSelectedByLastObject, False, True), backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLastRot)
 		cmds.button(label = "World", command = partial(self.BakeSelectedByWorld, True, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.bakeByWorld)
-		cmds.button(label = "World\nPOS", command = partial(self.BakeSelectedByWorld, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.bakeByWorldPos)
-		cmds.button(label = "World\nROT", command = partial(self.BakeSelectedByWorld, False, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.bakeByWorldRot)
+		cmds.button(label = "W-POS", command = partial(self.BakeSelectedByWorld, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.bakeByWorldPos)
+		cmds.button(label = "W-ROT", command = partial(self.BakeSelectedByWorld, False, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.bakeByWorldRot)
 	def UILayoutAnimation(self, layoutMain, windowWidthMargin, lineHeight):
-		layoutRigging = cmds.frameLayout(parent = layoutMain, label = "ANIMATION", collapsable = True)
+		layoutRigging = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "ANIMATION", collapsable = True, backgroundColor = Settings.frames2Color)
 		layoutColumn = cmds.columnLayout(parent = layoutRigging, adjustableColumn = True)
 		#
 		countOffsets = 3
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Delete\nAnimation", command = partial(Animation.DeleteKeys, True), backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
-		cmds.button(label = "Delete\nNonkeyable", command = Animation.DeleteKeysNonkeyable, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteNonkeyableKeys)
-		cmds.button(label = "Delete\nStatic", command = Animation.DeleteStaticCurves, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteStaticCurves)
+		cmds.button(label = "DEL Animation", command = partial(Animation.DeleteKeys, True), backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
+		cmds.button(label = "DEL Nonkeyable", command = Animation.DeleteKeysNonkeyable, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteNonkeyableKeys)
+		cmds.button(label = "DEL Static", command = Animation.DeleteStaticCurves, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteStaticCurves)
 		#
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
@@ -257,6 +258,18 @@ class Tools:
 		cmds.button(label = "Offset", command = partial(Animation.SetInfinity, 4, None), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.animationCurveInfinity)
 		cmds.button(label = "Oscillate", command = partial(Animation.SetInfinity, 5, None), backgroundColor = Colors.blue100, annotation = ToolsAnnotations.animationCurveInfinity)
 		#
+		countOffsets = 6
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "<<<=", command = partial(self.AnimationOffset, -1, 3), backgroundColor = Colors.purple100, annotation = ToolsAnnotations.animationOffset)
+		cmds.button(label = "<<=", command = partial(self.AnimationOffset, -1, 2), backgroundColor = Colors.purple50, annotation = ToolsAnnotations.animationOffset)
+		cmds.button(label = "<=", command = partial(self.AnimationOffset, -1, 1), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.animationOffset)
+		cmds.button(label = "=>", command = partial(self.AnimationOffset, 1, 1), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.animationOffset)
+		cmds.button(label = "=>>", command = partial(self.AnimationOffset, 1, 2), backgroundColor = Colors.purple50, annotation = ToolsAnnotations.animationOffset)
+		cmds.button(label = "=>>>", command = partial(self.AnimationOffset, 1, 3), backgroundColor = Colors.purple100, annotation = ToolsAnnotations.animationOffset)
+	def UILayoutTimeline(self, layoutMain, windowWidthMargin, lineHeight):
+		layoutRigging = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "TIMELINE", collapsable = True, backgroundColor = Settings.frames2Color)
+		layoutColumn = cmds.columnLayout(parent = layoutRigging, adjustableColumn = True)
+		#
 		countOffsets = 7
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "<<", command = partial(Timeline.SetTime, 3), backgroundColor = Colors.green10, annotation = ToolsAnnotations.timelineSetMinOut)
@@ -266,15 +279,6 @@ class Tools:
 		cmds.button(label = "OUT", command = partial(Timeline.SetTime, 5), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineExpandOut)
 		cmds.button(label = "IN", command = partial(Timeline.SetTime, 6), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineExpandIn)
 		cmds.button(label = "SET", command = partial(Timeline.SetTime, 7), backgroundColor = Colors.orange50, annotation = ToolsAnnotations.timelineSetRange)
-		#
-		countOffsets = 6
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "<<<=", command = partial(self.AnimationOffset, -1, 3), backgroundColor = Colors.purple100, annotation = ToolsAnnotations.animationOffset)
-		cmds.button(label = "<<=", command = partial(self.AnimationOffset, -1, 2), backgroundColor = Colors.purple50, annotation = ToolsAnnotations.animationOffset)
-		cmds.button(label = "<=", command = partial(self.AnimationOffset, -1, 1), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.animationOffset)
-		cmds.button(label = "=>", command = partial(self.AnimationOffset, 1, 1), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.animationOffset)
-		cmds.button(label = "=>>", command = partial(self.AnimationOffset, 1, 2), backgroundColor = Colors.purple50, annotation = ToolsAnnotations.animationOffset)
-		cmds.button(label = "=>>>", command = partial(self.AnimationOffset, 1, 3), backgroundColor = Colors.purple100, annotation = ToolsAnnotations.animationOffset)
 
 
 	# LOCATORS

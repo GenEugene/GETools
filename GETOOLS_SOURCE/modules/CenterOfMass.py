@@ -82,7 +82,7 @@ class CenterOfMass:
 		self.UILayoutWeights(layoutMain, windowWidthMargin, lineHeight)
 		self.UILayoutBaking(layoutMain, windowWidthMargin, lineHeight)
 	def UILayoutSetup(self, layoutMain, windowWidthMargin, lineHeight):
-		self.layoutSetup = cmds.frameLayout(parent = layoutMain, label = "SETUP", collapsable = True) # , backgroundColor = Colors.blackWhite10
+		self.layoutSetup = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "SETUP", collapsable = True, backgroundColor = Settings.frames2Color)
 		layoutColumn = cmds.columnLayout(parent = self.layoutSetup, adjustableColumn = True)
 		#
 		COMButtons1 = 4
@@ -98,7 +98,7 @@ class CenterOfMass:
 		cmds.button(label = "PROJECTOR XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
 		cmds.button(label = "PROJECTOR XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
 	def UILayoutWeights(self, layoutMain, windowWidthMargin, lineHeight):
-		self.layoutWeights = cmds.frameLayout(parent = layoutMain, label = "WEIGHTS", collapsable = True)
+		self.layoutWeights = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "WEIGHTS", collapsable = True, backgroundColor = Settings.frames2Color)
 		layoutColumn = cmds.columnLayout(parent = self.layoutWeights, adjustableColumn = True)
 
 		count = 1
@@ -148,7 +148,7 @@ class CenterOfMass:
 		PartButton(CenterOfMassSettings.partKnee, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightKnee)
 		PartButton(CenterOfMassSettings.partFoot, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightFoot)
 	def UILayoutBaking(self, layoutMain, windowWidthMargin, lineHeight):
-		self.layoutBaking = cmds.frameLayout(parent = layoutMain, label = "BAKING", collapsable = True)
+		self.layoutBaking = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color)
 
 		count = 3
 		cmds.gridLayout(numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
@@ -265,7 +265,6 @@ class CenterOfMass:
 			cmds.select(clear = True)
 			return
 
-		# return self.BakeAsChildrenFromLastSelected(minSelectedCount = 1)
 		self.CachedSelectedObjects = Locators.CreateAndBakeAsChildrenFromLastSelected()
 		return self.CachedSelectedObjects
 	def BakeScenario3(self, *args):

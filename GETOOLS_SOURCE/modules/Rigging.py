@@ -53,7 +53,7 @@ class Rigging:
 
 
 		# CONSTRAINTS
-		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = "CONSTRAINTS", collapsable = True)
+		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CONSTRAINTS", collapsable = True, backgroundColor = Settings.frames2Color)
 		layoutColumnConstraints = cmds.columnLayout(parent = layoutConstraints, adjustableColumn = True)
 		#
 		countOffsets = 4
@@ -64,13 +64,13 @@ class Rigging:
 		# self.checkboxConstraintOffset = UI.Checkbox(label = "Offset", value = False, annotation = RiggingAnnotations.constraintOffset)
 		cmds.separator(style = "none")
 		#
-		countOffsets = 5
+		countOffsets = 4
 		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Parent", command = self.ConstrainParent, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintParent)
 		cmds.button(label = "Point", command = self.ConstrainPoint, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintPoint)
 		cmds.button(label = "Orient", command = self.ConstrainOrient, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintOrient)
 		cmds.button(label = "Scale", command = self.ConstrainScale, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintScale)
-		cmds.button(label = "Aim", command = self.ConstrainAim, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintAim, enable = False)
+		# cmds.button(label = "Aim", command = self.ConstrainAim, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintAim, enable = False) # TODO
 		#
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
@@ -79,21 +79,21 @@ class Rigging:
 
 
 		# UTILS
-		layoutUtils = cmds.frameLayout(parent = layoutMain, label = "UTILS", collapsable = True)
+		layoutUtils = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "UTILS", collapsable = True, backgroundColor = Settings.frames2Color)
 		layoutColumnUtils = cmds.columnLayout(parent = layoutUtils, adjustableColumn = True)
 		#
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Rotate order\nSHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderShow)
-		cmds.button(label = "Rotate order\nHIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderHide)
-		cmds.button(label = "Segment Scale\nCompensate ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.scaleCompensateOn)
-		cmds.button(label = "Segment Scale\nCompensate OFF", command = partial(Other.SegmentScaleCompensate, False), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.scaleCompensateOff)
-		cmds.button(label = "Joint\nBONE", command = partial(Other.JointDrawStyle, 0), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.jointDrawStyleBone)
-		cmds.button(label = "Joint\nHIDDEN", command = partial(Other.JointDrawStyle, 2), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.jointDrawStyleHidden)
+		cmds.button(label = "Rotate Order - SHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderShow)
+		cmds.button(label = "Rotate Order - HIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderHide)
+		cmds.button(label = "Compensate - ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.scaleCompensateOn)
+		cmds.button(label = "Compensate - OFF", command = partial(Other.SegmentScaleCompensate, False), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.scaleCompensateOff)
+		cmds.button(label = "Joint - BONE", command = partial(Other.JointDrawStyle, 0), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.jointDrawStyleBone)
+		cmds.button(label = "Joint - HIDDEN", command = partial(Other.JointDrawStyle, 2), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.jointDrawStyleHidden)
 		#
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Copy Skin Weights\nFrom Last Selected", command = Skinning.CopySkinWeightsFromLastMesh, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.copySkinWeights)
+		cmds.button(label = "Copy Skin Weights From Last Selected", command = Skinning.CopySkinWeightsFromLastMesh, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.copySkinWeights)
 
 
 	# CONSTRAINTS
