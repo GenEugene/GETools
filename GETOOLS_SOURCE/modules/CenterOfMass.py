@@ -266,7 +266,7 @@ class CenterOfMass:
 			return
 
 		# return self.BakeAsChildrenFromLastSelected(minSelectedCount = 1)
-		self.CachedSelectedObjects = Locators.BakeAsChildrenFromLastSelected()
+		self.CachedSelectedObjects = Locators.CreateAndBakeAsChildrenFromLastSelected()
 		return self.CachedSelectedObjects
 	def BakeScenario3(self, *args):
 		objects = self.BakeScenario2()
