@@ -69,17 +69,21 @@ def Offset(selected, time, attributes = None):
 		cmds.keyframe(selected, edit = True, relative = True, option = "over", includeUpperBound = True, timeChange = time)
 	else:
 		cmds.keyframe(selected, edit = True, relative = True, option = "over", includeUpperBound = True, timeChange = time, attribute = attributes)
-
-def OffsetObjects(direction = 1, step = 1): # TODO
+def OffsetObjects(direction = 1, step = 1): # use if needed later # , channelBox = False
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(2)
+	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
 		return
 	
 	time = step * direction
-	attributes = None # TODO
+	selectedAttributes = Selector.GetChannelBoxAttributes()
 
-	for i in range(len(selectedList)):
-		timeCurrent = i * time
-		Offset(selectedList[i], timeCurrent, attributes)
+	count = len(selectedList)
+	for i in range(count):
+		if (count == 1):
+			timeCurrent = time
+		else:
+			timeCurrent = i * time
+		
+		Offset(selectedList[i], timeCurrent, selectedAttributes)
 
