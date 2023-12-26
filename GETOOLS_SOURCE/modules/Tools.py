@@ -76,6 +76,8 @@ class ToolsAnnotations:
 	timelineExpandIn = "Expand timeline range to inner range"
 	timelineSetRange = "Set timeline inner range on selected range by mouse"
 
+	animationOffset = "Move animation on selected objects in time.\nThe animation will move relative to the index of the selected object.\nThe best way to desync animation.\nWorks with selection in the channel box."
+
 class ToolsSettings:
 	# SLIDERS (field min/max, slider min/max)
 	rangeLocatorAimOffset = (0, float("inf"), 0, 200)
@@ -267,12 +269,12 @@ class Tools:
 		#
 		countOffsets = 6
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "<<<=", command = partial(self.AnimationOffset, -1, 3), backgroundColor = Colors.purple100) # TODO
-		cmds.button(label = "<<=", command = partial(self.AnimationOffset, -1, 2), backgroundColor = Colors.purple50) # TODO
-		cmds.button(label = "<=", command = partial(self.AnimationOffset, -1, 1), backgroundColor = Colors.purple10) # TODO
-		cmds.button(label = "=>", command = partial(self.AnimationOffset, 1, 1), backgroundColor = Colors.purple10) # TODO
-		cmds.button(label = "=>>", command = partial(self.AnimationOffset, 1, 2), backgroundColor = Colors.purple50) # TODO
-		cmds.button(label = "=>>>", command = partial(self.AnimationOffset, 1, 3), backgroundColor = Colors.purple100) # TODO
+		cmds.button(label = "<<<=", command = partial(self.AnimationOffset, -1, 3), backgroundColor = Colors.purple100, annotation = ToolsAnnotations.animationOffset)
+		cmds.button(label = "<<=", command = partial(self.AnimationOffset, -1, 2), backgroundColor = Colors.purple50, annotation = ToolsAnnotations.animationOffset)
+		cmds.button(label = "<=", command = partial(self.AnimationOffset, -1, 1), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.animationOffset)
+		cmds.button(label = "=>", command = partial(self.AnimationOffset, 1, 1), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.animationOffset)
+		cmds.button(label = "=>>", command = partial(self.AnimationOffset, 1, 2), backgroundColor = Colors.purple50, annotation = ToolsAnnotations.animationOffset)
+		cmds.button(label = "=>>>", command = partial(self.AnimationOffset, 1, 3), backgroundColor = Colors.purple100, annotation = ToolsAnnotations.animationOffset)
 
 
 	# LOCATORS
