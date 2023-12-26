@@ -5,7 +5,7 @@ Backlog:
 - [RIGGING] added constraint offset object
 - [RIGGING] added Rebake IK from selected objects
 
-v0.0.13
+v0.13.0
 - [UI] Added pop-up for shelf buttons installation.
 - [UI] Decreased buttons size and renamed some labels.
 - [TOOLS] Added locators size controller.
@@ -17,6 +17,7 @@ v0.0.13
 - [OVERLAPPY] Added pos/rot layer prefixes.
 - Improved Baking and Timeline modules.
 - Refactored Locators module.
+- Changed GETools version format.
 
 v0.0.12
 - [UI] Decreased window size and renamed some labels.
