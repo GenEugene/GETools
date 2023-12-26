@@ -63,7 +63,7 @@ class CenterOfMassSettings:
 	partFoot = ("foot", 1.9)
 
 class CenterOfMass:
-	version = "v0.1.2"
+	version = "v0.1.3"
 	name = "CENTER OF MASS"
 	title = name + " " + version
 
