@@ -6,6 +6,7 @@ Backlog:
 - [RIGGING] added Rebake IK from selected objects
 
 v0.0.13
+- [UI] Added pop-up for shelf buttons installation.
 - [UI] Decreased buttons size and renamed some labels.
 - [TOOLS] Added locators size controller.
 - [TOOLS] Added World baking tool.

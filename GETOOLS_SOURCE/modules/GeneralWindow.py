@@ -82,6 +82,21 @@ class GeneralWindow:
 		cmds.menuItem(label = "Print channel box selected attributes", command = PrintChannelBoxAttributes)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette)
+		
+		cmds.menu(label = "Install", tearOff = True)
+		cmds.menuItem(dividerLabel = "Utils", divider = True)
+		cmds.menuItem(label = "Select Transform Hiererchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
+		cmds.menuItem(dividerLabel = "Tools/Baking", divider = True)
+		cmds.menuItem(label = "Bake Classic", command = partial(Install.ToShelf_BakeClassic, self.directory))
+		cmds.menuItem(label = "Bake Classic Cut Out", command = partial(Install.ToShelf_BakeClassicCutOut, self.directory))
+		cmds.menuItem(dividerLabel = "Tools/Timeline", divider = True)
+		cmds.menuItem(label = "Set Timeline Min Out", command = partial(Install.ToShelf_SetTimelineMinOut, self.directory))
+		cmds.menuItem(label = "Set Timeline Min In", command = partial(Install.ToShelf_SetTimelineMinIn, self.directory))
+		cmds.menuItem(label = "Set Timeline Max In", command = partial(Install.ToShelf_SetTimelineMaxIn, self.directory))
+		cmds.menuItem(label = "Set Timeline Max Out", command = partial(Install.ToShelf_SetTimelineMaxOut, self.directory))
+		cmds.menuItem(label = "Set Timeline Expand Out", command = partial(Install.ToShelf_SetTimelineExpandOut, self.directory))
+		cmds.menuItem(label = "Set Timeline Expand In", command = partial(Install.ToShelf_SetTimelineExpandIn, self.directory))
+		cmds.menuItem(label = "Set Timeline", command = partial(Install.ToShelf_SetTimelineSet, self.directory))
 
 		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
 		def LinkVersionHistory(self): cmds.showHelp("https://github.com/GenEugene/GETools/blob/master/changelog.txt", absolute = True)
@@ -127,16 +142,15 @@ class GeneralWindow:
 				return
 			Layers.MoveChildrenToParent(selected[:-1], selected[-1]) # FIXME main problem is layers have no selection order, they just listed from top to bottom
 
-		cmds.menu(label = "---", enable = False)
-		cmds.menu(label = "DEV", tearOff = True)
-		cmds.menuItem(dividerLabel = "Layers", divider = True)
-		cmds.menuItem(label = "Layer Create", command = LayerCreate)
-		cmds.menuItem(label = "Layer Create For Selected", command = LayerCreateForSelected)
-		cmds.menuItem(label = "Layer Delete", command = LayerDelete)
-		cmds.menuItem(label = "Layer Get Selected", command = LayerGetSelected)
-		cmds.menuItem(label = "Layer Move", command = LayerMove)
-		cmds.menuItem(dividerLabel = "Install to shelf", divider = True)
-		cmds.menuItem(label = "Install Select Hierarchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
+		# cmds.menu(label = "---", enable = False)
+		# cmds.menu(label = "DEV", tearOff = True)
+		# cmds.menuItem(dividerLabel = "Layers", divider = True)
+		# cmds.menuItem(label = "Layer Create", command = LayerCreate)
+		# cmds.menuItem(label = "Layer Create For Selected", command = LayerCreateForSelected)
+		# cmds.menuItem(label = "Layer Delete", command = LayerDelete)
+		# cmds.menuItem(label = "Layer Get Selected", command = LayerGetSelected)
+		# cmds.menuItem(label = "Layer Move", command = LayerMove)
+		pass
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = "1. " + tls.Tools.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		tls.Tools().UICreate(self.frameTools)
