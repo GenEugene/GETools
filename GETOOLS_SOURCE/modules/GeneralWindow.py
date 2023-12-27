@@ -83,20 +83,7 @@ class GeneralWindow:
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette)
 		
-		cmds.menu(label = "Install", tearOff = True)
-		cmds.menuItem(dividerLabel = "Utils", divider = True)
-		cmds.menuItem(label = "Select Transform Hiererchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
-		cmds.menuItem(dividerLabel = "Tools/Baking", divider = True)
-		cmds.menuItem(label = "Bake Classic", command = partial(Install.ToShelf_BakeClassic, self.directory))
-		cmds.menuItem(label = "Bake Classic Cut Out", command = partial(Install.ToShelf_BakeClassicCutOut, self.directory))
-		cmds.menuItem(dividerLabel = "Tools/Timeline", divider = True)
-		cmds.menuItem(label = "Set Timeline Min Out", command = partial(Install.ToShelf_SetTimelineMinOut, self.directory))
-		cmds.menuItem(label = "Set Timeline Min In", command = partial(Install.ToShelf_SetTimelineMinIn, self.directory))
-		cmds.menuItem(label = "Set Timeline Max In", command = partial(Install.ToShelf_SetTimelineMaxIn, self.directory))
-		cmds.menuItem(label = "Set Timeline Max Out", command = partial(Install.ToShelf_SetTimelineMaxOut, self.directory))
-		cmds.menuItem(label = "Set Timeline Expand Out", command = partial(Install.ToShelf_SetTimelineExpandOut, self.directory))
-		cmds.menuItem(label = "Set Timeline Expand In", command = partial(Install.ToShelf_SetTimelineExpandIn, self.directory))
-		cmds.menuItem(label = "Set Timeline", command = partial(Install.ToShelf_SetTimelineSet, self.directory))
+		self.LayoutMenuInstall()
 
 		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
 		def LinkVersionHistory(self): cmds.showHelp("https://github.com/GenEugene/GETools/blob/master/changelog.txt", absolute = True)
@@ -151,6 +138,169 @@ class GeneralWindow:
 		# cmds.menuItem(label = "Layer Get Selected", command = LayerGetSelected)
 		# cmds.menuItem(label = "Layer Move", command = LayerMove)
 		pass
+	def LayoutMenuInstall(self):
+		cmds.menu(label = "To Shelf", tearOff = True)
+		###
+		cmds.menuItem(subMenu = True, label = "General")
+		cmds.menuItem(dividerLabel = "File", divider = True)
+		cmds.menuItem(label = "Reload Scene (force)") # TODO
+		cmds.menuItem(label = "Exit Maya (force)") # TODO
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Restart GETools") # TODO
+		cmds.menuItem(label = "Close GETools") # TODO
+		cmds.menuItem(dividerLabel = "Utils", divider = True)
+		cmds.menuItem(label = "Select Transform Hiererchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(dividerLabel = "TOOLS - Locators", divider = True)
+		###
+		cmds.menuItem(subMenu = True, label = "Size")
+		cmds.menuItem(label = "50%") # TODO
+		cmds.menuItem(label = "90%") # TODO
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "110%") # TODO
+		cmds.menuItem(label = "200%") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(subMenu = True, label = "Create")
+		cmds.menuItem(label = "Locator") # TODO
+		cmds.menuItem(label = "Match") # TODO
+		cmds.menuItem(label = "Parent") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(subMenu = True, label = "Pin")
+		cmds.menuItem(label = "Pin") # TODO
+		cmds.menuItem(label = "Without reverse constraint") # TODO
+		cmds.menuItem(label = "POS") # TODO
+		cmds.menuItem(label = "ROT") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(subMenu = True, label = "Relative")
+		cmds.menuItem(label = "Relative") # TODO
+		cmds.menuItem(label = "Skip last object reverse constraint") # TODO
+		cmds.menuItem(label = "Without reverse constraint") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(subMenu = True, label = "Aim")
+		cmds.menuItem(label = "-X") # TODO
+		cmds.menuItem(label = "+X") # TODO
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "-Y") # TODO
+		cmds.menuItem(label = "+Y") # TODO
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "-Z") # TODO
+		cmds.menuItem(label = "+Z") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(dividerLabel = "TOOLS - Baking", divider = True)
+		###
+		cmds.menuItem(subMenu = True, label = "Bake")
+		cmds.menuItem(label = "Classic", command = partial(Install.ToShelf_BakeClassic, self.directory))
+		cmds.menuItem(label = "Classic Cut Out", command = partial(Install.ToShelf_BakeClassicCutOut, self.directory))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Custom") # TODO
+		cmds.menuItem(label = "Custom Cut Out") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(subMenu = True, label = "By Last")
+		cmds.menuItem(label = "By Last") # TODO
+		cmds.menuItem(label = "POS") # TODO
+		cmds.menuItem(label = "ROT") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(subMenu = True, label = "World")
+		cmds.menuItem(label = "World") # TODO
+		cmds.menuItem(label = "POS") # TODO
+		cmds.menuItem(label = "ROT") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(dividerLabel = "TOOLS - Animation", divider = True)
+		###
+		cmds.menuItem(subMenu = True, label = "Delete")
+		cmds.menuItem(label = "Animation") # TODO
+		cmds.menuItem(label = "Nonkeyable") # TODO
+		cmds.menuItem(label = "Static") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(label = "Euler Filter") # TODO
+		#
+		cmds.menuItem(subMenu = True, label = "Infinity")
+		cmds.menuItem(label = "Constant") # TODO
+		cmds.menuItem(label = "Linear") # TODO
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Cycle") # TODO
+		cmds.menuItem(label = "Offset") # TODO
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Oscillate") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(subMenu = True, label = "Offset")
+		cmds.menuItem(label = "-3") # TODO
+		cmds.menuItem(label = "-2") # TODO
+		cmds.menuItem(label = "-1") # TODO
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "+1") # TODO
+		cmds.menuItem(label = "+2") # TODO
+		cmds.menuItem(label = "+3") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(dividerLabel = "TOOLS - Timeline", divider = True)
+		###
+		cmds.menuItem(subMenu = True, label = "Timeline")
+		cmds.menuItem(label = "Min Out", command = partial(Install.ToShelf_SetTimelineMinOut, self.directory))
+		cmds.menuItem(label = "Min In", command = partial(Install.ToShelf_SetTimelineMinIn, self.directory))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Max In", command = partial(Install.ToShelf_SetTimelineMaxIn, self.directory))
+		cmds.menuItem(label = "Max Out", command = partial(Install.ToShelf_SetTimelineMaxOut, self.directory))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Expand Out", command = partial(Install.ToShelf_SetTimelineExpandOut, self.directory))
+		cmds.menuItem(label = "Expand In", command = partial(Install.ToShelf_SetTimelineExpandIn, self.directory))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Selected Range", command = partial(Install.ToShelf_SetTimelineSet, self.directory))
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(dividerLabel = "RIGGING - Constraints", divider = True)
+		###
+		cmds.menuItem(subMenu = True, label = "Constraints")
+		cmds.menuItem(label = "Parent") # TODO
+		cmds.menuItem(label = "Point") # TODO
+		cmds.menuItem(label = "Orient") # TODO
+		cmds.menuItem(label = "Scale") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(subMenu = True, label = "Connections")
+		cmds.menuItem(label = "Disconnect") # TODO
+		cmds.menuItem(label = "Delete Constraints") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(dividerLabel = "RIGGING - Utils", divider = True)
+		###
+		cmds.menuItem(subMenu = True, label = "Rotate Order")
+		cmds.menuItem(label = "Show") # TODO
+		cmds.menuItem(label = "Hide") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(subMenu = True, label = "Segment Scale Compensate")
+		cmds.menuItem(label = "On") # TODO
+		cmds.menuItem(label = "Off") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(subMenu = True, label = "Joint Draw Style")
+		cmds.menuItem(label = "Bone") # TODO
+		cmds.menuItem(label = "Hidden") # TODO
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(label = "Copy Skin Weights From Last Selected") # TODO
+		#
+		cmds.menuItem(dividerLabel = "EXPERIMENTAL", divider = True)
+		###
+		cmds.menuItem(subMenu = True, label = "Motion Trail")
+		cmds.menuItem(label = "Create") # TODO
+		cmds.menuItem(label = "Select") # TODO
+		cmds.menuItem(label = "Delete") # TODO
+		cmds.setParent('..', menu = True)
+		#
+
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = "1. " + tls.Tools.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		tls.Tools().UICreate(self.frameTools)
