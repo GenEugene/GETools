@@ -143,11 +143,8 @@ class GeneralWindow:
 		###
 		cmds.menuItem(subMenu = True, label = "General")
 		cmds.menuItem(dividerLabel = "File", divider = True)
-		cmds.menuItem(label = "Reload Scene (force)") # TODO
-		cmds.menuItem(label = "Exit Maya (force)") # TODO
-		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Restart GETools") # TODO
-		cmds.menuItem(label = "Close GETools") # TODO
+		cmds.menuItem(label = "Reload Scene (force)", command = partial(Install.ToShelf_ReloadScene, self.directory))
+		cmds.menuItem(label = "Exit Maya (force)", command = partial(Install.ToShelf_ExitMaya, self.directory))
 		cmds.menuItem(dividerLabel = "Utils", divider = True)
 		cmds.menuItem(label = "Select Transform Hiererchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
 		cmds.setParent('..', menu = True)
@@ -235,13 +232,13 @@ class GeneralWindow:
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Offset")
-		cmds.menuItem(label = "-3") # TODO
-		cmds.menuItem(label = "-2") # TODO
-		cmds.menuItem(label = "-1") # TODO
+		cmds.menuItem(label = "-3", command = partial(Install.ToShelf_AnimOffsetMinus3, self.directory))
+		cmds.menuItem(label = "-2", command = partial(Install.ToShelf_AnimOffsetMinus2, self.directory))
+		cmds.menuItem(label = "-1", command = partial(Install.ToShelf_AnimOffsetMinus1, self.directory))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "+1") # TODO
-		cmds.menuItem(label = "+2") # TODO
-		cmds.menuItem(label = "+3") # TODO
+		cmds.menuItem(label = "+1", command = partial(Install.ToShelf_AnimOffsetPlus1, self.directory))
+		cmds.menuItem(label = "+2", command = partial(Install.ToShelf_AnimOffsetPlus2, self.directory))
+		cmds.menuItem(label = "+3", command = partial(Install.ToShelf_AnimOffsetPlus3, self.directory))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(dividerLabel = "TOOLS - Timeline", divider = True)
@@ -290,14 +287,14 @@ class GeneralWindow:
 		cmds.menuItem(label = "Hidden") # TODO
 		cmds.setParent('..', menu = True)
 		#
-		cmds.menuItem(label = "Copy Skin Weights From Last Selected") # TODO
+		cmds.menuItem(label = "Copy Skin Weights From Last Selected", command = partial(Install.ToShelf_CopySkin, self.directory))
 		#
 		cmds.menuItem(dividerLabel = "EXPERIMENTAL", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Motion Trail")
-		cmds.menuItem(label = "Create") # TODO
-		cmds.menuItem(label = "Select") # TODO
-		cmds.menuItem(label = "Delete") # TODO
+		cmds.menuItem(label = "Create", command = partial(Install.ToShelf_MotionTrailCreate, self.directory))
+		cmds.menuItem(label = "Select", command = partial(Install.ToShelf_MotionTrailSelect, self.directory))
+		cmds.menuItem(label = "Delete", command = partial(Install.ToShelf_MotionTrailDelete, self.directory))
 		cmds.setParent('..', menu = True)
 		#
 
