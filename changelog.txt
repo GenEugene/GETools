@@ -8,16 +8,17 @@ Backlog:
 v0.13.0
 - [UI] Added pop-up for shelf buttons installation.
 - [UI] Decreased buttons size and renamed some labels.
+- [TOOLS] Fixed bug in Locator detection logic.
 - [TOOLS] Added locators size controller.
 - [TOOLS] Added World baking tool.
 - [TOOLS] Added offset animation tool.
+- [TOOLS] Added rotation mode for Locator Aim Switch.
 - [TOOLS] Updated DeleteKeys functions.
 - [TOOLS] Updated "Bake By Last" button. New name "By Last" + 2 alternative buttons for Position and Rotation.
 - [TOOLS] Removed Tools/Animation/Key Range button. Replaced by "Delete Animation" button.
 - [OVERLAPPY] Added pos/rot layer prefixes.
-- Improved Baking and Timeline modules.
-- Refactored Locators module.
-- Changed GETools version format.
+- Improved various modules and overall quality.
+- Changed GETools version format [0.XX.0].
 
 v0.0.12
 - [UI] Decreased window size and renamed some labels.

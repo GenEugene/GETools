@@ -5,6 +5,8 @@ import sys
 
 import GETOOLS_SOURCE.utils.Shelf as Shelf
 
+from GETOOLS_SOURCE.values import Enums
+
 class Presets:
 	pathGeneral =\
 	"import GETOOLS_SOURCE.modules.GeneralWindow as gtwindow"
@@ -37,19 +39,19 @@ gtwindow.GeneralWindow().RUN_DOCKED()\
 	runSceneReload ='''\
 {0}
 scene.Reload()\
-'''.format(pathLocators)
+'''.format(pathScene)
 
 	runExitMaya ='''\
 {0}
 scene.ExitMaya()\
-'''.format(pathLocators)
+'''.format(pathScene)
 
 
 	# UTILS
 	runSelectTransformHierarchy ='''\
 {0}
 selector.SelectTransformHierarchy()\
-'''.format(pathLocators)
+'''.format(pathSelector)
 
 
 	# LOCATORS
@@ -125,12 +127,23 @@ locators.CreateOnSelectedAim\
 baker.BakeSelected\
 '''.format(pathBaker)
 
+	runBakeCustom ='''\
+{0}
+baker.BakeSelected\
+'''.format(pathBaker)
+
+	runBakeByLast ='''\
+{0}
+baker.BakeSelectedByLastObject\
+'''.format(pathBaker)
+
 
 	# ANIMATION
 	runAnimOffset ='''\
 {0}
 animation.OffsetObjects\
 '''.format(pathAnimation)
+
 	runSetTimeline ='''\
 {0}
 timeline.SetTime\
@@ -167,8 +180,7 @@ def AddPathToEnvironment(path, *args):
 	if path not in sys.path:
 		sys.path.insert(0, path)
 def GetFunctionString(path, *args):
-	return \
-"""\
+	return """\
 if not os.path.exists("{path}"):
 	raise IOError(r"The source path {path} does not exist!")
 
@@ -176,8 +188,7 @@ if "{path}" not in sys.path:
 	sys.path.insert(0, "{path}")\
 """.format(path = path)
 def GetFunctionStringForTool(path, tool, *args):
-	return \
-"""\
+	return """\
 import os
 import sys
 
@@ -246,6 +257,25 @@ def ToShelf_BakeClassic(path, *args):
 	MoveToShelf(path, Presets.runBakeClassic + "(classic = True, preserveOutsideKeys = True)", "BakeClassic", "Bake")
 def ToShelf_BakeClassicCutOut(path, *args):
 	MoveToShelf(path, Presets.runBakeClassic + "(classic = True, preserveOutsideKeys = False)", "BakeClassicCutOut", "BakeCut")
+def ToShelf_BakeCustom(path, *args):
+	MoveToShelf(path, Presets.runBakeCustom + "(classic = False, preserveOutsideKeys = True, selectedRange = True, channelBox = True)", "BakeCustom", "BakeC")
+def ToShelf_BakeCustomCutOut(path, *args):
+	MoveToShelf(path, Presets.runBakeCustom + "(classic = False, preserveOutsideKeys = False, selectedRange = True, channelBox = True)", "BakeCustomCutOut", "BakeCCut")
+
+def ToShelf_BakeByLast(path, translate, rotate, *args):
+	if (translate and rotate):
+		suffix = ""
+		parameters = "(selectedRange = True, channelBox = True)"
+	elif (translate and not rotate):
+		suffix = "POS"
+		attributes = Enums.Attributes.translateShort
+		parameters = "(selectedRange = True, channelBox = False, attributes = {0})".format(attributes)
+	elif (not translate and rotate):
+		suffix = "ROT"
+		attributes = Enums.Attributes.rotateShort
+		parameters = "(selectedRange = True, channelBox = False, attributes = {0})".format(attributes)
+	MoveToShelf(path, Presets.runBakeByLast + parameters, "BakeByLast{0}".format(suffix), "BL{0}".format(suffix))
+
 
 # ANIMATION
 def ToShelf_AnimOffset(path, direction, time, *args):

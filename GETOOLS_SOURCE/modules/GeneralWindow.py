@@ -216,14 +216,14 @@ class GeneralWindow:
 		cmds.menuItem(label = "Classic", command = partial(Install.ToShelf_BakeClassic, self.directory))
 		cmds.menuItem(label = "Classic Cut Out", command = partial(Install.ToShelf_BakeClassicCutOut, self.directory))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Custom") # TODO
-		cmds.menuItem(label = "Custom Cut Out") # TODO
+		cmds.menuItem(label = "Custom", command = partial(Install.ToShelf_BakeCustom, self.directory))
+		cmds.menuItem(label = "Custom Cut Out", command = partial(Install.ToShelf_BakeCustomCutOut, self.directory))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "By Last")
-		cmds.menuItem(label = "By Last") # TODO
-		cmds.menuItem(label = "POS") # TODO
-		cmds.menuItem(label = "ROT") # TODO
+		cmds.menuItem(label = "By Last", command = partial(Install.ToShelf_BakeByLast, self.directory, True, True))
+		cmds.menuItem(label = "POS", command = partial(Install.ToShelf_BakeByLast, self.directory, True, False))
+		cmds.menuItem(label = "ROT", command = partial(Install.ToShelf_BakeByLast, self.directory, False, True))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "World")

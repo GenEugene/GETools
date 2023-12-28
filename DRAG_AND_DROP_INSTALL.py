@@ -18,8 +18,7 @@ Install.AddPathToEnvironment(scriptPath)
 # Button settings
 buttonLabel = "GETools"
 functionAddPathToEnvironment = Install.GetFunctionString(scriptPath)
-buttonCommand = \
-"""\
+buttonCommand = """\
 #########################################
 ### Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
 ### GETools
