@@ -40,6 +40,8 @@ class GeneralWindow:
 		layoutRoot = cmds.menuBarLayout(width = Settings.windowWidth)
 		self.LayoutMenuBar(layoutRoot)
 		
+		# self.LayoutTitle(layoutRoot) # TODO title
+
 		layoutScroll = cmds.scrollLayout(parent = layoutRoot, width = Settings.windowWidth)
 		self.LayoutTools(layoutScroll)
 		self.LayoutRigging(layoutScroll)
@@ -328,6 +330,12 @@ class GeneralWindow:
 		cmds.menuItem(label = "Delete", command = partial(Install.ToShelf_MotionTrailDelete, self.directory))
 		cmds.setParent('..', menu = True)
 		#
+
+	def LayoutTitle(self, parentLayout): # TODO figure out how to use resizeable images
+		cmds.columnLayout("layoutTitle", parent = parentLayout, adjustableColumn = False)
+		size = 30
+		cmds.iconTextButton(label = "GETOOLS", style = "iconAndTextHorizontal", image = self.directory + Icons.get, width = size, height = size)
+		# cmds.image(image = self.directory + Icons.get, width = size, height = size)
 
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = "1. " + tls.Tools.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
