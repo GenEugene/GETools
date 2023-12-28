@@ -6,6 +6,7 @@ Backlog:
 - [RIGGING] added Rebake IK from selected objects
 
 v1.0.0
+- [UI] Changed main icon and added some small icons.
 - [UI] Added pop-up for shelf buttons installation.
 - [UI] Decreased buttons size and renamed some labels.
 - [TOOLS] Fixed bug in Locator detection logic.

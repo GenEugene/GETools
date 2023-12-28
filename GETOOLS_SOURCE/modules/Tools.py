@@ -84,7 +84,7 @@ class ToolsSettings:
 	rangeLocatorAimOffset = (0, float("inf"), 0, 200)
 
 class Tools:
-	version = "v0.2.0"
+	version = "v1.0"
 	name = "TOOLS"
 	title = name + " " + version
 
@@ -105,7 +105,7 @@ class Tools:
 		self.UILayoutAnimation(layoutMain, windowWidthMargin, lineHeight)
 		self.UILayoutTimeline(layoutMain, windowWidthMargin, lineHeight)
 	def UILayoutLocators(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
-		layoutLocators = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "LOCATORS / SPACE SWITCHING", collapsable = True, backgroundColor = Settings.frames2Color)
+		layoutLocators = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "LOCATORS // SPACE SWITCHING", collapsable = True, backgroundColor = Settings.frames2Color)
 		layoutColumn = cmds.columnLayout(parent = layoutLocators, adjustableColumn = True)
 		#
 		countOffsets = 6

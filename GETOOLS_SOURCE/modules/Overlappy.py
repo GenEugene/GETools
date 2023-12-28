@@ -102,7 +102,7 @@ class OverlappySettings:
 	rangeOffsetZ = (float("-inf"), float("inf"), 0, 100)
 	
 class Overlappy:
-	version = "v2.0.7"
+	version = "v2.7"
 	name = "OVERLAPPY"
 	title = name + " " + version
 

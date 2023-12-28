@@ -39,7 +39,7 @@ class RiggingAnnotations:
 	copySkinWeights = "Copy skin weights from last selected object to all other selected objects"
 
 class Rigging:
-	version = "v0.0.4"
+	version = "v1.0"
 	name = "RIGGING"
 	title = name + " " + version
 

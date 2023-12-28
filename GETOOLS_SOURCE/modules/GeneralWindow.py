@@ -17,6 +17,8 @@ from GETOOLS_SOURCE.modules import Rigging as rig
 from GETOOLS_SOURCE.modules import Settings
 from GETOOLS_SOURCE.modules import Tools as tls
 
+from GETOOLS_SOURCE.values import Icons
+
 class GeneralWindow:
 	version = "v1.0.0"
 	name = "GETools"
@@ -97,21 +99,21 @@ class GeneralWindow:
 		def LinkShareIdeas(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/ideas", absolute = True)
 		def LinkReport(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/report-a-problem", absolute = True)
 		
-		cmds.menuItem(label = "About GETools", enable = False) # TODO add window with information
+		cmds.menuItem(label = "About GETools", enable = False, image = self.directory + Icons.get) # TODO add window with information
 		cmds.menuItem(label = "Version History", command = LinkVersionHistory)
 		cmds.menuItem(dividerLabel = "Links", divider = True)
 		cmds.menuItem(label = "GitHub", command = LinkGithub)
 		cmds.menuItem(label = "Gumroad", command = LinkGumroad)
 		cmds.menuItem(dividerLabel = "HOW TO USE", divider = True)
-		cmds.menuItem(label = "Documentation", command = LinkGithubWiki)
-		cmds.menuItem(label = "Tutorial Video", enable = False, command = LinkYoutubeTutorial)
+		cmds.menuItem(label = "Documentation", command = LinkGithubWiki, image = Icons.help)
+		cmds.menuItem(label = "Tutorial Video", enable = False, command = LinkYoutubeTutorial, image = Icons.playblast)
 		cmds.menuItem(dividerLabel = "Contacts", divider = True)
 		cmds.menuItem(label = "Linkedin", command = LinkLinkedin)
 		cmds.menuItem(label = "YouTube", command = LinkYoutube)
 		cmds.menuItem(label = "Discord", command = LinkDiscord)
 		cmds.menuItem(dividerLabel = "Support", divider = True)
-		cmds.menuItem(label = "Share your Ideas", command = LinkShareIdeas)
-		cmds.menuItem(label = "Report a Problem", command = LinkReport)
+		cmds.menuItem(label = "Share your Ideas", command = LinkShareIdeas, image = Icons.light)
+		cmds.menuItem(label = "Report a Problem", command = LinkReport, image = Icons.warning)
 
 		# DEV ZONE
 		def LayerCreate(*args):
