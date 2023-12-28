@@ -3,19 +3,33 @@
 import maya.cmds as cmds
 # import maya.mel as mel
 
-# from GETOOLS_SOURCE.utils import Selector
+from GETOOLS_SOURCE.utils import Selector
 
 def RotateOrderVisibility(on = True, *args):
-	selected = cmds.ls(selection = True, type = "transform")
-	for item in selected:
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return
+
+	for item in selectedList:
 		cmds.setAttr(item + ".rotateOrder", channelBox = on)
 
-def SegmentScaleCompensate(value = 0, *args):
+def SegmentScaleCompensate(value = 0, *args): # TODO refactor
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return
+
 	selected = cmds.ls(selection = True, type = "joint")
 	for item in selected:
 		cmds.setAttr(item + ".segmentScaleCompensate", value)
 
-def JointDrawStyle(mode = 0, *args):
+def JointDrawStyle(mode = 0, *args): # TODO refactor
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return
+
 	selected = cmds.ls(selection = True, type = "joint")
 	for item in selected:
 		cmds.setAttr(item + ".drawStyle", mode)

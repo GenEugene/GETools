@@ -28,9 +28,13 @@ def DeleteKeys(channelBox = False, *args):
 def DeleteKeyRange(*args): # XXX unused function
 	mel.eval('timeSliderClearKey')
 def DeleteKeysNonkeyable(*args):
-	selected = cmds.ls(selection = True)
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return
+
 	counter = 0
-	for item in selected:
+	for item in selectedList:
 		attributes = cmds.listAttr(item, channelBox = 1)
 		if attributes != None:
 			for j in range(len(attributes)):
@@ -38,12 +42,19 @@ def DeleteKeysNonkeyable(*args):
 				counter += 1
 	print ("\nNonkeyable attributes deleted: {0}".format(counter))
 def DeleteStaticCurves(*args):
+	# Check selected objects
+	Selector.MultipleObjects(1)
 	cmds.delete(staticChannels = True)
 
 def FilterCurve(*args):
+	# Check selected objects
+	Selector.MultipleObjects(1)
 	cmds.filterCurve()
 
 def SetInfinity(mode, items = None, *args):
+	if (Selector.MultipleObjects(1) == None):
+		return
+
 	result = ""
 	if (mode == 1):
 		result = "constant"
@@ -59,10 +70,17 @@ def SetInfinity(mode, items = None, *args):
 		cmds.setInfinity(preInfinite = result, postInfinite = result)
 	else:
 		cmds.setInfinity(items, preInfinite = result, postInfinite = result)
+
 def SetInfinityConstant(selected):
 	SetInfinity(mode = 1, items = selected)
-def SetInfinityCycle(selected):
+def SetInfinityLinear(selected):
 	SetInfinity(mode = 2, items = selected)
+def SetInfinityCycle(selected):
+	SetInfinity(mode = 3, items = selected)
+def SetInfinityCycleRelative(selected):
+	SetInfinity(mode = 4, items = selected)
+def SetInfinityOscillate(selected):
+	SetInfinity(mode = 5, items = selected)
 
 def Offset(selected, time, attributes = None):
 	if (attributes == None):
