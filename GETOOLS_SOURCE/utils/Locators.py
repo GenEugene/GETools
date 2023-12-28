@@ -5,6 +5,7 @@ import maya.cmds as cmds
 from GETOOLS_SOURCE.utils import Animation
 from GETOOLS_SOURCE.utils import Baker
 from GETOOLS_SOURCE.utils import Constraints
+from GETOOLS_SOURCE.utils import Other
 from GETOOLS_SOURCE.utils import Parent
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Text
@@ -16,17 +17,28 @@ nameAim = "{0}Aim".format(nameBase)
 scale = 1.0
 minSelectedCount = 1
 
+# SIZE
 def GetSize(locator):
-	return (
-	cmds.getAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[0]),
-	cmds.getAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[1]),
-	cmds.getAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[2]))
+	shape = Other.GetShapeType(element = locator, type = Enums.Types.locator)
+	if (shape != None):
+		return (
+		cmds.getAttr(shape + "." + Enums.Attributes.scaleLocal[0]),
+		cmds.getAttr(shape + "." + Enums.Attributes.scaleLocal[1]),
+		cmds.getAttr(shape + "." + Enums.Attributes.scaleLocal[2]))
+	else:
+		return None
+
 def SetSize(locator, valueX, valueY, valueZ):
 	if (valueX == 0 or valueY == 0 or valueZ == 0):
 		cmds.warning("Target locator scale is ZERO. The lLocator scaler may have problems.")
-	cmds.setAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[0], valueX)
-	cmds.setAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[1], valueY)
-	cmds.setAttr(locator + Enums.Types.shape + "." + Enums.Attributes.scaleLocal[2], valueZ)
+	shape = Other.GetShapeType(element = locator, type = Enums.Types.locator)
+	if (shape != None):
+		cmds.setAttr(shape + "." + Enums.Attributes.scaleLocal[0], valueX)
+		cmds.setAttr(shape + "." + Enums.Attributes.scaleLocal[1], valueY)
+		cmds.setAttr(shape + "." + Enums.Attributes.scaleLocal[2], valueZ)
+		return True
+	else:
+		return False
 def ScaleSize(locator, valueX, valueY, valueZ):
 	size = GetSize(locator)
 	sizeX = size[0] * valueX
@@ -34,6 +46,26 @@ def ScaleSize(locator, valueX, valueY, valueZ):
 	sizeZ = size[2] * valueZ
 	SetSize(locator, sizeX, sizeY, sizeZ)
 
+def SelectedLocatorsSizeScale(value, *args):
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return None
+	
+	for item in selectedList:
+		shape = Other.GetShapeType(element = item, type = Enums.Types.locator)
+		if (shape != None):
+			ScaleSize(item, value, value, value)
+def SelectedLocatorsSizeSet(value, *args):
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return None
+	
+	for item in selectedList:
+		shape = Other.GetShapeType(element = item, type = Enums.Types.locator)
+		if (shape != None):
+			SetSize(item, value, value, value)
+
+# CREATE
 def Create(name = nameBase, scale = scale, hideParent = False, subLocator = False):
 	locatorCurrent = cmds.spaceLocator(name = Text.SetUniqueFromText(name))[0]
 	SetSize(locatorCurrent, scale, scale, scale)
