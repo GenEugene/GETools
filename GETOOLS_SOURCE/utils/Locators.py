@@ -27,7 +27,6 @@ def GetSize(locator):
 		cmds.getAttr(shape + "." + Enums.Attributes.scaleLocal[2]))
 	else:
 		return None
-
 def SetSize(locator, valueX, valueY, valueZ):
 	if (valueX == 0 or valueY == 0 or valueZ == 0):
 		cmds.warning("Target locator scale is ZERO. The lLocator scaler may have problems.")
@@ -72,7 +71,9 @@ def Create(name = nameBase, scale = scale, hideParent = False, subLocator = Fals
 	cmds.select(locatorCurrent)
 
 	if hideParent:
-		cmds.setAttr(locatorCurrent + Enums.Types.shape + "." + Enums.Attributes.visibility, 0)
+		shape = Other.GetShapeType(element = locatorCurrent, type = Enums.Types.locator)
+		if (shape != None):
+			cmds.setAttr(shape + "." + Enums.Attributes.visibility, 0)
 	
 	if subLocator:
 		subLocator = Create(locatorCurrent + "Secondary")
@@ -161,7 +162,7 @@ def CreateAndBakeAsChildrenFromLastSelected(scale = scale, minSelectedCount = 2,
 	else:
 		cmds.select(objects[1][-1])
 	return objects
-def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = minSelectedCount, hideParent = False, subLocator = False, aimVector = (1, 0, 0), distance = 100, reverse = True):
+def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = minSelectedCount, hideParent = False, subLocator = False, aimVector = (1, 0, 0), distance = 100, reverse = True): # TODO add rotation only mode
 	# Check selected objects
 	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator)
 	if (objects == None):
