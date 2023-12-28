@@ -1,6 +1,6 @@
 # Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
 
-blackWhite0 = (0, 0, 0)
+blackWhite00 = (0, 0, 0)
 blackWhite10 = (0.1, 0.1, 0.1)
 blackWhite20 = (0.2, 0.2, 0.2)
 blackWhite30 = (0.3, 0.3, 0.3)
@@ -42,6 +42,7 @@ purple100 = (0.75, 0.3, 1)
 
 
 import maya.cmds as cmds
+from functools import partial
 
 class ColorsPalette:
 	def __init__(self):
@@ -52,59 +53,61 @@ class ColorsPalette:
 		self.lineHeight = 20
 	
 	def CreateUI(self):
-		# WINDOW
 		if cmds.window(self.window_name, exists = True):
 			cmds.deleteUI(self.window_name)
 		cmds.window(self.window_name, title = self.titleText, maximizeButton = False, sizeable = True, widthHeight = (self.windowWidth, self.windowHeight))
 		cmds.window(self.window_name, edit = True, resizeToFitChildren = True)
 		layoutMain = cmds.columnLayout(adjustableColumn = False, width = self.windowWidth)
 
-		# TODO add color console print on button press
+		def ButtonPrint(label, color):
+			def PrintColor(label, color, *args): print("{0}: {1}".format(label, color))
+			cmds.button(label = label, command = partial(PrintColor, label, color), backgroundColor = color)
+
 		buttonsBlackWhite = 11
 		cmds.gridLayout(parent = layoutMain, numberOfColumns = buttonsBlackWhite, cellWidth = self.windowWidth / buttonsBlackWhite)
 		#
-		cmds.button(label = "0", backgroundColor = blackWhite0)
-		cmds.button(label = "10", backgroundColor = blackWhite10)
-		cmds.button(label = "20", backgroundColor = blackWhite20)
-		cmds.button(label = "30", backgroundColor = blackWhite30)
-		cmds.button(label = "40", backgroundColor = blackWhite40)
-		cmds.button(label = "50", backgroundColor = blackWhite50)
-		cmds.button(label = "60", backgroundColor = blackWhite60)
-		cmds.button(label = "70", backgroundColor = blackWhite70)
-		cmds.button(label = "80", backgroundColor = blackWhite80)
-		cmds.button(label = "90", backgroundColor = blackWhite90)
-		cmds.button(label = "100", backgroundColor = blackWhite100)
+		ButtonPrint(label = "0", color = blackWhite00)
+		ButtonPrint(label = "10", color = blackWhite10)
+		ButtonPrint(label = "20", color = blackWhite20)
+		ButtonPrint(label = "30", color = blackWhite30)
+		ButtonPrint(label = "40", color = blackWhite40)
+		ButtonPrint(label = "50", color = blackWhite50)
+		ButtonPrint(label = "60", color = blackWhite60)
+		ButtonPrint(label = "70", color = blackWhite70)
+		ButtonPrint(label = "80", color = blackWhite80)
+		ButtonPrint(label = "90", color = blackWhite90)
+		ButtonPrint(label = "100", color = blackWhite100)
 
 		buttonsColors = 3
 		cmds.gridLayout(parent = layoutMain, numberOfColumns = buttonsColors, cellWidth = self.windowWidth / buttonsColors)
 		#
-		cmds.button(label = "red 10", backgroundColor = red10)
-		cmds.button(label = "red 50", backgroundColor = red50)
-		cmds.button(label = "red 100", backgroundColor = red100)
+		ButtonPrint(label = "red 10", color = red10)
+		ButtonPrint(label = "red 50", color = red50)
+		ButtonPrint(label = "red 100", color = red100)
 		#
-		cmds.button(label = "orange 10", backgroundColor = orange10)
-		cmds.button(label = "orange 50", backgroundColor = orange50)
-		cmds.button(label = "orange 100", backgroundColor = orange100)
+		ButtonPrint(label = "orange 10", color = orange10)
+		ButtonPrint(label = "orange 50", color = orange50)
+		ButtonPrint(label = "orange 100", color = orange100)
 		#
-		cmds.button(label = "yellow 10", backgroundColor = yellow10)
-		cmds.button(label = "yellow 50", backgroundColor = yellow50)
-		cmds.button(label = "yellow 100", backgroundColor = yellow100)
+		ButtonPrint(label = "yellow 10", color = yellow10)
+		ButtonPrint(label = "yellow 50", color = yellow50)
+		ButtonPrint(label = "yellow 100", color = yellow100)
 		#
-		cmds.button(label = "green 10", backgroundColor = green10)
-		cmds.button(label = "green 50", backgroundColor = green50)
-		cmds.button(label = "green 100", backgroundColor = green100)
+		ButtonPrint(label = "green 10", color = green10)
+		ButtonPrint(label = "green 50", color = green50)
+		ButtonPrint(label = "green 100", color = green100)
 		#
-		cmds.button(label = "light blue 10", backgroundColor = lightBlue10)
-		cmds.button(label = "light blue 50", backgroundColor = lightBlue50)
-		cmds.button(label = "light blue 100", backgroundColor = lightBlue100)
+		ButtonPrint(label = "light blue 10", color = lightBlue10)
+		ButtonPrint(label = "light blue 50", color = lightBlue50)
+		ButtonPrint(label = "light blue 100", color = lightBlue100)
 		#
-		cmds.button(label = "blue 10", backgroundColor = blue10)
-		cmds.button(label = "blue 50", backgroundColor = blue50)
-		cmds.button(label = "blue 100", backgroundColor = blue100)
+		ButtonPrint(label = "blue 10", color = blue10)
+		ButtonPrint(label = "blue 50", color = blue50)
+		ButtonPrint(label = "blue 100", color = blue100)
 		#
-		cmds.button(label = "purple 10", backgroundColor = purple10)
-		cmds.button(label = "purple 50", backgroundColor = purple50)
-		cmds.button(label = "purple 100", backgroundColor = purple100)
+		ButtonPrint(label = "purple 10", color = purple10)
+		ButtonPrint(label = "purple 50", color = purple50)
+		ButtonPrint(label = "purple 100", color = purple100)
 
 		# RUN WINDOW
 		cmds.showWindow(self.window_name)

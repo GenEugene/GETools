@@ -4,10 +4,11 @@ import maya.cmds as cmds
 
 from GETOOLS_SOURCE.utils import Selector
 
-def CopySkinWeightsFromLastMesh(minSelectedCount = 2):
-	selected = Selector.MultipleObjects(minSelectedCount)
+def CopySkinWeightsFromLastMesh(*args):
+	selected = Selector.MultipleObjects(2)
 	if (selected == None):
 		return
+	
 	if (not HasSkinCluster(selected[-1])):
 		return
 
@@ -19,6 +20,7 @@ def CopySkinWeightsFromLastMesh(minSelectedCount = 2):
 		
 		cmds.select(selected[-1], item)
 		cmds.CopySkinWeights(surfaceAssociation = "closestPoint", influenceAssociation = "closestJoint", noMirror = True)
+	
 	cmds.select(selected)
 
 def HasSkinCluster(targetObject):
