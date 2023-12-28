@@ -44,6 +44,7 @@ class ToolsAnnotations:
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
 	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
 	locatorsBakeAim = "Bake locators for Aim Space Switching"
+	locatorsBakeAimRotate = "{0}.\nBake locators for Aim Space Switching".format(_onlyForRotation)
 	locatorAimDistance = "Locator Aim distance from original object. Need to use non-zero value"
 
 	# Bake
@@ -150,7 +151,6 @@ class Tools:
 		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, annotation = ToolsAnnotations.hideParent)
 		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, annotation = ToolsAnnotations.subLocator)
 		self.floatLocatorSize = UI.FloatField(value = 10, precision = 3, annotation = ToolsAnnotations.locatorSize)
-		# self.floatLocatorSize = UI.FloatFieldButtons(value = 5, precision = 3, annotation = ToolsAnnotations.locatorSize, width = cellWidth * 0.9, height = lineHeight, commandUp = "", commandDown = "") # TODO
 		#
 		countOffsets = 6
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
@@ -171,27 +171,28 @@ class Tools:
 		cmds.menuItem(label = "without reverse constraint", command = self.LocatorsRelative)
 		#
 		layoutAim = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
-		countOffsets = 6
-		labelLocalSpace = "without reverse constraint"
+		countOffsets = 12
+		textRotation = "r"
 		cmds.gridLayout(parent = layoutAim, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "-X", command = partial(self.LocatorsBakeAim, 1, True), backgroundColor = Colors.red10, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.popupMenu()
-		cmds.menuItem(label = labelLocalSpace, command = partial(self.LocatorsBakeAim, 1, False))
-		cmds.button(label = "+X", command = partial(self.LocatorsBakeAim, 2, True), backgroundColor = Colors.red50, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.popupMenu()
-		cmds.menuItem(label = labelLocalSpace, command = partial(self.LocatorsBakeAim, 2, False))
-		cmds.button(label = "-Y", command = partial(self.LocatorsBakeAim, 3, True), backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.popupMenu()
-		cmds.menuItem(label = labelLocalSpace, command = partial(self.LocatorsBakeAim, 3, False))
-		cmds.button(label = "+Y", command = partial(self.LocatorsBakeAim, 4, True), backgroundColor = Colors.green50, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.popupMenu()
-		cmds.menuItem(label = labelLocalSpace, command = partial(self.LocatorsBakeAim, 4, False))
-		cmds.button(label = "-Z", command = partial(self.LocatorsBakeAim, 5, True), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.popupMenu()
-		cmds.menuItem(label = labelLocalSpace, command = partial(self.LocatorsBakeAim, 5, False))
-		cmds.button(label = "+Z", command = partial(self.LocatorsBakeAim, 6, True), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.popupMenu()
-		cmds.menuItem(label = labelLocalSpace, command = partial(self.LocatorsBakeAim, 6, False))
+		#
+		cmds.button(label = "-X", command = partial(self.LocatorsBakeAim, 1, False), backgroundColor = Colors.red10, annotation = ToolsAnnotations.locatorsBakeAim)
+		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 1, True), backgroundColor = Colors.red10, annotation = ToolsAnnotations.locatorsBakeAimRotate)
+		#
+		cmds.button(label = "+X", command = partial(self.LocatorsBakeAim, 2, False), backgroundColor = Colors.red50, annotation = ToolsAnnotations.locatorsBakeAim)
+		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 2, True), backgroundColor = Colors.red50, annotation = ToolsAnnotations.locatorsBakeAimRotate)
+		#
+		cmds.button(label = "-Y", command = partial(self.LocatorsBakeAim, 3, False), backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorsBakeAim)
+		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 3, True), backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorsBakeAimRotate)
+		#
+		cmds.button(label = "+Y", command = partial(self.LocatorsBakeAim, 4, False), backgroundColor = Colors.green50, annotation = ToolsAnnotations.locatorsBakeAim)
+		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 4, True), backgroundColor = Colors.green50, annotation = ToolsAnnotations.locatorsBakeAimRotate)
+		#
+		cmds.button(label = "-Z", command = partial(self.LocatorsBakeAim, 5, False), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsBakeAim)
+		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 5, True), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsBakeAimRotate)
+		#
+		cmds.button(label = "+Z", command = partial(self.LocatorsBakeAim, 6, False), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsBakeAim)
+		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 6, True), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsBakeAimRotate)
+		#
 		self.floatLocatorAimOffset = UI.Slider(
 			parent = layoutAim,
 			widthWindow = windowWidthMargin,
@@ -332,7 +333,7 @@ class Tools:
 	def LocatorsRelativeReverse(self, *args):
 		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraintReverse = True, skipLastReverse = False)
 	
-	def LocatorsBakeAim(self, axis, reverse, *args):
+	def LocatorsBakeAim(self, axis, rotateOnly = False, *args):
 		scale = self.floatLocatorSize.Get()
 		distance = self.floatLocatorAimOffset.Get()
 		hideParent = self.checkboxLocatorHideParent.Get()
@@ -345,10 +346,10 @@ class Tools:
 		elif (axis == 5): axisVector = (0, 0, -1)
 		elif (axis == 6): axisVector = (0, 0, 1)
 
-		Locators.CreateOnSelectedAim(scale = scale, hideParent = hideParent, subLocator = subLocators, aimVector = axisVector, distance = distance, reverse = reverse)
+		Locators.CreateOnSelectedAim(scale = scale, hideParent = hideParent, subLocator = subLocators, rotateOnly = rotateOnly, aimVector = axisVector, distance = distance, reverse = True)
 
 		if (distance == 0):
-			cmds.warning("Aim distance is 0. Hihgly recomended to use non-zero value.")
+			cmds.warning("Aim distance is 0. Highly recommended to use non-zero value.")
 
 
 	# BAKING

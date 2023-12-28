@@ -162,37 +162,31 @@ def CreateAndBakeAsChildrenFromLastSelected(scale = scale, minSelectedCount = 2,
 	else:
 		cmds.select(objects[1][-1])
 	return objects
-def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = minSelectedCount, hideParent = False, subLocator = False, aimVector = (1, 0, 0), distance = 100, reverse = True): # TODO add rotation only mode
+def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = minSelectedCount, hideParent = False, subLocator = False, rotateOnly = False, aimVector = (1, 0, 0), distance = 100, reverse = True):
 	# Check selected objects
 	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator)
 	if (objects == None):
 		return None
 	
-	# Get lists from function
-	selectedList = objects[0]
-	locatorsRootList = objects[1]
-	if subLocator:
-		sublocatorsList = objects[2]
-	
 	# Create aim locators
 	groupsList = []
 	locatorsOffsetsList = []
 	locatorsTargetsList = []
-	for i in range(len(selectedList)):
-		aimGroup = cmds.group(empty = True, name = selectedList[i] + "_AimGroup")
-		locOffset = Create(name = locatorsRootList[i] + "Offset", scale = scale)
-		locTarget = Create(name = locatorsRootList[i] + "Target", scale = scale)
+	for i in range(len(objects[0])):
+		aimGroup = cmds.group(empty = True, name = objects[0][i] + "_AimGroup")
+		locOffset = Create(name = objects[1][i] + "Offset", scale = scale)
+		locTarget = Create(name = objects[1][i] + "Target", scale = scale)
 
-		cmds.matchTransform(locOffset, locatorsRootList[i], position = True, rotation = True, scale = True)
-		cmds.matchTransform(locTarget, locatorsRootList[i], position = True, rotation = True, scale = True)
+		cmds.matchTransform(locOffset, objects[1][i], position = True, rotation = True, scale = True)
+		cmds.matchTransform(locTarget, objects[1][i], position = True, rotation = True, scale = True)
 
-		cmds.parent(locatorsRootList[i], aimGroup)
-		cmds.parent(locOffset, locatorsRootList[i])
+		cmds.parent(objects[1][i], aimGroup)
+		cmds.parent(locOffset, objects[1][i])
 		cmds.parent(locTarget, aimGroup)
 
 		if subLocator:
-			cmds.matchTransform(sublocatorsList[i], locOffset, position = True, rotation = True, scale = True)
-			cmds.parent(sublocatorsList[i], locOffset)
+			cmds.matchTransform(objects[2][i], locOffset, position = True, rotation = True, scale = True)
+			cmds.parent(objects[2][i], locOffset)
 		
 		aimVectorScaled = [0, 0, 0]
 		aimVectorScaled[0] = aimVector[0] * distance
@@ -203,40 +197,45 @@ def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = minSel
 		groupsList.append(aimGroup)
 		locatorsOffsetsList.append(locOffset)
 		locatorsTargetsList.append(locTarget)
+
+		Constraints.ConstrainListToLastElement(selected = (objects[1][i], objects[0][i]), parent = False, point = True, orient = True)
+		Constraints.ConstrainListToLastElement(selected = (locTarget, objects[0][i]))
 		
-		Constraints.ConstrainListToLastElement(selected = (locatorsRootList[i], selectedList[i]), parent = False, point = True, orient = True)
-		Constraints.ConstrainListToLastElement(selected = (locTarget, selectedList[i]))
-	
 	# Bake animation from original objects
-	cmds.select(locatorsRootList + locatorsTargetsList, replace = True)
+	cmds.select(objects[1] + locatorsTargetsList, replace = True)
 	Baker.BakeSelected()
-	Constraints.DeleteConstraints(locatorsRootList)
+	Constraints.DeleteConstraints(objects[1])
 	Constraints.DeleteConstraints(locatorsTargetsList)
 	Animation.DeleteStaticCurves()
 
 	# Create aim constraint
-	for i in range(len(selectedList)):
+	for i in range(len(objects[0])):
 		if (aimVector[2] == 0):
 			upVector = (0, 0, 1)
 		else:
 			upVector = (0, 1, 0)
-		cmds.aimConstraint(locatorsTargetsList[i], locatorsOffsetsList[i], maintainOffset = True, weight = 1, aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = upVector, worldUpObject = locatorsRootList[i])
+		cmds.aimConstraint(locatorsTargetsList[i], locatorsOffsetsList[i], maintainOffset = True, weight = 1, aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = upVector, worldUpObject = objects[1][i])
 	
 	# Reverse constrain # TODO move constraint to temp group
 	if (reverse):
-		for i in range(len(selectedList)):
+		for i in range(len(objects[0])):
 			parentObject = None
 			if subLocator:
-				parentObject = sublocatorsList[i]
+				parentObject = objects[2][i]
 			else:
 				parentObject = locatorsOffsetsList[i]
 			
-			Constraints.ConstrainSecondToFirstObject(parentObject, selectedList[i], maintainOffset = False, parent = False, point = True, orient = True)
-	
+			# Constraints
+			if (rotateOnly):
+				Constraints.ConstrainSecondToFirstObject(objects[0][i], objects[1][i], maintainOffset = False, parent = False, point = True, orient = False)
+				Constraints.ConstrainSecondToFirstObject(parentObject, objects[0][i], maintainOffset = False, parent = False, point = False, orient = True)
+			else:
+				Constraints.ConstrainSecondToFirstObject(parentObject, objects[0][i], maintainOffset = False, parent = False, point = True, orient = True)
+
 	# Select objects and return
 	cmds.select(locatorsTargetsList)
 	if subLocator:
-		return selectedList, aimGroup, locatorsRootList, locatorsOffsetsList, locatorsTargetsList, sublocatorsList
+		return objects[0], aimGroup, objects[1], locatorsOffsetsList, locatorsTargetsList, objects[2]
 	else:
-		return selectedList, aimGroup, locatorsRootList, locatorsOffsetsList, locatorsTargetsList
+		return objects[0], aimGroup, objects[1], locatorsOffsetsList, locatorsTargetsList
 
