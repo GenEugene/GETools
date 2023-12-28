@@ -85,6 +85,11 @@ def DeleteConstraints(selected):
 		if (children[i] != None):
 			for child in children[i]:
 				cmds.delete(child)
+def DeleteConstraintsOnSelected(*args):
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return
+	DeleteConstraints(selectedList)
 
 def DisconnectTargetsFromConstraint(selected):
 	connections = Selector.GetConnectionsOfType(selected, type = Enums.Types.constraint, source = True, destination = False)
@@ -128,4 +133,8 @@ def DisconnectTargetsFromConstraint(selected):
 	# 			if (item in targets):
 	# 				cmds.aimConstraint(item, selected[-1], edit = True, remove = True)
 	pass
-
+def DisconnectTargetsFromConstraintOnSelected(*args):
+	selectedList = Selector.MultipleObjects(2)
+	if (selectedList == None):
+		return
+	DisconnectTargetsFromConstraint(selectedList)

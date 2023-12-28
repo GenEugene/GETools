@@ -5,7 +5,7 @@ Backlog:
 - [RIGGING] added constraint offset object
 - [RIGGING] added Rebake IK from selected objects
 
-v0.13.0
+v1.0.0
 - [UI] Added pop-up for shelf buttons installation.
 - [UI] Decreased buttons size and renamed some labels.
 - [TOOLS] Fixed bug in Locator detection logic.
@@ -18,7 +18,6 @@ v0.13.0
 - [TOOLS] Removed Tools/Animation/Key Range button. Replaced by "Delete Animation" button.
 - [OVERLAPPY] Added pos/rot layer prefixes.
 - Improved various modules and overall quality.
-- Changed GETools version format [0.XX.0].
 
 v0.0.12
 - [UI] Decreased window size and renamed some labels.

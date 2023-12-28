@@ -84,7 +84,7 @@ class ToolsSettings:
 	rangeLocatorAimOffset = (0, float("inf"), 0, 200)
 
 class Tools:
-	version = "v0.1.6"
+	version = "v0.2.0"
 	name = "TOOLS"
 	title = name + " " + version
 

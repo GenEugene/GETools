@@ -1,4 +1,5 @@
 # Copyright 2023 by Eugene Gataulin (GenEugene). All Rights Reserved.
+# Logic in this module is not optimal enough, need manually change path names, methods and parameters.
 
 import os
 import sys
@@ -16,6 +17,10 @@ class Presets:
 	"import GETOOLS_SOURCE.utils.Baker as baker"
 	pathSelector =\
 	"import GETOOLS_SOURCE.utils.Selector as selector"
+	pathOther =\
+	"import GETOOLS_SOURCE.utils.Other as other"
+	pathConstraints =\
+	"import GETOOLS_SOURCE.utils.Constraints as constraints"
 	pathLocators =\
 	"import GETOOLS_SOURCE.utils.Locators as locators"
 	pathTimeline =\
@@ -137,11 +142,41 @@ baker.BakeSelected\
 baker.BakeSelectedByLastObject\
 '''.format(pathBaker)
 
+	runBakeByWorld ='''\
+{0}
+baker.BakeSelectedByWorld\
+'''.format(pathBaker)
+
 
 	# ANIMATION
 	runAnimOffset ='''\
 {0}
 animation.OffsetObjects\
+'''.format(pathAnimation)
+
+	runDeleteKeys ='''\
+{0}
+animation.DeleteKeys(True)\
+'''.format(pathAnimation)
+
+	runDeleteNonkeyable ='''\
+{0}
+animation.DeleteKeysNonkeyable()\
+'''.format(pathAnimation)
+
+	runDeleteStatic ='''\
+{0}
+animation.DeleteStaticCurves()\
+'''.format(pathAnimation)
+
+	runEulerFilter ='''\
+{0}
+animation.FilterCurve()\
+'''.format(pathAnimation)
+
+	runSetInfinity ='''\
+{0}
+animation.SetInfinity\
 '''.format(pathAnimation)
 
 	runSetTimeline ='''\
@@ -151,6 +186,36 @@ timeline.SetTime\
 
 
 	# RIGGING
+	runConstraint ='''\
+{0}
+constraints.ConstrainSelectedToLastObject\
+'''.format(pathConstraints)
+
+	runDeleteConstraints ='''\
+{0}
+constraints.DeleteConstraintsOnSelected()\
+'''.format(pathConstraints)
+
+	runDisconnectTargets ='''\
+{0}
+constraints.DisconnectTargetsFromConstraintOnSelected()\
+'''.format(pathConstraints)
+
+	runRotateOrder ='''\
+{0}
+other.RotateOrderVisibility\
+'''.format(pathOther)
+
+	runSegmentScaleCompensateCompensate ='''\
+{0}
+other.SegmentScaleCompensate\
+'''.format(pathOther)
+
+	runJointDrawStyle ='''\
+{0}
+other.JointDrawStyle\
+'''.format(pathOther)
+
 	runCopySkin ='''\
 {0}
 skinning.CopySkinWeightsFromLastMesh()\
@@ -275,11 +340,36 @@ def ToShelf_BakeByLast(path, translate, rotate, *args):
 		attributes = Enums.Attributes.rotateShort
 		parameters = "(selectedRange = True, channelBox = False, attributes = {0})".format(attributes)
 	MoveToShelf(path, Presets.runBakeByLast + parameters, "BakeByLast{0}".format(suffix), "BL{0}".format(suffix))
+def ToShelf_BakeByWorld(path, translate, rotate, *args):
+	if (translate and rotate):
+		suffix = ""
+		parameters = "(selectedRange = True, channelBox = True)"
+	elif (translate and not rotate):
+		suffix = "POS"
+		attributes = Enums.Attributes.translateShort
+		parameters = "(selectedRange = True, channelBox = False, attributes = {0})".format(attributes)
+	elif (not translate and rotate):
+		suffix = "ROT"
+		attributes = Enums.Attributes.rotateShort
+		parameters = "(selectedRange = True, channelBox = False, attributes = {0})".format(attributes)
+	MoveToShelf(path, Presets.runBakeByWorld + parameters, "BakeByWorld{0}".format(suffix), "BW{0}".format(suffix))
 
 
 # ANIMATION
 def ToShelf_AnimOffset(path, direction, time, *args):
 	MoveToShelf(path, Presets.runAnimOffset + "({0}, {1})".format(direction, time), "AnimOffset_{0}_{1}".format(direction, time), "AO{0}_{1}".format(direction, time))
+
+def ToShelf_DeleteKeys(path, *args):
+	MoveToShelf(path, Presets.runDeleteKeys, "DeleteKeys", "DKeys")
+def ToShelf_DeleteNonkeyable(path, *args):
+	MoveToShelf(path, Presets.runDeleteNonkeyable, "DeleteNonkeyable", "DNonkeyable")
+def ToShelf_DeleteStatic(path, *args):
+	MoveToShelf(path, Presets.runDeleteStatic, "DeleteStatic", "DStatic")
+
+def ToShelf_EulerFilter(path, *args):
+	MoveToShelf(path, Presets.runEulerFilter, "EulerFilter", "Euler")
+def ToShelf_SetInfinity(path, mode, *args):
+	MoveToShelf(path, Presets.runSetInfinity + "({0})".format(mode), "SetInfinity{0}".format(mode), "Inf{0}".format(mode))
 
 # TIMELINE
 def ToShelf_SetTimelineMinOut(path, *args):
@@ -298,8 +388,39 @@ def ToShelf_SetTimelineSet(path, *args):
 	MoveToShelf(path, Presets.runSetTimeline + "(7)", "SetTimelineSet", "|<->|")
 
 # RIGGING
+def ToShelf_Constraint(path, maintainOffset, parent, point, orient, scale, *args):
+	if (maintainOffset):
+		suffixMaintain = "M"
+	else:
+		suffixMaintain = ""
+	
+	if (parent):
+		suffix = "Parent"
+	elif (not parent and point):
+		suffix = "Point"
+	elif (not parent and orient):
+		suffix = "Orient"
+	elif (not parent and not point and not orient and scale):
+		suffix = "Scale"
+	
+	suffix = suffixMaintain + suffix
+
+	MoveToShelf(path, Presets.runConstraint + "(maintainOffset = {0}, parent = {1}, point = {2}, orient = {3}, scale = {4})".format(maintainOffset, parent, point, orient, scale), "Constraint{0}".format(suffix), "C{0}".format(suffix))
+def ToShelf_DeleteConstraints(path, *args):
+	MoveToShelf(path, Presets.runDeleteConstraints, "DeleteConstraints", "DeleteConstraints")
+def ToShelf_DisconnectTargets(path, *args):
+	MoveToShelf(path, Presets.runDisconnectTargets, "DisconnectTargets", "Disconnect")
+
+def ToShelf_RotateOrder(path, mode, *args):
+	MoveToShelf(path, Presets.runRotateOrder + "({0})".format(mode), "RotateOrder{0}".format(mode), "RO{0}".format(mode))
+def ToShelf_SegmentScaleCompensate(path, mode, *args):
+	MoveToShelf(path, Presets.runSegmentScaleCompensateCompensate + "({0})".format(mode), "SegmentScaleCompensate{0}".format(mode), "SSC{0}".format(mode))
+def ToShelf_JointDrawStyle(path, mode, *args):
+	MoveToShelf(path, Presets.runJointDrawStyle + "({0})".format(mode), "JointDrawStyle{0}".format(mode), "J{0}".format(mode))
+
 def ToShelf_CopySkin(path, *args):
 	MoveToShelf(path, Presets.runCopySkin, "CopySkin", "CopySkin")
+
 
 # MOTION TRAIL
 def ToShelf_MotionTrailCreate(path, *args):

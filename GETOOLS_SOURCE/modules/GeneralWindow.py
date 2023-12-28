@@ -230,29 +230,29 @@ class GeneralWindow:
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "World")
-		cmds.menuItem(label = "World") # TODO
-		cmds.menuItem(label = "POS") # TODO
-		cmds.menuItem(label = "ROT") # TODO
+		cmds.menuItem(label = "World", command = partial(Install.ToShelf_BakeByWorld, self.directory, True, True))
+		cmds.menuItem(label = "POS", command = partial(Install.ToShelf_BakeByWorld, self.directory, True, False))
+		cmds.menuItem(label = "ROT", command = partial(Install.ToShelf_BakeByWorld, self.directory, False, True))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(dividerLabel = "TOOLS - Animation", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Delete")
-		cmds.menuItem(label = "Animation") # TODO
-		cmds.menuItem(label = "Nonkeyable") # TODO
-		cmds.menuItem(label = "Static") # TODO
+		cmds.menuItem(label = "Animation", command = partial(Install.ToShelf_DeleteKeys, self.directory))
+		cmds.menuItem(label = "Nonkeyable", command = partial(Install.ToShelf_DeleteNonkeyable, self.directory))
+		cmds.menuItem(label = "Static", command = partial(Install.ToShelf_DeleteStatic, self.directory))
 		cmds.setParent('..', menu = True)
 		#
-		cmds.menuItem(label = "Euler Filter") # TODO
+		cmds.menuItem(label = "Euler Filter", command = partial(Install.ToShelf_EulerFilter, self.directory))
 		#
 		cmds.menuItem(subMenu = True, label = "Infinity")
-		cmds.menuItem(label = "Constant") # TODO
-		cmds.menuItem(label = "Linear") # TODO
+		cmds.menuItem(label = "Constant", command = partial(Install.ToShelf_SetInfinity, self.directory, 1))
+		cmds.menuItem(label = "Linear", command = partial(Install.ToShelf_SetInfinity, self.directory, 2))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Cycle") # TODO
-		cmds.menuItem(label = "Offset") # TODO
+		cmds.menuItem(label = "Cycle", command = partial(Install.ToShelf_SetInfinity, self.directory, 3))
+		cmds.menuItem(label = "Offset", command = partial(Install.ToShelf_SetInfinity, self.directory, 4))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Oscillate") # TODO
+		cmds.menuItem(label = "Oscillate", command = partial(Install.ToShelf_SetInfinity, self.directory, 5))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Offset")
@@ -283,32 +283,37 @@ class GeneralWindow:
 		cmds.menuItem(dividerLabel = "RIGGING - Constraints", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Constraints")
-		cmds.menuItem(label = "Parent") # TODO
-		cmds.menuItem(label = "Point") # TODO
-		cmds.menuItem(label = "Orient") # TODO
-		cmds.menuItem(label = "Scale") # TODO
+		cmds.menuItem(label = "Parent", command = partial(Install.ToShelf_Constraint, self.directory, False, True, False, False, False))
+		cmds.menuItem(label = "Point", command = partial(Install.ToShelf_Constraint, self.directory, False, False, True, False, False))
+		cmds.menuItem(label = "Orient", command = partial(Install.ToShelf_Constraint, self.directory, False, False, False, True, False))
+		cmds.menuItem(label = "Scale", command = partial(Install.ToShelf_Constraint, self.directory, False, False, False, False, True))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Parent with maintain", command = partial(Install.ToShelf_Constraint, self.directory, True, True, False, False, False))
+		cmds.menuItem(label = "Point with maintain", command = partial(Install.ToShelf_Constraint, self.directory, True, False, True, False, False))
+		cmds.menuItem(label = "Orient with maintain", command = partial(Install.ToShelf_Constraint, self.directory, True, False, False, True, False))
+		cmds.menuItem(label = "Scale with maintain", command = partial(Install.ToShelf_Constraint, self.directory, True, False, False, False, True))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Connections")
-		cmds.menuItem(label = "Disconnect") # TODO
-		cmds.menuItem(label = "Delete Constraints") # TODO
+		cmds.menuItem(label = "Disconnect", command = partial(Install.ToShelf_DisconnectTargets, self.directory))
+		cmds.menuItem(label = "Delete Constraints", command = partial(Install.ToShelf_DeleteConstraints, self.directory))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(dividerLabel = "RIGGING - Utils", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Rotate Order")
-		cmds.menuItem(label = "Show") # TODO
-		cmds.menuItem(label = "Hide") # TODO
+		cmds.menuItem(label = "Show", command = partial(Install.ToShelf_RotateOrder, self.directory, True))
+		cmds.menuItem(label = "Hide", command = partial(Install.ToShelf_RotateOrder, self.directory, False))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Segment Scale Compensate")
-		cmds.menuItem(label = "On") # TODO
-		cmds.menuItem(label = "Off") # TODO
+		cmds.menuItem(label = "On", command = partial(Install.ToShelf_SegmentScaleCompensate, self.directory, True))
+		cmds.menuItem(label = "Off", command = partial(Install.ToShelf_SegmentScaleCompensate, self.directory, False))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Joint Draw Style")
-		cmds.menuItem(label = "Bone") # TODO
-		cmds.menuItem(label = "Hidden") # TODO
+		cmds.menuItem(label = "Bone", command = partial(Install.ToShelf_JointDrawStyle, self.directory, 0))
+		cmds.menuItem(label = "Hidden", command = partial(Install.ToShelf_JointDrawStyle, self.directory, 2))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(label = "Copy Skin Weights From Last Selected", command = partial(Install.ToShelf_CopySkin, self.directory))

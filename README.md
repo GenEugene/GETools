@@ -19,6 +19,5 @@ Simply drag and drop GETools\TOOLS\DRAG_AND_DROP_INSTALL.py into Maya viewport
 ***
 
 # Known issues:
-- Graph Editor is not supported yet
 - UI Buttons are not aligned perfectly
 

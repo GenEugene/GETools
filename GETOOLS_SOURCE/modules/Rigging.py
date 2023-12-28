@@ -74,8 +74,8 @@ class Rigging:
 		#
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
-		cmds.button(label = "Disconnect", command = self.DisconnectTargetsFromConstraint, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDisconnectSelected)
-		cmds.button(label = "Delete Constraints", command = self.DeleteConstraints, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDelete)
+		cmds.button(label = "Disconnect", command = Constraints.DisconnectTargetsFromConstraintOnSelected, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDisconnectSelected)
+		cmds.button(label = "Delete Constraints", command = Constraints.DeleteConstraintsOnSelected, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDelete)
 
 
 		# UTILS
@@ -107,15 +107,4 @@ class Rigging:
 		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = False, scale = True, aim = False)
 	def ConstrainAim(self, *args): # TODO
 		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = False, scale = False, aim = True)
-
-	def DeleteConstraints(self, *args):
-		selectedList = Selector.MultipleObjects(1)
-		if (selectedList == None):
-			return
-		Constraints.DeleteConstraints(selectedList)
-	def DisconnectTargetsFromConstraint(self, *args):
-		selectedList = Selector.MultipleObjects(2)
-		if (selectedList == None):
-			return
-		Constraints.DisconnectTargetsFromConstraint(selectedList)
 
