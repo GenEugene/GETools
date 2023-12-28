@@ -6,86 +6,166 @@ import sys
 import GETOOLS_SOURCE.utils.Shelf as Shelf
 
 class Presets:
-	runGeneralWindow = \
-'''\
-import GETOOLS_SOURCE.modules.GeneralWindow as gtwindow
+	pathGeneral =\
+	"import GETOOLS_SOURCE.modules.GeneralWindow as gtwindow"
+	pathScene =\
+	"import GETOOLS_SOURCE.utils.Scene as scene"
+	pathBaker =\
+	"import GETOOLS_SOURCE.utils.Baker as baker"
+	pathSelector =\
+	"import GETOOLS_SOURCE.utils.Selector as selector"
+	pathLocators =\
+	"import GETOOLS_SOURCE.utils.Locators as locators"
+	pathTimeline =\
+	"import GETOOLS_SOURCE.utils.Timeline as timeline"
+	pathAnimation =\
+	"import GETOOLS_SOURCE.utils.Animation as animation"
+	pathSkinning =\
+	"import GETOOLS_SOURCE.utils.Skinning as skinning"
+	pathMotionTrail =\
+	"import GETOOLS_SOURCE.utils.MotionTrail as mtrail"
+
+
+	# GENERAL
+	runGeneralWindow ='''\
+{0}
 gtwindow.GeneralWindow().RUN_DOCKED()\
-'''
+'''.format(pathGeneral)
 
 
-	def RunSceneReload():
-		import GETOOLS_SOURCE.utils.Scene as scene
-		scene.Reload()
-	
-
-	runSceneReload = \
-'''\
-import GETOOLS_SOURCE.utils.Scene as scene
+	# FILE
+	runSceneReload ='''\
+{0}
 scene.Reload()\
-'''
-	
-	runExitMaya = \
-'''\
-import GETOOLS_SOURCE.utils.Scene as scene
+'''.format(pathLocators)
+
+	runExitMaya ='''\
+{0}
 scene.ExitMaya()\
-'''
-	
-	runSelectTransformHierarchy = \
-'''\
-import GETOOLS_SOURCE.utils.Selector as selector
+'''.format(pathLocators)
+
+
+	# UTILS
+	runSelectTransformHierarchy ='''\
+{0}
 selector.SelectTransformHierarchy()\
-'''
+'''.format(pathLocators)
 
-	runBakeClassic = \
-'''\
-import GETOOLS_SOURCE.utils.Baker as baker
+
+	# LOCATORS
+	runLocatorsSizeScale ='''\
+{0}
+locators.SelectedLocatorsSizeScale\
+'''.format(pathLocators)
+
+	runLocatorsSizeSet ='''\
+{0}
+locators.SelectedLocatorsSizeSet\
+'''.format(pathLocators)
+
+	runLocatorCreate ='''\
+{0}
+locators.Create()\
+'''.format(pathLocators)
+
+	runLocatorsMatch ='''\
+{0}
+locators.CreateOnSelected(constraint = False)\
+'''.format(pathLocators)
+
+	runLocatorsParent ='''\
+{0}
+locators.CreateOnSelected(constraint = True)\
+'''.format(pathLocators)
+
+	runLocatorsPin ='''\
+{0}
+locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = True, constrainRotate = True)\
+'''.format(pathLocators)
+
+	runLocatorsPinWithoutReverse ='''\
+{0}
+locators.CreateOnSelected(constraint = True, bake = True)\
+'''.format(pathLocators)
+
+	runLocatorsPinPos ='''\
+{0}
+locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = True, constrainRotate = False)\
+'''.format(pathLocators)
+
+	runLocatorsPinRot ='''\
+{0}
+locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = False, constrainRotate = True)\
+'''.format(pathLocators)
+
+	runLocatorsRelative ='''\
+{0}
+locators.CreateAndBakeAsChildrenFromLastSelected(constraintReverse = True, skipLastReverse = False)\
+'''.format(pathLocators)
+
+	runLocatorsRelativeSkipLast ='''\
+{0}
+locators.CreateAndBakeAsChildrenFromLastSelected(constraintReverse = True)\
+'''.format(pathLocators)
+
+	runLocatorsRelativeWithoutReverse ='''\
+{0}
+locators.CreateAndBakeAsChildrenFromLastSelected()\
+'''.format(pathLocators)
+
+	runLocatorsAim ='''\
+{0}
+locators.CreateOnSelectedAim\
+'''.format(pathLocators)
+
+
+	# BAKING
+	runBakeClassic ='''\
+{0}
 baker.BakeSelected\
-'''
+'''.format(pathBaker)
 
-	runAnimOffset = \
-'''\
-import GETOOLS_SOURCE.utils.Animation as animation
+
+	# ANIMATION
+	runAnimOffset ='''\
+{0}
 animation.OffsetObjects\
-'''
-	
-	runSetTimeline = \
-'''\
-import GETOOLS_SOURCE.utils.Timeline as timeline
+'''.format(pathAnimation)
+	runSetTimeline ='''\
+{0}
 timeline.SetTime\
-'''
-	
-	runCopySkin = \
-'''\
-import GETOOLS_SOURCE.utils.Skinning as skinning
+'''.format(pathTimeline)
+
+
+	# RIGGING
+	runCopySkin ='''\
+{0}
 skinning.CopySkinWeightsFromLastMesh()\
-'''
-	
-	runMotionTrailCreate = \
-'''\
-import GETOOLS_SOURCE.utils.MotionTrail as mtrail
+'''.format(pathSkinning)
+
+
+	# EXPERIMENTAL
+	runMotionTrailCreate ='''\
+{0}
 mtrail.Create()\
-'''
-	
-	runMotionTrailSelect = \
-'''\
-import GETOOLS_SOURCE.utils.MotionTrail as mtrail
+'''.format(pathLocators)
+	runMotionTrailSelect ='''\
+{0}
 mtrail.Select()\
-'''
-	
-	runMotionTrailDelete = \
-'''\
-import GETOOLS_SOURCE.utils.MotionTrail as mtrail
+'''.format(pathLocators)
+	runMotionTrailDelete ='''\
+{0}
 mtrail.Delete()\
-'''
+'''.format(pathLocators)
 
 
+# LOGIC
 def AddPathToEnvironment(path, *args):
 	if not os.path.exists(path):
 		raise IOError(r'The source path {0} does not exist!'.format(path))
 
 	if path not in sys.path:
 		sys.path.insert(0, path)
-
 def GetFunctionString(path, *args):
 	return \
 """\
@@ -95,7 +175,6 @@ if not os.path.exists("{path}"):
 if "{path}" not in sys.path:
 	sys.path.insert(0, "{path}")\
 """.format(path = path)
-
 def GetFunctionStringForTool(path, tool, *args):
 	return \
 """\
@@ -106,7 +185,6 @@ import sys
 
 {tool}\
 """.format(path = GetFunctionString(path), tool = tool)
-
 def MoveToShelf(path, tool, label, labelImage, *args):
 	command = GetFunctionStringForTool(path, tool)
 	Shelf.AddToCurrentShelf(
@@ -126,6 +204,43 @@ def ToShelf_ExitMaya(path, *args):
 def ToShelf_SelectHierarchy(path, *args):
 	MoveToShelf(path, Presets.runSelectTransformHierarchy, "SelectHierarchy", "SelHi")
 
+# LOCATORS
+def ToShelf_LocatorsSizeScale50(path, *args):
+	MoveToShelf(path, Presets.runLocatorsSizeScale + "(0.5)", "LocatorsSizeScale50", "L50%")
+def ToShelf_LocatorsSizeScale90(path, *args):
+	MoveToShelf(path, Presets.runLocatorsSizeScale + "(0.9)", "LocatorsSizeScale90", "L90%")
+def ToShelf_LocatorsSizeScale110(path, *args):
+	MoveToShelf(path, Presets.runLocatorsSizeScale + "(1.1)", "LocatorsSizeScale110", "L110%")
+def ToShelf_LocatorsSizeScale200(path, *args):
+	MoveToShelf(path, Presets.runLocatorsSizeScale + "(2.0)", "LocatorsSizeScale200", "L200%")
+
+def ToShelf_LocatorCreate(path, *args):
+	MoveToShelf(path, Presets.runLocatorCreate, "LocatorCreate", "Loc")
+def ToShelf_LocatorsMatch(path, *args):
+	MoveToShelf(path, Presets.runLocatorsMatch, "LocatorsMatch", "LocMatch")
+def ToShelf_LocatorsParent(path, *args):
+	MoveToShelf(path, Presets.runLocatorsParent, "LocatorsParent", "LocParent")
+
+def ToShelf_LocatorsPin(path, *args):
+	MoveToShelf(path, Presets.runLocatorsPin, "LocatorsPin", "Pin")
+def ToShelf_LocatorsPinWithoutReverse(path, *args):
+	MoveToShelf(path, Presets.runLocatorsPinWithoutReverse, "LocatorsPinWithoutReverse", "Pin-")
+def ToShelf_LocatorsPinPos(path, *args):
+	MoveToShelf(path, Presets.runLocatorsPinPos, "LocatorsPinPos", "P-Pos")
+def ToShelf_LocatorsPinRot(path, *args):
+	MoveToShelf(path, Presets.runLocatorsPinRot, "LocatorsPinRot", "P-Rot")
+
+def ToShelf_LocatorsRelative(path, *args):
+	MoveToShelf(path, Presets.runLocatorsRelative, "Relative", "Rel")
+def ToShelf_LocatorsRelativeSkipLast(path, *args):
+	MoveToShelf(path, Presets.runLocatorsRelativeSkipLast, "RelativeSkipLast", "Rel-1")
+def ToShelf_LocatorsRelativeWithoutReverse(path, *args):
+	MoveToShelf(path, Presets.runLocatorsRelativeWithoutReverse, "RelativeWithoutReverse", "Rel-")
+
+def ToShelf_LocatorsAim(path, name, rotateOnly, aimVector, *args):
+	parameters = "(rotateOnly = {0}, aimVector = {1}, reverse = True)".format(rotateOnly, aimVector)
+	MoveToShelf(path, Presets.runLocatorsAim + parameters, "LocatorsAim{0}".format(name), "Aim {0}".format(name))
+
 # BAKING
 def ToShelf_BakeClassic(path, *args):
 	MoveToShelf(path, Presets.runBakeClassic + "(classic = True, preserveOutsideKeys = True)", "BakeClassic", "Bake")
@@ -133,18 +248,8 @@ def ToShelf_BakeClassicCutOut(path, *args):
 	MoveToShelf(path, Presets.runBakeClassic + "(classic = True, preserveOutsideKeys = False)", "BakeClassicCutOut", "BakeCut")
 
 # ANIMATION
-def ToShelf_AnimOffsetMinus3(path, *args):
-	MoveToShelf(path, Presets.runAnimOffset + "(-1, 3)", "AnimOffsetMinus3", "AOm3")
-def ToShelf_AnimOffsetMinus2(path, *args):
-	MoveToShelf(path, Presets.runAnimOffset + "(-1, 2)", "AnimOffsetMinus2", "AOm2")
-def ToShelf_AnimOffsetMinus1(path, *args):
-	MoveToShelf(path, Presets.runAnimOffset + "(-1, 1)", "AnimOffsetMinus1", "AOm1")
-def ToShelf_AnimOffsetPlus1(path, *args):
-	MoveToShelf(path, Presets.runAnimOffset + "(1, 1)", "AnimOffsetPlus1", "AOp1")
-def ToShelf_AnimOffsetPlus2(path, *args):
-	MoveToShelf(path, Presets.runAnimOffset + "(1, 2)", "AnimOffsetPlus2", "AOp2")
-def ToShelf_AnimOffsetPlus3(path, *args):
-	MoveToShelf(path, Presets.runAnimOffset + "(1, 3)", "AnimOffsetPlus3", "AOp3")
+def ToShelf_AnimOffset(path, direction, time, *args):
+	MoveToShelf(path, Presets.runAnimOffset + "({0}, {1})".format(direction, time), "AnimOffset_{0}_{1}".format(direction, time), "AO{0}_{1}".format(direction, time))
 
 # TIMELINE
 def ToShelf_SetTimelineMinOut(path, *args):

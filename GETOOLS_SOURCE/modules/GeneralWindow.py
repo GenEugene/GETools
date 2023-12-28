@@ -152,41 +152,62 @@ class GeneralWindow:
 		cmds.menuItem(dividerLabel = "TOOLS - Locators", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Size")
-		cmds.menuItem(label = "50%") # TODO
-		cmds.menuItem(label = "90%") # TODO
+		cmds.menuItem(label = "50%", command = partial(Install.ToShelf_LocatorsSizeScale50, self.directory))
+		cmds.menuItem(label = "90%", command = partial(Install.ToShelf_LocatorsSizeScale90, self.directory))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "110%") # TODO
-		cmds.menuItem(label = "200%") # TODO
+		cmds.menuItem(label = "110%", command = partial(Install.ToShelf_LocatorsSizeScale110, self.directory))
+		cmds.menuItem(label = "200%", command = partial(Install.ToShelf_LocatorsSizeScale200, self.directory))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Create")
-		cmds.menuItem(label = "Locator") # TODO
-		cmds.menuItem(label = "Match") # TODO
-		cmds.menuItem(label = "Parent") # TODO
+		cmds.menuItem(label = "Locator", command = partial(Install.ToShelf_LocatorCreate, self.directory))
+		cmds.menuItem(label = "Match", command = partial(Install.ToShelf_LocatorsMatch, self.directory))
+		cmds.menuItem(label = "Parent", command = partial(Install.ToShelf_LocatorsParent, self.directory))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Pin")
-		cmds.menuItem(label = "Pin") # TODO
-		cmds.menuItem(label = "Without reverse constraint") # TODO
-		cmds.menuItem(label = "POS") # TODO
-		cmds.menuItem(label = "ROT") # TODO
+		cmds.menuItem(label = "Pin", command = partial(Install.ToShelf_LocatorsPin, self.directory))
+		cmds.menuItem(label = "Without reverse constraint", command = partial(Install.ToShelf_LocatorsPinWithoutReverse, self.directory))
+		cmds.menuItem(label = "POS", command = partial(Install.ToShelf_LocatorsPinPos, self.directory))
+		cmds.menuItem(label = "ROT", command = partial(Install.ToShelf_LocatorsPinRot, self.directory))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Relative")
-		cmds.menuItem(label = "Relative") # TODO
-		cmds.menuItem(label = "Skip last object reverse constraint") # TODO
-		cmds.menuItem(label = "Without reverse constraint") # TODO
+		cmds.menuItem(label = "Relative", command = partial(Install.ToShelf_LocatorsRelative, self.directory))
+		cmds.menuItem(label = "Skip last object reverse constraint", command = partial(Install.ToShelf_LocatorsRelativeSkipLast, self.directory))
+		cmds.menuItem(label = "Without reverse constraint", command = partial(Install.ToShelf_LocatorsRelativeWithoutReverse, self.directory))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Aim")
-		cmds.menuItem(label = "-X") # TODO
-		cmds.menuItem(label = "+X") # TODO
+		minus = "-"
+		plus = "+"
+		axisX = "X"
+		axisY = "Y"
+		axisZ = "Z"
+		axisXMinus = minus + axisX
+		axisYMinus = minus + axisY
+		axisZMinus = minus + axisZ
+		axisXPlus = plus + axisX
+		axisYPlus = plus + axisY
+		axisZPlus = plus + axisZ
+		cmds.menuItem(dividerLabel = "All", divider = True)
+		cmds.menuItem(label = axisXMinus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisXMinus, False, (-1, 0, 0)))
+		cmds.menuItem(label = axisXPlus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisXPlus, False, (1, 0, 0)))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "-Y") # TODO
-		cmds.menuItem(label = "+Y") # TODO
+		cmds.menuItem(label = axisYMinus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisYMinus, False, (0, -1, 0)))
+		cmds.menuItem(label = axisYPlus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisYPlus, False, (0, 1, 0)))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "-Z") # TODO
-		cmds.menuItem(label = "+Z") # TODO
+		cmds.menuItem(label = axisZMinus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisZMinus, False, (0, 0, -1)))
+		cmds.menuItem(label = axisZPlus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisZPlus, False, (0, 0, 1)))
+		cmds.menuItem(dividerLabel = "Rotation", divider = True)
+		cmds.menuItem(label = axisXMinus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisXMinus, True, (-1, 0, 0)))
+		cmds.menuItem(label = axisXPlus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisXPlus, True, (1, 0, 0)))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = axisYMinus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisYMinus, True, (0, -1, 0)))
+		cmds.menuItem(label = axisYPlus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisYPlus, True, (0, 1, 0)))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = axisZMinus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisZMinus, True, (0, 0, -1)))
+		cmds.menuItem(label = axisZPlus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisZPlus, True, (0, 0, 1)))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(dividerLabel = "TOOLS - Baking", divider = True)
@@ -232,13 +253,13 @@ class GeneralWindow:
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Offset")
-		cmds.menuItem(label = "-3", command = partial(Install.ToShelf_AnimOffsetMinus3, self.directory))
-		cmds.menuItem(label = "-2", command = partial(Install.ToShelf_AnimOffsetMinus2, self.directory))
-		cmds.menuItem(label = "-1", command = partial(Install.ToShelf_AnimOffsetMinus1, self.directory))
+		cmds.menuItem(label = "-3", command = partial(Install.ToShelf_AnimOffset, self.directory, -1, 3))
+		cmds.menuItem(label = "-2", command = partial(Install.ToShelf_AnimOffset, self.directory, -1, 2))
+		cmds.menuItem(label = "-1", command = partial(Install.ToShelf_AnimOffset, self.directory, -1, 1))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "+1", command = partial(Install.ToShelf_AnimOffsetPlus1, self.directory))
-		cmds.menuItem(label = "+2", command = partial(Install.ToShelf_AnimOffsetPlus2, self.directory))
-		cmds.menuItem(label = "+3", command = partial(Install.ToShelf_AnimOffsetPlus3, self.directory))
+		cmds.menuItem(label = "+1", command = partial(Install.ToShelf_AnimOffset, self.directory, 1, 1))
+		cmds.menuItem(label = "+2", command = partial(Install.ToShelf_AnimOffset, self.directory, 1, 2))
+		cmds.menuItem(label = "+3", command = partial(Install.ToShelf_AnimOffset, self.directory, 1, 3))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(dividerLabel = "TOOLS - Timeline", divider = True)
