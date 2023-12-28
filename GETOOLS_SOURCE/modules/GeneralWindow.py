@@ -18,7 +18,7 @@ from GETOOLS_SOURCE.modules import Settings
 from GETOOLS_SOURCE.modules import Tools as tls
 
 class GeneralWindow:
-	version = "v0.13.0"
+	version = "v1.0.0"
 	name = "GETools"
 	title = name + " " + version
 
@@ -89,6 +89,7 @@ class GeneralWindow:
 		def LinkVersionHistory(self): cmds.showHelp("https://github.com/GenEugene/GETools/blob/master/changelog.txt", absolute = True)
 		def LinkGithub(self): cmds.showHelp("https://github.com/GenEugene/GETools", absolute = True)
 		def LinkGumroad(self): cmds.showHelp("https://gumroad.com/l/iCNa", absolute = True)
+		def LinkGithubWiki(self): cmds.showHelp("https://github.com/GenEugene/GETools/wiki", absolute = True)
 		def LinkYoutubeTutorial(self): cmds.showHelp("", absolute = True) # TODO add new youtube link with tutorial
 		def LinkLinkedin(self): cmds.showHelp("https://www.linkedin.com/in/geneugene", absolute = True)
 		def LinkYoutube(self): cmds.showHelp("https://youtube.com/@EugeneGataulin", absolute = True)
@@ -101,6 +102,8 @@ class GeneralWindow:
 		cmds.menuItem(dividerLabel = "Links", divider = True)
 		cmds.menuItem(label = "GitHub", command = LinkGithub)
 		cmds.menuItem(label = "Gumroad", command = LinkGumroad)
+		cmds.menuItem(dividerLabel = "HOW TO USE", divider = True)
+		cmds.menuItem(label = "Documentation", command = LinkGithubWiki)
 		cmds.menuItem(label = "Tutorial Video", enable = False, command = LinkYoutubeTutorial)
 		cmds.menuItem(dividerLabel = "Contacts", divider = True)
 		cmds.menuItem(label = "Linkedin", command = LinkLinkedin)
