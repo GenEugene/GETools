@@ -18,6 +18,7 @@ v1.0.0
 - [TOOLS] Updated "Bake By Last" button. New name "By Last" + 2 alternative buttons for Position and Rotation.
 - [TOOLS] Removed Tools/Animation/Key Range button. Replaced by "Delete Animation" button.
 - [OVERLAPPY] Added pos/rot layer prefixes.
+- [UTILS] Added color printing in Colors Palette.
 - Improved various modules and overall quality.
 
 v0.0.12
