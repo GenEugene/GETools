@@ -5,6 +5,9 @@ Backlog:
 - [RIGGING] added constraint offset object
 - [RIGGING] added Rebake IK from selected objects
 
+v1.0.1
+- [HOTFIX] Removed cross dependency for Maya 2020.
+
 v1.0.0
 - [UI] Changed main icon and added some small icons.
 - [UI] Added pop-up for shelf buttons installation.

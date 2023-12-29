@@ -3,7 +3,6 @@
 import maya.cmds as cmds
 
 from GETOOLS_SOURCE.utils import Constraints
-from GETOOLS_SOURCE.utils import Locators
 from GETOOLS_SOURCE.utils import Selector
 from GETOOLS_SOURCE.utils import Timeline
 
@@ -78,7 +77,7 @@ def BakeSelectedByWorld(sampleBy = 1.0, selectedRange = False, channelBox = Fals
 	if (selectedList == None):
 		return
 	
-	world = Locators.Create()
+	world = cmds.group(world = True, empty = True)
 	selectedList.append(world)
 	cmds.select(selectedList, replace = True)
 	BakeSelectedByLastObject(sampleBy = sampleBy, selectedRange = selectedRange, channelBox = channelBox, attributes = attributes)
