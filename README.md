@@ -19,5 +19,6 @@ Simply drag and drop GETools\TOOLS\DRAG_AND_DROP_INSTALL.py into Maya viewport
 ***
 
 # Known issues:
+- If Maya uses interface scaling, some UI elements can be stretched or aligned incorrectly
 - UI Buttons are not aligned perfectly
 
