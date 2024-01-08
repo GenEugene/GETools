@@ -20,7 +20,7 @@ from GETOOLS_SOURCE.modules import Tools as tls
 from GETOOLS_SOURCE.values import Icons
 
 class GeneralWindow:
-	version = "v1.0.1"
+	version = "v1.0.2"
 	name = "GETools"
 	title = name + " " + version
 
