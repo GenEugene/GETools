@@ -52,9 +52,6 @@ def FilterCurve(*args):
 	cmds.filterCurve()
 
 def SetInfinity(mode, items = None, *args):
-	if (Selector.MultipleObjects(1) == None):
-		return
-
 	result = ""
 	if (mode == 1):
 		result = "constant"
@@ -66,7 +63,10 @@ def SetInfinity(mode, items = None, *args):
 		result = "cycleRelative"
 	elif (mode == 5):
 		result = "oscillate"
+	
 	if (items == None):
+		if (Selector.MultipleObjects(1) == None):
+			return
 		cmds.setInfinity(preInfinite = result, postInfinite = result)
 	else:
 		cmds.setInfinity(items, preInfinite = result, postInfinite = result)
