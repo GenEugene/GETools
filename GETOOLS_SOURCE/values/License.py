@@ -1,3 +1,4 @@
+text = """\
 # GETOOLS is under the terms of the MIT License
 
 # Copyright (c) 2018-2024 Eugene Gataulin (GenEugene). All Rights Reserved.
@@ -21,24 +22,4 @@
 # SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
-
-root = "\\GETOOLS_SOURCE"
-
-get = root + "\icons\GET.png"
-tools = root + "\icons\Tools.png"
-centerOfMass = root + "\icons\CenterOfMass.png"
-overlappy = root + "\icons\Overlappy.png"
-
-# Maya's
-empty = "empty.png"
-bookmark = "Bookmark.png"
-help = "help.png"
-error = "error.png"
-warning = "warningIcon.svg"
-visible = "visible.png"
-light = "Light.png"
-playblast = "playblast.png"
-wait = "waitBusy.png"
-list = "list.svg"
-layer = "layerEditor.png"
-zoom = "zoom.png"
+"""
