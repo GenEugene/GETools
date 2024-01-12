@@ -5,6 +5,9 @@ Backlog:
 - [RIGGING] added constraint offset object
 - [RIGGING] added Rebake IK from selected objects
 
+v1.0.3
+- Absolute import replaced by relative import.
+
 v1.0.2
 - Fixed the "Set Infinity" function causing a warning message to appear in the console.
 
