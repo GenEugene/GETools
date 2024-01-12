@@ -25,24 +25,24 @@
 import maya.cmds as cmds
 from functools import partial
 
-from GETOOLS_SOURCE.utils import Colors
-from GETOOLS_SOURCE.utils import Install
-from GETOOLS_SOURCE.utils import Layers
-from GETOOLS_SOURCE.utils import MayaSettings
-from GETOOLS_SOURCE.utils import MotionTrail
-from GETOOLS_SOURCE.utils import Scene
-from GETOOLS_SOURCE.utils import Selector
+from ..modules import CenterOfMass
+from ..modules import Overlappy
+from ..modules import Rigging
+from ..modules import Settings
+from ..modules import Tools
 
-from GETOOLS_SOURCE.modules import CenterOfMass as com
-from GETOOLS_SOURCE.modules import Overlappy as ovlp
-from GETOOLS_SOURCE.modules import Rigging as rig
-from GETOOLS_SOURCE.modules import Settings
-from GETOOLS_SOURCE.modules import Tools as tls
+from ..utils import Colors
+from ..utils import Install
+from ..utils import Layers
+from ..utils import MayaSettings
+from ..utils import MotionTrail
+from ..utils import Scene
+from ..utils import Selector
 
-from GETOOLS_SOURCE.values import Icons
+from ..values import Icons
 
 class GeneralWindow:
-	version = "v1.0.2"
+	version = "v1.0.3"
 	name = "GETools"
 	title = name + " " + version
 
@@ -360,17 +360,17 @@ class GeneralWindow:
 		# cmds.image(image = self.directory + Icons.get, width = size, height = size)
 
 	def LayoutTools(self, parentLayout):
-		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = "1. " + tls.Tools.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		tls.Tools().UICreate(self.frameTools)
+		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = "1. " + Tools.Tools.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		Tools.Tools().UICreate(self.frameTools)
 	def LayoutRigging(self, parentLayout):
-		self.frameRigging = cmds.frameLayout("layoutRigging", parent = parentLayout, label = "2. " + rig.Rigging.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		rig.Rigging().UICreate(self.frameRigging)
+		self.frameRigging = cmds.frameLayout("layoutRigging", parent = parentLayout, label = "2. " + Rigging.Rigging.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		Rigging.Rigging().UICreate(self.frameRigging)
 	def LayoutOverlappy(self, parentLayout):
-		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = "3. " + ovlp.Overlappy.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		ovlp.Overlappy().UICreate(self.frameOverlappy)
+		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = "3. " + Overlappy.Overlappy.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		Overlappy.Overlappy().UICreate(self.frameOverlappy)
 	def LayoutCenterOfMass(self, parentLayout):
-		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = "4. " + com.CenterOfMass.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		com.CenterOfMass().UICreate(self.frameCenterOfMass)
+		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = "4. " + CenterOfMass.CenterOfMass.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		CenterOfMass.CenterOfMass().UICreate(self.frameCenterOfMass)
 	def LayoutExperimental(self, parentLayout):
 		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "5. " + "EXPERIMENTAL", collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		cmds.popupMenu()

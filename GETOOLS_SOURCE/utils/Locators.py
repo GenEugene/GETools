@@ -24,15 +24,15 @@
 
 import maya.cmds as cmds
 
-from GETOOLS_SOURCE.utils import Animation
-from GETOOLS_SOURCE.utils import Baker
-from GETOOLS_SOURCE.utils import Constraints
-from GETOOLS_SOURCE.utils import Other
-from GETOOLS_SOURCE.utils import Parent
-from GETOOLS_SOURCE.utils import Selector
-from GETOOLS_SOURCE.utils import Text
+from ..utils import Animation
+from ..utils import Baker
+from ..utils import Constraints
+from ..utils import Other
+from ..utils import Parent
+from ..utils import Selector
+from ..utils import Text
 
-from GETOOLS_SOURCE.values import Enums
+from ..values import Enums
 
 nameBase = "gLoc"
 nameAim = "{0}Aim".format(nameBase)

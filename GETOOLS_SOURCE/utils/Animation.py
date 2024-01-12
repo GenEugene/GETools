@@ -25,8 +25,8 @@
 import maya.cmds as cmds
 import maya.mel as mel
 
-from GETOOLS_SOURCE.utils import Selector
-from GETOOLS_SOURCE.utils import Timeline
+from ..utils import Selector
+from ..utils import Timeline
 
 def DeleteKeys(channelBox = False, *args):
 	if (Selector.MultipleObjects(1) == None):

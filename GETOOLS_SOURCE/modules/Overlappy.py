@@ -26,20 +26,20 @@ import maya.cmds as cmds
 from math import pow, sqrt
 from functools import partial
 
-from GETOOLS_SOURCE.values import Enums
+from ..modules import Settings
 
-from GETOOLS_SOURCE.utils import Animation
-from GETOOLS_SOURCE.utils import Baker
-from GETOOLS_SOURCE.utils import Colors
-from GETOOLS_SOURCE.utils import Constraints
-from GETOOLS_SOURCE.utils import Layers
-from GETOOLS_SOURCE.utils import MayaSettings
-from GETOOLS_SOURCE.utils import Selector
-from GETOOLS_SOURCE.utils import Text
-from GETOOLS_SOURCE.utils import Timeline
-from GETOOLS_SOURCE.utils import UI
+from ..utils import Animation
+from ..utils import Baker
+from ..utils import Colors
+from ..utils import Constraints
+from ..utils import Layers
+from ..utils import MayaSettings
+from ..utils import Selector
+from ..utils import Text
+from ..utils import Timeline
+from ..utils import UI
 
-from GETOOLS_SOURCE.modules import Settings
+from ..values import Enums
 
 class OverlappyAnnotations:
 	# Setup

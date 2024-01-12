@@ -24,9 +24,9 @@
 
 import maya.cmds as cmds
 
-from GETOOLS_SOURCE.utils import Constraints
-from GETOOLS_SOURCE.utils import Selector
-from GETOOLS_SOURCE.utils import Timeline
+from ..utils import Constraints
+from ..utils import Selector
+from ..utils import Timeline
 
 def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, selectedRange = False, channelBox = False, attributes = None):
 	# Check selected objects

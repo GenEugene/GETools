@@ -26,9 +26,9 @@
 import os
 import sys
 
-import GETOOLS_SOURCE.utils.Shelf as Shelf
+from ..utils import Shelf
 
-from GETOOLS_SOURCE.values import Enums
+from ..values import Enums
 
 class Presets:
 	pathGeneral =\

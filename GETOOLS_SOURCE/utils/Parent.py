@@ -24,7 +24,7 @@
 
 import maya.cmds as cmds
 
-from GETOOLS_SOURCE.utils import Selector
+from ..utils import Selector
 
 def FirstToSecond(child, parent, maintainOffset = True):
 	cmds.parent(child, parent)

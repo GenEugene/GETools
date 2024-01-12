@@ -22,7 +22,7 @@
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 
-from GETOOLS_SOURCE.utils import Colors
+from ..utils import Colors
 
 windowName = "windowGETools"
 dockName = "dockGETools"

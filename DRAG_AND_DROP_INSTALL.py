@@ -24,12 +24,11 @@
 
 import os
 
-from GETOOLS_SOURCE.values import Icons
-from GETOOLS_SOURCE.values import License
-
 from GETOOLS_SOURCE.utils import Install
 from GETOOLS_SOURCE.utils import Shelf
 
+from GETOOLS_SOURCE.values import Icons
+from GETOOLS_SOURCE.values import License
 
 # Get script directory path
 scriptPath = os.path.dirname(__file__)
