@@ -40,6 +40,7 @@ from ..utils import Timeline
 from ..utils import UI
 
 from ..values import Enums
+from ..values import Icons
 
 class OverlappyAnnotations:
 	# Setup
@@ -187,14 +188,14 @@ class Overlappy:
 		cmds.menuBarLayout()
 
 		cmds.menu(label = "Edit")
-		cmds.menuItem(label = "Reset Settings", command = self._ResetAllValues)
+		cmds.menuItem(label = "Reset Settings", command = self._ResetAllValues, image = Icons.rotateClockwise)
 
 		cmds.menu(label = "Select", tearOff = True)
-		cmds.menuItem(label = "Object", command = self._SelectObject)
-		cmds.menuItem(label = "Particle", command = self._SelectParticle)
-		cmds.menuItem(label = "Nucleus", command = self._SelectNucleus)
-		cmds.menuItem(label = "Target locator", command = self._SelectTarget)
-		cmds.menuItem(label = "Aim locator", command = self._SelectAim)
+		cmds.menuItem(label = "Object", command = self._SelectObject, image = Icons.cursor)
+		cmds.menuItem(label = "Particle", command = self._SelectParticle, image = Icons.particle)
+		cmds.menuItem(label = "Nucleus", command = self._SelectNucleus, image = Icons.nucleus)
+		cmds.menuItem(label = "Target locator", command = self._SelectTarget, image = Icons.locator)
+		cmds.menuItem(label = "Aim locator", command = self._SelectAim, image = Icons.locator)
 	def UILayoutButtons(self, layoutMain, windowWidthMargin, lineHeight):
 		# SETUP
 		self.layoutButtons = cmds.frameLayout("layoutButtons", label = Settings.frames2Prefix + "BUTTONS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color)

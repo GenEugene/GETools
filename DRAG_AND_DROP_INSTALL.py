@@ -52,8 +52,8 @@ import maya.cmds as cmds
 
 {func}
 
-import GETOOLS_SOURCE.modules.GeneralWindow as gtwindow
-gtwindow.GeneralWindow().RUN_DOCKED(\"{path}\")\
+from GETOOLS_SOURCE.modules import GeneralWindow
+GeneralWindow.GeneralWindow().RUN_DOCKED(\"{path}\")\
 """.format(func = functionAddPathToEnvironment, path = scriptPath, license = License.text)
 
 

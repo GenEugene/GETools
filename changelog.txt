@@ -7,6 +7,7 @@ Backlog:
 
 v1.0.3
 - Absolute import replaced by relative import.
+- Added more icons on pop-up menus.
 
 v1.0.2
 - Fixed the "Set Infinity" function causing a warning message to appear in the console.
