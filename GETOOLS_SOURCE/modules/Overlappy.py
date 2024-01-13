@@ -26,20 +26,21 @@ import maya.cmds as cmds
 from math import pow, sqrt
 from functools import partial
 
-from GETOOLS_SOURCE.values import Enums
+from ..modules import Settings
 
-from GETOOLS_SOURCE.utils import Animation
-from GETOOLS_SOURCE.utils import Baker
-from GETOOLS_SOURCE.utils import Colors
-from GETOOLS_SOURCE.utils import Constraints
-from GETOOLS_SOURCE.utils import Layers
-from GETOOLS_SOURCE.utils import MayaSettings
-from GETOOLS_SOURCE.utils import Selector
-from GETOOLS_SOURCE.utils import Text
-from GETOOLS_SOURCE.utils import Timeline
-from GETOOLS_SOURCE.utils import UI
+from ..utils import Animation
+from ..utils import Baker
+from ..utils import Colors
+from ..utils import Constraints
+from ..utils import Layers
+from ..utils import MayaSettings
+from ..utils import Selector
+from ..utils import Text
+from ..utils import Timeline
+from ..utils import UI
 
-from GETOOLS_SOURCE.modules import Settings
+from ..values import Enums
+from ..values import Icons
 
 class OverlappyAnnotations:
 	# Setup
@@ -187,14 +188,14 @@ class Overlappy:
 		cmds.menuBarLayout()
 
 		cmds.menu(label = "Edit")
-		cmds.menuItem(label = "Reset Settings", command = self._ResetAllValues)
+		cmds.menuItem(label = "Reset Settings", command = self._ResetAllValues, image = Icons.rotateClockwise)
 
 		cmds.menu(label = "Select", tearOff = True)
-		cmds.menuItem(label = "Object", command = self._SelectObject)
-		cmds.menuItem(label = "Particle", command = self._SelectParticle)
-		cmds.menuItem(label = "Nucleus", command = self._SelectNucleus)
-		cmds.menuItem(label = "Target locator", command = self._SelectTarget)
-		cmds.menuItem(label = "Aim locator", command = self._SelectAim)
+		cmds.menuItem(label = "Object", command = self._SelectObject, image = Icons.cursor)
+		cmds.menuItem(label = "Particle", command = self._SelectParticle, image = Icons.particle)
+		cmds.menuItem(label = "Nucleus", command = self._SelectNucleus, image = Icons.nucleus)
+		cmds.menuItem(label = "Target locator", command = self._SelectTarget, image = Icons.locator)
+		cmds.menuItem(label = "Aim locator", command = self._SelectAim, image = Icons.locator)
 	def UILayoutButtons(self, layoutMain, windowWidthMargin, lineHeight):
 		# SETUP
 		self.layoutButtons = cmds.frameLayout("layoutButtons", label = Settings.frames2Prefix + "BUTTONS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color)

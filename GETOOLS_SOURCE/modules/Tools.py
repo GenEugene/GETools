@@ -25,17 +25,18 @@
 import maya.cmds as cmds
 from functools import partial
 
-from GETOOLS_SOURCE.utils import Animation
-from GETOOLS_SOURCE.utils import Baker
-from GETOOLS_SOURCE.utils import Colors
-from GETOOLS_SOURCE.utils import Locators
-from GETOOLS_SOURCE.utils import Other
-from GETOOLS_SOURCE.utils import Selector
-from GETOOLS_SOURCE.utils import Timeline
-from GETOOLS_SOURCE.utils import UI
+from ..modules import Settings
 
-from GETOOLS_SOURCE.modules import Settings
-from GETOOLS_SOURCE.values import Enums
+from ..utils import Animation
+from ..utils import Baker
+from ..utils import Colors
+from ..utils import Locators
+from ..utils import Other
+from ..utils import Selector
+from ..utils import Timeline
+from ..utils import UI
+
+from ..values import Enums
 
 class ToolsAnnotations:
 	_onlyForTranslation = "Only for Translation"

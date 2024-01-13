@@ -25,14 +25,13 @@
 import maya.cmds as cmds
 from functools import partial
 
-from GETOOLS_SOURCE.utils import Colors
-from GETOOLS_SOURCE.utils import Constraints
-from GETOOLS_SOURCE.utils import Other
-from GETOOLS_SOURCE.utils import Selector
-from GETOOLS_SOURCE.utils import Skinning
-from GETOOLS_SOURCE.utils import UI
+from ..modules import Settings
 
-from GETOOLS_SOURCE.modules import Settings
+from ..utils import Colors
+from ..utils import Constraints
+from ..utils import Other
+from ..utils import Skinning
+from ..utils import UI
 
 class RiggingAnnotations:
 	# Constraints
