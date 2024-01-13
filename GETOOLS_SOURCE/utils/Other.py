@@ -27,7 +27,7 @@ import maya.cmds as cmds
 
 from ..utils import Selector
 
-def RotateOrderVisibility(on = True, *args):
+def RotateOrderVisibility(on=True, *args):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
@@ -36,7 +36,7 @@ def RotateOrderVisibility(on = True, *args):
 	for item in selectedList:
 		cmds.setAttr(item + ".rotateOrder", channelBox = on)
 
-def SegmentScaleCompensate(value = 0, *args): # TODO refactor
+def SegmentScaleCompensate(value=0, *args): # TODO refactor
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
@@ -46,7 +46,7 @@ def SegmentScaleCompensate(value = 0, *args): # TODO refactor
 	for item in selected:
 		cmds.setAttr(item + ".segmentScaleCompensate", value)
 
-def JointDrawStyle(mode = 0, *args): # TODO refactor
+def JointDrawStyle(mode=0, *args): # TODO refactor
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):

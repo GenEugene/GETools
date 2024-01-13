@@ -52,3 +52,4 @@ def HasSkinCluster(targetObject):
 		return False
 	else:
 		return True
+

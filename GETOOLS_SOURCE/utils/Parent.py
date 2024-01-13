@@ -26,7 +26,7 @@ import maya.cmds as cmds
 
 from ..utils import Selector
 
-def FirstToSecond(child, parent, maintainOffset = True):
+def FirstToSecond(child, parent, maintainOffset=True):
 	cmds.parent(child, parent)
 	if (not maintainOffset):
 		cmds.matchTransform(child, parent, position = True, rotation = True)
@@ -38,7 +38,7 @@ def SelectedToLastObject():
 		return
 	ListToLastObjects(selected)
 
-def ListToLastObjects(selected, maintainOffset = True, reverse = False):
+def ListToLastObjects(selected, maintainOffset=True, reverse=False):
 	for i in range(len(selected)):
 		if (i == len(selected) - 1):
 			break
@@ -51,3 +51,4 @@ def ListToLastObjects(selected, maintainOffset = True, reverse = False):
 			index2 = -1
 		
 		FirstToSecond(selected[index1], selected[index2], maintainOffset)
+

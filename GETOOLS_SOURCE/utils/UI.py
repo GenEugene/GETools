@@ -29,7 +29,7 @@ from ..modules import Settings
 from ..utils import Colors
 
 class Window: # TODO
-	def __init__(self, titleText = "My Window Name", windowWidth = 150, windowHeight = 50, nameWindow = "myWindowDefault"):
+	def __init__(self, titleText="My Window Name", windowWidth=150, windowHeight=50, nameWindow="myWindowDefault"):
 		self.titleText = titleText
 		self.windowWidth = windowWidth
 		self.windowHeight = windowHeight
@@ -50,21 +50,21 @@ class Window: # TODO
 class FloatFieldButtons: # TODO test
 	def __init__(self,
 			# parent = None,
-			value = 10,
-			precision = 3,
-			enabled = True,
-			annotation = "",
-			command = "pass",
-			menuReset = True,
-			width = 20,
-			height = 10,
-			commandUp = "pass",
-			commandDown = "pass",
-			backgroundColor = Colors.blackWhite70,
+			value=10,
+			precision=3,
+			enabled=True,
+			annotation="",
+			command="pass",
+			menuReset=True,
+			width=20,
+			height=10,
+			commandUp="pass",
+			commandDown="pass",
+			backgroundColor=Colors.blackWhite70,
 			):
 		
 		buttonsWidth = width / 2
-		cmds.rowLayout(numberOfColumns = 2, columnWidth2 = (buttonsWidth, buttonsWidth), columnAttach = [(1, 'both', 0), (2, 'both', 0)] )
+		cmds.rowLayout(numberOfColumns = 2, columnWidth2 = (buttonsWidth, buttonsWidth), columnAttach = ((1, 'both', 0), (2, 'both', 0)) )
 
 		self.floatLocatorSize = FloatField(value = value, precision = precision, annotation = annotation, enabled = enabled, command = command, menuReset = menuReset)
 
@@ -75,31 +75,31 @@ class FloatFieldButtons: # TODO test
 
 class ButtonLeftRight:
 	def __init__(self,
-			# parent = None, # TODO
-			width = 20,
-			height = 10,
-			annotation = "",
-			commandLeft = "pass",
-			commandRight = "pass",
-			backgroundColor = Colors.blackWhite70,
+			# parent=None, # TODO
+			width=20,
+			height=10,
+			annotation="",
+			commandLeft="pass",
+			commandRight="pass",
+			backgroundColor=Colors.blackWhite70,
 			):
 		
 		buttonsWidth = width / 2
-		cmds.rowLayout(numberOfColumns = 2, columnWidth2 = (buttonsWidth, buttonsWidth), columnAttach = [(1, 'both', 0), (2, 'both', 0)] )
+		cmds.rowLayout(numberOfColumns = 2, columnWidth2 = (buttonsWidth, buttonsWidth), columnAttach = ((1, 'both', 0), (2, 'both', 0)) )
 		cmds.button(label = "<", height = height, command = commandLeft, annotation = annotation, backgroundColor = backgroundColor)
 		cmds.button(label = ">", height = height, command = commandRight, annotation = annotation, backgroundColor = backgroundColor)
 		cmds.setParent('..')
 
 class FloatField:
 	def __init__(self,
-			value = 10,
-			precision = 3,
-			enabled = True,
-			annotation = "",
-			command = "pass",
-			menuReset = True,
-			minValue = float("-inf"),
-			maxValue = float("inf"),
+			value=10,
+			precision=3,
+			enabled=True,
+			annotation="",
+			command="pass",
+			menuReset=True,
+			minValue=float("-inf"),
+			maxValue=float("inf"),
 			):
 		
 		self.valueDefault = value
@@ -112,7 +112,7 @@ class FloatField:
 	def Get(self, *args):
 		return cmds.floatField(self.floatField, query = True, value = True)
 	
-	def Set(self, value = 0, *args):
+	def Set(self, value=0, *args):
 		cmds.floatField(self.floatField, edit = True, value = value)
 	
 	def Reset(self, *args):
@@ -120,14 +120,14 @@ class FloatField:
 
 class Checkbox:
 	def __init__(self,
-			# parent = None, # TODO
-			label = "label",
-			value = False,
-			enable = True,
-			annotation = "",
-			command = "pass",
-			# commandResetAll = "",
-			menuReset = True,
+			# parent=None, # TODO
+			label="label",
+			value=False,
+			enable=True,
+			annotation="",
+			command="pass",
+			# commandResetAll="",
+			menuReset=True,
 			):
 		
 		self.valueDefault = value
@@ -141,7 +141,7 @@ class Checkbox:
 	def Get(self, *args):
 		return cmds.checkBox(self.checkbox, query = True, value = True)
 	
-	def Set(self, value = None, *args):
+	def Set(self, value=None, *args):
 		cmds.checkBox(self.checkbox, edit = True, value = value)
 	
 	def Reset(self, *args):
@@ -149,17 +149,17 @@ class Checkbox:
 
 class Slider:
 	def __init__(self,
-			parent = None,
-			label = "label",
-			annotation = "",
-			value = 0,
-			minMax = [0, 1, 0, 1],
-			precision = 3,
-			widthWindow = 50,
-			widthMarker = 10,
-			columnWidth3 = (5, 5, 5),
-			command = "pass",
-			menuReset = True,
+			parent=None,
+			label="label",
+			annotation="",
+			value=0,
+			minMax=(0, 1, 0, 1),
+			precision=3,
+			widthWindow=50,
+			widthMarker=10,
+			columnWidth3=(5, 5, 5),
+			command="pass",
+			menuReset=True,
 			):
 		
 		self.valueDefault = value
@@ -201,7 +201,7 @@ class Slider:
 	def Get(self, *args):
 		return cmds.floatSliderGrp(self.slider, query = True, value = True)
 	
-	def Set(self, value = None, *args):
+	def Set(self, value=None, *args):
 		if (value == None):
 			_value = cmds.floatSliderGrp(self.slider, query = True, value = True)
 		else:
@@ -255,3 +255,4 @@ class Slider:
 	
 	def ResetCached(self, *args):
 		self.valueCached = 0
+

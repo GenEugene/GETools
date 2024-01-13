@@ -57,7 +57,7 @@ def SetTimeCurrent(value):
 def GetTimeCurrent():
 	return cmds.currentTime(query = True)
 
-def GetTimeMinMax(inner = True):
+def GetTimeMinMax(inner=True):
 	if inner:
 		min = cmds.playbackOptions(query = True, min = True)
 		max = cmds.playbackOptions(query = True, max = True)
@@ -73,7 +73,7 @@ def CheckHighlighting():
 def GetSelectedTimeRange():
 	return cmds.timeControl(FetchTimeline(), query = True, rangeArray = True)
 
-def SetTime(mode = 0, *args):
+def SetTime(mode=0, *args):
 	if (mode == 1):
 		cmds.playbackOptions(min = GetTimeCurrent())
 	elif (mode == 2):
@@ -92,3 +92,4 @@ def SetTime(mode = 0, *args):
 		selectedTime = GetSelectedTimeRange()
 		endTime = selectedTime[1] - 1
 		cmds.playbackOptions(min = selectedTime[0], max = endTime)
+

@@ -102,7 +102,7 @@ class OverlappySettings:
 	loftMinDistance = 5
 	
 	# SIMULATION SETTINGS # TODO: move to preset
-	checkboxesOptions = [False, True, False, True]
+	checkboxesOptions = (False, True, False, True)
 	particleRadius = 5
 	particleConserve = 1
 	particleDrag = 0.01
@@ -518,7 +518,7 @@ class Overlappy:
 		cmds.parent(self.locAim[2], self.locAim[0])
 
 		# Create aim loft
-		self.loft[0] = cmds.circle(name = nameLoftStart, degree = 1, sections = 4, normal = [0, 1, 0])[0]
+		self.loft[0] = cmds.circle(name = nameLoftStart, degree = 1, sections = 4, normal = (0, 1, 0))[0]
 		self.loft[1] = cmds.duplicate(self.loft[0], name = nameLoftEnd)[0]
 		_scale1 = 0.001
 		_scale2 = self.sliderPRadius.Get() * OverlappySettings.loftFactor
@@ -558,18 +558,21 @@ class Overlappy:
 			return
 		
 		# Try to get suffix name
-		_tempList = [OverlappySettings.nameLocGoalTarget[0], OverlappySettings.nameLocGoalTarget[1], OverlappySettings.nameParticle, OverlappySettings.nameLocAim[0], OverlappySettings.nameLoft[2]]
+		_tempList = (OverlappySettings.nameLocGoalTarget[0], OverlappySettings.nameLocGoalTarget[1], OverlappySettings.nameParticle, OverlappySettings.nameLocAim[0], OverlappySettings.nameLoft[2])
 		_objectName = ""
 		for child in _children:
 			for item in _tempList:
 				_splitNames = child.split(item)
-				if (len(_splitNames) < 2): continue
+				if (len(_splitNames) < 2):
+					continue
 				_lastName = _splitNames[-1]
 				if (_objectName == ""):
 					_objectName = _lastName
 				else:
-					if (_objectName == _lastName): continue
-					else: cmds.warning("Suffix \"{0}\" don't equals to \"{1}\"".format(_objectName, _lastName))
+					if (_objectName == _lastName):
+						continue
+					else:
+						cmds.warning("Suffix \"{0}\" don't equals to \"{1}\"".format(_objectName, _lastName))
 		_converted = Text.ConvertSymbols(_objectName, False)
 		if (cmds.objExists(_converted)):
 			self.selectedObject = _converted
@@ -577,7 +580,8 @@ class Overlappy:
 		def CheckAndSet(name):
 			if (cmds.objExists(name + _objectName)):
 				return name + _objectName
-			else: return
+			else:
+				return
 		
 		# Objects
 		self.locGoalTarget[0] = CheckAndSet(OverlappySettings.nameLocGoalTarget[0])
@@ -607,7 +611,7 @@ class Overlappy:
 		# self._GetSimulation()
 		# self._GetOffsets()
 		pass
-	def _SetupDelete(self, deselect = True, *args):
+	def _SetupDelete(self, deselect=True, *args):
 		self.selectedObject = ""
 		self.locGoalTarget = ["", ""]
 		self.locAim = ["", "", "", ""]
@@ -625,7 +629,7 @@ class Overlappy:
 			cmds.delete(_nucleus)
 		if (deselect):
 			cmds.select(clear = True)
-	def _OffsetsUpdate(self, cacheReset = False, *args): # TODO rework
+	def _OffsetsUpdate(self, cacheReset=False, *args): # TODO rework
 		if (type(cacheReset) is float):
 			cacheReset = False
 		if (cacheReset):
@@ -658,37 +662,45 @@ class Overlappy:
 
 		# Mirrors
 		_mirror = [1, 1, 1]
-		if (self.checkboxMirrorX.Get()): _mirror[0] = -1
-		if (self.checkboxMirrorY.Get()): _mirror[1] = -1
-		if (self.checkboxMirrorZ.Get()): _mirror[2] = -1
+		if (self.checkboxMirrorX.Get()):
+			_mirror[0] = -1
+		if (self.checkboxMirrorY.Get()):
+			_mirror[1] = -1
+		if (self.checkboxMirrorZ.Get()):
+			_mirror[2] = -1
 		
 		# Get values from sliders
-		_values = [0, 0, 0]
-		_values[0] = self.sliderOffsetX.Get() * _mirror[0]
-		_values[1] = self.sliderOffsetY.Get() * _mirror[1]
-		_values[2] = self.sliderOffsetZ.Get() * _mirror[2]
+		_values = (
+			self.sliderOffsetX.Get() * _mirror[0],
+			self.sliderOffsetY.Get() * _mirror[1],
+			self.sliderOffsetZ.Get() * _mirror[2],
+			)
 		
 		# Set locGoal constraint offset
-		_goalAttributes = [0, 0, 0]
-		_goalAttributes[0] = self.locGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateX"
-		_goalAttributes[1] = self.locGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateY"
-		_goalAttributes[2] = self.locGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateZ"
+		_goalAttributes = (
+			self.locGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateX",
+			self.locGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateY",
+			self.locGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateZ",
+			)
 		cmds.setAttr(_goalAttributes[0], _values[0])
 		cmds.setAttr(_goalAttributes[1], _values[1])
 		cmds.setAttr(_goalAttributes[2], _values[2])
 		
 		# Get offset
 		_goalPosition = cmds.xform(self.locGoalTarget[0], query = True, translation = True)
-		_goalOffset = [0, 0, 0]
-		_goalOffset[0] = self.startPositionGoalParticle[0][0] - _goalPosition[0]
-		_goalOffset[1] = self.startPositionGoalParticle[0][1] - _goalPosition[1]
-		_goalOffset[2] = self.startPositionGoalParticle[0][2] - _goalPosition[2]
+		_goalOffset = (
+			self.startPositionGoalParticle[0][0] - _goalPosition[0],
+			self.startPositionGoalParticle[0][1] - _goalPosition[1],
+			self.startPositionGoalParticle[0][2] - _goalPosition[2],
+			)
 		
 		# Set particle attributes
-		_particleAttributes = [0, 0, 0]
-		_particleAttributes[0] = OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateX"
-		_particleAttributes[1] = OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateY"
-		_particleAttributes[2] = OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateZ"
+		_particleAttributes = (
+			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateX",
+			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateY",
+			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateZ",
+			)
+
 		cmds.setAttr(_particleAttributes[0], self.startPositionGoalParticle[1][0] - _goalOffset[0])
 		cmds.setAttr(_particleAttributes[1], self.startPositionGoalParticle[1][1] - _goalOffset[1])
 		cmds.setAttr(_particleAttributes[2], self.startPositionGoalParticle[1][2] - _goalOffset[2])
@@ -714,7 +726,7 @@ class Overlappy:
 
 
 	### SELECT
-	def _Select(self, name = "", *args):
+	def _Select(self, name="", *args):
 		if (name != ""):
 			if (cmds.objExists(name)):
 				cmds.select(name, replace = True)
@@ -775,10 +787,12 @@ class Overlappy:
 		else:
 			cmds.setAttr(self.loft[2] + ".visibility", 1)
 	def _LoftGetDistance(self, *args):
-		_vector = [0, 0, 0]
-		_vector[0] = self.sliderOffsetX.Get()
-		_vector[1] = self.sliderOffsetY.Get()
-		_vector[2] = self.sliderOffsetZ.Get()
+		_vector = (
+			self.sliderOffsetX.Get(),
+			self.sliderOffsetY.Get(),
+			self.sliderOffsetZ.Get(),
+			)
+
 		return sqrt(pow(_vector[0], 2) + pow(_vector[1], 2) + pow(_vector[2], 2)) # Distance formula : V((x2 - x1)2 + (y2 - y1)2 + (z2 - z1)2)
 
 	# def _GetSimulation(self, *args): # TODO rework scan logic
@@ -802,7 +816,7 @@ class Overlappy:
 		self.checkboxLayer.Reset()
 		self.checkboxLoop.Reset()
 		self.checkboxClean.Reset()
-	def _ResetSimulation(self, full = False, *args):
+	def _ResetSimulation(self, full=False, *args):
 		if (full):
 			self.sliderPRadius.Reset()
 		self.sliderPConserve.Reset()
@@ -823,7 +837,7 @@ class Overlappy:
 	
 
 	### BAKE
-	def _BakeLogic(self, parent, zeroOffsets = False, translation = True, deleteSetupLock = False, *args):
+	def _BakeLogic(self, parent, zeroOffsets=False, translation=True, deleteSetupLock=False, *args):
 		# Filter attributes
 		_item = self.selectedObject
 		
@@ -948,7 +962,7 @@ class Overlappy:
 
 		MayaSettings.CachedPlaybackDeactivate()
 
-		if (self.checkboxHierarchy.Get() == True):
+		if (self.checkboxHierarchy.Get()):
 			_selected = Selector.SelectTransformHierarchy()
 		
 		def RunBakeLogicVariant():
@@ -982,7 +996,7 @@ class Overlappy:
 		# Create layers on selected
 		layerName = Text.ConvertSymbols(name) + "_1"
 		return Layers.Create(layerName = layerName, parent = self.layers[0])
-	def _LayerMoveToSafeOrTemp(self, safeLayer = True, *args): # TODO rework
+	def _LayerMoveToSafeOrTemp(self, safeLayer=True, *args): # TODO rework
 		_id = [0, 1]
 		
 		if (not safeLayer):

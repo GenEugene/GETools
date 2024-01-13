@@ -24,7 +24,7 @@
 
 import maya.cmds as cmds
 
-def MultipleObjects(minimalCount = 1, transformsOnly = True):
+def MultipleObjects(minimalCount=1, transformsOnly=True):
 	# Save selected objects to variable
 	if (transformsOnly):
 		selectedList = cmds.ls(selection = True, type = "transform", shapes = False)
@@ -67,7 +67,7 @@ def PrintSelected(*args):
 		print(item)
 	print("")
 
-def GetChildrenOfType(selected, type = ""):
+def GetChildrenOfType(selected, type=""):
 	result = []
 	for item in selected:
 		if (cmds.objExists(item)):
@@ -76,7 +76,7 @@ def GetChildrenOfType(selected, type = ""):
 			result.append(None)
 	return result
 
-def GetConnectionsOfType(selected, type = "", source = True, destination = True):
+def GetConnectionsOfType(selected, type="", source=True, destination=True):
 	result = []
 	for item in selected:
 		if (cmds.objExists(item)):

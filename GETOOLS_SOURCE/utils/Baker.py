@@ -28,7 +28,7 @@ from ..utils import Constraints
 from ..utils import Selector
 from ..utils import Timeline
 
-def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, selectedRange = False, channelBox = False, attributes = None):
+def BakeSelected(classic=True, preserveOutsideKeys=True, sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
@@ -48,7 +48,7 @@ def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, sel
 		# TODO move logic pattern to separate function
 		bakeRegular = True
 		selectedAttributes = Selector.GetChannelBoxAttributes()
-		if (channelBox == True):
+		if (channelBox):
 			bakeRegular = selectedAttributes == None
 		if (bakeRegular):
 			if (attributes == None):
@@ -69,7 +69,7 @@ def BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = 1.0, sel
 			cmds.cutKey(time = (timeRange[1], None)) # to right
 	cmds.refresh(suspend = False)
 
-def BakeSelectedByLastObject(pairOnly = False, sampleBy = 1.0, selectedRange = False, channelBox = False, attributes = None):
+def BakeSelectedByLastObject(pairOnly=False, sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(2)
 	if (selectedList == None):
@@ -93,7 +93,7 @@ def BakeSelectedByLastObject(pairOnly = False, sampleBy = 1.0, selectedRange = F
 	cmds.select(selectedList)
 	return selectedList
 
-def BakeSelectedByWorld(sampleBy = 1.0, selectedRange = False, channelBox = False, attributes = None):
+def BakeSelectedByWorld(sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
@@ -108,3 +108,4 @@ def BakeSelectedByWorld(sampleBy = 1.0, selectedRange = False, channelBox = Fals
 # def BakeReverseParentOnPair(): # TODO add child locator on parent object (OPTIONAL)
 # 	selectedList = BakeSelectedByLastObject(pairOnly = True)
 # 	Constraints.ConstrainSecondToFirstObject(selectedList[0], selectedList[1], maintainOffset = True)
+

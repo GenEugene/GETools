@@ -44,9 +44,10 @@ def GetSize(locator):
 	shape = Other.GetShapeType(element = locator, type = Enums.Types.locator)
 	if (shape != None):
 		return (
-		cmds.getAttr(shape + "." + Enums.Attributes.scaleLocal[0]),
-		cmds.getAttr(shape + "." + Enums.Attributes.scaleLocal[1]),
-		cmds.getAttr(shape + "." + Enums.Attributes.scaleLocal[2]))
+			cmds.getAttr(shape + "." + Enums.Attributes.scaleLocal[0]),
+			cmds.getAttr(shape + "." + Enums.Attributes.scaleLocal[1]),
+			cmds.getAttr(shape + "." + Enums.Attributes.scaleLocal[2]),
+			)
 	else:
 		return None
 def SetSize(locator, valueX, valueY, valueZ):
@@ -87,7 +88,7 @@ def SelectedLocatorsSizeSet(value, *args):
 			SetSize(item, value, value, value)
 
 # CREATE
-def Create(name = nameBase, scale = scale, hideParent = False, subLocator = False):
+def Create(name=nameBase, scale=scale, hideParent=False, subLocator=False):
 	locatorCurrent = cmds.spaceLocator(name = Text.SetUniqueFromText(name))[0]
 	SetSize(locatorCurrent, scale, scale, scale)
 	cmds.select(locatorCurrent)
@@ -105,7 +106,7 @@ def Create(name = nameBase, scale = scale, hideParent = False, subLocator = Fals
 		return locatorCurrent, subLocator
 	else:
 		return locatorCurrent
-def CreateOnSelected(name = nameBase, scale = scale, minSelectedCount = minSelectedCount, hideParent = False, subLocator = False, constraint = False, bake = False, parentToLastSelected = False, constrainReverse = False, constrainTranslate = True, constrainRotate = True):
+def CreateOnSelected(name=nameBase, scale=scale, minSelectedCount=minSelectedCount, hideParent=False, subLocator=False, constraint=False, bake=False, parentToLastSelected=False, constrainReverse=False, constrainTranslate=True, constrainRotate=True):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minSelectedCount)
 	if (selectedList == None):
@@ -162,7 +163,7 @@ def CreateOnSelected(name = nameBase, scale = scale, minSelectedCount = minSelec
 	else:
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
-def CreateAndBakeAsChildrenFromLastSelected(scale = scale, minSelectedCount = 2, hideParent = False, subLocator = False, constraintReverse = False, skipLastReverse = True):
+def CreateAndBakeAsChildrenFromLastSelected(scale=scale, minSelectedCount=2, hideParent=False, subLocator=False, constraintReverse=False, skipLastReverse=True):
 	# Check selected objects
 	objects = CreateOnSelected(scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator, constraint = True, bake = True, parentToLastSelected = True)
 	if (objects == None):
@@ -184,7 +185,7 @@ def CreateAndBakeAsChildrenFromLastSelected(scale = scale, minSelectedCount = 2,
 	else:
 		cmds.select(objects[1][-1])
 	return objects
-def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = minSelectedCount, hideParent = False, subLocator = False, rotateOnly = False, aimVector = (1, 0, 0), distance = 100, reverse = True):
+def CreateOnSelectedAim(name=nameAim, scale=scale, minSelectedCount=minSelectedCount, hideParent=False, subLocator=False, rotateOnly=False, aimVector=(1,0,0), distance=100, reverse=True):
 	# Check selected objects
 	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator)
 	if (objects == None):
@@ -210,10 +211,11 @@ def CreateOnSelectedAim(name = nameAim, scale = scale, minSelectedCount = minSel
 			cmds.matchTransform(objects[2][i], locOffset, position = True, rotation = True, scale = True)
 			cmds.parent(objects[2][i], locOffset)
 		
-		aimVectorScaled = [0, 0, 0]
-		aimVectorScaled[0] = aimVector[0] * distance
-		aimVectorScaled[1] = aimVector[1] * distance
-		aimVectorScaled[2] = aimVector[2] * distance
+		aimVectorScaled = (
+			aimVector[0] * distance,
+			aimVector[1] * distance,
+			aimVector[2] * distance,
+			)
 		cmds.move(aimVectorScaled[0], aimVectorScaled[1], aimVectorScaled[2], locTarget, relative = True, objectSpace = True, worldSpaceDistance = True)
 
 		groupsList.append(aimGroup)

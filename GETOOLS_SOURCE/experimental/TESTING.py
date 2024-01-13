@@ -4,7 +4,7 @@ nameWindow = "TEST_window"
 windowWidth = 300
 windowHeight = 100
 margin = 5
-windowWidthMargin = windowWidth - margin * 2
+windowWidthMargin = windowWidth - margin*2
 
 
 # Create a new window

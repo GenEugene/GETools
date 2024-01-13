@@ -449,10 +449,10 @@ class GeneralWindow:
 	def WindowCreate(self, *args):
 		self.CreateUI()
 		self.FramesCollapse(True)
-	def RUN_DOCKED(self, path = "", forced = False, *args):
+	def RUN_DOCKED(self, path="", forced=False, *args):
 		self.directory = path
 
-		if (forced == False and self.DockCheck()): # for script toggling. Comment these 3 lines if you need to deactivate toggling
+		if (not forced and self.DockCheck()): # for script toggling. Comment these 3 lines if you need to deactivate toggling
 			if (self.DockCheckVisible()):
 				self.DockDelete()
 				print("{0} closed".format(GeneralWindow.title))

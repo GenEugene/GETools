@@ -82,7 +82,8 @@ class ColorsPalette:
 		layoutMain = cmds.columnLayout(adjustableColumn = False, width = self.windowWidth)
 
 		def ButtonPrint(label, color):
-			def PrintColor(label, color, *args): print("{0}: {1}".format(label, color))
+			def PrintColor(label, color, *args):
+				print("{0}: {1}".format(label, color))
 			cmds.button(label = label, command = partial(PrintColor, label, color), backgroundColor = color)
 
 		buttonsBlackWhite = 11

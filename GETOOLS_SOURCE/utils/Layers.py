@@ -31,7 +31,7 @@ LayerBase = "BaseAnimation"
 LayerPrefix = "_layer_"
 
 
-def Create(layerName, parent = LayerBase, *args):
+def Create(layerName, parent=LayerBase, *args):
 	# if(cmds.objExists(layerName)):
 	# 	cmds.warning("Layer \"{0}\" already exists".format(layerName))
 	# 	return None
@@ -42,7 +42,7 @@ def Create(layerName, parent = LayerBase, *args):
 	print("Layer \"{0}\" created".format(layer))
 	return layer
 
-def CreateForSelected(selected, parent = LayerBase, prefix = LayerPrefix, *args):
+def CreateForSelected(selected, parent=LayerBase, prefix=LayerPrefix, *args):
 	layers = []
 	for item in selected:
 		layerName = prefix + Text.ConvertSymbols(item) + "_1"
