@@ -75,9 +75,9 @@ scene.ExitMaya()\
 
 
 	# UTILS
-	runSelectTransformHierarchy ='''\
+	runSelectHierarchy ='''\
 {0}
-selector.SelectTransformHierarchy()\
+selector.SelectHierarchy()\
 '''.format(pathSelector)
 
 
@@ -300,7 +300,7 @@ def ToShelf_ExitMaya(path, *args):
 
 # UTILS
 def ToShelf_SelectHierarchy(path, *args):
-	MoveToShelf(path, Presets.runSelectTransformHierarchy, "SelectHierarchy", "SelHi")
+	MoveToShelf(path, Presets.runSelectHierarchy, "SelectHierarchy", "SelHi")
 
 # LOCATORS
 def ToShelf_LocatorsSizeScale50(path, *args):

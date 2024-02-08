@@ -42,7 +42,10 @@ def MultipleObjects(minimalCount=1, transformsOnly=True):
 	else:
 		return selectedList
 
-def SelectTransformHierarchy(*args):
+def SelectHierarchy(*args):
+	cmds.SelectHierarchy()
+
+def SelectHierarchyTransforms(*args):
 	selected = MultipleObjects()
 	if (selected == None):
 		return None

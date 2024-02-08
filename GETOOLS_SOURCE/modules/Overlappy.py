@@ -963,7 +963,7 @@ class Overlappy:
 		MayaSettings.CachedPlaybackDeactivate()
 
 		if (self.checkboxHierarchy.Get()):
-			_selected = Selector.SelectTransformHierarchy()
+			_selected = Selector.SelectHierarchyTransforms()
 		
 		def RunBakeLogicVariant():
 			if (variant == 1):
