@@ -42,7 +42,7 @@ from ..utils import Selector
 from ..values import Icons
 
 class GeneralWindow:
-	version = "v1.0.3"
+	version = "v1.0.4"
 	name = "GETools"
 	title = name + " " + version
 
@@ -103,6 +103,7 @@ class GeneralWindow:
 			print(Selector.GetChannelBoxAttributes())
 		cmds.menu(label = "Utils", tearOff = True)
 		cmds.menuItem(label = "Select Hiererchy", command = Selector.SelectHierarchy)
+		cmds.menuItem(label = "Create Reset Button", command = Install.CreateResetButton)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected, image = Icons.text)
 		cmds.menuItem(label = "Print channel box selected attributes", command = PrintChannelBoxAttributes, image = Icons.text)
@@ -176,6 +177,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Exit Maya (force)", command = partial(Install.ToShelf_ExitMaya, self.directory))
 		cmds.menuItem(dividerLabel = "Utils", divider = True)
 		cmds.menuItem(label = "Select Hiererchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
+		cmds.menuItem(label = "Create Reset Button", command = partial(Install.ToShelf_CreateResetButton, self.directory), image = Icons.reset)
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(dividerLabel = "TOOLS - Locators", divider = True)
