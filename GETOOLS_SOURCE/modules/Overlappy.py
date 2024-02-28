@@ -23,6 +23,7 @@
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 
 import maya.cmds as cmds
+import maya.mel as mel
 from math import pow, sqrt
 from functools import partial
 
@@ -93,6 +94,7 @@ class OverlappySettings:
 	nameGroup = prefix + "Group"
 	nameLocGoalTarget = (prefix + "LocGoal", prefix + "LocTarget")
 	nameLocAim = (prefix + "LocAimBase", prefix + "LocAimHidden", prefix + "LocAim", prefix + "LocAimUp")
+	nameNucleus = prefix + "Nucleus"
 	nameParticle = prefix + "Particle"
 	nameLoft = (prefix + "LoftStart", prefix + "LoftEnd", prefix + "LoftShape")
 	nameLayers = (prefixLayer + "TEMP_", prefixLayer + "SAFE_", "pos_", "rot_")
@@ -125,7 +127,7 @@ class OverlappySettings:
 	rangeOffsetZ = (float("-inf"), float("inf"), 0, 100)
 	
 class Overlappy:
-	version = "v2.7"
+	version = "v2.8"
 	name = "OVERLAPPY"
 	title = name + " " + version
 
@@ -142,6 +144,8 @@ class Overlappy:
 		self.nucleus = ""
 		self.loft = ["", "", ""]
 		self.layers = ["", ""]
+		self.nucleusNodesBefore = [""]
+		self.nucleusNodesAfter = [""]
 		
 		# LAYOUTS
 		self.windowMain = None
@@ -442,6 +446,7 @@ class Overlappy:
 		_objConverted = Text.ConvertSymbols(objCurrent)
 		nameLocGoal = OverlappySettings.nameLocGoalTarget[0] + _objConverted
 		nameLocParticle = OverlappySettings.nameLocGoalTarget[1] + _objConverted
+		nameNucleus = OverlappySettings.nameNucleus + _objConverted
 		nameParticle = OverlappySettings.nameParticle + _objConverted
 		nameLocAimBase = OverlappySettings.nameLocAim[0] + _objConverted
 		nameLocAimHidden = OverlappySettings.nameLocAim[1] + _objConverted
@@ -459,6 +464,17 @@ class Overlappy:
 		cmds.setAttr(self.locGoalTarget[0] + ".visibility", 0)
 		self.startPositionGoalParticle[0] = cmds.xform(self.locGoalTarget[0], query = True, translation = True)
 
+		# Nucleus node
+		self.nucleusNodesBefore = cmds.ls(type = "nucleus")
+		self.nucleus = cmds.createNode("nucleus", name = nameNucleus)
+		cmds.connectAttr("time1.outTime", self.nucleus + ".currentTime")
+		cmds.parent(self.nucleus, OverlappySettings.nameGroup)
+		# self.sliderNTimeScale.startName = self.nucleus
+		cmds.setAttr(self.nucleus + ".gravity", 0)
+		cmds.setAttr(self.nucleus + ".timeScale", self.sliderNTimeScale.Get())
+		cmds.setAttr(self.nucleus + ".startFrame", self.time.values[2])
+		cmds.setAttr(self.nucleus + ".visibility", 0)
+
 		# Create particle, goal and get selected object position
 		_position = cmds.xform(objCurrent, query = True, worldSpace = True, rotatePivot = True)
 		self.particle = cmds.nParticle(name = nameParticle, position = _position, conserve = 1)[0]
@@ -468,6 +484,15 @@ class Overlappy:
 		cmds.setAttr(self.particle + ".overrideEnabled", 1)
 		cmds.setAttr(self.particle + ".overrideDisplayType", 2)
 
+		# Reconnect particle to temp nucleus and remove extra nodes
+		mel.eval("assignNSolver {0}".format(nameNucleus))
+		self.nucleusNodesAfter = cmds.ls(type = "nucleus")
+		nodesForRemoving = [item for item in self.nucleusNodesAfter if item not in self.nucleusNodesBefore]
+		for item in nodesForRemoving:
+			if(item != self.nucleus):
+				# cmds.warning("extra node deleted {0}".format(item))
+				cmds.delete(item)
+
 		# Set simulation attributes
 		cmds.setAttr(self.particle + "Shape.radius", self.sliderPRadius.Get())
 		cmds.setAttr(self.particle + "Shape.solverDisplay", 1)
@@ -476,15 +501,6 @@ class Overlappy:
 		cmds.setAttr(self.particle + "Shape.damp", self.sliderPDamp.Get())
 		cmds.setAttr(self.particle + "Shape.goalSmoothness", self.sliderGSmooth.Get())
 		cmds.setAttr(self.particle + "Shape.goalWeight[0]", self.sliderGWeight.Get())
-
-		# Nucleus detection
-		self.nucleus = cmds.ls(type = "nucleus")[0]
-		cmds.parent(self.nucleus, OverlappySettings.nameGroup)
-		# self.sliderNTimeScale.startName = self.nucleus
-		cmds.setAttr(self.nucleus + ".gravity", 0)
-		cmds.setAttr(self.nucleus + ".timeScale", self.sliderNTimeScale.Get())
-		cmds.setAttr(self.nucleus + ".startFrame", self.time.values[2])
-		cmds.setAttr(self.nucleus + ".visibility", 0)
 
 		# Create and connect locator to particle
 		self.locGoalTarget[1] = cmds.spaceLocator(name = nameLocParticle)[0]
@@ -601,9 +617,9 @@ class Overlappy:
 		self.time.SetCurrentCached()
 		
 		# Nucleus
-		_nucleus = cmds.ls(type = "nucleus")
-		if (len(_nucleus) > 0):
-			self.nucleus = _nucleus[0]
+		# _nucleus = cmds.ls(type = "nucleus")
+		# if (len(_nucleus) > 0):
+		# 	self.nucleus = _nucleus[0]
 			# self.sliderNTimeScale.startName = self.nucleus
 		
 		# Get sliders
@@ -623,10 +639,6 @@ class Overlappy:
 		if (cmds.objExists(OverlappySettings.nameGroup)):
 			cmds.delete(OverlappySettings.nameGroup)
 		
-		# Delete nucleus node
-		_nucleus = cmds.ls(type = "nucleus")
-		if (len(_nucleus) > 0):
-			cmds.delete(_nucleus)
 		if (deselect):
 			cmds.select(clear = True)
 	def _OffsetsUpdate(self, cacheReset=False, *args): # TODO rework
