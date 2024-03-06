@@ -28,7 +28,7 @@ import maya.mel as mel
 from ..utils import Selector
 from ..utils import Timeline
 
-def DeleteKeys(channelBox = False, *args):
+def DeleteKeys(channelBox=False, *args):
 	if (Selector.MultipleObjects(1) == None):
 		return
 
@@ -41,7 +41,7 @@ def DeleteKeys(channelBox = False, *args):
 	selectedAttributes = Selector.GetChannelBoxAttributes()
 	# TODO move logic pattern to separate function
 	cutAll = True
-	if (channelBox == True):
+	if (channelBox):
 		cutAll = selectedAttributes == None
 	if (cutAll):
 		cmds.cutKey(time = (timeRange[0], timeRange[1]))
@@ -73,7 +73,7 @@ def FilterCurve(*args):
 	Selector.MultipleObjects(1)
 	cmds.filterCurve()
 
-def SetInfinity(mode, items = None, *args):
+def SetInfinity(mode, items=None, *args):
 	result = ""
 	if (mode == 1):
 		result = "constant"
@@ -104,12 +104,12 @@ def SetInfinityCycleRelative(selected):
 def SetInfinityOscillate(selected):
 	SetInfinity(mode = 5, items = selected)
 
-def Offset(selected, time, attributes = None):
+def Offset(selected, time, attributes=None):
 	if (attributes == None):
 		cmds.keyframe(selected, edit = True, relative = True, option = "over", includeUpperBound = True, timeChange = time)
 	else:
 		cmds.keyframe(selected, edit = True, relative = True, option = "over", includeUpperBound = True, timeChange = time, attribute = attributes)
-def OffsetObjects(direction = 1, step = 1): # use if needed later # , channelBox = False
+def OffsetObjects(direction=1, step=1): # use if needed later # , channelBox = False
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):

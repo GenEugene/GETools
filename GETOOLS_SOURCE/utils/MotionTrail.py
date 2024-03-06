@@ -70,14 +70,14 @@ def CreateCurveFromTrajectory(): # TODO rework tool and add to module
 
 
 	# Get time start/end
-	start = cmds.playbackOptions(q=1, min=1)
-	end = cmds.playbackOptions(q=1, max=1)
+	start = cmds.playbackOptions(query = 1, min = 1)
+	end = cmds.playbackOptions(query = 1, max = 1)
 	# Create motion trail
-	cmds.snapshot(n = mtName, mt=1, i=step, st = start, et = end)
+	cmds.snapshot(name = mtName, motionTrail = 1, increment = step, startTime = start, endTime = end)
 
 	# Get points from motion trail
-	cmds.select(mtFinalName, r=1)
-	selected = cmds.ls(sl=1, dag=1, et="snapshotShape")
+	cmds.select(mtFinalName, replace = 1)
+	selected = cmds.ls(selection = 1, dagObjects = 1, exactType = "snapshotShape")
 	pts = cmds.getAttr(selected[0] + ".pts")
 	size = len(pts)
 	for i in range(size):
@@ -85,8 +85,9 @@ def CreateCurveFromTrajectory(): # TODO rework tool and add to module
 		#print "{0}: {1}".format(i, pts[i])
 
 	# Create curve
-	newCurve = cmds.curve(n = curveName, d = degree, p = pts)
+	newCurve = cmds.curve(name = curveName, degree = degree, point = pts)
 
 	# End
 	cmds.delete(mtFinalName)
-	cmds.select(cl=1)
+	cmds.select(clear = 1)
+

@@ -30,11 +30,13 @@ from ..utils import Shelf
 
 from ..values import Enums
 
-class Presets:
+class Presets: # TODO simplify
 	pathGeneral =\
 	"import GETOOLS_SOURCE.modules.GeneralWindow as gtwindow"
 	pathScene =\
 	"import GETOOLS_SOURCE.utils.Scene as scene"
+	pathInstall =\
+	"import GETOOLS_SOURCE.utils.Install as install"
 	pathBaker =\
 	"import GETOOLS_SOURCE.utils.Baker as baker"
 	pathSelector =\
@@ -75,10 +77,15 @@ scene.ExitMaya()\
 
 
 	# UTILS
-	runSelectTransformHierarchy ='''\
+	runSelectHierarchy ='''\
 {0}
-selector.SelectTransformHierarchy()\
+selector.SelectHierarchy()\
 '''.format(pathSelector)
+	
+	runCreateResetButton ='''\
+{0}
+install.CreateResetButton()\
+'''.format(pathInstall)
 
 
 	# LOCATORS
@@ -300,7 +307,9 @@ def ToShelf_ExitMaya(path, *args):
 
 # UTILS
 def ToShelf_SelectHierarchy(path, *args):
-	MoveToShelf(path, Presets.runSelectTransformHierarchy, "SelectHierarchy", "SelHi")
+	MoveToShelf(path, Presets.runSelectHierarchy, "SelectHierarchy", "SelHi")
+def ToShelf_CreateResetButton(path, *args):
+	MoveToShelf(path, Presets.runCreateResetButton, "CreateResetButton", "Reset")
 
 # LOCATORS
 def ToShelf_LocatorsSizeScale50(path, *args):
@@ -451,4 +460,17 @@ def ToShelf_MotionTrailSelect(path, *args):
 	MoveToShelf(path, Presets.runMotionTrailSelect, "MotionTrailSelect", "MTSelect")
 def ToShelf_MotionTrailDelete(path, *args):
 	MoveToShelf(path, Presets.runMotionTrailDelete, "MotionTrailDelete", "MTDelete")
+
+
+# RESET BUTTON
+def CreateResetButton(*args): # TODO get all published attributes
+	# get namespace
+	# get all published attributes
+	# generate reset code
+	# create button and fill command
+
+	# nameNamespace = "rig_Staff_01:"
+	# cmds.setAttr(nameNamespace + "ct_Root.translateX", 0)
+	
+	print("Reset button for objects")
 

@@ -1,9 +1,9 @@
 GETools changelog
 
-Backlog:
-- not completed | [RIGGING] added Aim Constraint logic
-- [RIGGING] added constraint offset object
-- [RIGGING] added Rebake IK from selected objects
+v1.0.4
+- [OVERLAPPY] Reworked Nucleus implementation with non-destructive way.
+- [UTILS] Added simple SelectHierarchy method.
+- Refactored code style.
 
 v1.0.3
 - Absolute import replaced by relative import.

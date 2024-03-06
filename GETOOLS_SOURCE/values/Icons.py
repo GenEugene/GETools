@@ -80,3 +80,6 @@ wait = "waitBusy.png"
 warning = "warningIcon.svg"
 world = "volumeSphere.png"
 zoom = "zoom.png"
+
+# TODO add icons sample window
+

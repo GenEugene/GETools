@@ -33,3 +33,4 @@ def Reload(*args):
 
 def ExitMaya(*args):
 	cmds.quit(force = True)
+

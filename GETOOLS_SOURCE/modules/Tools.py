@@ -346,7 +346,7 @@ class Tools:
 	
 	def LocatorsBake(self, *args):
 		Locators.CreateOnSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraint = True, bake = True)
-	def LocatorsBakeReverse(self, translate = True, rotate = True, *args): # TODO , channelBox = False
+	def LocatorsBakeReverse(self, translate=True, rotate=True, *args): # TODO , channelBox = False
 		Locators.CreateOnSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraint = True, bake = True, constrainReverse = True, constrainTranslate = translate, constrainRotate = rotate)
 	
 	def LocatorsRelative(self, *args):
@@ -356,7 +356,7 @@ class Tools:
 	def LocatorsRelativeReverse(self, *args):
 		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraintReverse = True, skipLastReverse = False)
 	
-	def LocatorsBakeAim(self, axis, rotateOnly = False, *args):
+	def LocatorsBakeAim(self, axis, rotateOnly=False, *args):
 		scale = self.floatLocatorSize.Get()
 		distance = self.floatLocatorAimOffset.Get()
 		hideParent = self.checkboxLocatorHideParent.Get()
@@ -376,9 +376,9 @@ class Tools:
 
 
 	# BAKING
-	def BakeSamplesSet(self, value = 1, *args):
+	def BakeSamplesSet(self, value=1, *args):
 		self.fieldBakingSamples.Set(value)
-	def BakeSamplesAdd(self, direction = 1, *args):
+	def BakeSamplesAdd(self, direction=1, *args):
 		value = self.fieldBakingSamples.Get()
 
 		addition = 0
@@ -408,14 +408,14 @@ class Tools:
 		Baker.BakeSelected(classic = False, preserveOutsideKeys = True, selectedRange = True, channelBox = True)
 	def BakeSelectedCustomCut(self, *args): # TODO , sampleBy = self.fieldBakingStep.Get()
 		Baker.BakeSelected(classic = False, preserveOutsideKeys = False, selectedRange = True, channelBox = True)
-	def BakeSelectedByLastObject(self, translate = True, rotate = True, *args):
+	def BakeSelectedByLastObject(self, translate=True, rotate=True, *args):
 		if (translate and rotate):
 			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True)
 		elif (translate and not rotate):
 			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateShort)
 		elif (not translate and rotate):
 			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateShort)
-	def BakeSelectedByWorld(self, translate = True, rotate = True, *args):
+	def BakeSelectedByWorld(self, translate=True, rotate=True, *args):
 		if (translate and rotate):
 			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True)
 		elif (translate and not rotate):
@@ -425,6 +425,6 @@ class Tools:
 
 
 	# ANIMATION
-	def AnimationOffset(self, direction = 1, step = 1, *args):
+	def AnimationOffset(self, direction=1, step=1, *args):
 		Animation.OffsetObjects(direction, step)
 

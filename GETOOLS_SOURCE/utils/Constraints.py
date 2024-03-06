@@ -50,7 +50,7 @@ def ConstrainListToLastElement(reverse=False, selected=None, maintainOffset=True
 			index1 = -1
 			index2 = i
 		
-		ConstrainSecondToFirstObject(selected[index1], selected[index2], maintainOffset, parent, point, orient, scale, aim, weight = weight)
+		ConstrainSecondToFirstObject(selected[index1], selected[index2], maintainOffset, parent, point, orient, scale, aim, weight)
 
 def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
 	if parent:
@@ -81,7 +81,7 @@ def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True,
 	if aim:
 		ConstrainAim(objectParent, objectChild, maintainOffset, weight) # TODO add customization logic
 
-def ConstrainAim(objectParent, objectChild, maintainOffset = True, weight = 1, aimVector = (0, 0, 1), upVector = (0, 1, 0), worldUpVector = (0, 1, 0), worldUpObject = None): # TODO complete aim logic
+def ConstrainAim(objectParent, objectChild, maintainOffset=True, weight=1, aimVector=(0, 0, 1), upVector=(0, 1, 0), worldUpVector=(0, 1, 0), worldUpObject=None): # TODO complete aim logic
 	# "scene" "object" "objectrotation" "vector" "none"
 	if (worldUpObject == None):
 		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = "vector", worldUpVector = worldUpVector)
@@ -95,7 +95,7 @@ def DeleteConstraints(selected):
 		if (item == None):
 			continue
 		for connection in item:
-			if (cmds.objExists(connection) == False):
+			if (not cmds.objExists(connection)):
 				continue
 			for constraint in Enums.Constraints.list:
 				if constraint in connection:
@@ -127,7 +127,7 @@ def DisconnectTargetsFromConstraint(selected):
 	# 2. Custom
 	# for connection in connections[-1]:
 	# 	for item in selected[:-1]:
-	# 		if (cmds.objExists(connection) == False):
+	# 		if (not cmds.objExists(connection)):
 	# 				continue
 
 	# 		if Enums.Constraints.parentConstraint in connection:
@@ -160,3 +160,4 @@ def DisconnectTargetsFromConstraintOnSelected(*args):
 	if (selectedList == None):
 		return
 	DisconnectTargetsFromConstraint(selectedList)
+

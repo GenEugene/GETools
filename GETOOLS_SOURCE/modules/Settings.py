@@ -26,7 +26,7 @@ from ..utils import Colors
 
 windowName = "windowGETools"
 dockName = "dockGETools"
-dockAllowedAreas = ["left", "right"]
+dockAllowedAreas = ("left", "right")
 dockStartArea = dockAllowedAreas[0] # start docking state, 0 - left, 1 - right
 
 windowHeight = 500 # vertical window size when undocked

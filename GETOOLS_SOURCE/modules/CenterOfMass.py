@@ -222,7 +222,7 @@ class CenterOfMass:
 			cmds.delete(self.COMObject)
 			self.COMObject = None
 			cmds.warning("Last active center of mass object was deleted")
-	def COMFloorProjection(self, skipAxis = "y", *args):
+	def COMFloorProjection(self, skipAxis="y", *args):
 		if (not self.COMObjectCheck()):
 			return
 
@@ -261,7 +261,7 @@ class CenterOfMass:
 		selectedList.append(self.COMObject)
 		Constraints.ConstrainListToLastElement(reverse = True, selected = selectedList, maintainOffset = False, parent = False, point = True, weight = weight)
 	def COMDisconnectTargets(self, *args):
-		if (self.COMObject == None or cmds.objExists(self.COMObject) == False):
+		if (self.COMObject == None or not cmds.objExists(self.COMObject)):
 			cmds.warning("Center Of Mass object is not connected to script. Please select Center Of Mass object and press Activate button before")
 			return
 
@@ -306,7 +306,7 @@ class CenterOfMass:
 		Baker.BakeSelected()
 		cmds.delete(self.CachedSelectedObjects[1][-1])
 	
-	def LinkCached(self, maintainOffset = False, *args):
+	def LinkCached(self, maintainOffset=False, *args):
 		if (self.CachedSelectedObjects == None):
 			cmds.warning("No cached objects yet, operation cancelled")
 			return
