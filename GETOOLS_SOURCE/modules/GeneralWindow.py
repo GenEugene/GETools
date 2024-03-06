@@ -103,7 +103,7 @@ class GeneralWindow:
 			print(Selector.GetChannelBoxAttributes())
 		cmds.menu(label = "Utils", tearOff = True)
 		cmds.menuItem(label = "Select Hiererchy", command = Selector.SelectHierarchy)
-		cmds.menuItem(label = "Create Reset Button", command = Install.CreateResetButton)
+		# cmds.menuItem(label = "Create Reset Button", command = Install.CreateResetButton)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected, image = Icons.text)
 		cmds.menuItem(label = "Print channel box selected attributes", command = PrintChannelBoxAttributes, image = Icons.text)
