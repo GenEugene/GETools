@@ -1,6 +1,8 @@
 GETools changelog
 
 v1.0.4
+- [OVERLAPPY] Reworked Nucleus implementation with non-destructive way.
+- [UTILS] Added simple SelectHierarchy method.
 - Refactored code style.
 
 v1.0.3
