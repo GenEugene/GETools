@@ -32,23 +32,16 @@ from ..values import Enums
 NameWrap = "wrapTemp"
 
 
-def WrapsCreate(*args):
-	# Check selected objects
-	selectedList = Selector.MultipleObjects(2)
-	if (selectedList == None):
-		return
-
-	cmds.select(clear = True)
-
+def WrapsCreate(elements, *args):
 	wrapList = []
 
-	for i in range(len(selectedList)):
-		if(i >= len(selectedList) - 1):
+	for i in range(len(elements)):
+		if (i >= len(elements) - 1):
 			break
 		
-		targetShape = selectedList[i] + Enums.Types.shape
-		sourceShape = selectedList[-1] + Enums.Types.shape
-		sourceTransform = selectedList[-1]
+		targetShape = elements[i] + Enums.Types.shape
+		sourceShape = elements[-1] + Enums.Types.shape
+		sourceTransform = elements[-1]
 
 		# Create wrap node and connect
 		node = cmds.deformer(targetShape, name = NameWrap, type = "wrap")
@@ -57,13 +50,51 @@ def WrapsCreate(*args):
 		cmds.connectAttr(sourceShape + ".worldMesh[0]", NameWrap + ".driverPoints[0]")
 		cmds.connectAttr(sourceTransform + ".inflType", NameWrap + ".inflType[0]")
 
-	# Cleanup
+	return wrapList
+def WrapsCreateOnSelected(*args):
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(2)
+	if (selectedList == None):
+		return
+
+	cmds.select(clear = True)
+	wraps = WrapsCreate(selectedList)
 	cmds.select(selectedList, replace = True)
 
-	return wrapList
+	return selectedList, wraps
 
-def WrapsDelete(wrapList, *args): # TODO
+def WrapsDelete(wrapList, *args):
 	for item in wrapList:
 		cmds.disconnectAttr(item + ".input[0].inputGeometry", item + ".basePoints[0]")
 		cmds.delete(item)
+
+def BlendshapesWrapMigrate(*args): # TODO
+	result = WrapsCreateOnSelected()
+	if (result == None):
+		cmds.warning("No objects detected")
+		return
+
+	selectedList = result[0]
+	wraps = result[1]
+
+	# TODO get original blendshape node
+	#blendshape = selectedList[-1]
+	# TODO get blenshaoe weights names
+	#weights = cmds.listAttr(blendshape + ".weight", multi = True)
+
+	# TODO set blendshape to 1
+	# TODO duplicate mesh
+	# TODO set blendshape to 0
+	# TODO repeat
+	# for item in selectedList:
+		# print(len(weights))
+		# for i in range(len(weights)):
+		# 	weights[i]
+		# 	pass
+	
+	# TODO connect new blendshapes to targets
+	
+	# TODO delete temporary wraps
+	# WrapsDelete(wraps)
+	pass
 

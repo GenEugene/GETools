@@ -111,8 +111,8 @@ class GeneralWindow:
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette, image = Icons.color)
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Wraps Create", command = Deformers.WrapsCreate) # TODO finish wraps logic and move to Rigging module
-		cmds.menuItem(label = "Wraps Delete", command = Deformers.WrapsDelete) # TODO finish wraps logic and move to Rigging module
+		cmds.menuItem(label = "Wraps Create", command = Deformers.WrapsCreateOnSelected) # TODO finish wraps logic and move to Rigging module
+		cmds.menuItem(label = "Blendshapes Wrap Migrate", command = Deformers.BlendshapesWrapMigrate) # TODO finish wraps logic and move to Rigging module
 		
 		self.LayoutMenuInstall()
 
