@@ -32,6 +32,7 @@ from ..modules import Settings
 from ..modules import Tools
 
 from ..utils import Colors
+from ..utils import Deformers
 from ..utils import Install
 from ..utils import Layers
 from ..utils import MayaSettings
@@ -42,7 +43,7 @@ from ..utils import Selector
 from ..values import Icons
 
 class GeneralWindow:
-	version = "v1.0.4"
+	version = "v1.0.5"
 	name = "GETools"
 	title = name + " " + version
 
@@ -109,6 +110,9 @@ class GeneralWindow:
 		cmds.menuItem(label = "Print channel box selected attributes", command = PrintChannelBoxAttributes, image = Icons.text)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette, image = Icons.color)
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Wraps Create", command = Deformers.WrapsCreate) # TODO finish wraps logic and move to Rigging module
+		cmds.menuItem(label = "Wraps Delete", command = Deformers.WrapsDelete) # TODO finish wraps logic and move to Rigging module
 		
 		self.LayoutMenuInstall()
 
