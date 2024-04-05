@@ -28,8 +28,8 @@ import maya.cmds as cmds
 from ..utils import Selector
 # from ..values import Enums
 
-
 nameWrap = "wrapTemp"
+nameBlendshapePrefix = "bs_"
 dropoff = 4
 smoothness = 0
 
@@ -83,7 +83,7 @@ def WrapsDelete(wrapsList, *args):
 	for wrap in wrapsList:
 		cmds.delete(wrap)
 
-def BlendshapesProjecting(*args): # TODO
+def BlendshapesProjecting(*args): # TODO split function to steps
 	result = WrapsCreateOnSelected()
 	if (result == None):
 		cmds.warning("No objects detected")
@@ -99,29 +99,34 @@ def BlendshapesProjecting(*args): # TODO
 
 	# Get blendshape node and weights
 	shape = cmds.listRelatives(sourceMesh, shapes = True)[1] # weak solution, what if index is not always the same?
-	blendshape = cmds.listConnections(shape, type = "blendShape")[0]
-	weights = cmds.listAttr(blendshape + ".weight", multi = True)
+	blendshapeSource = cmds.listConnections(shape, type = "blendShape")[0]
+	weights = cmds.listAttr(blendshapeSource + ".weight", multi = True)
 
 	# Zero all weights
 	for item in weights:
-		cmds.setAttr(blendshape + "." + item, 0)
+		cmds.setAttr(blendshapeSource + "." + item, 0)
 	
 	# Activate one by one and duplicate results
 	duplicatesList = []
 	for i in range(len(selectedList) - 1):
 		duplicates = []
 		for item in weights:
-			cmds.setAttr(blendshape + "." + item, 1)
+			cmds.setAttr(blendshapeSource + "." + item, 1)
 			duplicate = cmds.duplicate(selectedList[i], name = item)
 			duplicates.append(duplicate)
-			cmds.setAttr(blendshape + "." + item, 0)
+			cmds.setAttr(blendshapeSource + "." + item, 0)
 		duplicatesList.append(duplicates)
-	
-	# TODO create blendshape nodes to targets
-	# TODO connect new blendshapes to targets
-	
+
+	# Wraps cleanup
 	WrapsDelete(wraps)
 	cmds.delete(sourceDuplicate)
 
+	# Create blendshape nodes, add targets and delete duplicates
+	for x in range(len(selectedList) - 1):
+		blendshapeTarget = cmds.blendShape(selectedList[x], name = nameBlendshapePrefix + selectedList[x])
+		for y in range(len(duplicatesList[x])):
+			cmds.blendShape(blendshapeTarget, edit = True, target = (selectedList[x], y, duplicatesList[x][y][0], 1.0))
+			cmds.delete(duplicatesList[x][y][0])
+ 
 	cmds.select(selectedList, replace = True)
 
