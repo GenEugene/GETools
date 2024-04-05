@@ -32,7 +32,6 @@ from ..modules import Settings
 from ..modules import Tools
 
 from ..utils import Colors
-from ..utils import Deformers
 from ..utils import Install
 from ..utils import Layers
 from ..utils import MayaSettings
@@ -110,9 +109,6 @@ class GeneralWindow:
 		cmds.menuItem(label = "Print channel box selected attributes", command = PrintChannelBoxAttributes, image = Icons.text)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette, image = Icons.color)
-		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Wraps Create", command = Deformers.WrapsCreateOnSelected) # TODO finish wraps logic and move to Rigging module
-		cmds.menuItem(label = "Blendshapes Wrap Migrate", command = Deformers.BlendshapesProjecting) # TODO finish wraps logic and move to Rigging module
 		
 		self.LayoutMenuInstall()
 
@@ -181,9 +177,9 @@ class GeneralWindow:
 		cmds.menuItem(label = "Exit Maya (force)", command = partial(Install.ToShelf_ExitMaya, self.directory))
 		cmds.menuItem(dividerLabel = "Utils", divider = True)
 		cmds.menuItem(label = "Select Hiererchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
-		cmds.menuItem(label = "Create Reset Button", command = partial(Install.ToShelf_CreateResetButton, self.directory), image = Icons.reset)
+		# cmds.menuItem(label = "Create Reset Button", command = partial(Install.ToShelf_CreateResetButton, self.directory), image = Icons.reset)
 		cmds.setParent('..', menu = True)
-		#
+		
 		cmds.menuItem(dividerLabel = "TOOLS - Locators", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Size")
@@ -244,7 +240,7 @@ class GeneralWindow:
 		cmds.menuItem(label = axisZMinus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisZMinus, True, (0, 0, -1)))
 		cmds.menuItem(label = axisZPlus, command = partial(Install.ToShelf_LocatorsAim, self.directory, axisZPlus, True, (0, 0, 1)))
 		cmds.setParent('..', menu = True)
-		#
+		
 		cmds.menuItem(dividerLabel = "TOOLS - Baking", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Bake")
@@ -266,7 +262,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "POS", command = partial(Install.ToShelf_BakeByWorld, self.directory, True, False))
 		cmds.menuItem(label = "ROT", command = partial(Install.ToShelf_BakeByWorld, self.directory, False, True))
 		cmds.setParent('..', menu = True)
-		#
+		
 		cmds.menuItem(dividerLabel = "TOOLS - Animation", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Delete", image = Icons.delete)
@@ -296,7 +292,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "+2", command = partial(Install.ToShelf_AnimOffset, self.directory, 1, 2))
 		cmds.menuItem(label = "+3", command = partial(Install.ToShelf_AnimOffset, self.directory, 1, 3))
 		cmds.setParent('..', menu = True)
-		#
+		
 		cmds.menuItem(dividerLabel = "TOOLS - Timeline", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Timeline")
@@ -311,7 +307,7 @@ class GeneralWindow:
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Selected Range", command = partial(Install.ToShelf_SetTimelineSet, self.directory))
 		cmds.setParent('..', menu = True)
-		#
+		
 		cmds.menuItem(dividerLabel = "RIGGING - Constraints", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Constraints", image = Icons.constraint)
@@ -330,7 +326,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Disconnect", command = partial(Install.ToShelf_DisconnectTargets, self.directory))
 		cmds.menuItem(label = "Delete Constraints", command = partial(Install.ToShelf_DeleteConstraints, self.directory))
 		cmds.setParent('..', menu = True)
-		#
+		
 		cmds.menuItem(dividerLabel = "RIGGING - Utils", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Rotate Order")
@@ -349,7 +345,14 @@ class GeneralWindow:
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(label = "Copy Skin Weights From Last Selected", command = partial(Install.ToShelf_CopySkin, self.directory), image = Icons.copy)
-		#
+		
+		cmds.menuItem(dividerLabel = "RIGGING - Deformers", divider = True)
+		###
+		# cmds.menuItem(subMenu = True, label = "Rotate Order")
+		cmds.menuItem(label = "Wraps Create", command = partial(Install.ToShelf_WrapsCreate, self.directory), image = Icons.wrap)
+		cmds.menuItem(label = "Blendshapes Projecting", command = partial(Install.ToShelf_BlendshapesProjecting, self.directory), image = Icons.blendshape)
+		cmds.setParent('..', menu = True)
+		
 		cmds.menuItem(dividerLabel = "EXPERIMENTAL", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Motion Trail")

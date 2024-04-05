@@ -60,11 +60,12 @@ def WrapsCreate(elements, *args):
 		cmds.setAttr(node + ".autoWeightThreshold", 1)
 		cmds.setAttr(node + ".dropoff[0]", dropoff)
 		cmds.setAttr(node + ".smoothness[0]", smoothness)
+		cmds.setAttr(node + ".inflType[0]", 2)
 
 		# Connect to other nodes
 		cmds.connectAttr(sourceDuplicateShape + ".worldMesh[0]", node + ".basePoints[0]")
 		cmds.connectAttr(sourceShape + ".worldMesh[0]", node + ".driverPoints[0]")
-		cmds.connectAttr(sourceTransform + ".inflType", node + ".inflType[0]")
+		# cmds.connectAttr(sourceTransform + ".inflType", node + ".inflType[0]")
 
 	return wrapsList, sourceDuplicate
 def WrapsCreateOnSelected(*args):
@@ -83,7 +84,7 @@ def WrapsDelete(wrapsList, *args):
 	for wrap in wrapsList:
 		cmds.delete(wrap)
 
-def BlendshapesProjecting(*args): # TODO split function to steps
+def BlendshapesProjecting(*args):
 	result = WrapsCreateOnSelected()
 	if (result == None):
 		cmds.warning("No objects detected")
@@ -97,9 +98,21 @@ def BlendshapesProjecting(*args): # TODO split function to steps
 	wraps = result[1]
 	sourceDuplicate = result[2]
 
-	# Get blendshape node and weights
-	shape = cmds.listRelatives(sourceMesh, shapes = True)[1] # weak solution, what if index is not always the same?
-	blendshapeSource = cmds.listConnections(shape, type = "blendShape")[0]
+	# Get blendshape node
+	# print("### {0}".format(cmds.listRelatives(sourceMesh, shapes = True))) # HACK for debug shape issue
+	shape = cmds.listRelatives(sourceMesh, shapes = True)[1] # FIXME weak solution, index is not always the same and sometimes just 1 element
+	blendshapeSource = cmds.listConnections(shape, type = "blendShape")
+
+	# Check blendshape node
+	if (blendshapeSource == None):
+		cmds.warning("Last selected object has no blendShape node. Operation aborted")
+		WrapsDelete(wraps)
+		cmds.delete(sourceDuplicate)
+		cmds.select(selectedList, replace = True)
+		return
+
+	#  Get blendshape weights
+	blendshapeSource = blendshapeSource[0]
 	weights = cmds.listAttr(blendshapeSource + ".weight", multi = True)
 
 	# Zero all weights

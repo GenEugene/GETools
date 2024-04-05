@@ -43,6 +43,8 @@ class Presets: # TODO simplify
 	"import GETOOLS_SOURCE.utils.Selector as selector"
 	pathOther =\
 	"import GETOOLS_SOURCE.utils.Other as other"
+	pathDeformers =\
+	"import GETOOLS_SOURCE.utils.Deformers as deformers"
 	pathConstraints =\
 	"import GETOOLS_SOURCE.utils.Constraints as constraints"
 	pathLocators =\
@@ -250,6 +252,16 @@ other.JointDrawStyle\
 skinning.CopySkinWeightsFromLastMesh()\
 '''.format(pathSkinning)
 
+	runWrapsCreate ='''\
+{0}
+deformers.WrapsCreateOnSelected()\
+'''.format(pathDeformers)
+
+	runBlendshapesProjecting ='''\
+{0}
+deformers.BlendshapesProjecting()\
+'''.format(pathDeformers)
+
 
 	# EXPERIMENTAL
 	runMotionTrailCreate ='''\
@@ -451,6 +463,11 @@ def ToShelf_JointDrawStyle(path, mode, *args):
 
 def ToShelf_CopySkin(path, *args):
 	MoveToShelf(path, Presets.runCopySkin, "CopySkin", "CopySkin")
+
+def ToShelf_WrapsCreate(path, *args):
+	MoveToShelf(path, Presets.runWrapsCreate, "WrapsCreate", "WrapsCreate")
+def ToShelf_BlendshapesProjecting(path, *args):
+	MoveToShelf(path, Presets.runBlendshapesProjecting, "BSProjecting", "BSProjecting")
 
 
 # MOTION TRAIL

@@ -29,6 +29,7 @@ from ..modules import Settings
 
 from ..utils import Colors
 from ..utils import Constraints
+from ..utils import Deformers
 from ..utils import Other
 from ..utils import Skinning
 from ..utils import UI
@@ -58,6 +59,10 @@ class RiggingAnnotations:
 	jointDrawStyleBone = "Bone {0}".format(_jointDrawStyle)
 	jointDrawStyleHidden = "Hidden {0}".format(_jointDrawStyle)
 	copySkinWeights = "Copy skin weights from last selected object to all other selected objects"
+
+	# Deformers
+	wraps = "Create wrap deformer on selected objects. Last object used as source deformation object."
+	blendshapeProjection = "Copy blendshapes from last selected object that must have a blendshape node"
 
 class Rigging:
 	version = "v1.1"
@@ -115,6 +120,16 @@ class Rigging:
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Copy Skin Weights From Last Selected", command = Skinning.CopySkinWeightsFromLastMesh, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.copySkinWeights)
+		
+		
+		# DEFORMERS
+		layoutBlendshapes = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "DEFORMERS", collapsable = True, backgroundColor = Settings.frames2Color)
+		layoutColumnBlendshapes = cmds.columnLayout(parent = layoutBlendshapes, adjustableColumn = True)
+		#
+		countOffsets = 2
+		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "Wraps Create", command = Deformers.WrapsCreateOnSelected, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.wraps)
+		cmds.button(label = "Blendshapes Projecting", command = Deformers.BlendshapesProjecting, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.blendshapeProjection)
 
 
 	# CONSTRAINTS

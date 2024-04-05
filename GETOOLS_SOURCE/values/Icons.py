@@ -80,6 +80,8 @@ wait = "waitBusy.png"
 warning = "warningIcon.svg"
 world = "volumeSphere.png"
 zoom = "zoom.png"
+blendshape = "blendShape.png"
+wrap = "wrap.png"
 
 # TODO add icons sample window
 
