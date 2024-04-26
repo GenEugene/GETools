@@ -129,7 +129,7 @@ class Rigging:
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Wraps Create", command = Deformers.WrapsCreateOnSelected, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.wraps)
-		cmds.button(label = "Blendshapes Projecting", command = Deformers.BlendshapesProjecting, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.blendshapeProjection)
+		cmds.button(label = "Blendshapes Projecting", command = Deformers.BlendshapesExtraction, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.blendshapeProjection)
 
 
 	# CONSTRAINTS

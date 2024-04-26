@@ -84,7 +84,7 @@ def WrapsDelete(wrapsList, *args):
 	for wrap in wrapsList:
 		cmds.delete(wrap)
 
-def BlendshapesProjecting(*args):
+def BlendshapesExtraction(*args): # TODO separate from Wraps logic
 	result = WrapsCreateOnSelected()
 	if (result == None):
 		cmds.warning("No objects detected")
@@ -142,4 +142,8 @@ def BlendshapesProjecting(*args):
 			cmds.delete(duplicatesList[x][y][0])
  
 	cmds.select(selectedList, replace = True)
+
+def RunBlendshapesLogic(*args): # TODO combine wraps and blendshapes logic
+	result = WrapsCreateOnSelected()
+	BlendshapesExtraction()
 
