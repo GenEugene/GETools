@@ -1,7 +1,7 @@
 # GETools
 
 ***
-Free animation tool for Autodesk Maya 2020+
+Free animation tool for Autodesk Maya 2020, 2022, 2023, 2024
 Here you can find different tools for specific cases, from simple tools for locator creation to complex tools for secondary animation generating and center of mass.
 
 If you like GETools, feel free to support the project by Paypal, Patreon, Gumroad or write to me on any social network listed below:
