@@ -25,6 +25,7 @@
 import maya.cmds as cmds
 # import maya.mel as mel
 
+from ..utils import Blendshapes
 from ..utils import Selector
 # from ..values import Enums
 
@@ -34,7 +35,7 @@ dropoff = 4
 smoothness = 0
 
 
-def WrapsCreate(elements, *args):
+def WrapsCreate(elements):
 	if (len(elements) < 2):
 		cmds.warning("Need at least 2 objects for Wrap")
 		return
@@ -80,11 +81,26 @@ def WrapsCreateOnSelected(*args):
 
 	return selectedList, wraps[0], wraps[1]
 
-def WrapsDelete(wrapsList, *args):
-	for wrap in wrapsList:
+def WrapsDelete(wraps):
+	for wrap in wraps:
 		cmds.delete(wrap)
 
-def BlendshapesExtraction(*args): # TODO separate from Wraps logic
+def BlendshapesExtraction(*args):
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(2)
+	if (selectedList == None):
+		return
+	
+	# Get blendshape node
+	sourceMesh = selectedList[-1]
+	blendshapeSource = Blendshapes.GetBlendshapeNodeFromModel(sourceMesh)
+	
+	# Check blendshape node
+	if (blendshapeSource == None):
+		cmds.warning("Last selected object has no blendShape node. Operation aborted")
+		return
+
+	# Create wraps
 	result = WrapsCreateOnSelected()
 	if (result == None):
 		cmds.warning("No objects detected")
@@ -93,40 +109,22 @@ def BlendshapesExtraction(*args): # TODO separate from Wraps logic
 	cmds.select(clear = True)
 
 	# Map values
-	selectedList = result[0]
-	sourceMesh = selectedList[-1]
 	wraps = result[1]
 	sourceDuplicate = result[2]
 
-	# Get blendshape node
-	shape = cmds.listRelatives(sourceMesh, shapes = True)[1] # FIXME replace by new Blendshapes methods
-	blendshapeSource = cmds.listConnections(shape, type = "blendShape")
+	# Get blendshape weights and zero all of them
+	weights = Blendshapes.GetBlendshapeWeights(blendshapeSource)
+	Blendshapes.ZeroBlendshapeWeights(weights[0])
 
-	# Check blendshape node
-	if (blendshapeSource == None):
-		cmds.warning("Last selected object has no blendShape node. Operation aborted")
-		WrapsDelete(wraps)
-		cmds.delete(sourceDuplicate)
-		cmds.select(selectedList, replace = True)
-		return
-
-	#  Get blendshape weights
-	blendshapeSource = blendshapeSource[0]
-	weights = cmds.listAttr(blendshapeSource + ".weight", multi = True)
-
-	# Zero all weights
-	for item in weights:
-		cmds.setAttr(blendshapeSource + "." + item, 0)
-	
 	# Activate one by one and duplicate results
 	duplicatesList = []
 	for i in range(len(selectedList) - 1):
 		duplicates = []
-		for item in weights:
-			cmds.setAttr(blendshapeSource + "." + item, 1)
-			duplicate = cmds.duplicate(selectedList[i], name = item)
+		for y in range(len(weights[0])):
+			cmds.setAttr(weights[0][y], 1)
+			duplicate = cmds.duplicate(selectedList[i], name = weights[1][y])
 			duplicates.append(duplicate)
-			cmds.setAttr(blendshapeSource + "." + item, 0)
+			cmds.setAttr(weights[0][y], 0)
 		duplicatesList.append(duplicates)
 
 	# Wraps cleanup
@@ -139,10 +137,11 @@ def BlendshapesExtraction(*args): # TODO separate from Wraps logic
 		for y in range(len(duplicatesList[x])):
 			cmds.blendShape(blendshapeTarget, edit = True, target = (selectedList[x], y, duplicatesList[x][y][0], 1.0))
 			cmds.delete(duplicatesList[x][y][0])
- 
+	
 	cmds.select(selectedList, replace = True)
 
 def RunBlendshapesLogic(*args): # TODO combine wraps and blendshapes logic
-	result = WrapsCreateOnSelected()
-	BlendshapesExtraction()
+	# result = WrapsCreateOnSelected()
+	# BlendshapesExtraction()
+	pass
 

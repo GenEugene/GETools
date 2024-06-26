@@ -28,34 +28,40 @@ import maya.cmds as cmds
 from ..utils import Selector
 
 
-def GetBlendshapeNodesFromList(selectedList):
-	if (selectedList == None):
+def GetBlendshapeNodeFromModel(model):
+	if (model == None):
+		return None
+	
+	result = ""
+
+	# Get blendshape nodes
+	relatives = cmds.listRelatives(model)
+	blendshapes = []
+
+	for relative in relatives:
+		connections = cmds.listConnections(relative, type = "blendShape")
+		if (connections == None):
+			continue
+
+		for connection in connections:
+			if connection not in blendshapes:
+				result = connection
+
+	if (len(result) == 0):
+		return None
+	
+	print(result)#
+	return result
+def GetBlendshapeNodesFromModelList(modelList):
+	if (modelList == None):
 		return None
 	
 	result = []
 
 	# Get blendshape nodes
-	for element in selectedList:
-		relatives = cmds.listRelatives(element)
-		blendshapes = []
-
-		for relative in relatives:
-			connections = cmds.listConnections(relative, type = "blendShape")
-			if (connections == None):
-				continue
-
-			for connection in connections:
-				if connection not in blendshapes:
-					blendshapes.append(connection)
-
-		result.append(blendshapes)
-	
-	# Print result
 	print("\tBLENDSHAPES")#
-	for item in result:
-		if (len(item) == 0):
-			continue
-		print(item[0])#
+	for model in modelList:
+		result.append(GetBlendshapeNodeFromModel(model))
 	
 	return result
 def GetBlendshapeNodesFromSelected(*args):
@@ -64,7 +70,7 @@ def GetBlendshapeNodesFromSelected(*args):
 	if (selectedList == None):
 		return None
 
-	return GetBlendshapeNodesFromList(selectedList)
+	return GetBlendshapeNodesFromModelList(selectedList)
 
 def GetBlendshapeWeights(blendshape):
 	# Check blendshape node
@@ -72,35 +78,37 @@ def GetBlendshapeWeights(blendshape):
 		return None
 	
 	#  Get blendshape weights
-	blendshapeNode = blendshape[0]
-	weights = cmds.listAttr(blendshapeNode + ".weight", multi = True)
+	blendshapeNode = blendshape
+	weightsNames = cmds.listAttr(blendshapeNode + ".weight", multi = True)
 
-	result = []
+	weightsNamesFull = []
 
 	# Print result
-	print("\tBLENDSHAPE \"{0}\" WEIGHTS".format(blendshape[0]))#
-	for weight in weights:
-		result.append(blendshapeNode + "." + weight)
-		print(result[-1])#
+	print("\tBLENDSHAPE \"{0}\" WEIGHTS".format(blendshape))#
+	for weight in weightsNames:
+		weightsNamesFull.append(blendshapeNode + "." + weight)
+		print(weightsNamesFull[-1])#
 	
-	return result
+	return weightsNamesFull, weightsNames
 def GetBlendshapeWeightsFromSelected(*args):
 	blendshapes = GetBlendshapeNodesFromSelected()
 	if (blendshapes == None):
 		return None
 
-	result = []
+	weightsNamesFull = []
+	weightsNames = []
 
 	for blendshape in blendshapes:
-		result.append(GetBlendshapeWeights(blendshape))
+		weightsNamesFull.append(GetBlendshapeWeights(blendshape)[0])
+		weightsNames.append(GetBlendshapeWeights(blendshape)[1])
 	
-	return result
+	return weightsNamesFull, weightsNames
 
 def ZeroBlendshapeWeights(weights):
 	for weight in weights:
 		cmds.setAttr(weight, 0)
 def ZeroBlendshapeWeightsOnSelected(*args):
-	weights = GetBlendshapeWeightsFromSelected()
+	weights = GetBlendshapeWeightsFromSelected()[0]
 	if (weights == None):
 		return
 	
