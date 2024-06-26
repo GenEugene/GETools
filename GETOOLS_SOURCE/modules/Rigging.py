@@ -27,6 +27,7 @@ from functools import partial
 
 from ..modules import Settings
 
+from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Constraints
 from ..utils import Deformers
@@ -123,13 +124,22 @@ class Rigging:
 		
 		
 		# DEFORMERS
-		layoutBlendshapes = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "DEFORMERS", collapsable = True, backgroundColor = Settings.frames2Color)
-		layoutColumnBlendshapes = cmds.columnLayout(parent = layoutBlendshapes, adjustableColumn = True)
+		layoutDeformers = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "DEFORMERS", collapsable = True, backgroundColor = Settings.frames2Color)
+		layoutColumnDeformers = cmds.columnLayout(parent = layoutDeformers, adjustableColumn = True)
 		#
 		countOffsets = 2
-		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumnDeformers, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
 		cmds.button(label = "Wraps Create", command = Deformers.WrapsCreateOnSelected, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.wraps)
 		cmds.button(label = "Blendshapes Projecting", command = Deformers.BlendshapesExtraction, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.blendshapeProjection)
+		
+
+		# BLENDSHAPES
+		layoutBlendshapes = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BLENDSHAPES", collapsable = True, backgroundColor = Settings.frames2Color)
+		layoutColumnBlendshapes = cmds.columnLayout(parent = layoutBlendshapes, adjustableColumn = True)
+		#
+		countOffsets = 1
+		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.button(label = "Zero Blendshapes Weights", command = Blendshapes.ZeroBlendshapeWeightsOnSelected)
 
 
 	# CONSTRAINTS

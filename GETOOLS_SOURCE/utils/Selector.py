@@ -24,12 +24,12 @@
 
 import maya.cmds as cmds
 
-def MultipleObjects(minimalCount=1, transformsOnly=True):
+def MultipleObjects(minimalCount=1, transformsOnly=True, shapes=False):
 	# Save selected objects to variable
 	if (transformsOnly):
-		selectedList = cmds.ls(selection = True, type = "transform", shapes = False)
+		selectedList = cmds.ls(selection = True, type = "transform", shapes = shapes)
 	else:
-		selectedList = cmds.ls(selection = True, shapes = False)
+		selectedList = cmds.ls(selection = True, shapes = shapes)
 
 	# Check selected objects
 	if (len(selectedList) < minimalCount):

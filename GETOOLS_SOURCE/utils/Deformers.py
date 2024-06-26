@@ -99,8 +99,7 @@ def BlendshapesExtraction(*args): # TODO separate from Wraps logic
 	sourceDuplicate = result[2]
 
 	# Get blendshape node
-	# print("### {0}".format(cmds.listRelatives(sourceMesh, shapes = True))) # HACK for debug shape issue
-	shape = cmds.listRelatives(sourceMesh, shapes = True)[1] # FIXME weak solution, index is not always the same and sometimes just 1 element
+	shape = cmds.listRelatives(sourceMesh, shapes = True)[1] # FIXME replace by new Blendshapes methods
 	blendshapeSource = cmds.listConnections(shape, type = "blendShape")
 
 	# Check blendshape node

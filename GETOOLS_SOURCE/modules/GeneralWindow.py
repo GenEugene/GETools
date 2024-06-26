@@ -31,6 +31,7 @@ from ..modules import Rigging
 from ..modules import Settings
 from ..modules import Tools
 
+from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Install
 from ..utils import Layers
@@ -109,6 +110,9 @@ class GeneralWindow:
 		cmds.menuItem(label = "Print channel box selected attributes", command = PrintChannelBoxAttributes, image = Icons.text)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette, image = Icons.color)
+		cmds.menuItem(dividerLabel = "Blendshapes", divider = True)
+		cmds.menuItem(label = "Print Blendshapes Base Nodes", command = Blendshapes.GetBlendshapeNodesFromSelected, image = Icons.text)
+		cmds.menuItem(label = "Print Blendshapes Names", command = Blendshapes.GetBlendshapeWeightsFromSelected, image = Icons.text)
 		
 		self.LayoutMenuInstall()
 
