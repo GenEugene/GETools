@@ -111,11 +111,11 @@ def ZeroBlendshapeWeights(weights):
 	for weight in weights:
 		cmds.setAttr(weight, 0)
 def ZeroBlendshapeWeightsOnSelected(*args):
-	weights = GetBlendshapeWeightsFromSelected()[0]
+	weights = GetBlendshapeWeightsFromSelected()
 	if (weights == None):
 		return
 	
-	for item in weights:
+	for item in weights[0]:
 		if (item == None):
 			continue
 		ZeroBlendshapeWeights(item)
