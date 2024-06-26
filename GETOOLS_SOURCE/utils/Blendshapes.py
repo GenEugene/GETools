@@ -100,7 +100,7 @@ def GetBlendshapeWeightsFromSelected(*args):
 
 	for blendshape in blendshapes:
 		weightsRaw = GetBlendshapeWeights(blendshape)
-		if(weightsRaw == None):
+		if (weightsRaw == None):
 			continue
 		weightsNamesFull.append(weightsRaw[0])
 		weightsNames.append(weightsRaw[1])
