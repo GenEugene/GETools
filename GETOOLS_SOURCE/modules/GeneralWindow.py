@@ -39,6 +39,7 @@ from ..utils import MayaSettings
 from ..utils import MotionTrail
 from ..utils import Scene
 from ..utils import Selector
+from ..utils import Toggles
 
 from ..values import Icons
 
@@ -96,6 +97,9 @@ class GeneralWindow:
 		cmds.menuItem(label = "Dock Left", command = partial(self.DockToSide, Settings.dockAllowedAreas[0]), image = Icons.arrowLeft)
 		cmds.menuItem(label = "Dock Right", command = partial(self.DockToSide, Settings.dockAllowedAreas[1]), image = Icons.arrowRight)
 		cmds.menuItem(label = "Undock", command = self.DockOff, image = Icons.arrowDown)
+		
+		cmds.menu(label = "Toggles", tearOff = True)
+		cmds.menuItem(label = "Joints", command = Toggles.ToggleJoints)
 
 		def ColorsPalette(*args):
 			colorCalibration = Colors.ColorsPalette()
@@ -113,7 +117,7 @@ class GeneralWindow:
 		cmds.menuItem(dividerLabel = "Blendshapes", divider = True)
 		cmds.menuItem(label = "Print Blendshapes Base Nodes", command = Blendshapes.GetBlendshapeNodesFromSelected, image = Icons.text)
 		cmds.menuItem(label = "Print Blendshapes Names", command = Blendshapes.GetBlendshapeWeightsFromSelected, image = Icons.text)
-		
+
 		self.LayoutMenuInstall()
 
 		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
