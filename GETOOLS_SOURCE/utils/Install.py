@@ -279,15 +279,17 @@ blendshapes.ZeroBlendshapeWeightsOnSelected()\
 	runMotionTrailCreate ='''\
 {0}
 mtrail.Create()\
-'''.format(pathLocators)
+'''.format(pathMotionTrail)
+
 	runMotionTrailSelect ='''\
 {0}
 mtrail.Select()\
-'''.format(pathLocators)
+'''.format(pathMotionTrail)
+
 	runMotionTrailDelete ='''\
 {0}
 mtrail.Delete()\
-'''.format(pathLocators)
+'''.format(pathMotionTrail)
 
 
 # LOGIC
