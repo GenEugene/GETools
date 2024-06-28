@@ -105,7 +105,7 @@ def WrapConvertToBlendshapes(blendshape): # TODO create single conversion logic 
 def WrapsConvertFromSelected(*args): # TODO
 	pass
 
-def WrapsDelete(wraps):
+def WrapsDelete(wraps): # TODO move out from current script, looks like just a regular delete method
 	for wrap in wraps:
 		cmds.delete(wrap)
 

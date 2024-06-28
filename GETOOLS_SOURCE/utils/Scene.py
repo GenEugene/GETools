@@ -29,7 +29,7 @@ def Reload(*args):
 	if(currentScene):
 		cmds.file(currentScene, open = True, force = True)
 	else:
-		cmds.file(newFile = 1, force = 1)
+		cmds.file(newFile = True, force = True)
 
 def ExitMaya(*args):
 	cmds.quit(force = True)
