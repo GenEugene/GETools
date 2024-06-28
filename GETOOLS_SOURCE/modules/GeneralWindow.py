@@ -188,6 +188,14 @@ class GeneralWindow:
 		# cmds.menuItem(label = "Create Reset Button", command = partial(Install.ToShelf_CreateResetButton, self.directory), image = Icons.reset)
 		cmds.setParent('..', menu = True)
 		
+		cmds.menuItem(dividerLabel = "TOGGLE", divider = True)
+		###
+		cmds.menuItem(subMenu = True, label = "Size", tearOff = True)
+		cmds.menuItem(label = "Joints", command = partial(Install.ToShelf_ToggleJoints, self.directory), image = Icons.joint)
+		# cmds.menuItem(label = "Meshes", command = partial(Install.ToShelf_ToggleJoints, self.directory))
+		# cmds.menuItem(label = "Nurbs", command = partial(Install.ToShelf_ToggleJoints, self.directory))
+		cmds.setParent('..', menu = True)
+		
 		cmds.menuItem(dividerLabel = "TOOLS - Locators", divider = True)
 		###
 		cmds.menuItem(subMenu = True, label = "Size", tearOff = True)

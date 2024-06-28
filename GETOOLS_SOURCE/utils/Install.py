@@ -37,6 +37,8 @@ class Presets: # TODO simplify
 	"import GETOOLS_SOURCE.utils.Scene as scene"
 	pathInstall =\
 	"import GETOOLS_SOURCE.utils.Install as install"
+	pathToggles =\
+	"import GETOOLS_SOURCE.utils.Toggles as toggles"
 	pathBaker =\
 	"import GETOOLS_SOURCE.utils.Baker as baker"
 	pathSelector =\
@@ -90,6 +92,13 @@ selector.SelectHierarchy()\
 {0}
 install.CreateResetButton()\
 '''.format(pathInstall)
+
+
+	# TOGGLES
+	runToggleJoints ='''\
+{0}
+toggles.ToggleJoints()\
+'''.format(pathToggles)
 
 
 	# LOCATORS
@@ -336,6 +345,10 @@ def ToShelf_SelectHierarchy(path, *args):
 	MoveToShelf(path, Presets.runSelectHierarchy, "SelectHierarchy", "SelHi")
 def ToShelf_CreateResetButton(path, *args):
 	MoveToShelf(path, Presets.runCreateResetButton, "CreateResetButton", "Reset")
+
+# TOGGLES
+def ToShelf_ToggleJoints(path, *args):
+	MoveToShelf(path, Presets.runToggleJoints, "ToggleJoints", "tglJoints")
 
 # LOCATORS
 def ToShelf_LocatorsSizeScale50(path, *args):
