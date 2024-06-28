@@ -35,7 +35,7 @@ dropoff = 4
 smoothness = 0
 
 
-def WrapsCreate(elements):
+def WrapsCreateOnList(elements):
 	if (len(elements) < 2):
 		cmds.warning("Need at least 2 objects for Wrap")
 		return
@@ -47,7 +47,7 @@ def WrapsCreate(elements):
 		if (i >= len(elements) - 1):
 			break
 		
-		sourceTransform = elements[-1]
+		# sourceTransform = elements[-1]
 		sourceDuplicateShape = cmds.listRelatives(sourceDuplicate, shapes = True, noIntermediate = True)[0]
 		sourceShape = cmds.listRelatives(elements[-1], shapes = True, noIntermediate = True)[0]
 		targetShape = cmds.listRelatives(elements[i], shapes = True, noIntermediate = True)[0]
@@ -76,16 +76,40 @@ def WrapsCreateOnSelected(*args):
 		return
 
 	cmds.select(clear = True)
-	wraps = WrapsCreate(selectedList)
+	wraps = WrapsCreateOnList(selectedList)
 	cmds.select(selectedList, replace = True)
 
 	return selectedList, wraps[0], wraps[1]
+
+def WrapConvertToBlendshapes(blendshape): # TODO create single conversion logic from Wrap to Blendshapes
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return
+
+	# Get blendshape nodes
+	relatives = cmds.listRelatives(selectedList[0])
+	wraps = []
+
+	for relative in relatives:
+		connections = cmds.listConnections(relative, type = "wrap")
+		if (connections == None):
+			continue
+
+		for connection in connections:
+			if connection not in wraps:
+				wraps.append(connection)
+	
+	print(wraps)
+	
+def WrapsConvertFromSelected(*args): # TODO
+	pass
 
 def WrapsDelete(wraps):
 	for wrap in wraps:
 		cmds.delete(wrap)
 
-def BlendshapesExtraction(*args):
+def BlendshapesReconstruction(*args): # TODO simplify function, split to smaller blocks
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(2)
 	if (selectedList == None):
@@ -139,9 +163,4 @@ def BlendshapesExtraction(*args):
 			cmds.delete(duplicatesList[x][y][0])
 	
 	cmds.select(selectedList, replace = True)
-
-def RunBlendshapesLogic(*args): # TODO combine wraps and blendshapes logic
-	# result = WrapsCreateOnSelected()
-	# BlendshapesExtraction()
-	pass
 

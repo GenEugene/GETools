@@ -350,11 +350,13 @@ class GeneralWindow:
 		#
 		cmds.menuItem(label = "Copy Skin Weights From Last Selected", command = partial(Install.ToShelf_CopySkin, self.directory), image = Icons.copy)
 		
-		cmds.menuItem(dividerLabel = "RIGGING - Deformers", divider = True)
+		cmds.menuItem(dividerLabel = "RIGGING - Blendshapes", divider = True)
 		###
 		# cmds.menuItem(subMenu = True, label = "Rotate Order")
 		cmds.menuItem(label = "Wraps Create", command = partial(Install.ToShelf_WrapsCreate, self.directory), image = Icons.wrap)
-		cmds.menuItem(label = "Blendshapes Projecting", command = partial(Install.ToShelf_BlendshapesProjecting, self.directory), image = Icons.blendshape)
+		# cmds.menuItem(label = "Wraps Convert", command = partial(Install.ToShelf_WrapsCreate, self.directory), image = Icons.wrap) # TODO
+		cmds.menuItem(label = "Reconstruct", command = partial(Install.ToShelf_BlendshapesReconstruct, self.directory), image = Icons.blendshape)
+		cmds.menuItem(label = "Zero Weights", command = partial(Install.ToShelf_BlendshapesZeroWeights, self.directory), image = Icons.blendshape)
 		cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(dividerLabel = "EXPERIMENTAL", divider = True)

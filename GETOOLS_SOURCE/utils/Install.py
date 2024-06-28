@@ -45,6 +45,8 @@ class Presets: # TODO simplify
 	"import GETOOLS_SOURCE.utils.Other as other"
 	pathDeformers =\
 	"import GETOOLS_SOURCE.utils.Deformers as deformers"
+	pathBlendshapes =\
+	"import GETOOLS_SOURCE.utils.Blendshapes as blendshapes"
 	pathConstraints =\
 	"import GETOOLS_SOURCE.utils.Constraints as constraints"
 	pathLocators =\
@@ -257,10 +259,20 @@ skinning.CopySkinWeightsFromLastMesh()\
 deformers.WrapsCreateOnSelected()\
 '''.format(pathDeformers)
 
-	runBlendshapesProjecting ='''\
+# 	runWrapsConvert ='''\ # TODO
+# {0}
+# deformers.WrapsConvertFromSelected()\
+# '''.format(pathDeformers)
+
+	runBlendshapesReconstruct ='''\
 {0}
-deformers.BlendshapesProjecting()\
+deformers.BlendshapesReconstruction()\
 '''.format(pathDeformers)
+
+	runBlendshapesZeroWeights ='''\
+{0}
+blendshapes.ZeroBlendshapeWeightsOnSelected()\
+'''.format(pathBlendshapes)
 
 
 	# EXPERIMENTAL
@@ -466,8 +478,12 @@ def ToShelf_CopySkin(path, *args):
 
 def ToShelf_WrapsCreate(path, *args):
 	MoveToShelf(path, Presets.runWrapsCreate, "WrapsCreate", "WrapsCreate")
-def ToShelf_BlendshapesProjecting(path, *args):
-	MoveToShelf(path, Presets.runBlendshapesProjecting, "BSProjecting", "BSProjecting")
+# def ToShelf_WrapsConvert(path, *args): # TODO
+# 	MoveToShelf(path, Presets.runWrapsConvert, "WrapsConvert", "WrapsConvert")
+def ToShelf_BlendshapesReconstruct(path, *args):
+	MoveToShelf(path, Presets.runBlendshapesReconstruct, "BSReconstruct", "BSReconstruct")
+def ToShelf_BlendshapesZeroWeights(path, *args):
+	MoveToShelf(path, Presets.runBlendshapesZeroWeights, "BSZeroWeights", "BSZeroWeights")
 
 
 # MOTION TRAIL
