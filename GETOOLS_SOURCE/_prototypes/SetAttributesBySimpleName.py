@@ -4,7 +4,7 @@ def FindAllObjects(objName):
 	objects = cmds.ls(type = "transform", long = True)
 	result = []
 	for item in objects:
-		if(item.endswith(objName)):
+		if(item.endswith("|" + objName) or item.endswith(":" + objName)):
 			result.append(item)
 	return result
 
