@@ -59,7 +59,36 @@ class Presets:
 	runCreateResetButton = pathInstall + "\n" + "install.CreateResetButton()"
 
 	# TOGGLES
+	# runToggleAllObjects = pathToggles + "\n" + "toggles.ToggleAllObjects()"
+	runToggleCameras = pathToggles + "\n" + "toggles.ToggleCameras()"
+	runToggleControlVertices = pathToggles + "\n" + "toggles.ToggleControlVertices()"
+	runToggleDeformers = pathToggles + "\n" + "toggles.ToggleDeformers()"
+	runToggleDimensions = pathToggles + "\n" + "toggles.ToggleDimensions()"
+	runToggleDynamicConstraints = pathToggles + "\n" + "toggles.ToggleDynamicConstraints()"
+	runToggleDynamics = pathToggles + "\n" + "toggles.ToggleDynamics()"
+	runToggleFluids = pathToggles + "\n" + "toggles.ToggleFluids()"
+	runToggleFollicles = pathToggles + "\n" + "toggles.ToggleFollicles()"
+	runToggleGrid = pathToggles + "\n" + "toggles.ToggleGrid()"
+	runToggleHairSystems = pathToggles + "\n" + "toggles.ToggleHairSystems()"
+	runToggleHandles = pathToggles + "\n" + "toggles.ToggleHandles()"
+	runToggleHulls = pathToggles + "\n" + "toggles.ToggleHulls()"
+	runToggleIkHandles = pathToggles + "\n" + "toggles.ToggleIkHandles()"
 	runToggleJoints = pathToggles + "\n" + "toggles.ToggleJoints()"
+	runToggleLights = pathToggles + "\n" + "toggles.ToggleLights()"
+	runToggleLocators = pathToggles + "\n" + "toggles.ToggleLocators()"
+	runToggleManipulators = pathToggles + "\n" + "toggles.ToggleManipulators()"
+	runToggleNCloths = pathToggles + "\n" + "toggles.ToggleNCloths()"
+	runToggleNParticles = pathToggles + "\n" + "toggles.ToggleNParticles()"
+	runToggleNRigids = pathToggles + "\n" + "toggles.ToggleNRigids()"
+	runToggleNurbsCurves = pathToggles + "\n" + "toggles.ToggleNurbsCurves()"
+	runToggleNurbsSurfaces = pathToggles + "\n" + "toggles.ToggleNurbsSurfaces()"
+	runTogglePivots = pathToggles + "\n" + "toggles.TogglePivots()"
+	runTogglePlanes = pathToggles + "\n" + "toggles.TogglePlanes()"
+	runTogglePolymeshes = pathToggles + "\n" + "toggles.TogglePolymeshes()"
+	runToggleShadows = pathToggles + "\n" + "toggles.ToggleShadows()"
+	runToggleStrokes = pathToggles + "\n" + "toggles.ToggleStrokes()"
+	runToggleSubdivSurfaces = pathToggles + "\n" + "toggles.ToggleSubdivSurfaces()"
+	runToggleTextures = pathToggles + "\n" + "toggles.ToggleTextures()"
 
 	# LOCATORS
 	runLocatorsSizeScale = pathLocators + "\n" + "locators.SelectedLocatorsSizeScale"
@@ -150,15 +179,46 @@ def ToShelf_ReloadScene(path, *args):
 def ToShelf_ExitMaya(path, *args):
 	MoveToShelf(path, Presets.runExitMaya, "ExitMaya", "Exit")
 
+
 # UTILS
 def ToShelf_SelectHierarchy(path, *args):
 	MoveToShelf(path, Presets.runSelectHierarchy, "SelectHierarchy", "SelHi")
 def ToShelf_CreateResetButton(path, *args):
 	MoveToShelf(path, Presets.runCreateResetButton, "CreateResetButton", "Reset")
 
+
 # TOGGLES
-def ToShelf_ToggleJoints(path, *args):
-	MoveToShelf(path, Presets.runToggleJoints, "ToggleJoints", "tglJoints")
+# def ToShelf_ToggleAllObjects(path, *args): MoveToShelf(path, Presets.runToggleAllObjects, "ToggleAllObjects", "tglAllObjects")
+def ToShelf_ToggleCameras(path, *args): MoveToShelf(path, Presets.runToggleCameras, "ToggleCameras", "tglCameras")
+def ToShelf_ToggleControlVertices(path, *args): MoveToShelf(path, Presets.runToggleControlVertices, "ToggleControlVertices", "tglControlVertices")
+def ToShelf_ToggleDeformers(path, *args): MoveToShelf(path, Presets.runToggleDeformers, "ToggleDeformers", "tglDeformers")
+def ToShelf_ToggleDimensions(path, *args): MoveToShelf(path, Presets.runToggleDimensions, "ToggleDimensions", "tglDimensions")
+def ToShelf_ToggleDynamicConstraints(path, *args): MoveToShelf(path, Presets.runToggleDynamicConstraints, "ToggleDynamicConstraints", "tglDynamicConstraints")
+def ToShelf_ToggleDynamics(path, *args): MoveToShelf(path, Presets.runToggleDynamics, "ToggleDynamics", "tglDynamics")
+def ToShelf_ToggleFluids(path, *args): MoveToShelf(path, Presets.runToggleFluids, "ToggleFluids", "tglFluids")
+def ToShelf_ToggleFollicles(path, *args): MoveToShelf(path, Presets.runToggleFollicles, "ToggleFollicles", "tglFollicles")
+def ToShelf_ToggleGrid(path, *args): MoveToShelf(path, Presets.runToggleGrid, "ToggleGrid", "tglGrid")
+def ToShelf_ToggleHairSystems(path, *args): MoveToShelf(path, Presets.runToggleHairSystems, "ToggleHairSystems", "tglHairSystems")
+def ToShelf_ToggleHandles(path, *args): MoveToShelf(path, Presets.runToggleHandles, "ToggleHandles", "tglHandles")
+def ToShelf_ToggleHulls(path, *args): MoveToShelf(path, Presets.runToggleHulls, "ToggleHulls", "tglHulls")
+def ToShelf_ToggleIkHandles(path, *args): MoveToShelf(path, Presets.runToggleIkHandles, "ToggleIkHandles", "tglIkHandles")
+def ToShelf_ToggleJoints(path, *args): MoveToShelf(path, Presets.runToggleJoints, "ToggleJoints", "tglJoints")
+def ToShelf_ToggleLights(path, *args): MoveToShelf(path, Presets.runToggleLights, "ToggleLights", "tglLights")
+def ToShelf_ToggleLocators(path, *args): MoveToShelf(path, Presets.runToggleLocators, "ToggleLocators", "tglLocators")
+def ToShelf_ToggleManipulators(path, *args): MoveToShelf(path, Presets.runToggleManipulators, "ToggleManipulators", "tglManipulators")
+def ToShelf_ToggleNCloths(path, *args): MoveToShelf(path, Presets.runToggleNCloths, "ToggleNCloths", "tglNCloths")
+def ToShelf_ToggleNParticles(path, *args): MoveToShelf(path, Presets.runToggleNParticles, "ToggleNParticles", "tglNParticles")
+def ToShelf_ToggleNRigids(path, *args): MoveToShelf(path, Presets.runToggleNRigids, "ToggleNRigids", "tglNRigids")
+def ToShelf_ToggleNurbsCurves(path, *args): MoveToShelf(path, Presets.runToggleNurbsCurves, "ToggleNurbsCurves", "tglNurbsCurves")
+def ToShelf_ToggleNurbsSurfaces(path, *args): MoveToShelf(path, Presets.runToggleNurbsSurfaces, "ToggleNurbsSurfaces", "tglNurbsSurfaces")
+def ToShelf_TogglePivots(path, *args): MoveToShelf(path, Presets.runTogglePivots, "TogglePivots", "tglPivots")
+def ToShelf_TogglePlanes(path, *args): MoveToShelf(path, Presets.runTogglePlanes, "TogglePlanes", "tglPlanes")
+def ToShelf_TogglePolymeshes(path, *args): MoveToShelf(path, Presets.runTogglePolymeshes, "TogglePolymeshes", "tglPolymeshes")
+def ToShelf_ToggleShadows(path, *args): MoveToShelf(path, Presets.runToggleShadows, "ToggleShadows", "tglShadows")
+def ToShelf_ToggleStrokes(path, *args): MoveToShelf(path, Presets.runToggleStrokes, "ToggleStrokes", "tglStrokes")
+def ToShelf_ToggleSubdivSurfaces(path, *args): MoveToShelf(path, Presets.runToggleSubdivSurfaces, "ToggleSubdivSurfaces", "tglSubdivSurfaces")
+def ToShelf_ToggleTextures(path, *args): MoveToShelf(path, Presets.runToggleTextures, "ToggleTextures", "tglTextures")
+
 
 # LOCATORS
 def ToShelf_LocatorsSizeScale50(path, *args):
@@ -196,6 +256,7 @@ def ToShelf_LocatorsRelativeWithoutReverse(path, *args):
 def ToShelf_LocatorsAim(path, name, rotateOnly, aimVector, *args):
 	parameters = "(rotateOnly = {0}, aimVector = {1}, reverse = True)".format(rotateOnly, aimVector)
 	MoveToShelf(path, Presets.runLocatorsAim + parameters, "LocatorsAim{0}".format(name), "Aim {0}".format(name))
+
 
 # BAKING
 def ToShelf_BakeClassic(path, *args):
@@ -251,6 +312,7 @@ def ToShelf_EulerFilter(path, *args):
 def ToShelf_SetInfinity(path, mode, *args):
 	MoveToShelf(path, Presets.runSetInfinity + "({0})".format(mode), "SetInfinity{0}".format(mode), "Inf{0}".format(mode))
 
+
 # TIMELINE
 def ToShelf_SetTimelineMinOut(path, *args):
 	MoveToShelf(path, Presets.runSetTimeline + "(3)", "SetTimelineMinOut", "<<")
@@ -266,6 +328,7 @@ def ToShelf_SetTimelineExpandIn(path, *args):
 	MoveToShelf(path, Presets.runSetTimeline + "(6)", "SetTimelineExpandIn", ">-<")
 def ToShelf_SetTimelineSet(path, *args):
 	MoveToShelf(path, Presets.runSetTimeline + "(7)", "SetTimelineSet", "|<->|")
+
 
 # RIGGING
 def ToShelf_Constraint(path, maintainOffset, parent, point, orient, scale, *args):

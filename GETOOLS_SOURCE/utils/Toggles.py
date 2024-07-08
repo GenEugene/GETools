@@ -24,13 +24,50 @@
 
 import maya.cmds as cmds
 
-# from ..utils import Selector
+from ..values import Enums
 
 
-def ToggleJoints(*args): # TODO make universal tool for other types
+def Toggle(parameter):
 	currentPanel = cmds.getPanel(withFocus = True)
-	checkJoints = cmds.modelEditor(currentPanel, query = True, joints = True)
-	cmds.modelEditor(currentPanel, edit = True, joints = not checkJoints)
+	checkModelEditor = cmds.modelEditor(currentPanel, exists = True)
 
-	print("Panel \"{0}\", Joints {1}".format(currentPanel, not checkJoints))
+	if (not checkModelEditor):
+		cmds.warning("No Model Editor in panel \"{0}\"".format(currentPanel))
+		return
+
+	check = cmds.modelEditor(currentPanel, query = True, **{parameter: True})
+	cmds.modelEditor(currentPanel, edit = True, **{parameter: not check})
+	print("Panel \"{0}\", {1} {2}".format(currentPanel, parameter, not check))
+
+
+# def ToggleAllObjects(*args): Toggle(Enums.ModelEditor.allObjects)
+def ToggleCameras(*args): Toggle(Enums.ModelEditor.cameras)
+def ToggleControlVertices(*args): Toggle(Enums.ModelEditor.controlVertices)
+def ToggleDeformers(*args): Toggle(Enums.ModelEditor.deformers)
+def ToggleDimensions(*args): Toggle(Enums.ModelEditor.dimensions)
+def ToggleDynamicConstraints(*args): Toggle(Enums.ModelEditor.dynamicConstraints)
+def ToggleDynamics(*args): Toggle(Enums.ModelEditor.dynamics)
+def ToggleFluids(*args): Toggle(Enums.ModelEditor.fluids)
+def ToggleFollicles(*args): Toggle(Enums.ModelEditor.follicles)
+def ToggleGrid(*args): Toggle(Enums.ModelEditor.grid)
+def ToggleHairSystems(*args): Toggle(Enums.ModelEditor.hairSystems)
+def ToggleHandles(*args): Toggle(Enums.ModelEditor.handles)
+def ToggleHulls(*args): Toggle(Enums.ModelEditor.hulls)
+def ToggleIkHandles(*args): Toggle(Enums.ModelEditor.ikHandles)
+def ToggleJoints(*args): Toggle(Enums.ModelEditor.joints)
+def ToggleLights(*args): Toggle(Enums.ModelEditor.lights)
+def ToggleLocators(*args): Toggle(Enums.ModelEditor.locators)
+def ToggleManipulators(*args): Toggle(Enums.ModelEditor.manipulators)
+def ToggleNCloths(*args): Toggle(Enums.ModelEditor.nCloths)
+def ToggleNParticles(*args): Toggle(Enums.ModelEditor.nParticles)
+def ToggleNRigids(*args): Toggle(Enums.ModelEditor.nRigids)
+def ToggleNurbsCurves(*args): Toggle(Enums.ModelEditor.nurbsCurves)
+def ToggleNurbsSurfaces(*args): Toggle(Enums.ModelEditor.nurbsSurfaces)
+def TogglePivots(*args): Toggle(Enums.ModelEditor.pivots)
+def TogglePlanes(*args): Toggle(Enums.ModelEditor.planes)
+def TogglePolymeshes(*args): Toggle(Enums.ModelEditor.polymeshes)
+def ToggleShadows(*args): Toggle(Enums.ModelEditor.shadows)
+def ToggleStrokes(*args): Toggle(Enums.ModelEditor.strokes)
+def ToggleSubdivSurfaces(*args): Toggle(Enums.ModelEditor.subdivSurfaces)
+def ToggleTextures(*args): Toggle(Enums.ModelEditor.textures)
 
