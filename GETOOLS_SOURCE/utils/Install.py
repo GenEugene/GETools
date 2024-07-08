@@ -30,275 +30,85 @@ from ..utils import Shelf
 
 from ..values import Enums
 
-class Presets: # TODO simplify
-	pathGeneral =\
-	"import GETOOLS_SOURCE.modules.GeneralWindow as gtwindow"
-	pathScene =\
-	"import GETOOLS_SOURCE.utils.Scene as scene"
-	pathInstall =\
-	"import GETOOLS_SOURCE.utils.Install as install"
-	pathToggles =\
-	"import GETOOLS_SOURCE.utils.Toggles as toggles"
-	pathBaker =\
-	"import GETOOLS_SOURCE.utils.Baker as baker"
-	pathSelector =\
-	"import GETOOLS_SOURCE.utils.Selector as selector"
-	pathOther =\
-	"import GETOOLS_SOURCE.utils.Other as other"
-	pathDeformers =\
-	"import GETOOLS_SOURCE.utils.Deformers as deformers"
-	pathBlendshapes =\
-	"import GETOOLS_SOURCE.utils.Blendshapes as blendshapes"
-	pathConstraints =\
-	"import GETOOLS_SOURCE.utils.Constraints as constraints"
-	pathLocators =\
-	"import GETOOLS_SOURCE.utils.Locators as locators"
-	pathTimeline =\
-	"import GETOOLS_SOURCE.utils.Timeline as timeline"
-	pathAnimation =\
-	"import GETOOLS_SOURCE.utils.Animation as animation"
-	pathSkinning =\
-	"import GETOOLS_SOURCE.utils.Skinning as skinning"
-	pathMotionTrail =\
-	"import GETOOLS_SOURCE.utils.MotionTrail as mtrail"
-
+class Presets:
+	pathGeneral = "import GETOOLS_SOURCE.modules.GeneralWindow as gtwindow"
+	pathAnimation = "import GETOOLS_SOURCE.utils.Animation as animation"
+	pathBaker = "import GETOOLS_SOURCE.utils.Baker as baker"
+	pathBlendshapes = "import GETOOLS_SOURCE.utils.Blendshapes as blendshapes"
+	pathConstraints = "import GETOOLS_SOURCE.utils.Constraints as constraints"
+	pathDeformers = "import GETOOLS_SOURCE.utils.Deformers as deformers"
+	pathInstall = "import GETOOLS_SOURCE.utils.Install as install"
+	pathLocators = "import GETOOLS_SOURCE.utils.Locators as locators"
+	pathMotionTrail = "import GETOOLS_SOURCE.utils.MotionTrail as mtrail"
+	pathOther = "import GETOOLS_SOURCE.utils.Other as other"
+	pathScene = "import GETOOLS_SOURCE.utils.Scene as scene"
+	pathSelector = "import GETOOLS_SOURCE.utils.Selector as selector"
+	pathSkinning = "import GETOOLS_SOURCE.utils.Skinning as skinning"
+	pathTimeline = "import GETOOLS_SOURCE.utils.Timeline as timeline"
+	pathToggles = "import GETOOLS_SOURCE.utils.Toggles as toggles"
 
 	# GENERAL
-	runGeneralWindow ='''\
-{0}
-gtwindow.GeneralWindow().RUN_DOCKED()\
-'''.format(pathGeneral)
-
+	runGeneralWindow = pathGeneral + "\n" + "gtwindow.GeneralWindow().RUN_DOCKED()"
 
 	# FILE
-	runSceneReload ='''\
-{0}
-scene.Reload()\
-'''.format(pathScene)
-
-	runExitMaya ='''\
-{0}
-scene.ExitMaya()\
-'''.format(pathScene)
-
+	runSceneReload = pathScene + "\n" + "scene.Reload()"
+	runExitMaya = pathScene + "\n" + "scene.ExitMaya()"
 
 	# UTILS
-	runSelectHierarchy ='''\
-{0}
-selector.SelectHierarchy()\
-'''.format(pathSelector)
-	
-	runCreateResetButton ='''\
-{0}
-install.CreateResetButton()\
-'''.format(pathInstall)
-
+	runSelectHierarchy = pathSelector + "\n" + "selector.SelectHierarchy()"
+	runCreateResetButton = pathInstall + "\n" + "install.CreateResetButton()"
 
 	# TOGGLES
-	runToggleJoints ='''\
-{0}
-toggles.ToggleJoints()\
-'''.format(pathToggles)
-
+	runToggleJoints = pathToggles + "\n" + "toggles.ToggleJoints()"
 
 	# LOCATORS
-	runLocatorsSizeScale ='''\
-{0}
-locators.SelectedLocatorsSizeScale\
-'''.format(pathLocators)
-
-	runLocatorsSizeSet ='''\
-{0}
-locators.SelectedLocatorsSizeSet\
-'''.format(pathLocators)
-
-	runLocatorCreate ='''\
-{0}
-locators.Create()\
-'''.format(pathLocators)
-
-	runLocatorsMatch ='''\
-{0}
-locators.CreateOnSelected(constraint = False)\
-'''.format(pathLocators)
-
-	runLocatorsParent ='''\
-{0}
-locators.CreateOnSelected(constraint = True)\
-'''.format(pathLocators)
-
-	runLocatorsPin ='''\
-{0}
-locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = True, constrainRotate = True)\
-'''.format(pathLocators)
-
-	runLocatorsPinWithoutReverse ='''\
-{0}
-locators.CreateOnSelected(constraint = True, bake = True)\
-'''.format(pathLocators)
-
-	runLocatorsPinPos ='''\
-{0}
-locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = True, constrainRotate = False)\
-'''.format(pathLocators)
-
-	runLocatorsPinRot ='''\
-{0}
-locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = False, constrainRotate = True)\
-'''.format(pathLocators)
-
-	runLocatorsRelative ='''\
-{0}
-locators.CreateAndBakeAsChildrenFromLastSelected(constraintReverse = True, skipLastReverse = False)\
-'''.format(pathLocators)
-
-	runLocatorsRelativeSkipLast ='''\
-{0}
-locators.CreateAndBakeAsChildrenFromLastSelected(constraintReverse = True)\
-'''.format(pathLocators)
-
-	runLocatorsRelativeWithoutReverse ='''\
-{0}
-locators.CreateAndBakeAsChildrenFromLastSelected()\
-'''.format(pathLocators)
-
-	runLocatorsAim ='''\
-{0}
-locators.CreateOnSelectedAim\
-'''.format(pathLocators)
-
+	runLocatorsSizeScale = pathLocators + "\n" + "locators.SelectedLocatorsSizeScale"
+	runLocatorsSizeSet = pathLocators + "\n" + "locators.SelectedLocatorsSizeSet"
+	runLocatorCreate = pathLocators + "\n" + "locators.Create()"
+	runLocatorsMatch = pathLocators + "\n" + "locators.CreateOnSelected(constraint = False)"
+	runLocatorsParent = pathLocators + "\n" + "locators.CreateOnSelected(constraint = True)"
+	runLocatorsPin = pathLocators + "\n" + "locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = True, constrainRotate = True)"
+	runLocatorsPinWithoutReverse = pathLocators + "\n" + "locators.CreateOnSelected(constraint = True, bake = True)"
+	runLocatorsPinPos = pathLocators + "\n" + "locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = True, constrainRotate = False)"
+	runLocatorsPinRot = pathLocators + "\n" + "locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = False, constrainRotate = True)"
+	runLocatorsRelative = pathLocators + "\n" + "locators.CreateAndBakeAsChildrenFromLastSelected(constraintReverse = True, skipLastReverse = False)"
+	runLocatorsRelativeSkipLast = pathLocators + "\n" + "locators.CreateAndBakeAsChildrenFromLastSelected(constraintReverse = True)"
+	runLocatorsRelativeWithoutReverse = pathLocators + "\n" + "locators.CreateAndBakeAsChildrenFromLastSelected()"
+	runLocatorsAim = pathLocators + "\n" + "locators.CreateOnSelectedAim"
 
 	# BAKING
-	runBakeClassic ='''\
-{0}
-baker.BakeSelected\
-'''.format(pathBaker)
-
-	runBakeCustom ='''\
-{0}
-baker.BakeSelected\
-'''.format(pathBaker)
-
-	runBakeByLast ='''\
-{0}
-baker.BakeSelectedByLastObject\
-'''.format(pathBaker)
-
-	runBakeByWorld ='''\
-{0}
-baker.BakeSelectedByWorld\
-'''.format(pathBaker)
-
+	runBakeClassic = pathBaker + "\n" + "baker.BakeSelected"
+	runBakeCustom = pathBaker + "\n" + "baker.BakeSelected"
+	runBakeByLast = pathBaker + "\n" + "baker.BakeSelectedByLastObject"
+	runBakeByWorld = pathBaker + "\n" + "baker.BakeSelectedByWorld"
 
 	# ANIMATION
-	runAnimOffset ='''\
-{0}
-animation.OffsetObjects\
-'''.format(pathAnimation)
-
-	runDeleteKeys ='''\
-{0}
-animation.DeleteKeys(True)\
-'''.format(pathAnimation)
-
-	runDeleteNonkeyable ='''\
-{0}
-animation.DeleteKeysNonkeyable()\
-'''.format(pathAnimation)
-
-	runDeleteStatic ='''\
-{0}
-animation.DeleteStaticCurves()\
-'''.format(pathAnimation)
-
-	runEulerFilter ='''\
-{0}
-animation.FilterCurve()\
-'''.format(pathAnimation)
-
-	runSetInfinity ='''\
-{0}
-animation.SetInfinity\
-'''.format(pathAnimation)
-
-	runSetTimeline ='''\
-{0}
-timeline.SetTime\
-'''.format(pathTimeline)
-
+	runAnimOffset = pathAnimation + "\n" + "animation.OffsetObjects"
+	runDeleteKeys = pathAnimation + "\n" + "animation.DeleteKeys(True)"
+	runDeleteNonkeyable = pathAnimation + "\n" + "animation.DeleteKeysNonkeyable()"
+	runDeleteStatic = pathAnimation + "\n" + "animation.DeleteStaticCurves()"
+	runEulerFilter = pathAnimation + "\n" + "animation.FilterCurve()"
+	runSetInfinity = pathAnimation + "\n" + "animation.SetInfinity"
+	runSetTimeline = pathTimeline + "\n" + "timeline.SetTime"
 
 	# RIGGING
-	runConstraint ='''\
-{0}
-constraints.ConstrainSelectedToLastObject\
-'''.format(pathConstraints)
+	runConstraint = pathConstraints + "\n" + "constraints.ConstrainSelectedToLastObject"
+	runDeleteConstraints = pathConstraints + "\n" + "constraints.DeleteConstraintsOnSelected()"
+	runDisconnectTargets = pathConstraints + "\n" + "constraints.DisconnectTargetsFromConstraintOnSelected()"
+	runRotateOrder = pathOther + "\n" + "other.RotateOrderVisibility"
+	runSegmentScaleCompensateCompensate = pathOther + "\n" + "other.SegmentScaleCompensate"
+	runJointDrawStyle = pathOther + "\n" + "other.JointDrawStyle"
+	runCopySkin = pathSkinning + "\n" + "skinning.CopySkinWeightsFromLastMesh()"
+	runWrapsCreate = pathDeformers + "\n" + "deformers.WrapsCreateOnSelected()"
 
-	runDeleteConstraints ='''\
-{0}
-constraints.DeleteConstraintsOnSelected()\
-'''.format(pathConstraints)
-
-	runDisconnectTargets ='''\
-{0}
-constraints.DisconnectTargetsFromConstraintOnSelected()\
-'''.format(pathConstraints)
-
-	runRotateOrder ='''\
-{0}
-other.RotateOrderVisibility\
-'''.format(pathOther)
-
-	runSegmentScaleCompensateCompensate ='''\
-{0}
-other.SegmentScaleCompensate\
-'''.format(pathOther)
-
-	runJointDrawStyle ='''\
-{0}
-other.JointDrawStyle\
-'''.format(pathOther)
-
-	runCopySkin ='''\
-{0}
-skinning.CopySkinWeightsFromLastMesh()\
-'''.format(pathSkinning)
-
-	runWrapsCreate ='''\
-{0}
-deformers.WrapsCreateOnSelected()\
-'''.format(pathDeformers)
-
-# 	runWrapsConvert ='''\ # TODO
-# {0}
-# deformers.WrapsConvertFromSelected()\
-# '''.format(pathDeformers)
-
-	runBlendshapesReconstruct ='''\
-{0}
-deformers.BlendshapesReconstruction()\
-'''.format(pathDeformers)
-
-	runBlendshapesZeroWeights ='''\
-{0}
-blendshapes.ZeroBlendshapeWeightsOnSelected()\
-'''.format(pathBlendshapes)
-
+	# runWrapsConvert = pathDeformers + "\n" + "ndeformers.WrapsConvertFromSelected()" # TODO
+	runBlendshapesReconstruct = pathDeformers + "\n" + "deformers.BlendshapesReconstruction()"
+	runBlendshapesZeroWeights = pathBlendshapes + "\n" + "blendshapes.ZeroBlendshapeWeightsOnSelected()"
 
 	# EXPERIMENTAL
-	runMotionTrailCreate ='''\
-{0}
-mtrail.Create()\
-'''.format(pathMotionTrail)
-
-	runMotionTrailSelect ='''\
-{0}
-mtrail.Select()\
-'''.format(pathMotionTrail)
-
-	runMotionTrailDelete ='''\
-{0}
-mtrail.Delete()\
-'''.format(pathMotionTrail)
+	runMotionTrailCreate = pathMotionTrail + "\n" + "mtrail.Create()"
+	runMotionTrailSelect = pathMotionTrail + "\n" + "mtrail.Select()"
+	runMotionTrailDelete = pathMotionTrail + "\n" + "mtrail.Delete()"
 
 
 # LOGIC
