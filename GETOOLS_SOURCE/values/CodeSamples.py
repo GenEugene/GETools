@@ -1,5 +1,4 @@
 # GETOOLS is under the terms of the MIT License
-
 # Copyright (c) 2018-2024 Eugene Gataulin (GenEugene). All Rights Reserved.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,11 +20,13 @@
 # SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
+# Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 # Logic in this module is not optimal enough, need manually change path names, methods and parameters.
 
-def GeneralWindow():
+
+def GeneralWindow(): # brackets added method use
 	import GETOOLS_SOURCE.modules.GeneralWindow as gtwindow
-	gtwindow.GeneralWindow().RUN_DOCKED()
+	gtwindow.GeneralWindow().RUN_DOCKED
 
 
 # FILE

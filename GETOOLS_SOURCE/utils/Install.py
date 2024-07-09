@@ -1,5 +1,4 @@
 # GETOOLS is under the terms of the MIT License
-
 # Copyright (c) 2018-2024 Eugene Gataulin (GenEugene). All Rights Reserved.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +20,7 @@
 # SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
-# Logic in this module is not optimal enough, need manually change path names, methods and parameters.
+# Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import os
 import sys
@@ -63,14 +62,12 @@ if "{path}" not in sys.path:
 	sys.path.insert(0, "{path}")\
 """.format(path = path)
 def GetFunctionStringForTool(path, tool, *args):
-	return """\
-import os
-import sys
-
-{path}
-
-{tool}\
-""".format(path = GetFunctionString(path), tool = tool)
+	result = ""
+	result += "import os" + "\n"
+	result += "import sys" + "\n\n"
+	result += GetFunctionString(path) + "\n\n"
+	result += tool
+	return result
 def MoveToShelf(path, tool, label, labelImage, *args):
 	command = GetFunctionStringForTool(path, tool)
 	Shelf.AddToCurrentShelf(

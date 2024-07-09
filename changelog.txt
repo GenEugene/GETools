@@ -1,5 +1,17 @@
 GETools changelog
 
+v1.0.5
+- [UI] Rework Drag and Drop install logic, less hardcode.
+- [UI] Rework Install module, remove hardcode.
+- [UI] Activate tear-off on drop downs.
+- [UTILS] Added printing blendshapes on selected.
+- [TOGGLE] Added toggle buttons for active viewport.
+- [RIGGING] Added wraps creation button.
+- [RIGGING] Added blendshapes projecting button.
+- [RIGGING] Added blendshapes zeroing button.
+- Added some prototypes.
+- Improved various modules and overall quality.
+
 v1.0.4
 - [OVERLAPPY] Reworked Nucleus implementation with non-destructive way.
 - [UTILS] Added simple SelectHierarchy method.
