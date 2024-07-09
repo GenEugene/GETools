@@ -47,7 +47,7 @@ class Attributes:
 
 	visibility = "visibility"
 
-	scaleLocal = ("localScaleX", "localScaleY", "localScaleZ")
+	scaleLocal = ("localScaleX", "localScaleY", "localScaleZ") # used for locators
 
 	rotateOrder = "rotateOrder"
 	startFrame = "startFrame"

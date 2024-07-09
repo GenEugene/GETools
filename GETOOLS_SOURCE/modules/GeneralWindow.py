@@ -460,14 +460,17 @@ class GeneralWindow:
 		cmds.menuItem(label = "Right-Click test")
 		
 		countOffsets = 3
-		cmds.gridLayout(numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-
+		cmds.gridLayout(parent = self.frameExperimental, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Trails Create", command = MotionTrail.Create, backgroundColor = Colors.orange10)
 		cmds.button(label = "Trails Select", command = MotionTrail.Select, backgroundColor = Colors.orange50)
 		cmds.button(label = "Trails Delete", command = MotionTrail.Delete, backgroundColor = Colors.orange100)
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Select", command = MotionTrail.Select)
 		# cmds.menuItem(label = "Delete", command = MotionTrail.Delete)
+		
+		# countOffsets = 1
+		# cmds.gridLayout(parent = self.frameExperimental, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		# cmds.button(label = "Print function", command = Install.TEST_INSPECT)
 		pass
 
 	# WINDOW

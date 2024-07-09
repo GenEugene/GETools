@@ -25,6 +25,7 @@
 import maya.cmds as cmds
 
 from ..utils import Selector
+from ..values import Enums
 
 def CopySkinWeightsFromLastMesh(*args):
 	selected = Selector.MultipleObjects(2)
@@ -46,7 +47,8 @@ def CopySkinWeightsFromLastMesh(*args):
 	cmds.select(selected)
 
 def HasSkinCluster(targetObject):
-	skinClusterDestination = cmds.ls(cmds.listHistory(targetObject), type = "skinCluster")
+	history = cmds.listHistory(targetObject)
+	skinClusterDestination = cmds.ls(history, type = Enums.Types.skinCluster)
 	if (len(skinClusterDestination) == 0):
 		print("{0} doesn't have skinCluster".format(targetObject))
 		return False

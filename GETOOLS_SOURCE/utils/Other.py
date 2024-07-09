@@ -26,6 +26,7 @@ import maya.cmds as cmds
 # import maya.mel as mel
 
 from ..utils import Selector
+from ..values import Enums
 
 def RotateOrderVisibility(on=True, *args):
 	# Check selected objects
@@ -34,7 +35,7 @@ def RotateOrderVisibility(on=True, *args):
 		return
 
 	for item in selectedList:
-		cmds.setAttr(item + ".rotateOrder", channelBox = on)
+		cmds.setAttr(item + "." + Enums.Attributes.rotateOrder, channelBox = on)
 
 def SegmentScaleCompensate(value=0, *args): # TODO refactor
 	# Check selected objects
@@ -42,9 +43,9 @@ def SegmentScaleCompensate(value=0, *args): # TODO refactor
 	if (selectedList == None):
 		return
 
-	selected = cmds.ls(selection = True, type = "joint")
+	selected = cmds.ls(selection = True, type = Enums.Types.joint)
 	for item in selected:
-		cmds.setAttr(item + ".segmentScaleCompensate", value)
+		cmds.setAttr(item + "." + Enums.Attributes.segmentScaleCompensate, value)
 
 def JointDrawStyle(mode=0, *args): # TODO refactor
 	# Check selected objects
@@ -52,12 +53,12 @@ def JointDrawStyle(mode=0, *args): # TODO refactor
 	if (selectedList == None):
 		return
 
-	selected = cmds.ls(selection = True, type = "joint")
+	selected = cmds.ls(selection = True, type = Enums.Types.joint)
 	for item in selected:
-		cmds.setAttr(item + ".drawStyle", mode)
+		cmds.setAttr(item + "." + Enums.Attributes.drawStyle, mode)
 
 def SelectJointsInScene(): # TODO make universal for other types
-	selected = cmds.ls(type = "joint")
+	selected = cmds.ls(type = Enums.Types.joint)
 	cmds.select(selected)
 
 def GetShapeType(element, type):

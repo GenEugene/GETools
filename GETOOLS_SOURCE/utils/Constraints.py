@@ -25,7 +25,6 @@
 import maya.cmds as cmds
 
 from ..utils import Selector
-
 from ..values import Enums
 
 def ConstrainSelectedToLastObject(reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):

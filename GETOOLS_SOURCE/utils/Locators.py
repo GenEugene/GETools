@@ -31,7 +31,6 @@ from ..utils import Other
 from ..utils import Parent
 from ..utils import Selector
 from ..utils import Text
-
 from ..values import Enums
 
 nameBase = "gLoc"

@@ -34,7 +34,6 @@ nameBlendshapePrefix = "bs_"
 dropoff = 4
 smoothness = 0
 
-
 def WrapsCreateOnList(elements):
 	if (len(elements) < 2):
 		cmds.warning("Need at least 2 objects for Wrap")

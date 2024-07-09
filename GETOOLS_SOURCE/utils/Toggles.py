@@ -26,7 +26,6 @@ import maya.cmds as cmds
 
 from ..values import Enums
 
-
 def Toggle(parameter):
 	currentPanel = cmds.getPanel(withFocus = True)
 	checkModelEditor = cmds.modelEditor(currentPanel, exists = True)
@@ -38,7 +37,6 @@ def Toggle(parameter):
 	check = cmds.modelEditor(currentPanel, query = True, **{parameter: True})
 	cmds.modelEditor(currentPanel, edit = True, **{parameter: not check})
 	print("Panel \"{0}\", {1} {2}".format(currentPanel, parameter, not check))
-
 
 # def ToggleAllObjects(*args): Toggle(Enums.ModelEditor.allObjects)
 def ToggleCameras(*args): Toggle(Enums.ModelEditor.cameras)

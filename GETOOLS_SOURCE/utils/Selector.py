@@ -24,10 +24,12 @@
 
 import maya.cmds as cmds
 
+from ..values import Enums
+
 def MultipleObjects(minimalCount=1, transformsOnly=True, shapes=False):
 	# Save selected objects to variable
 	if (transformsOnly):
-		selectedList = cmds.ls(selection = True, type = "transform", shapes = shapes)
+		selectedList = cmds.ls(selection = True, type = Enums.Types.transform, shapes = shapes)
 	else:
 		selectedList = cmds.ls(selection = True, shapes = shapes)
 
@@ -51,7 +53,7 @@ def SelectHierarchyTransforms(*args):
 		return None
 
 	cmds.select(hierarchy = True)
-	list = cmds.ls(selection = True, type = "transform", shapes = False)
+	list = cmds.ls(selection = True, type = Enums.Types.transform, shapes = False)
 	cmds.select(clear = True)
 	
 	for i in range(len(list)):
