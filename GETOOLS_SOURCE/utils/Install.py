@@ -219,10 +219,10 @@ def ToShelf_SetTimelineMaxIn(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(2)", "SetTimelineMaxIn", "->")
 def ToShelf_SetTimelineMaxOut(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(4)", "SetTimelineMaxOut", ">>")
-def ToShelf_SetTimelineExpandOut(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(5)", "SetTimelineExpandOut", "<->")
-def ToShelf_SetTimelineExpandIn(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(6)", "SetTimelineExpandIn", ">-<")
+def ToShelf_SetTimelineFocusOut(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(5)", "SetTimelineFocusOut", "<->")
+def ToShelf_SetTimelineFocusIn(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(6)", "SetTimelineFocusIn", ">-<")
 def ToShelf_SetTimelineSet(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(7)", "SetTimelineSet", "|<->|")
 
