@@ -1,5 +1,17 @@
 GETools changelog
 
+v1.0.5
+- Fixed motion trails to shelf button
+- Decreased hardcode in Drag and Drop logic.
+- Reworked Button Install module.
+- [UI] Added tear-off to sub menus
+- [UTILS] Added toggle buttons for active viewport.
+- [UTILS] Added "Print Blendshapes Base Nodes".
+- [UTILS] Added "Print Blendshapes Names".
+- [RIGGING] Added wraps button.
+- [RIGGING] Added blendshapes reconstruct button.
+- [RIGGING] Added "Zero Blendshapes Weights" button.
+
 v1.0.4
 - [OVERLAPPY] Reworked Nucleus implementation with non-destructive way.
 - [UTILS] Added simple SelectHierarchy method.

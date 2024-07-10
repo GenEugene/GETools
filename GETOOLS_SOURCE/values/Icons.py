@@ -1,5 +1,4 @@
 # GETOOLS is under the terms of the MIT License
-
 # Copyright (c) 2018-2024 Eugene Gataulin (GenEugene). All Rights Reserved.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,6 +20,7 @@
 # SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
+# Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 root = "\\GETOOLS_SOURCE"
 
@@ -35,22 +35,29 @@ arrowDown = "arrowDown.png"
 arrowLeft = "arrowLeft.png"
 arrowRight = "arrowRight.png"
 arrowUp = "arrowUp.png"
+blendshape = "blendShape.png"
 bookmark = "Bookmark.png"
+camera = "camera.svg"
 color = "colorPresetSpectrum.png"
 confirm = "confirm.png"
 constraint = "out_normalConstraint.png"
 copy = "skinWeightCopy.png"
 cursor = "aselect.png"
 delete = "delete.png"
+dynamicConstraint = "dynamicConstraint.svg"
 error = "error.png"
 expandLeft = "leftExpand.png"
 expandRight = "rightExpand.png"
 fileOpen = "fileOpen.png"
 fileSave = "fileSave.png"
 filter = "filter.png"
+follicle = "follicle.svg"
+grid = "grid.svg"
+hairSystem = "hairSystem.svg"
 help = "help.png"
 helpLine = "help_line.png"
 home = "home.png"
+ikHandle = "ikHandle.svg"
 itemDown = "item_down.png"
 itemUp = "item_up.png"
 joint = "kinJoint.png"
@@ -61,24 +68,33 @@ locator = "locator.png"
 lock = "lock.png"
 lockOff = "Lock_OFF.png"
 lockOn = "Lock_ON.png"
+nCloth = "nCloth.svg"
+nRigid = "nRigid.svg"
 nucleus = "nucleus.svg"
+nurbsCurve = "nurbsCurve.svg"
+nurbsSurface = "nurbsSurface.svg"
 off = "hyper_s_OFF.png"
 on = "hyper_s_ON.png"
 particle = "particle.svg"
 pin = "pinItem.png"
 pinInvert = "invertUVpinning.png"
+plane = "plane.png"
 playblast = "playblast.png"
 plus = "addClip.png"
+polyMesh = "polyMesh.png"
 reset = "menuIconReset.png"
 rotateCClockwise = "counterclockwise.png"
 rotateClockwise = "clockwise.png"
 settings = "advancedSettings.png"
+shadows = "Shadows.png"
+stroke = "stroke.svg"
 text = "polyType.png"
 visibleOff = "hidden.png"
 visibleOn = "visible.png"
 wait = "waitBusy.png"
 warning = "warningIcon.svg"
 world = "volumeSphere.png"
+wrap = "wrap.png"
 zoom = "zoom.png"
 
 # TODO add icons sample window

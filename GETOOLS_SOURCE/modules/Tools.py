@@ -1,5 +1,4 @@
 # GETOOLS is under the terms of the MIT License
-
 # Copyright (c) 2018-2024 Eugene Gataulin (GenEugene). All Rights Reserved.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,6 +20,7 @@
 # SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
+# Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import maya.cmds as cmds
 from functools import partial
@@ -96,8 +96,8 @@ class ToolsAnnotations:
 	timelineSetMinIn = "Set minimal inner timeline value"
 	timelineSetMaxIn = "Set maximum inner timeline value"
 	timelineSetMaxOut = "Set maximum outer timeline value"
-	timelineExpandOut = "Expand timeline range to outer range"
-	timelineExpandIn = "Expand timeline range to inner range"
+	timelineFocusOut = "Focus outer timeline range"
+	timelineFocusIn = "Focus inner timeline range"
 	timelineSetRange = "Set timeline inner range on selected range by mouse"
 
 	animationOffset = "Move animation on selected objects in time.\nThe animation will move relative to the index of the selected object.\nThe best way to desync animation.\nWorks with selection in the channel box."
@@ -300,8 +300,8 @@ class Tools:
 		cmds.button(label = "<-", command = partial(Timeline.SetTime, 1), backgroundColor = Colors.green50, annotation = ToolsAnnotations.timelineSetMinIn)
 		cmds.button(label = "->", command = partial(Timeline.SetTime, 2), backgroundColor = Colors.green50, annotation = ToolsAnnotations.timelineSetMaxIn)
 		cmds.button(label = ">>", command = partial(Timeline.SetTime, 4), backgroundColor = Colors.green10, annotation = ToolsAnnotations.timelineSetMaxOut)
-		cmds.button(label = "<->", command = partial(Timeline.SetTime, 5), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineExpandOut)
-		cmds.button(label = ">-<", command = partial(Timeline.SetTime, 6), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineExpandIn)
+		cmds.button(label = "<->", command = partial(Timeline.SetTime, 5), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineFocusOut)
+		cmds.button(label = ">-<", command = partial(Timeline.SetTime, 6), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineFocusIn)
 		cmds.button(label = "|<->|", command = partial(Timeline.SetTime, 7), backgroundColor = Colors.orange50, annotation = ToolsAnnotations.timelineSetRange)
 
 

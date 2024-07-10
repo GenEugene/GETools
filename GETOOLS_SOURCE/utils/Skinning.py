@@ -1,5 +1,4 @@
 # GETOOLS is under the terms of the MIT License
-
 # Copyright (c) 2018-2024 Eugene Gataulin (GenEugene). All Rights Reserved.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,10 +20,12 @@
 # SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
+# Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import maya.cmds as cmds
 
 from ..utils import Selector
+from ..values import Enums
 
 def CopySkinWeightsFromLastMesh(*args):
 	selected = Selector.MultipleObjects(2)
@@ -46,7 +47,8 @@ def CopySkinWeightsFromLastMesh(*args):
 	cmds.select(selected)
 
 def HasSkinCluster(targetObject):
-	skinClusterDestination = cmds.ls(cmds.listHistory(targetObject), type = "skinCluster")
+	history = cmds.listHistory(targetObject)
+	skinClusterDestination = cmds.ls(history, type = Enums.Types.skinCluster)
 	if (len(skinClusterDestination) == 0):
 		print("{0} doesn't have skinCluster".format(targetObject))
 		return False

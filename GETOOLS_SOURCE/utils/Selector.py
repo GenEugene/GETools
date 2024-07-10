@@ -1,5 +1,4 @@
 # GETOOLS is under the terms of the MIT License
-
 # Copyright (c) 2018-2024 Eugene Gataulin (GenEugene). All Rights Reserved.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,15 +20,18 @@
 # SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
+# Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import maya.cmds as cmds
 
-def MultipleObjects(minimalCount=1, transformsOnly=True):
+from ..values import Enums
+
+def MultipleObjects(minimalCount=1, transformsOnly=True, shapes=False):
 	# Save selected objects to variable
 	if (transformsOnly):
-		selectedList = cmds.ls(selection = True, type = "transform", shapes = False)
+		selectedList = cmds.ls(selection = True, type = Enums.Types.transform, shapes = shapes)
 	else:
-		selectedList = cmds.ls(selection = True, shapes = False)
+		selectedList = cmds.ls(selection = True, shapes = shapes)
 
 	# Check selected objects
 	if (len(selectedList) < minimalCount):
@@ -51,7 +53,7 @@ def SelectHierarchyTransforms(*args):
 		return None
 
 	cmds.select(hierarchy = True)
-	list = cmds.ls(selection = True, type = "transform", shapes = False)
+	list = cmds.ls(selection = True, type = Enums.Types.transform, shapes = False)
 	cmds.select(clear = True)
 	
 	for i in range(len(list)):

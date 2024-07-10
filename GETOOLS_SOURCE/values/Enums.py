@@ -1,5 +1,4 @@
 # GETOOLS is under the terms of the MIT License
-
 # Copyright (c) 2018-2024 Eugene Gataulin (GenEugene). All Rights Reserved.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,6 +20,7 @@
 # SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
+# Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 class Types:
 	transform = "transform"
@@ -47,7 +47,7 @@ class Attributes:
 
 	visibility = "visibility"
 
-	scaleLocal = ("localScaleX", "localScaleY", "localScaleZ")
+	scaleLocal = ("localScaleX", "localScaleY", "localScaleZ") # used for locators
 
 	rotateOrder = "rotateOrder"
 	startFrame = "startFrame"
@@ -101,4 +101,37 @@ class Other:
 	"Shape"
 	".overrideEnabled"
 	".overrideDisplayType"
+
+
+class ModelEditor:
+	# allObjects = "allObjects"
+	cameras = "cameras"
+	controlVertices = "controlVertices"
+	deformers = "deformers"
+	dimensions = "dimensions"
+	dynamicConstraints = "dynamicConstraints"
+	dynamics = "dynamics"
+	fluids = "fluids"
+	follicles = "follicles"
+	grid = "grid"
+	hairSystems = "hairSystems"
+	handles = "handles"
+	hulls = "hulls"
+	ikHandles = "ikHandles"
+	joints = "joints"
+	lights = "lights"
+	locators = "locators"
+	manipulators = "manipulators"
+	nCloths = "nCloths"
+	nParticles = "nParticles"
+	nRigids = "nRigids"
+	nurbsCurves = "nurbsCurves"
+	nurbsSurfaces = "nurbsSurfaces"
+	pivots = "pivots"
+	planes = "planes"
+	polymeshes = "polymeshes"
+	shadows = "shadows"
+	strokes = "strokes"
+	subdivSurfaces = "subdivSurfaces"
+	textures = "textures"
 

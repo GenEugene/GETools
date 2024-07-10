@@ -1,5 +1,4 @@
 # GETOOLS is under the terms of the MIT License
-
 # Copyright (c) 2018-2024 Eugene Gataulin (GenEugene). All Rights Reserved.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,15 +20,14 @@
 # SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
+# Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import maya.cmds as cmds
 
 from ..utils import Text
 
-
 LayerBase = "BaseAnimation"
 LayerPrefix = "_layer_"
-
 
 def Create(layerName, parent=LayerBase, *args):
 	# if(cmds.objExists(layerName)):

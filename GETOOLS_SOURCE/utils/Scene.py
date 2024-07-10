@@ -1,5 +1,4 @@
 # GETOOLS is under the terms of the MIT License
-
 # Copyright (c) 2018-2024 Eugene Gataulin (GenEugene). All Rights Reserved.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,6 +20,7 @@
 # SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
+# Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import maya.cmds as cmds
 
@@ -29,7 +29,7 @@ def Reload(*args):
 	if(currentScene):
 		cmds.file(currentScene, open = True, force = True)
 	else:
-		cmds.file(newFile = 1, force = 1)
+		cmds.file(newFile = True, force = True)
 
 def ExitMaya(*args):
 	cmds.quit(force = True)
