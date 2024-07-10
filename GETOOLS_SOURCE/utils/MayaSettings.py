@@ -28,7 +28,14 @@ def HelpPopupActivate(*args): # turn on help popups to show descriptions when bu
 	cmds.help(popupMode = True)
 
 def CachedPlaybackDeactivate(*args):
-	if (cmds.evaluator(query = True, name = "cache")):
-		cmds.evaluator(name = "cache", enable = False)
-		cmds.warning("GETools: Cached Playback turned off")
+	try:
+		evaluators = cmds.evaluator(query = True)
+		if ("cache" in evaluators):
+			if (cmds.evaluator(query = True, name = "cache")):
+				cmds.evaluator(name = "cache", enable = False)
+				cmds.warning("GETools: Cached Playback turned off")
+		else:
+			cmds.warning("GETools: Cache evaluator not found in Maya API")
+	except Exception as exception:
+		cmds.warning("GETools: Error deactivating cached playback - {0}".format(exception))
 
