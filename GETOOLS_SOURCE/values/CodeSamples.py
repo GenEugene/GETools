@@ -23,7 +23,7 @@
 # Logic in this module is not optimal enough, need manually change path names, methods and parameters.
 
 
-def GeneralWindow(): # brackets added method use
+def GeneralWindow(): # brackets added when method used
 	import GETOOLS_SOURCE.modules.GeneralWindow as gtwindow
 	gtwindow.GeneralWindow().RUN_DOCKED
 
@@ -167,7 +167,7 @@ def ToggleTextures():
 
 
 # LOCATORS
-def LocatorsSizeScale(): # brackets added method use
+def LocatorsSizeScale(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Locators as locators
 	locators.SelectedLocatorsSizeScale
 
@@ -215,31 +215,31 @@ def LocatorsRelativeWithoutReverse():
 	import GETOOLS_SOURCE.utils.Locators as locators
 	locators.CreateAndBakeAsChildrenFromLastSelected()
 
-def LocatorsAim(): # brackets added method use
+def LocatorsAim(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Locators as locators
 	locators.CreateOnSelectedAim
 
 
 # BAKINNG
-def BakeClassic(): # brackets added method use
+def BakeClassic(): # brackets added when method used
     import GETOOLS_SOURCE.utils.Baker as baker
     baker.BakeSelected
 
-def BakeCustom(): # brackets added method use
+def BakeCustom(): # brackets added when method used
     import GETOOLS_SOURCE.utils.Baker as baker
     baker.BakeSelected
 
-def BakeByLast(): # brackets added method use
+def BakeByLast(): # brackets added when method used
     import GETOOLS_SOURCE.utils.Baker as baker
     baker.BakeSelectedByLastObject
 
-def BakeByWorld(): # brackets added method use
+def BakeByWorld(): # brackets added when method used
     import GETOOLS_SOURCE.utils.Baker as baker
     baker.BakeSelectedByWorld
 
 
 # ANIMATION
-def AnimOffset(): # brackets added method use
+def AnimOffset(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Animation as animation
 	animation.OffsetObjects
 
@@ -259,17 +259,17 @@ def EulerFilter():
 	import GETOOLS_SOURCE.utils.Animation as animation
 	animation.FilterCurve()
 
-def SetInfinity(): # brackets added method use
+def SetInfinity(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Animation as animation
 	animation.SetInfinity
 
-def SetTimeline(): # brackets added method use
+def SetTimeline(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Timeline as timeline
 	timeline.SetTime
 
 
 # RIGGING
-def Constraint(): # brackets added method use
+def Constraint(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Constraints as constraints
 	constraints.ConstrainSelectedToLastObject
 
@@ -281,15 +281,15 @@ def DisconnectTargets():
 	import GETOOLS_SOURCE.utils.Constraints as constraints
 	constraints.DisconnectTargetsFromConstraintOnSelected()
 
-def RotateOrder(): # brackets added method use
+def RotateOrder(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Other as other
 	other.RotateOrderVisibility
 
-def SegmentScaleCompensate(): # brackets added method use
+def SegmentScaleCompensate(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Other as other
 	other.SegmentScaleCompensate
 
-def JointDrawStyle(): # brackets added method use
+def JointDrawStyle(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Other as other
 	other.JointDrawStyle
 
