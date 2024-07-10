@@ -297,6 +297,10 @@ def CopySkin():
 	import GETOOLS_SOURCE.utils.Skinning as skinning
 	skinning.CopySkinWeightsFromLastMesh()
 
+def SelectSkinnedMeshesOrJoints():
+	import GETOOLS_SOURCE.utils.Skinning as skinning
+	skinning.SelectSkinnedMeshesOrJoints()
+
 def WrapsCreate():
 	import GETOOLS_SOURCE.utils.Deformers as deformers
 	deformers.WrapsCreateOnSelected()

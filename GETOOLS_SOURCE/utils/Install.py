@@ -258,6 +258,8 @@ def ToShelf_JointDrawStyle(path, mode, *args):
 
 def ToShelf_CopySkin(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.CopySkin), "CopySkin", "CopySkin")
+def ToShelf_SelectSkinnedMeshesOrJoints(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SelectSkinnedMeshesOrJoints), "SelectSkinned", "SelectSkinned")
 
 def ToShelf_WrapsCreate(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.WrapsCreate), "WrapsCreate", "WrapsCreate")
