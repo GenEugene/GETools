@@ -16,8 +16,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
@@ -30,7 +29,6 @@ from ..modules import Overlappy
 from ..modules import Rigging
 from ..modules import Settings
 from ..modules import Tools
-
 from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Install
@@ -40,11 +38,10 @@ from ..utils import MotionTrail
 from ..utils import Scene
 from ..utils import Selector
 from ..utils import Toggles
-
 from ..values import Icons
 
 class GeneralWindow:
-	version = "v1.0.5"
+	version = "v1.0.6"
 	name = "GETools"
 	title = name + " " + version
 
