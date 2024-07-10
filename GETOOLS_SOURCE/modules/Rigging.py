@@ -75,16 +75,12 @@ class Rigging:
 		self.checkboxConstraintMaintain = None
 		self.checkboxConstraintOffset = None
 	def UICreate(self, layoutMain):
-		windowWidthMargin = Settings.windowWidthMargin
-		lineHeight = Settings.lineHeight
-
-
 		# CONSTRAINTS
 		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CONSTRAINTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumnConstraints = cmds.columnLayout(parent = layoutConstraints, adjustableColumn = True)
 		#
 		countOffsets = 4
-		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.separator(style = "none")
 		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, annotation = RiggingAnnotations.constraintReverse)
 		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, annotation = RiggingAnnotations.constraintMaintain)
@@ -92,7 +88,7 @@ class Rigging:
 		cmds.separator(style = "none")
 		#
 		countOffsets = 4
-		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Parent", command = self.ConstrainParent, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintParent)
 		cmds.button(label = "Point", command = self.ConstrainPoint, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintPoint)
 		cmds.button(label = "Orient", command = self.ConstrainOrient, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintOrient)
@@ -100,7 +96,7 @@ class Rigging:
 		# cmds.button(label = "**Aim", command = self.ConstrainAim, backgroundColor = Colors.red10, annotation = RiggingAnnotations.constraintAim, enable = False) # TODO
 		#
 		countOffsets = 2
-		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Disconnect", command = Constraints.DisconnectTargetsFromConstraintOnSelected, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDisconnectSelected)
 		cmds.button(label = "Delete Constraints", command = Constraints.DeleteConstraintsOnSelected, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDelete)
 
@@ -110,7 +106,7 @@ class Rigging:
 		layoutColumnUtils = cmds.columnLayout(parent = layoutUtils, adjustableColumn = True)
 		#
 		countOffsets = 2
-		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Rotate Order - SHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderShow)
 		cmds.button(label = "Rotate Order - HIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderHide)
 		cmds.button(label = "Compensate - ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.scaleCompensateOn)
@@ -119,7 +115,7 @@ class Rigging:
 		cmds.button(label = "Joint - HIDDEN", command = partial(Other.JointDrawStyle, 2), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.jointDrawStyleHidden)
 		#
 		countOffsets = 1
-		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Copy Skin Weights From Last Selected", command = Skinning.CopySkinWeightsFromLastMesh, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.copySkinWeights)
 		
 		# BLENDSHAPES
@@ -127,13 +123,13 @@ class Rigging:
 		layoutColumnBlendshapes = cmds.columnLayout(parent = layoutBlendshapes, adjustableColumn = True)
 		#
 		countOffsets = 2
-		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Wraps", command = Deformers.WrapsCreateOnSelected, backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.wrapsCreate)
 		# cmds.button(label = "**Convert", command = Deformers.WrapConvertToBlendshapes) # TODO
 		cmds.button(label = "Reconstruct", command = Deformers.BlendshapesReconstruction, backgroundColor = Colors.green50, annotation = RiggingAnnotations.blendshapeCopyFromTarget)
 		#
 		countOffsets = 1
-		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = windowWidthMargin / countOffsets, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Zero Weights", command = Blendshapes.ZeroBlendshapeWeightsOnSelected, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.blendshapeZeroWeights)
 
 

@@ -1,5 +1,10 @@
 GETools changelog
 
+v1.0.6
+- [UI] Fixed compatibility with Maya 2025.
+- Improved cache evaluator detection.
+- Refactored some modules.
+
 v1.0.5
 - Fixed motion trails to shelf button
 - Decreased hardcode in Drag and Drop logic.
