@@ -24,6 +24,7 @@
 class Types:
 	transform = "transform"
 	joint = "joint"
+	mesh = "mesh"
 	locator = "locator"
 	constraint = "constraint"
 	animLayer = "animLayer"

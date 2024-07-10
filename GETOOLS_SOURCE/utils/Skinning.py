@@ -45,12 +45,81 @@ def CopySkinWeightsFromLastMesh(*args):
 	
 	cmds.select(selected)
 
-def HasSkinCluster(targetObject):
+def GetSkinCluster(targetObject):
 	history = cmds.listHistory(targetObject)
 	skinClusterDestination = cmds.ls(history, type = Enums.Types.skinCluster)
+	
 	if (len(skinClusterDestination) == 0):
+		print("{0} doesn't have skinCluster".format(targetObject))
+		return None
+	else:
+		return skinClusterDestination
+
+def HasSkinCluster(targetObject):
+	skinCluster = GetSkinCluster(targetObject)
+	if (skinCluster == None):
 		print("{0} doesn't have skinCluster".format(targetObject))
 		return False
 	else:
 		return True
+
+
+def GetJointsSkinnedToMesh(mesh):
+	cluster = GetSkinCluster(mesh)
+	if (cluster == None):
+		return None
+
+	joints = cmds.listConnections(cluster[0] + ".matrix")
+	if (joints == None):
+		cmds.warning("No joints")
+		return None
+
+	for joint in joints:
+		print(joint)
+	
+	return joints
+
+def SelectSkinnedMeshesOrJoints(*args):
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return None
+	
+	if (cmds.nodeType(selectedList[0]) == Enums.Types.joint):
+		resultClusters = []
+		for selected in selectedList:
+			clusters = cmds.listConnections(selected + ".worldMatrix")
+			if (clusters == None):
+				continue
+			for cluster in clusters:
+				if (cluster not in resultClusters):
+					resultClusters.append(cluster)
+		
+		if (len(resultClusters)) == 0:
+			cmds.warning("No clusters found")
+			return None
+		
+		resultMeshes = []
+		for cluster in resultClusters:
+			meshes = cmds.listConnections(cluster, type = Enums.Types.mesh)
+			if (meshes != None):
+				for mesh in meshes:
+					if (mesh not in resultMeshes):
+						resultMeshes.append(mesh)
+
+		print(resultMeshes)
+		cmds.select(resultMeshes, replace = True)
+	else:
+		resultJoints = []
+		for selected in selectedList:
+			joints = GetJointsSkinnedToMesh(selected)
+			if (joints != None):
+				resultJoints.append(GetJointsSkinnedToMesh(selected))
+		
+		if (len(resultJoints)) == 0:
+			cmds.warning("No joints found")
+			return None
+		
+		resultJoints = resultJoints[0]
+		cmds.select(resultJoints, replace = True)
 

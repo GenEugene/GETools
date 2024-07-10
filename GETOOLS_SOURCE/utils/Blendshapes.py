@@ -44,7 +44,8 @@ def GetBlendshapeNodeFromModel(model):
 		for connection in connections:
 			if connection not in blendshapes:
 				result = connection
-
+				blendshapes.append(connection)
+				
 	if (len(result) == 0):
 		return None
 	

@@ -37,6 +37,7 @@ from ..utils import MayaSettings
 from ..utils import MotionTrail
 from ..utils import Scene
 from ..utils import Selector
+from ..utils import Skinning
 from ..utils import Toggles
 from ..values import Icons
 
@@ -102,6 +103,7 @@ class GeneralWindow:
 			print(Selector.GetChannelBoxAttributes())
 		cmds.menu(label = "Utils", tearOff = True)
 		cmds.menuItem(label = "Select Hiererchy", command = Selector.SelectHierarchy)
+		cmds.menuItem(label = "Select Skinned Meshes Or Joints", command = Skinning.SelectSkinnedMeshesOrJoints)
 		# cmds.menuItem(label = "Create Reset Button", command = Install.CreateResetButton)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected, image = Icons.text)
