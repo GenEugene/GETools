@@ -117,7 +117,7 @@ def ZeroBlendshapeWeightsOnSelected(*args):
 			continue
 		ZeroBlendshapeWeights(item)
 
-def ExtractMeshesFromBlendshape(blendshape):
+def ExtractShapesFromBlendshape(blendshape):
 	# Check blendshape node
 	if (blendshape == None or len(blendshape) == 0):
 		return None
@@ -137,7 +137,7 @@ def ExtractMeshesFromBlendshape(blendshape):
 		cmds.setAttr(weights[0][i], 0)
 
 	return duplicatedMeshes
-def ExtractMeshesFromBlendshapes(blendshapes):
+def ExtractShapesFromBlendshapes(blendshapes):
 	if (blendshapes == None):
 		return None
 
@@ -145,17 +145,17 @@ def ExtractMeshesFromBlendshapes(blendshapes):
 
 	# Get blendshape nodes
 	for blendshape in blendshapes:
-		meshes.append(ExtractMeshesFromBlendshape(blendshape))
+		meshes.append(ExtractShapesFromBlendshape(blendshape))
 
 	return meshes
-def ExtractMeshesFromSelected(*args):
+def ExtractShapesFromSelected(*args):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
 		return None
 	
 	blendshapes = GetBlendshapeNodesFromMeshes(selectedList)
-	meshes = ExtractMeshesFromBlendshapes(blendshapes)
+	meshes = ExtractShapesFromBlendshapes(blendshapes)
 	
 	cmds.select(selectedList, replace = True)
 

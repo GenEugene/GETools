@@ -313,6 +313,10 @@ def BlendshapesReconstruct():
 	import GETOOLS_SOURCE.utils.Deformers as deformers
 	deformers.BlendshapesReconstruction()
 
+def BlendshapesExtractShapes():
+	import GETOOLS_SOURCE.utils.Blendshapes as blendshapes
+	blendshapes.ExtractShapesFromSelected()
+
 def BlendshapesZeroWeights():
 	import GETOOLS_SOURCE.utils.Blendshapes as blendshapes
 	blendshapes.ZeroBlendshapeWeightsOnSelected()

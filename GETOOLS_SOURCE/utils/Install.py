@@ -267,6 +267,8 @@ def ToShelf_WrapsConvert(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.WrapsConvert), "WrapsConvert", "WrapsConvert") # TODO add corresponding logic
 def ToShelf_BlendshapesReconstruct(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.BlendshapesReconstruct), "BSReconstruct", "BSReconstruct")
+def ToShelf_BlendshapesExtractShapes(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.BlendshapesExtractShapes), "BSExtractShapes", "BSExtractShapes")
 def ToShelf_BlendshapesZeroWeights(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.BlendshapesZeroWeights), "BSZeroWeights", "BSZeroWeights")
 

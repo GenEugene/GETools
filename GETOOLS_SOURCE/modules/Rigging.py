@@ -61,10 +61,10 @@ class RiggingAnnotations:
 	copySkinWeights = "Copy skin weights from last selected object to all other selected objects"
 
 	# Deformers
-	wrapsCreate = "Create a wrap deformer on selected objects.\nThe last object used as a source deformation object"
-	blendshapeCopyFromTarget = "Reconstruct blendshapes on selected objects from the last selected object.\nThe last object must have a blendshape node"
+	wrapsCreate = "Create a wrap deformer on selected objects.\nThe last object used as a source deformation object."
+	blendshapeCopyFromTarget = "Reconstruct blendshapes on selected objects from the last selected object.\nThe last object must have a blendshape node."
+	blendshapeExtract = "Extract blendshapes as duplicated meshes.\nPaint weights before extraction if needed."
 	blendshapeZeroWeights = "Zero all blendshape weights on selected objects"
-	blendshapeExtract = "Extract blendshapes as duplicated meshes. Paint weights before extraction if needed."
 
 class Rigging:
 	version = "v1.1"
@@ -123,16 +123,16 @@ class Rigging:
 		layoutBlendshapes = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BLENDSHAPES", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumnBlendshapes = cmds.columnLayout(parent = layoutBlendshapes, adjustableColumn = True)
 		#
-		countOffsets = 2
+		countOffsets = 3
 		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Wraps", command = Deformers.WrapsCreateOnSelected, backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.wrapsCreate)
 		# cmds.button(label = "**Convert", command = Deformers.WrapConvertToBlendshapes) # TODO
 		cmds.button(label = "Reconstruct", command = Deformers.BlendshapesReconstruction, backgroundColor = Colors.green50, annotation = RiggingAnnotations.blendshapeCopyFromTarget)
+		cmds.button(label = "Extract Shapes", command = Blendshapes.ExtractShapesFromSelected, backgroundColor = Colors.green10, annotation = RiggingAnnotations.blendshapeExtract)
 		#
-		# countOffsets = 2
-		# cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		countOffsets = 1
+		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Zero Weights", command = Blendshapes.ZeroBlendshapeWeightsOnSelected, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.blendshapeZeroWeights)
-		cmds.button(label = "Extract Shapes", command = Blendshapes.ExtractMeshesFromSelected, backgroundColor = Colors.green10, annotation = RiggingAnnotations.blendshapeExtract)
 
 
 	# CONSTRAINTS
