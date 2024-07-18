@@ -26,14 +26,14 @@ import maya.cmds as cmds
 
 from ..utils import Selector
 
-def GetBlendshapeNodeFromModel(model):
-	if (model == None):
+def GetBlendshapeNodeFromMesh(mesh):
+	if (mesh == None):
 		return None
 	
-	result = ""
+	blendshape = ""
 
 	# Get blendshape nodes
-	relatives = cmds.listRelatives(model)
+	relatives = cmds.listRelatives(mesh)
 	blendshapes = []
 
 	for relative in relatives:
@@ -43,33 +43,33 @@ def GetBlendshapeNodeFromModel(model):
 
 		for connection in connections:
 			if connection not in blendshapes:
-				result = connection
+				blendshape = connection
 				blendshapes.append(connection)
 				
-	if (len(result) == 0):
+	if (len(blendshape) == 0):
 		return None
 	
-	print(result)#
-	return result
-def GetBlendshapeNodesFromModelList(modelList):
-	if (modelList == None):
+	print(blendshape)#
+	return blendshape
+def GetBlendshapeNodesFromMeshes(meshList):
+	if (meshList == None):
 		return None
 	
-	result = []
+	blendshapes = []
 
 	# Get blendshape nodes
 	print("\tBLENDSHAPES")#
-	for model in modelList:
-		result.append(GetBlendshapeNodeFromModel(model))
+	for mesh in meshList:
+		blendshapes.append(GetBlendshapeNodeFromMesh(mesh))
 	
-	return result
+	return blendshapes
 def GetBlendshapeNodesFromSelected(*args):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
 		return None
 
-	return GetBlendshapeNodesFromModelList(selectedList)
+	return GetBlendshapeNodesFromMeshes(selectedList)
 
 def GetBlendshapeWeights(blendshape):
 	# Check blendshape node
@@ -77,15 +77,13 @@ def GetBlendshapeWeights(blendshape):
 		return None
 	
 	#  Get blendshape weights
-	blendshapeNode = blendshape
-	weightsNames = cmds.listAttr(blendshapeNode + ".weight", multi = True)
-
+	weightsNames = cmds.listAttr(blendshape + ".weight", multi = True)
 	weightsNamesFull = []
 
 	# Print result
 	print("\tBLENDSHAPE \"{0}\" WEIGHTS".format(blendshape))#
 	for weight in weightsNames:
-		weightsNamesFull.append(blendshapeNode + "." + weight)
+		weightsNamesFull.append(blendshape + "." + weight)
 		print(weightsNamesFull[-1])#
 	
 	return weightsNamesFull, weightsNames
@@ -118,4 +116,48 @@ def ZeroBlendshapeWeightsOnSelected(*args):
 		if (item == None):
 			continue
 		ZeroBlendshapeWeights(item)
+
+def ExtractMeshesFromBlendshape(blendshape):
+	# Check blendshape node
+	if (blendshape == None or len(blendshape) == 0):
+		return None
+	
+	# Get blendshape weights and zero all of them
+	weights = GetBlendshapeWeights(blendshape)
+	ZeroBlendshapeWeights(weights[0])
+
+	# Activate one by one and duplicate results
+	originalMesh = cmds.listConnections("bs_face", type = "mesh", source = False, destination = True)
+	duplicatedMeshes = []
+	
+	for i in range(len(weights[0])):
+		cmds.setAttr(weights[0][i], 1)
+		duplicate = cmds.duplicate(originalMesh, name = weights[1][i])
+		duplicatedMeshes.append(duplicate)
+		cmds.setAttr(weights[0][i], 0)
+
+	return duplicatedMeshes
+def ExtractMeshesFromBlendshapes(blendshapes):
+	if (blendshapes == None):
+		return None
+
+	meshes = []
+
+	# Get blendshape nodes
+	for blendshape in blendshapes:
+		meshes.append(ExtractMeshesFromBlendshape(blendshape))
+
+	return meshes
+def ExtractMeshesFromSelected(*args):
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return None
+	
+	blendshapes = GetBlendshapeNodesFromMeshes(selectedList)
+	meshes = ExtractMeshesFromBlendshapes(blendshapes)
+	
+	cmds.select(selectedList, replace = True)
+
+	return meshes
 

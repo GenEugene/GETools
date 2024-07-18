@@ -115,7 +115,7 @@ def BlendshapesReconstruction(*args): # TODO simplify function, split to smaller
 	
 	# Get blendshape node
 	sourceMesh = selectedList[-1]
-	blendshapeSource = Blendshapes.GetBlendshapeNodeFromModel(sourceMesh)
+	blendshapeSource = Blendshapes.GetBlendshapeNodeFromMesh(sourceMesh)
 	
 	# Check blendshape node
 	if (blendshapeSource == None):
@@ -134,6 +134,9 @@ def BlendshapesReconstruction(*args): # TODO simplify function, split to smaller
 	wraps = result[1]
 	sourceDuplicate = result[2]
 
+
+	# TODO replace by method
+
 	# Get blendshape weights and zero all of them
 	weights = Blendshapes.GetBlendshapeWeights(blendshapeSource)
 	Blendshapes.ZeroBlendshapeWeights(weights[0])
@@ -148,6 +151,9 @@ def BlendshapesReconstruction(*args): # TODO simplify function, split to smaller
 			duplicates.append(duplicate)
 			cmds.setAttr(weights[0][y], 0)
 		duplicatesList.append(duplicates)
+	
+	# TODO replace by method
+
 
 	# Wraps cleanup
 	WrapsDelete(wraps)
