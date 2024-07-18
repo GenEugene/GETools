@@ -127,7 +127,7 @@ def ExtractMeshesFromBlendshape(blendshape):
 	ZeroBlendshapeWeights(weights[0])
 
 	# Activate one by one and duplicate results
-	originalMesh = cmds.listConnections("bs_face", type = "mesh", source = False, destination = True)
+	originalMesh = cmds.listConnections(blendshape, type = "mesh", source = False, destination = True)
 	duplicatedMeshes = []
 	
 	for i in range(len(weights[0])):
