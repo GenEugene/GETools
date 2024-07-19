@@ -27,6 +27,7 @@ from ..modules import Settings
 
 from ..utils import Colors
 
+
 class Window: # TODO
 	def __init__(self, titleText="My Window Name", windowWidth=150, windowHeight=50, nameWindow="myWindowDefault"):
 		self.titleText = titleText

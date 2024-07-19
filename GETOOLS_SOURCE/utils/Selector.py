@@ -25,6 +25,7 @@ import maya.cmds as cmds
 
 from ..values import Enums
 
+
 def MultipleObjects(minimalCount=1, transformsOnly=True, shapes=False):
 	# Save selected objects to variable
 	if (transformsOnly):

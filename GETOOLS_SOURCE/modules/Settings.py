@@ -23,6 +23,7 @@
 
 from ..utils import Colors
 
+
 windowName = "windowGETools"
 dockName = "dockGETools"
 dockAllowedAreas = ("left", "right")

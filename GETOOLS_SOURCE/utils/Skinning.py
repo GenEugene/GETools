@@ -26,6 +26,7 @@ import maya.cmds as cmds
 from ..utils import Selector
 from ..values import Enums
 
+
 def CopySkinWeightsFromLastMesh(*args):
 	selected = Selector.MultipleObjects(2)
 	if (selected == None):

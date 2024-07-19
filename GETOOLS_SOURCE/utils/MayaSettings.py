@@ -23,6 +23,7 @@
 
 import maya.cmds as cmds
 
+
 def HelpPopupActivate(*args): # turn on help popups to show descriptions when buttons hovered by mouse
 	cmds.help(popupMode = True)
 

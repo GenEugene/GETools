@@ -25,8 +25,10 @@ import maya.cmds as cmds
 
 from ..utils import Text
 
+
 LayerBase = "BaseAnimation"
 LayerPrefix = "_layer_"
+
 
 def Create(layerName, parent=LayerBase, *args):
 	# if(cmds.objExists(layerName)):

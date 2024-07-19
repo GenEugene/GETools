@@ -25,6 +25,7 @@ import maya.cmds as cmds
 
 from ..values import Enums
 
+
 def Toggle(parameter):
 	currentPanel = cmds.getPanel(withFocus = True)
 	checkModelEditor = cmds.modelEditor(currentPanel, exists = True)

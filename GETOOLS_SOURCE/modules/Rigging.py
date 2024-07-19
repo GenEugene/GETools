@@ -25,7 +25,6 @@ import maya.cmds as cmds
 from functools import partial
 
 from ..modules import Settings
-
 from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Constraints
@@ -33,6 +32,7 @@ from ..utils import Deformers
 from ..utils import Other
 from ..utils import Skinning
 from ..utils import UI
+
 
 class RiggingAnnotations:
 	# Constraints
@@ -67,7 +67,7 @@ class RiggingAnnotations:
 	blendshapeZeroWeights = "Zero all blendshape weights on selected objects"
 
 class Rigging:
-	version = "v1.1"
+	version = "v1.2"
 	name = "RIGGING"
 	title = name + " " + version
 

@@ -23,6 +23,7 @@
 
 import maya.cmds as cmds
 
+
 def GetCurrentShelf():
 	return cmds.shelfTabLayout("ShelfLayout", query = True, selectTab = True)
 

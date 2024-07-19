@@ -41,6 +41,7 @@ from ..utils import Skinning
 from ..utils import Toggles
 from ..values import Icons
 
+
 class GeneralWindow:
 	version = "v1.0.6"
 	name = "GETools"

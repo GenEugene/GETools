@@ -27,7 +27,6 @@ from math import pow, sqrt
 from functools import partial
 
 from ..modules import Settings
-
 from ..utils import Animation
 from ..utils import Baker
 from ..utils import Colors
@@ -38,9 +37,9 @@ from ..utils import Selector
 from ..utils import Text
 from ..utils import Timeline
 from ..utils import UI
-
 from ..values import Enums
 from ..values import Icons
+
 
 class OverlappyAnnotations:
 	# Setup

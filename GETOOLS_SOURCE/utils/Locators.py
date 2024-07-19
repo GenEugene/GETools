@@ -32,10 +32,12 @@ from ..utils import Selector
 from ..utils import Text
 from ..values import Enums
 
+
 nameBase = "gLoc"
 nameAim = "{0}Aim".format(nameBase)
 scale = 1.0
 minSelectedCount = 1
+
 
 # SIZE
 def GetSize(locator):

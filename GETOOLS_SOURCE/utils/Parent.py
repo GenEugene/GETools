@@ -25,6 +25,7 @@ import maya.cmds as cmds
 
 from ..utils import Selector
 
+
 def FirstToSecond(child, parent, maintainOffset=True):
 	cmds.parent(child, parent)
 	if (not maintainOffset):

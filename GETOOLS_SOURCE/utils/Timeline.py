@@ -24,6 +24,7 @@
 import maya.cmds as cmds
 import maya.mel as mel
 
+
 class TimeRangeHandler:
 	def __init__(self):
 		self.values = [0, 0, 0, 0, 0] # current, minOuter, minInner, maxInner, maxOuter

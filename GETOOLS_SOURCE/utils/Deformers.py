@@ -28,10 +28,12 @@ from ..utils import Blendshapes
 from ..utils import Selector
 # from ..values import Enums
 
+
 nameWrap = "wrapTemp"
 nameBlendshapePrefix = "bs_"
 dropoff = 4
 smoothness = 0
+
 
 def WrapsCreateOnList(elements):
 	if (len(elements) < 2):

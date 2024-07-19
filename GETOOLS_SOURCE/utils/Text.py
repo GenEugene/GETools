@@ -23,6 +23,7 @@
 
 import maya.cmds as cmds
 
+
 def ConvertSymbols(text, direction=True):
 	replaceSymbol1 = ("|", "_RS1_")
 	replaceSymbol2 = (":", "_RS2_")

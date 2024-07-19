@@ -26,6 +26,7 @@ import maya.cmds as cmds
 
 from ..utils import Selector
 
+
 def GetBlendshapeNodeFromMesh(mesh):
 	if (mesh == None):
 		return None

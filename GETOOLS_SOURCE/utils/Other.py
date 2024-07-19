@@ -27,6 +27,7 @@ import maya.cmds as cmds
 from ..utils import Selector
 from ..values import Enums
 
+
 def RotateOrderVisibility(on=True, *args):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)

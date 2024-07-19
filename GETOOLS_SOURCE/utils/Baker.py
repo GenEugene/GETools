@@ -27,6 +27,7 @@ from ..utils import Constraints
 from ..utils import Selector
 from ..utils import Timeline
 
+
 def BakeSelected(classic=True, preserveOutsideKeys=True, sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)

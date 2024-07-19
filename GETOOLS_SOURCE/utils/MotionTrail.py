@@ -25,6 +25,7 @@ import maya.cmds as cmds
 
 from ..utils import Selector
 
+
 def Create(*args):
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):

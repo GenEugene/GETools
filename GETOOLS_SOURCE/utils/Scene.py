@@ -23,6 +23,7 @@
 
 import maya.cmds as cmds
 
+
 def Reload(*args):
 	currentScene = cmds.file(query = True, sceneName = True)
 	if(currentScene):

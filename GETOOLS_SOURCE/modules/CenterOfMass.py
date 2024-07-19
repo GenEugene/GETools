@@ -25,13 +25,13 @@ import maya.cmds as cmds
 from functools import partial
 
 from ..modules import Settings
-
 from ..utils import Baker
 from ..utils import Colors
 from ..utils import Constraints
 from ..utils import Locators
 from ..utils import Selector
 from ..utils import Text
+
 
 class CenterOfMassAnnotations:
 	# Setup
