@@ -239,9 +239,9 @@ def BakeByWorld(): # brackets added when method used
 
 
 # ANIMATION
-def AnimOffset(): # brackets added when method used
+def AnimOffsetSelected(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Animation as animation
-	animation.OffsetObjects
+	animation.OffsetSelected
 
 def DeleteKeys():
 	import GETOOLS_SOURCE.utils.Animation as animation

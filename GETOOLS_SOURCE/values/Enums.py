@@ -35,6 +35,8 @@ class Types:
 	skinCluster = "skinCluster"
 	motionTrail = "motionTrail"
 
+	cache = "cache"
+
 class Attributes:
 	translateShort = ("tx", "ty", "tz")
 	translateLong = ("translateX", "translateY", "translateZ")

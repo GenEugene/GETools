@@ -47,7 +47,7 @@ def DeleteKeys(channelBox=False, *args):
 		cmds.cutKey(time = (timeRange[0], timeRange[1]))
 	else:
 		cmds.cutKey(time = (timeRange[0], timeRange[1]), attribute = selectedAttributes)
-def DeleteKeyRange(*args): # XXX unused function
+def DeleteKeyRange(*args): # TODO unused, check if redundant
 	mel.eval('timeSliderClearKey')
 def DeleteKeysNonkeyable(*args):
 	# Check selected objects
@@ -109,7 +109,7 @@ def Offset(selected, time, attributes=None):
 		cmds.keyframe(selected, edit = True, relative = True, option = "over", includeUpperBound = True, timeChange = time)
 	else:
 		cmds.keyframe(selected, edit = True, relative = True, option = "over", includeUpperBound = True, timeChange = time, attribute = attributes)
-def OffsetObjects(direction=1, step=1): # use if needed later # , channelBox = False
+def OffsetSelected(direction=1, step=1): # use if needed later # , channelBox = False
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):

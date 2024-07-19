@@ -24,6 +24,7 @@
 import maya.cmds as cmds
 
 from ..utils import Selector
+from ..values import Enums
 
 
 def Create(*args):
@@ -36,28 +37,28 @@ def Create(*args):
 	start = cmds.playbackOptions(query = True, minTime = True)
 	end = cmds.playbackOptions(query = True, maxTime = True)
 	cmds.snapshot(name = name, motionTrail = True, increment = step, startTime = start, endTime = end)
-	selected = cmds.ls(type = "motionTrail")
+	selected = cmds.ls(type = Enums.Types.motionTrail)
 	
 	for item in selected:
-		cmds.setAttr(item + "Handle" + "Shape.trailDrawMode", 1)
-		cmds.setAttr(item + "Handle" + "Shape.template", 1)
+		cmds.setAttr(item + Enums.MotionTrail.handle + "Shape." + Enums.MotionTrail.trailDrawMode, 1)
+		cmds.setAttr(item + Enums.MotionTrail.handle + "Shape." + Enums.MotionTrail.template, 1)
 
 def Select(*args):
-	selected = cmds.ls(type = "motionTrail")
+	selected = cmds.ls(type = Enums.Types.motionTrail)
 	if (len(selected) == 0):
 		return
 	
 	cmds.select(clear = True)
 	for item in selected:
-		cmds.select(item + "Handle", add = True)
+		cmds.select(item + Enums.MotionTrail.handle, add = True)
 
 def Delete(*args):
-	selected = cmds.ls(type = "motionTrail")
+	selected = cmds.ls(type = Enums.Types.motionTrail)
 	if (len(selected) == 0):
 		return
 	
 	for item in selected:
-		cmds.delete(item + "Handle")
+		cmds.delete(item + Enums.MotionTrail.handle)
 
 def CreateCurveFromTrajectory(): # TODO rework tool and add to module
 	# Variables
@@ -65,7 +66,7 @@ def CreateCurveFromTrajectory(): # TODO rework tool and add to module
 	degree = 3
 	# Names
 	mtName = "newMotionTrail"
-	mtFinalName = mtName + "Handle"
+	mtFinalName = mtName + Enums.MotionTrail.handle
 	curveName = "testCurve"
 
 
@@ -77,8 +78,8 @@ def CreateCurveFromTrajectory(): # TODO rework tool and add to module
 
 	# Get points from motion trail
 	cmds.select(mtFinalName, replace = 1)
-	selected = cmds.ls(selection = 1, dagObjects = 1, exactType = "snapshotShape")
-	pts = cmds.getAttr(selected[0] + ".pts")
+	selected = cmds.ls(selection = 1, dagObjects = 1, exactType = Enums.MotionTrail.snapshotShape)
+	pts = cmds.getAttr(selected[0] + "." + Enums.MotionTrail.pts)
 	size = len(pts)
 	for i in range(size):
 		pts[i] = pts[i][0:3]

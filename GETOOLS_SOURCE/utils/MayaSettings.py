@@ -23,6 +23,8 @@
 
 import maya.cmds as cmds
 
+from ..values import Enums
+
 
 def HelpPopupActivate(*args): # turn on help popups to show descriptions when buttons hovered by mouse
 	cmds.help(popupMode = True)
@@ -30,9 +32,9 @@ def HelpPopupActivate(*args): # turn on help popups to show descriptions when bu
 def CachedPlaybackDeactivate(*args):
 	try:
 		evaluators = cmds.evaluator(query = True)
-		if ("cache" in evaluators):
-			if (cmds.evaluator(query = True, name = "cache")):
-				cmds.evaluator(name = "cache", enable = False)
+		if (Enums.Types.cache in evaluators):
+			if (cmds.evaluator(query = True, name = Enums.Types.cache)):
+				cmds.evaluator(name = Enums.Types.cache, enable = False)
 				cmds.warning("GETools: Cached Playback turned off")
 		else:
 			cmds.warning("GETools: Cache evaluator not found in Maya API")

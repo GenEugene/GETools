@@ -31,9 +31,9 @@ def ConstrainSelectedToLastObject(reverse=False, maintainOffset=True, parent=Tru
 	selected = Selector.MultipleObjects(2)
 	if (selected == None):
 		return
-	ConstrainListToLastElement(reverse, selected, maintainOffset, parent, point, orient, scale, aim, weight)
+	ConstrainListToLastElement(selected, reverse, maintainOffset, parent, point, orient, scale, aim, weight)
 
-def ConstrainListToLastElement(reverse=False, selected=None, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
+def ConstrainListToLastElement(selected=None, reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
 	if (selected == None):
 		cmds.warning("### WARNING ### selected = None")
 		return

@@ -61,13 +61,3 @@ def SelectJointsInScene(): # TODO make universal for other types
 	selected = cmds.ls(type = Enums.Types.joint)
 	cmds.select(selected)
 
-def GetShapeType(element, type):
-	shape = cmds.listRelatives(element, shapes = True)
-	if shape != None:
-		if (cmds.objectType(shape[0]) == type):
-			return shape[0]
-		else:
-			return None
-	else:
-		return None
-

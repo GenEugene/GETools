@@ -306,7 +306,7 @@ class Tools:
 
 		values = []
 		for item in selectedList:
-			shape = Other.GetShapeType(element = item, type = Enums.Types.locator)
+			shape = cmds.listRelatives(item, shapes = True, type = Enums.Types.locator)[0]
 			if (shape != None):
 				values.append(Locators.GetSize(item))
 		
@@ -419,5 +419,5 @@ class Tools:
 
 	# ANIMATION
 	def AnimationOffset(self, direction=1, step=1, *args):
-		Animation.OffsetObjects(direction, step)
+		Animation.OffsetSelected(direction, step)
 

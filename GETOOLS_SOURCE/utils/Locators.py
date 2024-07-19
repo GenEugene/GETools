@@ -26,7 +26,6 @@ import maya.cmds as cmds
 from ..utils import Animation
 from ..utils import Baker
 from ..utils import Constraints
-from ..utils import Other
 from ..utils import Parent
 from ..utils import Selector
 from ..utils import Text
@@ -41,7 +40,7 @@ minSelectedCount = 1
 
 # SIZE
 def GetSize(locator):
-	shape = Other.GetShapeType(element = locator, type = Enums.Types.locator)
+	shape = cmds.listRelatives(locator, shapes = True, type = Enums.Types.locator)[0]
 	if (shape != None):
 		return (
 			cmds.getAttr(shape + "." + Enums.Attributes.scaleLocal[0]),
@@ -53,7 +52,7 @@ def GetSize(locator):
 def SetSize(locator, valueX, valueY, valueZ):
 	if (valueX == 0 or valueY == 0 or valueZ == 0):
 		cmds.warning("Target locator scale is ZERO. The lLocator scaler may have problems.")
-	shape = Other.GetShapeType(element = locator, type = Enums.Types.locator)
+	shape = cmds.listRelatives(locator, shapes = True, type = Enums.Types.locator)[0]
 	if (shape != None):
 		cmds.setAttr(shape + "." + Enums.Attributes.scaleLocal[0], valueX)
 		cmds.setAttr(shape + "." + Enums.Attributes.scaleLocal[1], valueY)
@@ -74,7 +73,7 @@ def SelectedLocatorsSizeScale(value, *args):
 		return None
 	
 	for item in selectedList:
-		shape = Other.GetShapeType(element = item, type = Enums.Types.locator)
+		shape = cmds.listRelatives(item, shapes = True, type = Enums.Types.locator)[0]
 		if (shape != None):
 			ScaleSize(item, value, value, value)
 def SelectedLocatorsSizeSet(value, *args):
@@ -83,7 +82,7 @@ def SelectedLocatorsSizeSet(value, *args):
 		return None
 	
 	for item in selectedList:
-		shape = Other.GetShapeType(element = item, type = Enums.Types.locator)
+		shape = cmds.listRelatives(item, shapes = True, type = Enums.Types.locator)[0]
 		if (shape != None):
 			SetSize(item, value, value, value)
 
@@ -94,7 +93,7 @@ def Create(name=nameBase, scale=scale, hideParent=False, subLocator=False):
 	cmds.select(locatorCurrent)
 
 	if hideParent:
-		shape = Other.GetShapeType(element = locatorCurrent, type = Enums.Types.locator)
+		shape = cmds.listRelatives(locatorCurrent, shapes = True, type = Enums.Types.locator)[0]
 		if (shape != None):
 			cmds.setAttr(shape + "." + Enums.Attributes.visibility, 0)
 	

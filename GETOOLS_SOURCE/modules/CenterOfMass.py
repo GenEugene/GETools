@@ -255,7 +255,7 @@ class CenterOfMass:
 			return
 		
 		selectedList.append(self.COMObject)
-		Constraints.ConstrainListToLastElement(reverse = True, selected = selectedList, maintainOffset = False, parent = False, point = True, weight = weight)
+		Constraints.ConstrainListToLastElement(selected = selectedList, reverse = True, maintainOffset = False, parent = False, point = True, weight = weight)
 	def COMDisconnectTargets(self, *args):
 		if (self.COMObject == None or not cmds.objExists(self.COMObject)):
 			cmds.warning("Center Of Mass object is not connected to script. Please select Center Of Mass object and press Activate button before")

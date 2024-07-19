@@ -56,7 +56,7 @@ def Delete(layerName, *args):
 	else:
 		cmds.warning("Layer \"{0}\" doesn't exist".format(layerName))
 
-def MoveChildrenToParent(children, parent): # TODO rework *args
+def MoveChildrenToParent(children, parent): # TODO rework
 	# Check child layer
 	# if(not cmds.objExists(layerChild)):
 	# 	cmds.warning("Layer \"{0}\" doesn't exist".format(layerChild))

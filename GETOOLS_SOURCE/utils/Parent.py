@@ -31,7 +31,7 @@ def FirstToSecond(child, parent, maintainOffset=True):
 	if (not maintainOffset):
 		cmds.matchTransform(child, parent, position = True, rotation = True)
 	
-def SelectedToLastObject():
+def SelectedToLastObject(): # TODO check if redundant
 	# Check selected objects
 	selected = Selector.MultipleObjects(2)
 	if (selected == None):

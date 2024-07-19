@@ -81,34 +81,6 @@ def WrapsCreateOnSelected(*args):
 
 	return selectedList, wraps[0], wraps[1]
 
-def WrapConvertToBlendshapes(blendshape): # TODO create single conversion logic from Wrap to Blendshapes
-	# Check selected objects
-	selectedList = Selector.MultipleObjects(1)
-	if (selectedList == None):
-		return
-
-	# Get blendshape nodes
-	relatives = cmds.listRelatives(selectedList[0])
-	wraps = []
-
-	for relative in relatives:
-		connections = cmds.listConnections(relative, type = "wrap")
-		if (connections == None):
-			continue
-
-		for connection in connections:
-			if connection not in wraps:
-				wraps.append(connection)
-	
-	print(wraps)
-	
-def WrapsConvertFromSelected(*args): # TODO
-	pass
-
-def WrapsDelete(wraps): # TODO move out from current script, looks like just a regular delete method
-	for wrap in wraps:
-		cmds.delete(wrap)
-
 def BlendshapesReconstruction(*args): # TODO simplify function, split to smaller blocks
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(2)
@@ -158,7 +130,8 @@ def BlendshapesReconstruction(*args): # TODO simplify function, split to smaller
 
 
 	# Wraps cleanup
-	WrapsDelete(wraps)
+	for wrap in wraps:
+		cmds.delete(wrap)
 	cmds.delete(sourceDuplicate)
 
 	# Create blendshape nodes, add targets and delete duplicates
@@ -169,4 +142,27 @@ def BlendshapesReconstruction(*args): # TODO simplify function, split to smaller
 			cmds.delete(duplicatesList[x][y][0])
 	
 	cmds.select(selectedList, replace = True)
+
+def WrapConvertToBlendshapes(blendshape): # TODO create single conversion logic from Wrap to Blendshapes
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(1)
+	if (selectedList == None):
+		return
+
+	# Get blendshape nodes
+	relatives = cmds.listRelatives(selectedList[0])
+	wraps = []
+
+	for relative in relatives:
+		connections = cmds.listConnections(relative, type = "wrap")
+		if (connections == None):
+			continue
+
+		for connection in connections:
+			if connection not in wraps:
+				wraps.append(connection)
+	
+	print(wraps)
+def WrapsConvertFromSelected(*args): # TODO
+	pass
 

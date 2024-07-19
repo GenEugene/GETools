@@ -65,6 +65,7 @@ purple100 = (0.75, 0.3, 1)
 import maya.cmds as cmds
 from functools import partial
 
+
 class ColorsPalette:
 	def __init__(self):
 		self.window_name = "windowColorCalibration"

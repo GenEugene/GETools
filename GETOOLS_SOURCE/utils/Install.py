@@ -50,7 +50,6 @@ def ReadFunctionAsString(func):
 def AddPathToEnvironment(path, *args):
 	if not os.path.exists(path):
 		raise IOError(r'The source path {0} does not exist!'.format(path))
-
 	if path not in sys.path:
 		sys.path.insert(0, path)
 def GetFunctionString(path, *args):
@@ -195,8 +194,8 @@ def ToShelf_BakeByWorld(path, translate, rotate, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.BakeByWorld) + parameters, "BakeByWorld{0}".format(suffix), "BW{0}".format(suffix))
 
 # ANIMATION
-def ToShelf_AnimOffset(path, direction, time, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.AnimOffset) + "({0}, {1})".format(direction, time), "AnimOffset_{0}_{1}".format(direction, time), "AO{0}_{1}".format(direction, time))
+def ToShelf_AnimOffsetSelected(path, direction, time, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.AnimOffsetSelected) + "({0}, {1})".format(direction, time), "AnimOffset_{0}_{1}".format(direction, time), "AO{0}_{1}".format(direction, time))
 
 def ToShelf_DeleteKeys(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.DeleteKeys), "DeleteKeys", "DKeys")
