@@ -31,13 +31,10 @@ from GETOOLS_SOURCE.values import Icons
 from GETOOLS_SOURCE.values import License
 
 
-
-
 # Get script directory path
 scriptPath = os.path.dirname(__file__)
 scriptPath = scriptPath.replace("\\", "/")
 Install.AddPathToEnvironment(scriptPath)
-
 
 # Button settings
 buttonLabel = "GETools"
@@ -51,14 +48,12 @@ import maya.cmds as cmds
 environment = Install.GetFunctionString(scriptPath)
 code = Install.ReadFunctionAsString(CodeSamples.GeneralWindow)
 
-
 # Generate code line by line
 buttonCommand = ""
 buttonCommand += License.text + "\n"
 buttonCommand += imports + "\n"
 buttonCommand += environment + "\n\n"
 buttonCommand += code + "(\"{0}\")".format(scriptPath)
-
 
 # Drag and Drop function with button creation on current shelf
 def onMayaDroppedPythonFile(*args, **kwargs):
