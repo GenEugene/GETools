@@ -23,7 +23,7 @@
 
 import os
 
-from GETOOLS_SOURCE.modules import Settings
+from GETOOLS_SOURCE import Settings
 from GETOOLS_SOURCE.utils import Install
 from GETOOLS_SOURCE.utils import Shelf
 from GETOOLS_SOURCE.values import CodeSamples

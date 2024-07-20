@@ -21,7 +21,7 @@
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
-from ..utils import Colors
+from .utils import Colors
 
 
 useFaceIcon = False

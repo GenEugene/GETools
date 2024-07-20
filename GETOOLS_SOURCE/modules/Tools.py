@@ -24,7 +24,7 @@
 import maya.cmds as cmds
 from functools import partial
 
-from ..modules import Settings
+from .. import Settings
 from ..utils import Animation
 from ..utils import Baker
 from ..utils import Colors

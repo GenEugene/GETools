@@ -26,7 +26,7 @@ import maya.mel as mel
 from math import pow, sqrt
 from functools import partial
 
-from ..modules import Settings
+from .. import Settings
 from ..utils import Animation
 from ..utils import Baker
 from ..utils import Colors

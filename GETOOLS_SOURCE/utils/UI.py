@@ -23,7 +23,7 @@
 
 import maya.cmds as cmds
 
-from ..modules import Settings
+from .. import Settings
 
 from ..utils import Colors
 

@@ -24,10 +24,10 @@
 import maya.cmds as cmds
 from functools import partial
 
+from .. import Settings
 from ..modules import CenterOfMass
 from ..modules import Overlappy
 from ..modules import Rigging
-from ..modules import Settings
 from ..modules import Tools
 from ..utils import Blendshapes
 from ..utils import Colors
@@ -43,7 +43,7 @@ from ..values import Icons
 
 
 class GeneralWindow:
-	version = "v1.0.6"
+	version = "v1.1.0"
 	name = "GETools"
 	title = name + " " + version
 
