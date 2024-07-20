@@ -16,8 +16,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
@@ -26,8 +25,10 @@ import maya.cmds as cmds
 
 from ..utils import Text
 
+
 LayerBase = "BaseAnimation"
 LayerPrefix = "_layer_"
+
 
 def Create(layerName, parent=LayerBase, *args):
 	# if(cmds.objExists(layerName)):
@@ -55,7 +56,7 @@ def Delete(layerName, *args):
 	else:
 		cmds.warning("Layer \"{0}\" doesn't exist".format(layerName))
 
-def MoveChildrenToParent(children, parent): # TODO rework *args
+def MoveChildrenToParent(children, parent): # TODO rework
 	# Check child layer
 	# if(not cmds.objExists(layerChild)):
 	# 	cmds.warning("Layer \"{0}\" doesn't exist".format(layerChild))

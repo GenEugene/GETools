@@ -1,5 +1,14 @@
 GETools changelog
 
+v1.1.0
+- [CRITICAL] Fixed compatibility with Maya 2025.
+- [RIGGING] Added "Extract Shapes" logic from blendshapes.
+- [UI] Added button icon change on highlight.
+- [UI] Added alternative secret meme icon (need to activate in Settings "useFaceIcon = True").
+- Improved cache evaluator detection.
+- Moved Settings script to the root folder
+- General refactoring.
+
 v1.0.5
 - Fixed motion trails to shelf button
 - Decreased hardcode in Drag and Drop logic.

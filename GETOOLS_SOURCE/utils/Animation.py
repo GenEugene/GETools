@@ -16,8 +16,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
@@ -27,6 +26,7 @@ import maya.mel as mel
 
 from ..utils import Selector
 from ..utils import Timeline
+
 
 def DeleteKeys(channelBox=False, *args):
 	if (Selector.MultipleObjects(1) == None):
@@ -47,7 +47,7 @@ def DeleteKeys(channelBox=False, *args):
 		cmds.cutKey(time = (timeRange[0], timeRange[1]))
 	else:
 		cmds.cutKey(time = (timeRange[0], timeRange[1]), attribute = selectedAttributes)
-def DeleteKeyRange(*args): # XXX unused function
+def DeleteKeyRange(*args): # TODO unused, check if redundant
 	mel.eval('timeSliderClearKey')
 def DeleteKeysNonkeyable(*args):
 	# Check selected objects
@@ -109,7 +109,7 @@ def Offset(selected, time, attributes=None):
 		cmds.keyframe(selected, edit = True, relative = True, option = "over", includeUpperBound = True, timeChange = time)
 	else:
 		cmds.keyframe(selected, edit = True, relative = True, option = "over", includeUpperBound = True, timeChange = time, attribute = attributes)
-def OffsetObjects(direction=1, step=1): # use if needed later # , channelBox = False
+def OffsetSelected(direction=1, step=1): # use if needed later # , channelBox = False
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):

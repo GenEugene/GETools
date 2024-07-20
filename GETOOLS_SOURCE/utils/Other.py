@@ -16,8 +16,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
@@ -27,6 +26,7 @@ import maya.cmds as cmds
 
 from ..utils import Selector
 from ..values import Enums
+
 
 def RotateOrderVisibility(on=True, *args):
 	# Check selected objects
@@ -60,14 +60,4 @@ def JointDrawStyle(mode=0, *args): # TODO refactor
 def SelectJointsInScene(): # TODO make universal for other types
 	selected = cmds.ls(type = Enums.Types.joint)
 	cmds.select(selected)
-
-def GetShapeType(element, type):
-	shape = cmds.listRelatives(element, shapes = True)
-	if shape != None:
-		if (cmds.objectType(shape[0]) == type):
-			return shape[0]
-		else:
-			return None
-	else:
-		return None
 

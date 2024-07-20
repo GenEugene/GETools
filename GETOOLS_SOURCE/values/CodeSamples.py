@@ -16,15 +16,14 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 # Logic in this module is not optimal enough, need manually change path names, methods and parameters.
 
 
-def GeneralWindow(): # brackets added method use
+def GeneralWindow(): # brackets added when method used
 	import GETOOLS_SOURCE.modules.GeneralWindow as gtwindow
 	gtwindow.GeneralWindow().RUN_DOCKED
 
@@ -168,7 +167,7 @@ def ToggleTextures():
 
 
 # LOCATORS
-def LocatorsSizeScale(): # brackets added method use
+def LocatorsSizeScale(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Locators as locators
 	locators.SelectedLocatorsSizeScale
 
@@ -216,33 +215,33 @@ def LocatorsRelativeWithoutReverse():
 	import GETOOLS_SOURCE.utils.Locators as locators
 	locators.CreateAndBakeAsChildrenFromLastSelected()
 
-def LocatorsAim(): # brackets added method use
+def LocatorsAim(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Locators as locators
 	locators.CreateOnSelectedAim
 
 
 # BAKINNG
-def BakeClassic(): # brackets added method use
+def BakeClassic(): # brackets added when method used
     import GETOOLS_SOURCE.utils.Baker as baker
     baker.BakeSelected
 
-def BakeCustom(): # brackets added method use
+def BakeCustom(): # brackets added when method used
     import GETOOLS_SOURCE.utils.Baker as baker
     baker.BakeSelected
 
-def BakeByLast(): # brackets added method use
+def BakeByLast(): # brackets added when method used
     import GETOOLS_SOURCE.utils.Baker as baker
     baker.BakeSelectedByLastObject
 
-def BakeByWorld(): # brackets added method use
+def BakeByWorld(): # brackets added when method used
     import GETOOLS_SOURCE.utils.Baker as baker
     baker.BakeSelectedByWorld
 
 
 # ANIMATION
-def AnimOffset(): # brackets added method use
+def AnimOffsetSelected(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Animation as animation
-	animation.OffsetObjects
+	animation.OffsetSelected
 
 def DeleteKeys():
 	import GETOOLS_SOURCE.utils.Animation as animation
@@ -260,17 +259,17 @@ def EulerFilter():
 	import GETOOLS_SOURCE.utils.Animation as animation
 	animation.FilterCurve()
 
-def SetInfinity(): # brackets added method use
+def SetInfinity(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Animation as animation
 	animation.SetInfinity
 
-def SetTimeline(): # brackets added method use
+def SetTimeline(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Timeline as timeline
 	timeline.SetTime
 
 
 # RIGGING
-def Constraint(): # brackets added method use
+def Constraint(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Constraints as constraints
 	constraints.ConstrainSelectedToLastObject
 
@@ -282,21 +281,25 @@ def DisconnectTargets():
 	import GETOOLS_SOURCE.utils.Constraints as constraints
 	constraints.DisconnectTargetsFromConstraintOnSelected()
 
-def RotateOrder(): # brackets added method use
+def RotateOrder(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Other as other
 	other.RotateOrderVisibility
 
-def SegmentScaleCompensate(): # brackets added method use
+def SegmentScaleCompensate(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Other as other
 	other.SegmentScaleCompensate
 
-def JointDrawStyle(): # brackets added method use
+def JointDrawStyle(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Other as other
 	other.JointDrawStyle
 
 def CopySkin():
 	import GETOOLS_SOURCE.utils.Skinning as skinning
 	skinning.CopySkinWeightsFromLastMesh()
+
+def SelectSkinnedMeshesOrJoints():
+	import GETOOLS_SOURCE.utils.Skinning as skinning
+	skinning.SelectSkinnedMeshesOrJoints()
 
 def WrapsCreate():
 	import GETOOLS_SOURCE.utils.Deformers as deformers
@@ -309,6 +312,10 @@ def WrapsConvert(): # TODO
 def BlendshapesReconstruct():
 	import GETOOLS_SOURCE.utils.Deformers as deformers
 	deformers.BlendshapesReconstruction()
+
+def BlendshapesExtractShapes():
+	import GETOOLS_SOURCE.utils.Blendshapes as blendshapes
+	blendshapes.ExtractShapesFromSelected()
 
 def BlendshapesZeroWeights():
 	import GETOOLS_SOURCE.utils.Blendshapes as blendshapes

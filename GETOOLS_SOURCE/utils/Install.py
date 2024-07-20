@@ -16,8 +16,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
@@ -29,6 +28,7 @@ import inspect
 from ..utils import Shelf
 from ..values import CodeSamples
 from ..values import Enums
+
 
 # LOGIC
 def ReadFunctionAsString(func):
@@ -50,7 +50,6 @@ def ReadFunctionAsString(func):
 def AddPathToEnvironment(path, *args):
 	if not os.path.exists(path):
 		raise IOError(r'The source path {0} does not exist!'.format(path))
-
 	if path not in sys.path:
 		sys.path.insert(0, path)
 def GetFunctionString(path, *args):
@@ -195,8 +194,8 @@ def ToShelf_BakeByWorld(path, translate, rotate, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.BakeByWorld) + parameters, "BakeByWorld{0}".format(suffix), "BW{0}".format(suffix))
 
 # ANIMATION
-def ToShelf_AnimOffset(path, direction, time, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.AnimOffset) + "({0}, {1})".format(direction, time), "AnimOffset_{0}_{1}".format(direction, time), "AO{0}_{1}".format(direction, time))
+def ToShelf_AnimOffsetSelected(path, direction, time, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.AnimOffsetSelected) + "({0}, {1})".format(direction, time), "AnimOffset_{0}_{1}".format(direction, time), "AO{0}_{1}".format(direction, time))
 
 def ToShelf_DeleteKeys(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.DeleteKeys), "DeleteKeys", "DKeys")
@@ -259,6 +258,8 @@ def ToShelf_JointDrawStyle(path, mode, *args):
 
 def ToShelf_CopySkin(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.CopySkin), "CopySkin", "CopySkin")
+def ToShelf_SelectSkinnedMeshesOrJoints(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SelectSkinnedMeshesOrJoints), "SelectSkinned", "SelectSkinned")
 
 def ToShelf_WrapsCreate(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.WrapsCreate), "WrapsCreate", "WrapsCreate")
@@ -266,6 +267,8 @@ def ToShelf_WrapsConvert(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.WrapsConvert), "WrapsConvert", "WrapsConvert") # TODO add corresponding logic
 def ToShelf_BlendshapesReconstruct(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.BlendshapesReconstruct), "BSReconstruct", "BSReconstruct")
+def ToShelf_BlendshapesExtractShapes(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.BlendshapesExtractShapes), "BSExtractShapes", "BSExtractShapes")
 def ToShelf_BlendshapesZeroWeights(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.BlendshapesZeroWeights), "BSZeroWeights", "BSZeroWeights")
 

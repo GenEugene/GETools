@@ -16,24 +16,25 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import maya.cmds as cmds
 
+
 def GetCurrentShelf():
 	return cmds.shelfTabLayout("ShelfLayout", query = True, selectTab = True)
 
-def AddToCurrentShelf(command="", label="label", labelImage="", imagePath="pythonFamily.png", annotation=""):
+def AddToCurrentShelf(command="", label="label", labelImage="", imagePath="pythonFamily.png", imageHighlightPath="pythonFamily.png", annotation=""):
 	cmds.shelfButton(
 		command = command,
 		label = label,
 		imageOverlayLabel = labelImage,
 		annotation = annotation,
 		image = imagePath,
+		highlightImage = imageHighlightPath,
 		parent = GetCurrentShelf(),
 		sourceType = "Python",
 		)

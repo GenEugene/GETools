@@ -16,25 +16,25 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import os
 
+from GETOOLS_SOURCE import Settings
 from GETOOLS_SOURCE.utils import Install
 from GETOOLS_SOURCE.utils import Shelf
 from GETOOLS_SOURCE.values import CodeSamples
 from GETOOLS_SOURCE.values import Icons
 from GETOOLS_SOURCE.values import License
 
+
 # Get script directory path
 scriptPath = os.path.dirname(__file__)
 scriptPath = scriptPath.replace("\\", "/")
 Install.AddPathToEnvironment(scriptPath)
-
 
 # Button settings
 buttonLabel = "GETools"
@@ -48,7 +48,6 @@ import maya.cmds as cmds
 environment = Install.GetFunctionString(scriptPath)
 code = Install.ReadFunctionAsString(CodeSamples.GeneralWindow)
 
-
 # Generate code line by line
 buttonCommand = ""
 buttonCommand += License.text + "\n"
@@ -56,13 +55,13 @@ buttonCommand += imports + "\n"
 buttonCommand += environment + "\n\n"
 buttonCommand += code + "(\"{0}\")".format(scriptPath)
 
-
 # Drag and Drop function with button creation on current shelf
 def onMayaDroppedPythonFile(*args, **kwargs):
 	Shelf.AddToCurrentShelf(
 		command = buttonCommand,
 		label = buttonLabel,
 		annotation = "GenEugene Animation Tools",
-		imagePath = scriptPath + Icons.get,
+		imagePath = scriptPath + (Icons.get1_face if Settings.useFaceIcon else Icons.get1),
+		imageHighlightPath= scriptPath + (Icons.get2_face if Settings.useFaceIcon else Icons.get2),
 		)
 

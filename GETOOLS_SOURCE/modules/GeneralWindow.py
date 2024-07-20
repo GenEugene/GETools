@@ -16,8 +16,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
@@ -25,12 +24,11 @@
 import maya.cmds as cmds
 from functools import partial
 
+from .. import Settings
 from ..modules import CenterOfMass
 from ..modules import Overlappy
 from ..modules import Rigging
-from ..modules import Settings
 from ..modules import Tools
-
 from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Install
@@ -39,12 +37,13 @@ from ..utils import MayaSettings
 from ..utils import MotionTrail
 from ..utils import Scene
 from ..utils import Selector
+from ..utils import Skinning
 from ..utils import Toggles
-
 from ..values import Icons
 
+
 class GeneralWindow:
-	version = "v1.0.5"
+	version = "v1.1.0"
 	name = "GETools"
 	title = name + " " + version
 
@@ -104,7 +103,8 @@ class GeneralWindow:
 		def PrintChannelBoxAttributes(*args):
 			print(Selector.GetChannelBoxAttributes())
 		cmds.menu(label = "Utils", tearOff = True)
-		cmds.menuItem(label = "Select Hiererchy", command = Selector.SelectHierarchy)
+		cmds.menuItem(label = "Select Hiererchy", command = Selector.SelectHierarchy, image = Icons.selectByHierarchy)
+		cmds.menuItem(label = "Select Skinned Meshes Or Joints", command = Skinning.SelectSkinnedMeshesOrJoints)
 		# cmds.menuItem(label = "Create Reset Button", command = Install.CreateResetButton)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected, image = Icons.text)
@@ -118,7 +118,7 @@ class GeneralWindow:
 		cmds.menu(label = "Toggle", tearOff = True)
 		# cmds.menuItem(label = "All Objects", command = Toggles.ToggleAllObjects)
 		cmds.menuItem(label = "Cameras", command = Toggles.ToggleCameras, image = Icons.camera)
-		cmds.menuItem(label = "Control Vertices", command = Toggles.ToggleControlVertices)
+		cmds.menuItem(label = "Control Vertices", command = Toggles.ToggleControlVertices, image = Icons.vertex)
 		cmds.menuItem(label = "Deformers", command = Toggles.ToggleDeformers)
 		cmds.menuItem(label = "Dimensions", command = Toggles.ToggleDimensions)
 		cmds.menuItem(label = "Dynamic Constraints", command = Toggles.ToggleDynamicConstraints, image = Icons.dynamicConstraint)
@@ -133,7 +133,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Joints", command = Toggles.ToggleJoints, image = Icons.joint)
 		cmds.menuItem(label = "Lights", command = Toggles.ToggleLights, image = Icons.light)
 		cmds.menuItem(label = "Locators", command = Toggles.ToggleLocators, image = Icons.locator)
-		cmds.menuItem(label = "Manipulators", command = Toggles.ToggleManipulators)
+		cmds.menuItem(label = "Manipulators", command = Toggles.ToggleManipulators, image = Icons.manipulator)
 		cmds.menuItem(label = "NCloths", command = Toggles.ToggleNCloths, image = Icons.nCloth)
 		cmds.menuItem(label = "NParticles", command = Toggles.ToggleNParticles, image = Icons.particle)
 		cmds.menuItem(label = "NRigids", command = Toggles.ToggleNRigids, image = Icons.nRigid)
@@ -145,7 +145,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Shadows", command = Toggles.ToggleShadows, image = Icons.shadows)
 		cmds.menuItem(label = "Strokes", command = Toggles.ToggleStrokes, image = Icons.stroke)
 		cmds.menuItem(label = "Subdiv Surfaces", command = Toggles.ToggleSubdivSurfaces)
-		cmds.menuItem(label = "Textures", command = Toggles.ToggleTextures)
+		cmds.menuItem(label = "Textures", command = Toggles.ToggleTextures, image = Icons.image)
 
 
 		self.LayoutMenuInstall()
@@ -162,7 +162,7 @@ class GeneralWindow:
 		def LinkShareIdeas(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/ideas", absolute = True)
 		def LinkReport(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/report-a-problem", absolute = True)
 		
-		cmds.menuItem(label = "About GETools", enable = False, image = self.directory + Icons.get) # TODO add window with information
+		cmds.menuItem(label = "About GETools", enable = False, image = self.directory + Icons.get1) # TODO add window with information
 		cmds.menuItem(label = "Version History", command = LinkVersionHistory)
 		cmds.menuItem(dividerLabel = "Links", divider = True)
 		cmds.menuItem(label = "GitHub", command = LinkGithub, image = Icons.home)
@@ -210,19 +210,20 @@ class GeneralWindow:
 		cmds.menu(label = "To Shelf", tearOff = True)
 		
 		cmds.menuItem(subMenu = True, label = "File", tearOff = True, image = Icons.fileOpen)
-		cmds.menuItem(label = "Reload Scene (force)", command = partial(Install.ToShelf_ReloadScene, self.directory))
-		cmds.menuItem(label = "Exit Maya (force)", command = partial(Install.ToShelf_ExitMaya, self.directory))
+		cmds.menuItem(label = "Reload Scene (force)", command = partial(Install.ToShelf_ReloadScene, self.directory), image = Icons.reset)
+		cmds.menuItem(label = "Exit Maya (force)", command = partial(Install.ToShelf_ExitMaya, self.directory), image = Icons.off)
 		cmds.setParent('..', menu = True)
 
 		cmds.menuItem(subMenu = True, label = "Utils", tearOff = True)
-		cmds.menuItem(label = "Select Hiererchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory))
+		cmds.menuItem(label = "Select Hiererchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory), image = Icons.selectByHierarchy)
+		cmds.menuItem(label = "Select Skinned Meshes Or Joints", command = partial(Install.ToShelf_SelectSkinnedMeshesOrJoints, self.directory))
 		# cmds.menuItem(label = "Create Reset Button", command = partial(Install.ToShelf_CreateResetButton, self.directory), image = Icons.reset)
 		cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(subMenu = True, label = "Toggle", tearOff = True)
 		# cmds.menuItem(label = "All Objects", command = partial(Install.ToShelf_ToggleAllObjects, self.directory))
 		cmds.menuItem(label = "Cameras", command = partial(Install.ToShelf_ToggleCameras, self.directory), image = Icons.camera)
-		cmds.menuItem(label = "Control Vertices", command = partial(Install.ToShelf_ToggleControlVertices, self.directory))
+		cmds.menuItem(label = "Control Vertices", command = partial(Install.ToShelf_ToggleControlVertices, self.directory), image = Icons.vertex)
 		cmds.menuItem(label = "Deformers", command = partial(Install.ToShelf_ToggleDeformers, self.directory))
 		cmds.menuItem(label = "Dimensions", command = partial(Install.ToShelf_ToggleDimensions, self.directory))
 		cmds.menuItem(label = "Dynamic Constraints", command = partial(Install.ToShelf_ToggleDynamicConstraints, self.directory), image = Icons.dynamicConstraint)
@@ -237,7 +238,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Joints", command = partial(Install.ToShelf_ToggleJoints, self.directory), image = Icons.joint)
 		cmds.menuItem(label = "Lights", command = partial(Install.ToShelf_ToggleLights, self.directory), image = Icons.light)
 		cmds.menuItem(label = "Locators", command = partial(Install.ToShelf_ToggleLocators, self.directory), image = Icons.locator)
-		cmds.menuItem(label = "Manipulators", command = partial(Install.ToShelf_ToggleManipulators, self.directory))
+		cmds.menuItem(label = "Manipulators", command = partial(Install.ToShelf_ToggleManipulators, self.directory), image = Icons.manipulator)
 		cmds.menuItem(label = "NCloths", command = partial(Install.ToShelf_ToggleNCloths, self.directory), image = Icons.nCloth)
 		cmds.menuItem(label = "NParticles", command = partial(Install.ToShelf_ToggleNParticles, self.directory), image = Icons.particle)
 		cmds.menuItem(label = "NRigids", command = partial(Install.ToShelf_ToggleNRigids, self.directory), image = Icons.nRigid)
@@ -249,17 +250,17 @@ class GeneralWindow:
 		cmds.menuItem(label = "Shadows", command = partial(Install.ToShelf_ToggleShadows, self.directory), image = Icons.shadows)
 		cmds.menuItem(label = "Strokes", command = partial(Install.ToShelf_ToggleStrokes, self.directory), image = Icons.stroke)
 		cmds.menuItem(label = "Subdiv Surfaces", command = partial(Install.ToShelf_ToggleSubdivSurfaces, self.directory))
-		cmds.menuItem(label = "Textures", command = partial(Install.ToShelf_ToggleTextures, self.directory))
+		cmds.menuItem(label = "Textures", command = partial(Install.ToShelf_ToggleTextures, self.directory), image = Icons.image)
 		cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(dividerLabel = "TOOLS - Locators", divider = True)
 		###
-		cmds.menuItem(subMenu = True, label = "Size", tearOff = True)
-		cmds.menuItem(label = "50%", command = partial(Install.ToShelf_LocatorsSizeScale50, self.directory))
-		cmds.menuItem(label = "90%", command = partial(Install.ToShelf_LocatorsSizeScale90, self.directory))
+		cmds.menuItem(subMenu = True, label = "Size", tearOff = True, image = Icons.scale)
+		cmds.menuItem(label = "50%", command = partial(Install.ToShelf_LocatorsSizeScale50, self.directory), image = Icons.minus)
+		cmds.menuItem(label = "90%", command = partial(Install.ToShelf_LocatorsSizeScale90, self.directory), image = Icons.minus)
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "110%", command = partial(Install.ToShelf_LocatorsSizeScale110, self.directory))
-		cmds.menuItem(label = "200%", command = partial(Install.ToShelf_LocatorsSizeScale200, self.directory))
+		cmds.menuItem(label = "110%", command = partial(Install.ToShelf_LocatorsSizeScale110, self.directory), image = Icons.plus)
+		cmds.menuItem(label = "200%", command = partial(Install.ToShelf_LocatorsSizeScale200, self.directory), image = Icons.plus)
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Create", tearOff = True, image = Icons.locator)
@@ -271,8 +272,8 @@ class GeneralWindow:
 		cmds.menuItem(subMenu = True, label = "Pin", tearOff = True, image = Icons.pin)
 		cmds.menuItem(label = "Pin", command = partial(Install.ToShelf_LocatorsPin, self.directory))
 		cmds.menuItem(label = "Without reverse constraint", command = partial(Install.ToShelf_LocatorsPinWithoutReverse, self.directory))
-		cmds.menuItem(label = "POS", command = partial(Install.ToShelf_LocatorsPinPos, self.directory))
-		cmds.menuItem(label = "ROT", command = partial(Install.ToShelf_LocatorsPinRot, self.directory))
+		cmds.menuItem(label = "POS", command = partial(Install.ToShelf_LocatorsPinPos, self.directory), image = Icons.move)
+		cmds.menuItem(label = "ROT", command = partial(Install.ToShelf_LocatorsPinRot, self.directory), image = Icons.rotate)
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Relative", tearOff = True, image = Icons.pinInvert)
@@ -315,7 +316,7 @@ class GeneralWindow:
 		
 		cmds.menuItem(dividerLabel = "TOOLS - Baking", divider = True)
 		###
-		cmds.menuItem(subMenu = True, label = "Bake", tearOff = True)
+		cmds.menuItem(subMenu = True, label = "Bake", tearOff = True, image = Icons.bake)
 		cmds.menuItem(label = "Classic", command = partial(Install.ToShelf_BakeClassic, self.directory))
 		cmds.menuItem(label = "Classic Cut Out", command = partial(Install.ToShelf_BakeClassicCutOut, self.directory))
 		cmds.menuItem(divider = True)
@@ -323,16 +324,16 @@ class GeneralWindow:
 		cmds.menuItem(label = "Custom Cut Out", command = partial(Install.ToShelf_BakeCustomCutOut, self.directory))
 		cmds.setParent('..', menu = True)
 		#
-		cmds.menuItem(subMenu = True, label = "By Last", tearOff = True)
+		cmds.menuItem(subMenu = True, label = "By Last", tearOff = True, image = Icons.bake)
 		cmds.menuItem(label = "By Last", command = partial(Install.ToShelf_BakeByLast, self.directory, True, True))
-		cmds.menuItem(label = "POS", command = partial(Install.ToShelf_BakeByLast, self.directory, True, False))
-		cmds.menuItem(label = "ROT", command = partial(Install.ToShelf_BakeByLast, self.directory, False, True))
+		cmds.menuItem(label = "POS", command = partial(Install.ToShelf_BakeByLast, self.directory, True, False), image = Icons.move)
+		cmds.menuItem(label = "ROT", command = partial(Install.ToShelf_BakeByLast, self.directory, False, True), image = Icons.rotate)
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "World", tearOff = True, image = Icons.world)
 		cmds.menuItem(label = "World", command = partial(Install.ToShelf_BakeByWorld, self.directory, True, True))
-		cmds.menuItem(label = "POS", command = partial(Install.ToShelf_BakeByWorld, self.directory, True, False))
-		cmds.menuItem(label = "ROT", command = partial(Install.ToShelf_BakeByWorld, self.directory, False, True))
+		cmds.menuItem(label = "POS", command = partial(Install.ToShelf_BakeByWorld, self.directory, True, False), image = Icons.move)
+		cmds.menuItem(label = "ROT", command = partial(Install.ToShelf_BakeByWorld, self.directory, False, True), image = Icons.rotate)
 		cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(dividerLabel = "TOOLS - Animation", divider = True)
@@ -343,26 +344,26 @@ class GeneralWindow:
 		cmds.menuItem(label = "Static", command = partial(Install.ToShelf_DeleteStatic, self.directory))
 		cmds.setParent('..', menu = True)
 		#
-		cmds.menuItem(label = "Euler Filter", command = partial(Install.ToShelf_EulerFilter, self.directory), image = Icons.filter)
+		cmds.menuItem(label = "Euler Filter", command = partial(Install.ToShelf_EulerFilter, self.directory), image = Icons.filterActive)
 		#
-		cmds.menuItem(subMenu = True, label = "Infinity", tearOff = True)
+		cmds.menuItem(subMenu = True, label = "Infinity", tearOff = True, image = Icons.infinity)
 		cmds.menuItem(label = "Constant", command = partial(Install.ToShelf_SetInfinity, self.directory, 1))
 		cmds.menuItem(label = "Linear", command = partial(Install.ToShelf_SetInfinity, self.directory, 2))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Cycle", command = partial(Install.ToShelf_SetInfinity, self.directory, 3))
-		cmds.menuItem(label = "Offset", command = partial(Install.ToShelf_SetInfinity, self.directory, 4))
+		cmds.menuItem(label = "Cycle", command = partial(Install.ToShelf_SetInfinity, self.directory, 3), image = Icons.cycle)
+		cmds.menuItem(label = "Offset", command = partial(Install.ToShelf_SetInfinity, self.directory, 4), image = Icons.cycle)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Oscillate", command = partial(Install.ToShelf_SetInfinity, self.directory, 5))
 		cmds.setParent('..', menu = True)
 		#
-		cmds.menuItem(subMenu = True, label = "Offset", tearOff = True)
-		cmds.menuItem(label = "-3", command = partial(Install.ToShelf_AnimOffset, self.directory, -1, 3))
-		cmds.menuItem(label = "-2", command = partial(Install.ToShelf_AnimOffset, self.directory, -1, 2))
-		cmds.menuItem(label = "-1", command = partial(Install.ToShelf_AnimOffset, self.directory, -1, 1))
+		cmds.menuItem(subMenu = True, label = "Offset", tearOff = True, image = Icons.arrowsOutHorizontal)
+		cmds.menuItem(label = "-3", command = partial(Install.ToShelf_AnimOffsetSelected, self.directory, -1, 3), image = Icons.minus)
+		cmds.menuItem(label = "-2", command = partial(Install.ToShelf_AnimOffsetSelected, self.directory, -1, 2), image = Icons.minus)
+		cmds.menuItem(label = "-1", command = partial(Install.ToShelf_AnimOffsetSelected, self.directory, -1, 1), image = Icons.minus)
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "+1", command = partial(Install.ToShelf_AnimOffset, self.directory, 1, 1))
-		cmds.menuItem(label = "+2", command = partial(Install.ToShelf_AnimOffset, self.directory, 1, 2))
-		cmds.menuItem(label = "+3", command = partial(Install.ToShelf_AnimOffset, self.directory, 1, 3))
+		cmds.menuItem(label = "+1", command = partial(Install.ToShelf_AnimOffsetSelected, self.directory, 1, 1), image = Icons.plus)
+		cmds.menuItem(label = "+2", command = partial(Install.ToShelf_AnimOffsetSelected, self.directory, 1, 2), image = Icons.plus)
+		cmds.menuItem(label = "+3", command = partial(Install.ToShelf_AnimOffsetSelected, self.directory, 1, 3), image = Icons.plus)
 		cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(dividerLabel = "TOOLS - Timeline", divider = True)
@@ -374,8 +375,8 @@ class GeneralWindow:
 		cmds.menuItem(label = "Max In", command = partial(Install.ToShelf_SetTimelineMaxIn, self.directory))
 		cmds.menuItem(label = "Max Out", command = partial(Install.ToShelf_SetTimelineMaxOut, self.directory))
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Focus Out", command = partial(Install.ToShelf_SetTimelineFocusOut, self.directory))
-		cmds.menuItem(label = "Focus In", command = partial(Install.ToShelf_SetTimelineFocusIn, self.directory))
+		cmds.menuItem(label = "Focus Out", command = partial(Install.ToShelf_SetTimelineFocusOut, self.directory), image = Icons.arrowsOut)
+		cmds.menuItem(label = "Focus In", command = partial(Install.ToShelf_SetTimelineFocusIn, self.directory), image = Icons.arrowsIn)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Selected Range", command = partial(Install.ToShelf_SetTimelineSet, self.directory))
 		cmds.setParent('..', menu = True)
@@ -416,7 +417,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Hidden", command = partial(Install.ToShelf_JointDrawStyle, self.directory, 2), image = Icons.visibleOff)
 		cmds.setParent('..', menu = True)
 		#
-		cmds.menuItem(label = "Copy Skin Weights From Last Selected", command = partial(Install.ToShelf_CopySkin, self.directory), image = Icons.copy)
+		cmds.menuItem(label = "Copy Skin Weights From Last Selected", command = partial(Install.ToShelf_CopySkin, self.directory), image = Icons.copySkinWeights)
 		
 		cmds.menuItem(dividerLabel = "RIGGING - Blendshapes", divider = True)
 		###
@@ -424,22 +425,23 @@ class GeneralWindow:
 		cmds.menuItem(label = "Wraps Create", command = partial(Install.ToShelf_WrapsCreate, self.directory), image = Icons.wrap)
 		# cmds.menuItem(label = "Wraps Convert", command = partial(Install.ToShelf_WrapsCreate, self.directory), image = Icons.wrap) # TODO
 		cmds.menuItem(label = "Reconstruct", command = partial(Install.ToShelf_BlendshapesReconstruct, self.directory), image = Icons.blendshape)
-		cmds.menuItem(label = "Zero Weights", command = partial(Install.ToShelf_BlendshapesZeroWeights, self.directory), image = Icons.blendshape)
+		cmds.menuItem(label = "Extract Shapes", command = partial(Install.ToShelf_BlendshapesExtractShapes, self.directory), image = Icons.polyMesh)
+		cmds.menuItem(label = "Zero Weights", command = partial(Install.ToShelf_BlendshapesZeroWeights, self.directory), image = Icons.zero)
 		cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(dividerLabel = "EXPERIMENTAL", divider = True)
 		###
-		cmds.menuItem(subMenu = True, label = "Motion Trail", tearOff = True)
-		cmds.menuItem(label = "Create", command = partial(Install.ToShelf_MotionTrailCreate, self.directory))
-		cmds.menuItem(label = "Select", command = partial(Install.ToShelf_MotionTrailSelect, self.directory))
-		cmds.menuItem(label = "Delete", command = partial(Install.ToShelf_MotionTrailDelete, self.directory))
+		cmds.menuItem(subMenu = True, label = "Motion Trail", tearOff = True, image = Icons.motionTrail)
+		cmds.menuItem(label = "Create", command = partial(Install.ToShelf_MotionTrailCreate, self.directory), image = Icons.plus)
+		cmds.menuItem(label = "Select", command = partial(Install.ToShelf_MotionTrailSelect, self.directory), image = Icons.cursor)
+		cmds.menuItem(label = "Delete", command = partial(Install.ToShelf_MotionTrailDelete, self.directory), image = Icons.minus)
 		cmds.setParent('..', menu = True)
 		#
 
 	def LayoutTitle(self, parentLayout): # TODO figure out how to use resizeable images
 		cmds.columnLayout("layoutTitle", parent = parentLayout, adjustableColumn = False)
 		size = 30
-		cmds.iconTextButton(label = "GETOOLS", style = "iconAndTextHorizontal", image = self.directory + Icons.get, width = size, height = size)
+		cmds.iconTextButton(label = "GETOOLS", style = "iconAndTextHorizontal", image = self.directory + Icons.get1, width = size, height = size)
 		# cmds.image(image = self.directory + Icons.get, width = size, height = size)
 
 	def LayoutTools(self, parentLayout):

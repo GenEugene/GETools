@@ -16,8 +16,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
@@ -27,8 +26,7 @@ import maya.mel as mel
 from math import pow, sqrt
 from functools import partial
 
-from ..modules import Settings
-
+from .. import Settings
 from ..utils import Animation
 from ..utils import Baker
 from ..utils import Colors
@@ -39,9 +37,9 @@ from ..utils import Selector
 from ..utils import Text
 from ..utils import Timeline
 from ..utils import UI
-
 from ..values import Enums
 from ..values import Icons
+
 
 class OverlappyAnnotations:
 	# Setup
@@ -176,19 +174,14 @@ class Overlappy:
 		self.sliderOffsetY = None
 		self.sliderOffsetZ = None
 	def UICreate(self, layoutMain):
-		windowWidthMargin = Settings.windowWidthMargin
-		lineHeight = Settings.lineHeight
-		sliderWidth = Settings.sliderWidth
-		sliderWidthMarker = Settings.sliderWidthMarker
-
-		self.UILayoutMenuBar(layoutMain, windowWidthMargin)
-		self.UILayoutButtons(layoutMain, windowWidthMargin, lineHeight)
-		self.UILayoutLayers(layoutMain, windowWidthMargin, lineHeight)
-		self.UILayoutOptions(layoutMain, windowWidthMargin, lineHeight)
-		self.UILayoutParticleAttributes(layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker)
-		self.UILayoutParticleOffset(layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker)
-	def UILayoutMenuBar(self, layoutMain, windowWidthMargin):
-		cmds.columnLayout("layoutMenuBar", parent = layoutMain, adjustableColumn = True, width = windowWidthMargin)
+		self.UILayoutMenuBar(layoutMain)
+		self.UILayoutButtons(layoutMain)
+		self.UILayoutLayers(layoutMain)
+		self.UILayoutOptions(layoutMain)
+		self.UILayoutParticleAttributes(layoutMain)
+		self.UILayoutParticleOffset(layoutMain)
+	def UILayoutMenuBar(self, layoutMain):
+		cmds.columnLayout("layoutMenuBar", parent = layoutMain, adjustableColumn = True, width = Settings.windowWidthMargin)
 		cmds.menuBarLayout()
 
 		cmds.menu(label = "Edit")
@@ -200,13 +193,13 @@ class Overlappy:
 		cmds.menuItem(label = "Nucleus", command = self._SelectNucleus, image = Icons.nucleus)
 		cmds.menuItem(label = "Target locator", command = self._SelectTarget, image = Icons.locator)
 		cmds.menuItem(label = "Aim locator", command = self._SelectAim, image = Icons.locator)
-	def UILayoutButtons(self, layoutMain, windowWidthMargin, lineHeight):
+	def UILayoutButtons(self, layoutMain):
 		# SETUP
-		self.layoutButtons = cmds.frameLayout("layoutButtons", label = Settings.frames2Prefix + "BUTTONS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color)
+		self.layoutButtons = cmds.frameLayout("layoutButtons", label = Settings.frames2Prefix + "BUTTONS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutButtons, adjustableColumn = True)
 
 		count = 2
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		#
 		cmds.button(label = "SETUP", command = self._SetupInit, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
 		# cmds.button(label = "Scan setup into scene", command = self._SetupScan, backgroundColor = Colors.green10)
@@ -214,7 +207,7 @@ class Overlappy:
 
 		# BAKING
 		count = 3
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		#
 		cmds.button(label = "TRANSLATION", command = partial(self._BakeVariants, 1), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.translation)
 		cmds.popupMenu()
@@ -228,26 +221,26 @@ class Overlappy:
 		#
 		# cmds.button(label = "SCALE", command = partial(self._BakeVariants, 6), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.scale) # TODO implement scale simulation
 		pass
-	def UILayoutLayers(self, layoutMain, windowWidthMargin, lineHeight):
-		self.layoutLayers = cmds.frameLayout("layoutLayers", label = Settings.frames2Prefix + "LAYERS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color)
+	def UILayoutLayers(self, layoutMain):
+		self.layoutLayers = cmds.frameLayout("layoutLayers", label = Settings.frames2Prefix + "LAYERS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutLayers, adjustableColumn = True)
 		
 		count = 1
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Delete BaseAnimation layer", command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteBase)
 
 		count = 2
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Delete Temp layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
 		cmds.button(label = "Move to Safe layer", command = partial(self._LayerMoveToSafeOrTemp, True), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveTemp)
 		
 		cmds.button(label = "Delete Safe layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
 		cmds.button(label = "Move to Temp layer", command = partial(self._LayerMoveToSafeOrTemp, False), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveSafe)
-	def UILayoutOptions(self, layoutMain, windowWidthMargin, lineHeight):
-		self.layoutOptions = cmds.frameLayout("layoutOptions", label = Settings.frames2Prefix + "OPTIONS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color)
+	def UILayoutOptions(self, layoutMain):
+		self.layoutOptions = cmds.frameLayout("layoutOptions", label = Settings.frames2Prefix + "OPTIONS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		
 		count = 4
-		cmds.gridLayout(parent = self.layoutOptions, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = self.layoutOptions, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		
 		# _optionsResetAll = self._ResetOptions # , commandResetAll = _optionsResetAll
 		
@@ -255,20 +248,20 @@ class Overlappy:
 		self.checkboxLayer = UI.Checkbox(label = "Layer", value = OverlappySettings.checkboxesOptions[1], annotation = OverlappyAnnotations.checkboxLayer)
 		self.checkboxLoop = UI.Checkbox(label = "Loop", value = OverlappySettings.checkboxesOptions[2], annotation = OverlappyAnnotations.checkboxLoop) # FIXME make cycle infinity before bake
 		self.checkboxClean = UI.Checkbox(label = "Clean", value = OverlappySettings.checkboxesOptions[3], annotation = OverlappyAnnotations.checkboxClean)
-	def UILayoutParticleAttributes(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
-		self.layoutSimulation = cmds.frameLayout("layoutParticleSliders", label = Settings.frames2Prefix + "PARTICLE ATTRIBUTES", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color)
+	def UILayoutParticleAttributes(self, layoutMain):
+		self.layoutSimulation = cmds.frameLayout("layoutParticleSliders", label = Settings.frames2Prefix + "PARTICLE ATTRIBUTES", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutSimulation, adjustableColumn = True)
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click") # TODO add reset all function
 
 		commandDefault = self._UpdateParticleAttributes
 
-		layoutSliders1 = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
+		layoutSliders1 = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = Settings.windowWidthMargin, cellHeight = Settings.lineHeight)
 		self.sliderPRadius = UI.Slider(
 			parent = layoutSliders1,
-			widthWindow = windowWidthMargin,
-			widthMarker = sliderWidthMarker,
-			columnWidth3 = sliderWidth,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
 			command = commandDefault,
 			label = "Radius",
 			annotation = OverlappyAnnotations.particleRadius,
@@ -280,12 +273,12 @@ class Overlappy:
 		# cmds.separator(parent = self.layoutSimulation, style = "in", height = 1)
 		cmds.separator(parent = layoutColumn, style = "in")
 		
-		layoutSliders2 = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
+		layoutSliders2 = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = Settings.windowWidthMargin, cellHeight = Settings.lineHeight)
 		self.sliderPConserve = UI.Slider(
 			parent = layoutSliders2,
-			widthWindow = windowWidthMargin,
-			widthMarker = sliderWidthMarker,
-			columnWidth3 = sliderWidth,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
 			command = commandDefault,
 			label = "Conserve",
 			annotation = OverlappyAnnotations.particleConserve,
@@ -296,9 +289,9 @@ class Overlappy:
 		
 		self.sliderPDrag = UI.Slider(
 			parent = layoutSliders2,
-			widthWindow = windowWidthMargin,
-			widthMarker = sliderWidthMarker,
-			columnWidth3 = sliderWidth,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
 			command = commandDefault,
 			label = "Drag",
 			annotation = OverlappyAnnotations.particleDrag,
@@ -309,9 +302,9 @@ class Overlappy:
 		
 		self.sliderPDamp = UI.Slider(
 			parent = layoutSliders2,
-			widthWindow = windowWidthMargin,
-			widthMarker = sliderWidthMarker,
-			columnWidth3 = sliderWidth,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
 			command = commandDefault,
 			label = "Damp",
 			annotation = OverlappyAnnotations.particleDamp,
@@ -322,9 +315,9 @@ class Overlappy:
 		
 		self.sliderGSmooth = UI.Slider(
 			parent = layoutSliders2,
-			widthWindow = windowWidthMargin,
-			widthMarker = sliderWidthMarker,
-			columnWidth3 = sliderWidth,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
 			command = commandDefault,
 			label = "G.Smooth",
 			annotation = OverlappyAnnotations.particleGoalSmooth,
@@ -335,9 +328,9 @@ class Overlappy:
 		
 		self.sliderGWeight = UI.Slider(
 			parent = layoutSliders2,
-			widthWindow = windowWidthMargin,
-			widthMarker = sliderWidthMarker,
-			columnWidth3 = sliderWidth,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
 			command = commandDefault,
 			label = "G.Weight",
 			annotation = OverlappyAnnotations.particleGoalWeight,
@@ -348,9 +341,9 @@ class Overlappy:
 		
 		self.sliderNTimeScale = UI.Slider(
 			parent = layoutSliders2,
-			widthWindow = windowWidthMargin,
-			widthMarker = sliderWidthMarker,
-			columnWidth3 = sliderWidth,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
 			command = commandDefault,
 			label = "Time Scale",
 			annotation = OverlappyAnnotations.particleTimeScale,
@@ -358,14 +351,14 @@ class Overlappy:
 			minMax = OverlappySettings.rangeNTimeScale,
 			menuReset = True,
 		)
-	def UILayoutParticleOffset(self, layoutMain, windowWidthMargin, lineHeight, sliderWidth, sliderWidthMarker):
-		self.layoutOffset = cmds.frameLayout("layoutParticleOffset", label = Settings.frames2Prefix + "PARTICLE OFFSET", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color)
+	def UILayoutParticleOffset(self, layoutMain):
+		self.layoutOffset = cmds.frameLayout("layoutParticleOffset", label = Settings.frames2Prefix + "PARTICLE OFFSET", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutOffset, adjustableColumn = True)
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click") # TODO add reset all function
 
 		count = 3
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = windowWidthMargin / count, cellHeight = lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		# cmds.separator()
 		# , commandResetAll = self._ResetOffsets
 		self.checkboxMirrorX = UI.Checkbox(label = "Mirror X", command = partial(self._OffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorX)
@@ -373,15 +366,15 @@ class Overlappy:
 		self.checkboxMirrorZ = UI.Checkbox(label = "Mirror Z", command = partial(self._OffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorZ)
 		
 
-		layoutSliders = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = windowWidthMargin, cellHeight = lineHeight)
+		layoutSliders = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = Settings.windowWidthMargin, cellHeight = Settings.lineHeight)
 
 		commandDefault = self._OffsetsUpdate
 
 		self.sliderOffsetX = UI.Slider(
 			parent = layoutSliders,
-			widthWindow = windowWidthMargin,
-			widthMarker = sliderWidthMarker,
-			columnWidth3 = sliderWidth,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
 			command = commandDefault,
 			label = "   Move X",
 			annotation = OverlappyAnnotations.offsetX,
@@ -391,9 +384,9 @@ class Overlappy:
 
 		self.sliderOffsetY = UI.Slider(
 			parent = layoutSliders,
-			widthWindow = windowWidthMargin,
-			widthMarker = sliderWidthMarker,
-			columnWidth3 = sliderWidth,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
 			command = commandDefault,
 			label = "   Move Y",
 			annotation = OverlappyAnnotations.offsetY,
@@ -403,9 +396,9 @@ class Overlappy:
 
 		self.sliderOffsetZ = UI.Slider(
 			parent = layoutSliders,
-			widthWindow = windowWidthMargin,
-			widthMarker = sliderWidthMarker,
-			columnWidth3 = sliderWidth,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
 			command = commandDefault,
 			label = "   Move Z",
 			annotation = OverlappyAnnotations.offsetZ,

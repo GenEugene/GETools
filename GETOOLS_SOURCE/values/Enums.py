@@ -16,8 +16,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
@@ -25,6 +24,7 @@
 class Types:
 	transform = "transform"
 	joint = "joint"
+	mesh = "mesh"
 	locator = "locator"
 	constraint = "constraint"
 	animLayer = "animLayer"
@@ -34,6 +34,8 @@ class Types:
 	reference = "reference"
 	skinCluster = "skinCluster"
 	motionTrail = "motionTrail"
+
+	cache = "cache"
 
 class Attributes:
 	translateShort = ("tx", "ty", "tz")
