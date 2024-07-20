@@ -23,11 +23,15 @@
 
 import os
 
+from GETOOLS_SOURCE.modules import Settings
 from GETOOLS_SOURCE.utils import Install
 from GETOOLS_SOURCE.utils import Shelf
 from GETOOLS_SOURCE.values import CodeSamples
 from GETOOLS_SOURCE.values import Icons
 from GETOOLS_SOURCE.values import License
+
+
+
 
 # Get script directory path
 scriptPath = os.path.dirname(__file__)
@@ -62,7 +66,7 @@ def onMayaDroppedPythonFile(*args, **kwargs):
 		command = buttonCommand,
 		label = buttonLabel,
 		annotation = "GenEugene Animation Tools",
-		imagePath = scriptPath + Icons.get,
-		imageHighlightPath= scriptPath + Icons.get2,
+		imagePath = scriptPath + (Icons.get1_face if Settings.useFaceIcon else Icons.get1),
+		imageHighlightPath= scriptPath + (Icons.get2_face if Settings.useFaceIcon else Icons.get2),
 		)
 

@@ -162,7 +162,7 @@ class GeneralWindow:
 		def LinkShareIdeas(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/ideas", absolute = True)
 		def LinkReport(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/report-a-problem", absolute = True)
 		
-		cmds.menuItem(label = "About GETools", enable = False, image = self.directory + Icons.get) # TODO add window with information
+		cmds.menuItem(label = "About GETools", enable = False, image = self.directory + Icons.get1) # TODO add window with information
 		cmds.menuItem(label = "Version History", command = LinkVersionHistory)
 		cmds.menuItem(dividerLabel = "Links", divider = True)
 		cmds.menuItem(label = "GitHub", command = LinkGithub, image = Icons.home)
@@ -441,7 +441,7 @@ class GeneralWindow:
 	def LayoutTitle(self, parentLayout): # TODO figure out how to use resizeable images
 		cmds.columnLayout("layoutTitle", parent = parentLayout, adjustableColumn = False)
 		size = 30
-		cmds.iconTextButton(label = "GETOOLS", style = "iconAndTextHorizontal", image = self.directory + Icons.get, width = size, height = size)
+		cmds.iconTextButton(label = "GETOOLS", style = "iconAndTextHorizontal", image = self.directory + Icons.get1, width = size, height = size)
 		# cmds.image(image = self.directory + Icons.get, width = size, height = size)
 
 	def LayoutTools(self, parentLayout):

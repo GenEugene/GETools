@@ -24,6 +24,8 @@
 from ..utils import Colors
 
 
+useFaceIcon = False
+
 windowName = "windowGETools"
 dockName = "dockGETools"
 dockAllowedAreas = ("left", "right")
