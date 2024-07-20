@@ -72,7 +72,8 @@ def MoveToShelf(path, tool, label, labelImage, *args):
 	Shelf.AddToCurrentShelf(
 		command = command,
 		label = label,
-		labelImage = labelImage
+		labelImage = labelImage,
+		imageHighlightPath = labelImage
 		)
 
 # FILE

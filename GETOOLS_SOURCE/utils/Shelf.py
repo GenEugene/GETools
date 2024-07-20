@@ -27,13 +27,14 @@ import maya.cmds as cmds
 def GetCurrentShelf():
 	return cmds.shelfTabLayout("ShelfLayout", query = True, selectTab = True)
 
-def AddToCurrentShelf(command="", label="label", labelImage="", imagePath="pythonFamily.png", annotation=""):
+def AddToCurrentShelf(command="", label="label", labelImage="", imagePath="pythonFamily.png", imageHighlightPath="pythonFamily.png", annotation=""):
 	cmds.shelfButton(
 		command = command,
 		label = label,
 		imageOverlayLabel = labelImage,
 		annotation = annotation,
 		image = imagePath,
+		highlightImage = imageHighlightPath,
 		parent = GetCurrentShelf(),
 		sourceType = "Python",
 		)

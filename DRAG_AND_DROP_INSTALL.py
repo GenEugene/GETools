@@ -63,5 +63,6 @@ def onMayaDroppedPythonFile(*args, **kwargs):
 		label = buttonLabel,
 		annotation = "GenEugene Animation Tools",
 		imagePath = scriptPath + Icons.get,
+		imageHighlightPath= scriptPath + Icons.get2,
 		)
 
