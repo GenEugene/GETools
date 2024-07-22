@@ -19,18 +19,18 @@ def ClearRigNamespaces(_namespace=''):
 
 def NamespacesFromSelected(self, *args):
 	selected = cmds.ls(sl = 1)
-	if(selected):
+	if (selected):
 		namespaces = list("")
 		for i in range(len(selected)):
 			namespace = selected[i].split(':')[0]
 			
 			# Empty namespace
 			count = selected[i].split(':')
-			if(len(count) < 2):
+			if (len(count) < 2):
 				namespace = ""
 			
 			for i in range(len(selected)):
-				if(namespace not in namespaces):
+				if (namespace not in namespaces):
 					namespaces.append(namespace)
 
 		return selected, namespaces

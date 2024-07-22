@@ -482,7 +482,7 @@ class Overlappy:
 		self.nucleusNodesAfter = cmds.ls(type = "nucleus")
 		nodesForRemoving = [item for item in self.nucleusNodesAfter if item not in self.nucleusNodesBefore]
 		for item in nodesForRemoving:
-			if(item != self.nucleus):
+			if (item != self.nucleus):
 				# cmds.warning("extra node deleted {0}".format(item))
 				cmds.delete(item)
 
@@ -858,9 +858,9 @@ class Overlappy:
 		
 		for i in range(len(_attrs)):
 			_keyed = cmds.keyframe(_attrs[i], query = True)
-			if(_keyed):
+			if (_keyed):
 				_muted = cmds.mute(_attrs[i], query = True)
-				if(_muted):
+				if (_muted):
 					continue
 			
 			_locked = cmds.getAttr(_attrs[i], lock = True)
@@ -869,16 +869,16 @@ class Overlappy:
 			_constrained = False
 			_connections = cmds.listConnections(_attrs[i])
 			
-			if(_connections):
+			if (_connections):
 				for item in _connections:
 					_type = cmds.nodeType(item)
-					if(_type in Enums.Constraints.list):
+					if (_type in Enums.Constraints.list):
 						_constrained = True
 			
-			if(not _locked and _keyable and _settable and not _constrained):
+			if (not _locked and _keyable and _settable and not _constrained):
 				_attributesFiltered.append(_attributesType[i])
 		
-		if(len(_attributesFiltered) == 0):
+		if (len(_attributesFiltered) == 0):
 			cmds.warning("No attributes. Overlappy setup deleted")
 			self._SetupDelete()
 			return
@@ -995,7 +995,7 @@ class Overlappy:
 	### LAYERS
 	def _LayerCreate(self, name, *args): # TODO additional naming for translation and rotation
 		# Create main layer
-		if(not cmds.objExists(OverlappySettings.nameLayers[0])):
+		if (not cmds.objExists(OverlappySettings.nameLayers[0])):
 			self.layers[0] = Layers.Create(layerName = OverlappySettings.nameLayers[0])
 		
 		# Create layers on selected
@@ -1012,7 +1012,7 @@ class Overlappy:
 
 
 		# Check source layer
-		if(not cmds.objExists(_layer1)):
+		if (not cmds.objExists(_layer1)):
 			cmds.warning("Layer \"{0}\" doesn't exist".format(_layer1))
 			return
 		
@@ -1050,7 +1050,7 @@ class Overlappy:
 		
 
 		# Create safe layer
-		if(not cmds.objExists(_layer2)):
+		if (not cmds.objExists(_layer2)):
 			self.layers[_id[1]] = cmds.animLayer(_layer2, override = True)
 		
 

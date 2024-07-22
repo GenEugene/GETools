@@ -43,7 +43,7 @@ from ..values import Icons
 
 
 class GeneralWindow:
-	version = "v1.1.0"
+	version = "v1.1.1"
 	name = "GETools"
 	title = name + " " + version
 

@@ -26,7 +26,7 @@ import maya.cmds as cmds
 
 def Reload(*args):
 	currentScene = cmds.file(query = True, sceneName = True)
-	if(currentScene):
+	if (currentScene):
 		cmds.file(currentScene, open = True, force = True)
 	else:
 		cmds.file(newFile = True, force = True)

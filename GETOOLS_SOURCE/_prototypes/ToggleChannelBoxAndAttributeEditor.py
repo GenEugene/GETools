@@ -1,8 +1,8 @@
-if(`isChannelBoxRaised`)
+if (`isChannelBoxRaised`)
 {
 	openAEWindow;
 }
-else if(`isAttributeEditorRaised`)
+else if (`isAttributeEditorRaised`)
 {
 	raiseChannelBox;
 }
