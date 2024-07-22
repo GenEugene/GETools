@@ -1,5 +1,8 @@
 GETools changelog
 
+v1.2.0
+- [OVERLAPPY] Added confirm dialog for zero particle offset.
+
 v1.1.0
 - [CRITICAL] Fixed compatibility with Maya 2025.
 - [RIGGING] Added "Extract Shapes" logic from blendshapes.

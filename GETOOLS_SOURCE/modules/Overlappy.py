@@ -125,7 +125,7 @@ class OverlappySettings:
 	rangeOffsetZ = (float("-inf"), float("inf"), 0, 100)
 	
 class Overlappy:
-	version = "v2.8"
+	version = "v2.9"
 	name = "OVERLAPPY"
 	title = name + " " + version
 
@@ -843,15 +843,36 @@ class Overlappy:
 
 	### BAKE
 	def _BakeLogic(self, parent, zeroOffsets=False, translation=True, deleteSetupLock=False, *args):
+		# Check zero particle offset
+		if (not translation):
+			_checkOffsetX = self.sliderOffsetX.Get() == 0
+			_checkOffsetY = self.sliderOffsetY.Get() == 0
+			_checkOffsetZ = self.sliderOffsetZ.Get() == 0
+			if (_checkOffsetX and _checkOffsetY and _checkOffsetZ):
+				dialogResult = cmds.confirmDialog(
+					title = "Zero particle offset detected",
+					message = "For ROTATION BAKING, set the particle offset to non-zero values.\nIf all XYZ values are zero, the particle will stay in the same position as the original object, and no rotation will occur.\n",
+					messageAlign = "left",
+					icon = "warning",
+					button = ["Continue anyway", "Cancel"],
+					annotation = ["Bake with zero offset, no useful animation will be baked", "Cancel baking operation"],
+					defaultButton = "Cancel",
+					cancelButton = "Cancel",
+					dismissString = "TODO: dismissString"
+					)
+				if (dialogResult == "Cancel"):
+					print("Baking cancelled")
+					self._SetupDelete()
+					return
+
 		# Filter attributes
-		_item = self.selectedObject
-		
 		if (translation):
 			_attributesType = Enums.Attributes.translateShort
 		else:
 			_attributesType = Enums.Attributes.rotateShort
 		_attrs = ["", "", ""]
 		
+		_item = self.selectedObject
 		for i in range(len(_attrs)):
 			_attrs[i] = "{0}.{1}".format(_item, _attributesType[i])
 		_attributesFiltered = []
