@@ -843,28 +843,6 @@ class Overlappy:
 
 	### BAKE
 	def _BakeLogic(self, parent, zeroOffsets=False, translation=True, deleteSetupLock=False, *args):
-		# Check zero particle offset
-		if (not translation):
-			_checkOffsetX = self.sliderOffsetX.Get() == 0
-			_checkOffsetY = self.sliderOffsetY.Get() == 0
-			_checkOffsetZ = self.sliderOffsetZ.Get() == 0
-			if (_checkOffsetX and _checkOffsetY and _checkOffsetZ):
-				dialogResult = cmds.confirmDialog(
-					title = "Zero particle offset detected",
-					message = "For ROTATION BAKING, set the particle offset to non-zero values.\nIf all XYZ values are zero, the particle will stay in the same position as the original object, and no rotation will occur.\n",
-					messageAlign = "left",
-					icon = "warning",
-					button = ["Continue anyway", "Cancel"],
-					annotation = ["Bake with zero offset, no useful animation will be baked", "Cancel baking operation"],
-					defaultButton = "Cancel",
-					cancelButton = "Cancel",
-					dismissString = "TODO: dismissString"
-					)
-				if (dialogResult == "Cancel"):
-					print("Baking cancelled")
-					self._SetupDelete()
-					return
-
 		# Filter attributes
 		if (translation):
 			_attributesType = Enums.Attributes.translateShort
@@ -985,6 +963,27 @@ class Overlappy:
 		_selected = Selector.MultipleObjects()
 		if (_selected == None):
 			return
+		
+		# Check zero particle offset
+		if variant in [3, 4, 5]:
+			_checkOffsetX = self.sliderOffsetX.Get() == 0
+			_checkOffsetY = self.sliderOffsetY.Get() == 0
+			_checkOffsetZ = self.sliderOffsetZ.Get() == 0
+			if (_checkOffsetX and _checkOffsetY and _checkOffsetZ):
+				dialogResult = cmds.confirmDialog(
+					title = "Zero particle offset detected",
+					message = "For ROTATION BAKING, set the particle offset to non-zero values.\nIf all XYZ values are zero, the particle will stay in the same position as the original object, and no rotation will occur.\n",
+					messageAlign = "left",
+					icon = "warning",
+					button = ["Continue anyway", "Cancel"],
+					annotation = ["Bake with zero offset, no useful animation will be baked", "Cancel baking operation"],
+					defaultButton = "Cancel",
+					cancelButton = "Cancel",
+					dismissString = "TODO: dismissString"
+					)
+				if (dialogResult == "Cancel"):
+					cmds.warning("Overlappy Rotation Baking cancelled")
+					return
 
 		MayaSettings.CachedPlaybackDeactivate()
 
