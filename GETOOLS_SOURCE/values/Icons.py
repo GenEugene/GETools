@@ -21,16 +21,14 @@
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
-root = "\\GETOOLS_SOURCE"
+root = "/GETOOLS_SOURCE"
 
-get1 = root + "\icons\GET1.png"
-get2 = root + "\icons\GET2.png"
-get1_face = root + "\icons\GET1_face.png"
-get2_face = root + "\icons\GET2_face.png"
+get1 = (root + "/icons/GET1.png", root + "/icons/GET1_face.png")
+get2 = (root + "/icons/GET2.png", root + "/icons/GET2_face.png")
 
-tools = root + "\icons\Tools.png"
-centerOfMass = root + "\icons\CenterOfMass.png"
-overlappy = root + "\icons\Overlappy.png"
+tools = root + "/icons/Tools.png"
+centerOfMass = root + "/icons/CenterOfMass.png"
+overlappy = root + "/icons/Overlappy.png"
 
 # Maya's
 empty = "empty.png"

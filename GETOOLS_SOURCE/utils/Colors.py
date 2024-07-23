@@ -23,6 +23,7 @@
 
 blackWhite00 = (0, 0, 0)
 blackWhite10 = (0.1, 0.1, 0.1)
+blackWhite13 = (0.13, 0.13, 0.13)
 blackWhite20 = (0.2, 0.2, 0.2)
 blackWhite30 = (0.3, 0.3, 0.3)
 blackWhite40 = (0.4, 0.4, 0.4)

@@ -37,13 +37,14 @@ from ..utils import MayaSettings
 from ..utils import MotionTrail
 from ..utils import Scene
 from ..utils import Selector
+from ..utils import Shelf
 from ..utils import Skinning
 from ..utils import Toggles
 from ..values import Icons
 
 
 class GeneralWindow:
-	version = "v1.2.0"
+	version = "v1.2.1"
 	name = "GETools"
 	title = name + " " + version
 
@@ -162,7 +163,7 @@ class GeneralWindow:
 		def LinkShareIdeas(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/ideas", absolute = True)
 		def LinkReport(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/report-a-problem", absolute = True)
 		
-		cmds.menuItem(label = "About GETools", enable = False, image = self.directory + Icons.get1) # TODO add window with information
+		cmds.menuItem(label = "About GETools", enable = False, image = self.directory + Icons.get1[0]) # TODO add window with information
 		cmds.menuItem(label = "Version History", command = LinkVersionHistory)
 		cmds.menuItem(dividerLabel = "Links", divider = True)
 		cmds.menuItem(label = "GitHub", command = LinkGithub, image = Icons.home)
@@ -177,7 +178,9 @@ class GeneralWindow:
 		cmds.menuItem(dividerLabel = "Support", divider = True)
 		cmds.menuItem(label = "Share your Ideas", command = LinkShareIdeas, image = Icons.light)
 		cmds.menuItem(label = "Report a Problem", command = LinkReport, image = Icons.warning)
-
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Change Icon", command = partial(Shelf.ToggleButtonIcons, self.directory))
+		
 		# DEV ZONE
 		def LayerCreate(*args):
 			Layers.Create("testLayer")
@@ -441,7 +444,7 @@ class GeneralWindow:
 	def LayoutTitle(self, parentLayout): # TODO figure out how to use resizeable images
 		cmds.columnLayout("layoutTitle", parent = parentLayout, adjustableColumn = False)
 		size = 30
-		cmds.iconTextButton(label = "GETOOLS", style = "iconAndTextHorizontal", image = self.directory + Icons.get1, width = size, height = size)
+		cmds.iconTextButton(label = "GETOOLS", style = "iconAndTextHorizontal", image = self.directory + Icons.get1[0], width = size, height = size)
 		# cmds.image(image = self.directory + Icons.get, width = size, height = size)
 
 	def LayoutTools(self, parentLayout):

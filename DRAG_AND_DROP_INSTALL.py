@@ -36,9 +36,6 @@ scriptPath = os.path.dirname(__file__)
 scriptPath = scriptPath.replace("\\", "/")
 Install.AddPathToEnvironment(scriptPath)
 
-# Button settings
-buttonLabel = "GETools"
-
 imports = """\
 import os
 import sys
@@ -59,9 +56,9 @@ buttonCommand += code + "(\"{0}\")".format(scriptPath)
 def onMayaDroppedPythonFile(*args, **kwargs):
 	Shelf.AddToCurrentShelf(
 		command = buttonCommand,
-		label = buttonLabel,
+		label = Settings.buttonLabel,
 		annotation = "GenEugene Animation Tools",
-		imagePath = scriptPath + (Icons.get1_face if Settings.useFaceIcon else Icons.get1),
-		imageHighlightPath= scriptPath + (Icons.get2_face if Settings.useFaceIcon else Icons.get2),
+		image = scriptPath + Icons.get1[0],
+		imageHighlight = scriptPath + Icons.get2[0],
 		)
 
