@@ -54,11 +54,15 @@ def GetButtonFromShelf(buttonName):
 
 def ToggleButtonIcons(path, *args):
 	buttons = GetButtonFromShelf(Settings.buttonLabel)
+	if (buttons == None):
+		cmds.warning("No GETools button on current shelf")
+		return
 
 	for item in buttons:
 		currentImage = cmds.shelfButton(item, query = True, image = True)
 		currentImageHighlight = cmds.shelfButton(item, query = True, highlightImage = True)
 
+		changed = False
 		count = len(Icons.get1)
 		for i in range(count):
 			if (path + Icons.get1[i] == currentImage):
@@ -68,7 +72,12 @@ def ToggleButtonIcons(path, *args):
 				else:
 					currentImage = path + Icons.get1[0]
 					currentImageHighlight = path + Icons.get2[0]
+				changed = True
 				break
+		
+		if (not changed):
+			currentImage = path + Icons.get1[0]
+			currentImageHighlight = path + Icons.get2[0]
 
 		cmds.shelfButton(item, edit = True, image = currentImage, highlightImage = currentImageHighlight)
 	
