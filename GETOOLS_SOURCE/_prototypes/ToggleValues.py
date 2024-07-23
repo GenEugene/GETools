@@ -5,7 +5,7 @@ toggleValue = (0, 1)
 cmds.select("test1:cube1", replace = True)
 
 # Extract namespace from selected
-selected = cmds.ls(sl = True)[0]
+selected = cmds.ls(selection = True)[0]
 resultNamespace = selected.split(':')[0]
 count = selected.split(':')
 

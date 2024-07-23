@@ -18,7 +18,7 @@ def ClearRigNamespaces(_namespace=''):
 	cmds.select("SET_EXPORT_ANIM_ALL", r = 1) # Select all objects for baking
 
 def NamespacesFromSelected(self, *args):
-	selected = cmds.ls(sl = 1)
+	selected = cmds.ls(selection = True)
 	if (selected):
 		namespaces = list("")
 		for i in range(len(selected)):

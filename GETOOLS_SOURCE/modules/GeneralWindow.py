@@ -29,6 +29,7 @@ from ..modules import CenterOfMass
 from ..modules import Overlappy
 from ..modules import Rigging
 from ..modules import Tools
+from ..utils import Annotation
 from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Install
@@ -44,7 +45,7 @@ from ..values import Icons
 
 
 class GeneralWindow:
-	version = "v1.2.2"
+	version = "v1.2.3"
 	name = "GETools"
 	title = name + " " + version
 
@@ -107,6 +108,8 @@ class GeneralWindow:
 		cmds.menuItem(label = "Select Hiererchy", command = Selector.SelectHierarchy, image = Icons.selectByHierarchy)
 		cmds.menuItem(label = "Select Skinned Meshes Or Joints", command = Skinning.SelectSkinnedMeshesOrJoints)
 		# cmds.menuItem(label = "Create Reset Button", command = Install.CreateResetButton)
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Annotate selected", command = Annotation.AnnotateSelected)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected, image = Icons.text)
 		cmds.menuItem(label = "Print channel box selected attributes", command = PrintChannelBoxAttributes, image = Icons.text)

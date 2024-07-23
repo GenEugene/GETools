@@ -1,8 +1,9 @@
 GETools changelog
 
-v1.2.2
+v1.2.3
 - [OVERLAPPY] Added confirm dialog for zero particle offset.
 - [UI] Replaced button icon change approach, now simply use Help/Change Icon for toggling icons
+- Added annotation creation draft logic
 
 v1.1.0
 - [CRITICAL] Fixed compatibility with Maya 2025.
