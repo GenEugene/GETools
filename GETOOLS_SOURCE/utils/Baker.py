@@ -23,12 +23,13 @@
 
 import maya.cmds as cmds
 
+from ..utils import Animation
 from ..utils import Constraints
 from ..utils import Selector
 from ..utils import Timeline
 
 
-def BakeSelected(classic=True, preserveOutsideKeys=True, sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None):
+def BakeSelected(classic=True, preserveOutsideKeys=True, sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None, euler=False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
@@ -69,7 +70,10 @@ def BakeSelected(classic=True, preserveOutsideKeys=True, sampleBy=1.0, selectedR
 			cmds.cutKey(time = (timeRange[1], None)) # to right
 	cmds.refresh(suspend = False)
 
-def BakeSelectedByLastObject(pairOnly=False, sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None):
+	if (euler):
+		Animation.EulerFilterOnObjects(selectedList)
+
+def BakeSelectedByLastObject(pairOnly=False, sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None, euler=False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(2)
 	if (selectedList == None):
@@ -85,7 +89,7 @@ def BakeSelectedByLastObject(pairOnly=False, sampleBy=1.0, selectedRange=False, 
 	# Bake objects
 	cmds.select(selectedList)
 	cmds.select(selectedList[-1], deselect = True)
-	BakeSelected(sampleBy = sampleBy, selectedRange = selectedRange, channelBox = channelBox, attributes = attributes)
+	BakeSelected(sampleBy = sampleBy, selectedRange = selectedRange, channelBox = channelBox, attributes = attributes, euler = euler)
 
 	# Delete constraints
 	Constraints.DeleteConstraints(selectedList[:-1])
@@ -93,7 +97,7 @@ def BakeSelectedByLastObject(pairOnly=False, sampleBy=1.0, selectedRange=False, 
 	cmds.select(selectedList)
 	return selectedList
 
-def BakeSelectedByWorld(sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None):
+def BakeSelectedByWorld(sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None, euler=False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
@@ -102,7 +106,7 @@ def BakeSelectedByWorld(sampleBy=1.0, selectedRange=False, channelBox=False, att
 	world = cmds.group(world = True, empty = True)
 	selectedList.append(world)
 	cmds.select(selectedList, replace = True)
-	BakeSelectedByLastObject(sampleBy = sampleBy, selectedRange = selectedRange, channelBox = channelBox, attributes = attributes)
+	BakeSelectedByLastObject(sampleBy = sampleBy, selectedRange = selectedRange, channelBox = channelBox, attributes = attributes, euler = euler)
 	cmds.delete(world)
 
 # def BakeReverseParentOnPair(): # TODO add child locator on parent object (OPTIONAL)

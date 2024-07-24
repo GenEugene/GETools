@@ -52,6 +52,7 @@ class GeneralWindow:
 
 	def __init__(self):
 		self.directory = ""
+		
 		self.frameTools = None
 		self.frameRigging = None
 		self.frameOverlappy = None
