@@ -265,7 +265,7 @@ class Tools:
 		#
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Euler Filter", command = Animation.FilterCurve, backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.filterCurve)
+		cmds.button(label = "Euler Filter", command = Animation.EulerFilterOnSelected, backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.filterCurve)
 		#
 		countOffsets = 5
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)

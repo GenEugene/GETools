@@ -45,7 +45,7 @@ from ..values import Icons
 
 
 class GeneralWindow:
-	version = "v1.2.3"
+	version = "v1.2.4"
 	name = "GETools"
 	title = name + " " + version
 
@@ -151,8 +151,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Subdiv Surfaces", command = Toggles.ToggleSubdivSurfaces)
 		cmds.menuItem(label = "Textures", command = Toggles.ToggleTextures, image = Icons.image)
 
-
-		self.LayoutMenuInstall()
+		self.LayoutMenuOptions()
 
 		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
 		def LinkVersionHistory(self): cmds.showHelp("https://github.com/GenEugene/GETools/blob/master/changelog.txt", absolute = True)
@@ -212,9 +211,14 @@ class GeneralWindow:
 		# cmds.menuItem(label = "Layer Get Selected", command = LayerGetSelected)
 		# cmds.menuItem(label = "Layer Move", command = LayerMove)
 		pass
-	def LayoutMenuInstall(self):
-		cmds.menu(label = "To Shelf", tearOff = True)
-		
+	def LayoutMenuOptions(self):
+		cmds.menu(label = "Options", tearOff = True)
+		cmds.menuItem(label = "Euler Filter After Baking", checkBox = False)
+
+		cmds.menuItem(dividerLabel = "Install", divider = True)
+
+		# Install
+		cmds.menuItem(subMenu = True, label = "Install Buttons To Current Shelf", tearOff = True, image = Icons.fileOpen)
 		cmds.menuItem(subMenu = True, label = "File", tearOff = True, image = Icons.fileOpen)
 		cmds.menuItem(label = "Reload Scene (force)", command = partial(Install.ToShelf_ReloadScene, self.directory), image = Icons.reset)
 		cmds.menuItem(label = "Exit Maya (force)", command = partial(Install.ToShelf_ExitMaya, self.directory), image = Icons.off)
@@ -350,7 +354,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Static", command = partial(Install.ToShelf_DeleteStatic, self.directory))
 		cmds.setParent('..', menu = True)
 		#
-		cmds.menuItem(label = "Euler Filter", command = partial(Install.ToShelf_EulerFilter, self.directory), image = Icons.filterActive)
+		cmds.menuItem(label = "Euler Filter", command = partial(Install.ToShelf_EulerFilterOnSelected, self.directory), image = Icons.filterActive)
 		#
 		cmds.menuItem(subMenu = True, label = "Infinity", tearOff = True, image = Icons.infinity)
 		cmds.menuItem(label = "Constant", command = partial(Install.ToShelf_SetInfinity, self.directory, 1))
@@ -433,7 +437,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Reconstruct", command = partial(Install.ToShelf_BlendshapesReconstruct, self.directory), image = Icons.blendshape)
 		cmds.menuItem(label = "Extract Shapes", command = partial(Install.ToShelf_BlendshapesExtractShapes, self.directory), image = Icons.polyMesh)
 		cmds.menuItem(label = "Zero Weights", command = partial(Install.ToShelf_BlendshapesZeroWeights, self.directory), image = Icons.zero)
-		cmds.setParent('..', menu = True)
+		# cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(dividerLabel = "EXPERIMENTAL", divider = True)
 		###

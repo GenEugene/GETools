@@ -204,8 +204,8 @@ def ToShelf_DeleteNonkeyable(path, *args):
 def ToShelf_DeleteStatic(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.DeleteStatic), "DeleteStatic", "DStatic")
 
-def ToShelf_EulerFilter(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.EulerFilter), "EulerFilter", "Euler")
+def ToShelf_EulerFilterOnSelected(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.EulerFilterOnSelected), "EulerFilter", "Euler")
 def ToShelf_SetInfinity(path, mode, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetInfinity) + "({0})".format(mode), "SetInfinity{0}".format(mode), "Inf{0}".format(mode))
 

@@ -68,11 +68,16 @@ def DeleteStaticCurves(*args):
 	Selector.MultipleObjects(1)
 	cmds.delete(staticChannels = True)
 
-def FilterCurve(*args):
+def EulerFilterObject(obj):
+	cmds.filterCurve(obj)
+def EulerFilterOnSelected(*args):
 	# Check selected objects
-	Selector.MultipleObjects(1)
-	cmds.filterCurve()
-
+	selected = Selector.MultipleObjects(1)
+	if (selected == None):
+		return None
+	for item in selected:
+		EulerFilterObject(item)
+	
 def SetInfinity(mode, items=None, *args):
 	result = ""
 	if (mode == 1):
