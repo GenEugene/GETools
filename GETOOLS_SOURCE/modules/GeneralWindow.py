@@ -41,11 +41,12 @@ from ..utils import Selector
 from ..utils import Shelf
 from ..utils import Skinning
 from ..utils import Toggles
+from ..utils import UI
 from ..values import Icons
 
 
 class GeneralWindow:
-	version = "v1.2.4"
+	version = "v1.2.5"
 	name = "GETools"
 	title = name + " " + version
 
@@ -56,6 +57,8 @@ class GeneralWindow:
 		self.frameOverlappy = None
 		self.frameCenterOfMass = None
 		self.frameExperimental = None
+
+		self.menuCheckboxEulerFilter = None
 	def CreateUI(self):
 		if cmds.window(Settings.windowName, exists = True):
 			cmds.deleteUI(Settings.windowName)
@@ -213,7 +216,8 @@ class GeneralWindow:
 		pass
 	def LayoutMenuOptions(self):
 		cmds.menu(label = "Options", tearOff = True)
-		cmds.menuItem(label = "Euler Filter After Baking", checkBox = False)
+
+		self.menuCheckboxEulerFilter = UI.MenuCheckbox(label = "Euler Filter After Baking", value = False, valueDefault = False)
 
 		cmds.menuItem(dividerLabel = "Install", divider = True)
 
