@@ -461,7 +461,7 @@ class GeneralWindow:
 
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = "1. " + Tools.Tools.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		Tools.Tools().UICreate(self.frameTools)
+		Tools.Tools(self).UICreate(self.frameTools)
 	def LayoutRigging(self, parentLayout):
 		self.frameRigging = cmds.frameLayout("layoutRigging", parent = parentLayout, label = "2. " + Rigging.Rigging.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		Rigging.Rigging().UICreate(self.frameRigging)

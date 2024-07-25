@@ -70,6 +70,7 @@ def DeleteStaticCurves(*args):
 
 def EulerFilterOnObject(obj):
 	cmds.filterCurve(obj)
+	cmds.selectKey(clear = True)
 	print("######## Euler Filtered {0}".format(obj))
 def EulerFilterOnObjects(objects):
 	if (objects == None):
