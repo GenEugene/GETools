@@ -129,7 +129,12 @@ class Overlappy:
 	name = "OVERLAPPY"
 	title = name + " " + version
 
+	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
+	# from ..modules import GeneralWindow
+	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow):
 	def __init__(self):
+		self.generalInstance = generalInstance
+
 		# VALUES
 		self.time = Timeline.TimeRangeHandler()
 		self.startPositionGoalParticle = [None, (0, 0, 0)]
@@ -916,7 +921,7 @@ class Overlappy:
 		cmds.select(_clone, replace = True)
 		
 		# Bake
-		Baker.BakeSelected(classic = True, preserveOutsideKeys = True)
+		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		Constraints.DeleteConstraints(_clone)
 		
 		# Copy keys, create layers and paste keys

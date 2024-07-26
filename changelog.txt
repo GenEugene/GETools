@@ -6,8 +6,9 @@ v1.2.3
 - [UI] Replaced button icon change approach, now simply use Help/Change Icon for toggling icons.
 - [UI] Added "Options" menu with euler filter checkbox.
 - [UI] Moved "To Shelf" menu to the new "Options" menu.
-- Setup connection between base class instance between sub classes.
-- Improved euler filter method for using after baking.
+- [UI] Changed the color of the black panel to a lighter color.
+- Added connection between base class instance and sub classes.
+- Improved euler filter method for using after animation baking.
 
 v1.1.0
 - [CRITICAL] Fixed compatibility with Maya 2025.
