@@ -132,7 +132,7 @@ class Overlappy:
 	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
 	# from ..modules import GeneralWindow
 	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow):
-	def __init__(self):
+	def __init__(self, generalInstance):
 		self.generalInstance = generalInstance
 
 		# VALUES

@@ -467,10 +467,10 @@ class GeneralWindow:
 		Rigging.Rigging().UICreate(self.frameRigging)
 	def LayoutOverlappy(self, parentLayout):
 		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = "3. " + Overlappy.Overlappy.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		Overlappy.Overlappy().UICreate(self.frameOverlappy)
+		Overlappy.Overlappy(self).UICreate(self.frameOverlappy)
 	def LayoutCenterOfMass(self, parentLayout):
 		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = "4. " + CenterOfMass.CenterOfMass.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		CenterOfMass.CenterOfMass().UICreate(self.frameCenterOfMass)
+		CenterOfMass.CenterOfMass(self).UICreate(self.frameCenterOfMass)
 	def LayoutExperimental(self, parentLayout):
 		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "5. " + "EXPERIMENTAL", collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		cmds.popupMenu()
