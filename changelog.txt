@@ -1,6 +1,6 @@
 GETools changelog
 
-v1.2.3
+v1.2.5
 - [OVERLAPPY] Added confirm dialog for zero particle offset.
 - [UTILS] Added draft annotation creation logic.
 - [UI] Replaced button icon change approach, now simply use Help/Change Icon for toggling icons.
