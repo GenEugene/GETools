@@ -255,9 +255,9 @@ def DeleteStatic():
 	import GETOOLS_SOURCE.utils.Animation as animation
 	animation.DeleteStaticCurves()
 
-def EulerFilter():
+def EulerFilterOnSelected():
 	import GETOOLS_SOURCE.utils.Animation as animation
-	animation.FilterCurve()
+	animation.EulerFilterOnSelected()
 
 def SetInfinity(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Animation as animation

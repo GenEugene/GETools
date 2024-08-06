@@ -23,14 +23,36 @@
 
 import maya.cmds as cmds
 
+from ..utils import Parent
+from ..utils import Text
 
-def Reload(*args):
-	currentScene = cmds.file(query = True, sceneName = True)
-	if (currentScene):
-		cmds.file(currentScene, open = True, force = True)
-	else:
-		cmds.file(newFile = True, force = True)
 
-def ExitMaya(*args):
-	cmds.quit(force = True)
+prefix = "ann_"
+
+
+def Annotate(target, text, point=(0, 0, 0), displayArrow=True, useNameAsText=False, freeze=True):
+	textFinal = target if useNameAsText else text
+	annotation = cmds.annotate(target, text = textFinal, point = point)
+	cmds.setAttr(annotation + ".displayArrow", displayArrow)
+	if (freeze):
+		cmds.setAttr(annotation + ".overrideEnabled", 1)
+		cmds.setAttr(annotation + ".overrideDisplayType", 2)
+	return annotation
+
+def AnnotateSelected(*args):
+	selected = cmds.ls(selection = True)
+	for item in selected:
+		# Create annotation and get transform
+		annotation = Annotate(item, item, (0, 0, 0), displayArrow = False, useNameAsText = True)
+		transform = cmds.listRelatives(annotation, allParents = True)[0]
+
+		# Rename
+		nameFinal = prefix + item
+		nameFinal = Text.ConvertSymbols(nameFinal)
+		transform = cmds.rename(transform, nameFinal)
+
+		# Parent
+		Parent.FirstToSecond(transform, item, maintainOffset = False)
+
+	# TODO add constraint logic and group all annotations together
 

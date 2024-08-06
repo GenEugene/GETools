@@ -24,7 +24,7 @@
 from .utils import Colors
 
 
-useFaceIcon = False
+buttonLabel = "GETools"
 
 windowName = "windowGETools"
 dockName = "dockGETools"
@@ -43,7 +43,7 @@ sliderWidthMarker = 14
 windowWidthScroll = windowWidth - windowWidthScrollSpace
 windowWidthMargin = windowWidthScroll - margin * 2
 
-frames1Color = Colors.blackWhite00
+frames1Color = Colors.blackWhite13
 frames2Color = Colors.blackWhite20
 frames2Prefix = "//  "
 

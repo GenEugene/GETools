@@ -1,16 +1,26 @@
 GETools changelog
 
+v1.2.5
+- [OVERLAPPY] Added confirm dialog for zero particle offset.
+- [UTILS] Added draft annotation creation logic.
+- [UI] Replaced button icon change approach, now simply use Help/Change Icon for toggling icons.
+- [UI] Added "Options" menu with euler filter checkbox.
+- [UI] Moved "To Shelf" menu to the new "Options" menu.
+- [UI] Changed the color of the black panel to a lighter color (0.00 => 0.13).
+- Added connection between base class instance and sub classes.
+- Improved euler filter method for using after animation baking.
+
 v1.1.0
 - [CRITICAL] Fixed compatibility with Maya 2025.
 - [RIGGING] Added "Extract Shapes" logic from blendshapes.
 - [UI] Added button icon change on highlight.
 - [UI] Added alternative secret meme icon (need to activate in Settings "useFaceIcon = True").
 - Improved cache evaluator detection.
-- Moved Settings script to the root folder
+- Moved Settings script to the root folder.
 - General refactoring.
 
 v1.0.5
-- Fixed motion trails to shelf button
+- Fixed motion trails to shelf button.
 - Decreased hardcode in Drag and Drop logic.
 - Reworked Button Install module.
 - [UI] Added tear-off to sub menus

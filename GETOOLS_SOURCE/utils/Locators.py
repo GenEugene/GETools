@@ -105,7 +105,7 @@ def Create(name=nameBase, scale=scale, hideParent=False, subLocator=False):
 		return locatorCurrent, subLocator
 	else:
 		return locatorCurrent
-def CreateOnSelected(name=nameBase, scale=scale, minSelectedCount=minSelectedCount, hideParent=False, subLocator=False, constraint=False, bake=False, parentToLastSelected=False, constrainReverse=False, constrainTranslate=True, constrainRotate=True):
+def CreateOnSelected(name=nameBase, scale=scale, minSelectedCount=minSelectedCount, hideParent=False, subLocator=False, constraint=False, bake=False, parentToLastSelected=False, constrainReverse=False, constrainTranslate=True, constrainRotate=True, euler=False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minSelectedCount)
 	if (selectedList == None):
@@ -142,7 +142,7 @@ def CreateOnSelected(name=nameBase, scale=scale, minSelectedCount=minSelectedCou
 
 		# Bake locators and delete constraints
 		cmds.select(locatorsList)
-		Baker.BakeSelected()
+		Baker.BakeSelected(euler = euler)
 		Animation.DeleteStaticCurves()
 		Constraints.DeleteConstraints(locatorsList)
 
@@ -162,9 +162,9 @@ def CreateOnSelected(name=nameBase, scale=scale, minSelectedCount=minSelectedCou
 	else:
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
-def CreateAndBakeAsChildrenFromLastSelected(scale=scale, minSelectedCount=2, hideParent=False, subLocator=False, constraintReverse=False, skipLastReverse=True):
+def CreateAndBakeAsChildrenFromLastSelected(scale=scale, minSelectedCount=2, hideParent=False, subLocator=False, constraintReverse=False, skipLastReverse=True, euler=False):
 	# Check selected objects
-	objects = CreateOnSelected(scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator, constraint = True, bake = True, parentToLastSelected = True)
+	objects = CreateOnSelected(scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator, constraint = True, bake = True, parentToLastSelected = True, euler = euler)
 	if (objects == None):
 		return None
 	
@@ -184,9 +184,9 @@ def CreateAndBakeAsChildrenFromLastSelected(scale=scale, minSelectedCount=2, hid
 	else:
 		cmds.select(objects[1][-1])
 	return objects
-def CreateOnSelectedAim(name=nameAim, scale=scale, minSelectedCount=minSelectedCount, hideParent=False, subLocator=False, rotateOnly=False, aimVector=(1,0,0), distance=100, reverse=True):
+def CreateOnSelectedAim(name=nameAim, scale=scale, minSelectedCount=minSelectedCount, hideParent=False, subLocator=False, rotateOnly=False, aimVector=(1,0,0), distance=100, reverse=True, euler=False):
 	# Check selected objects
-	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator)
+	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator, euler = euler)
 	if (objects == None):
 		return None
 	
@@ -226,7 +226,7 @@ def CreateOnSelectedAim(name=nameAim, scale=scale, minSelectedCount=minSelectedC
 		
 	# Bake animation from original objects
 	cmds.select(objects[1] + locatorsTargetsList, replace = True)
-	Baker.BakeSelected()
+	Baker.BakeSelected(euler = euler)
 	Constraints.DeleteConstraints(objects[1])
 	Constraints.DeleteConstraints(locatorsTargetsList)
 	Animation.DeleteStaticCurves()

@@ -29,7 +29,6 @@ from ..utils import Animation
 from ..utils import Baker
 from ..utils import Colors
 from ..utils import Locators
-from ..utils import Other
 from ..utils import Selector
 from ..utils import Timeline
 from ..utils import UI
@@ -109,7 +108,11 @@ class Tools:
 	name = "TOOLS"
 	title = name + " " + version
 
-	def __init__(self):
+	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
+	# from ..modules import GeneralWindow
+	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow):
+	def __init__(self, generalInstance):
+		self.generalInstance = generalInstance
 		self.checkboxLocatorHideParent = None
 		self.checkboxLocatorSubLocator = None
 		self.floatLocatorSize = None
@@ -265,7 +268,7 @@ class Tools:
 		#
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Euler Filter", command = Animation.FilterCurve, backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.filterCurve)
+		cmds.button(label = "Euler Filter", command = Animation.EulerFilterOnSelected, backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.filterCurve)
 		#
 		countOffsets = 5
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
@@ -343,11 +346,11 @@ class Tools:
 		Locators.CreateOnSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraint = True, bake = True, constrainReverse = True, constrainTranslate = translate, constrainRotate = rotate)
 	
 	def LocatorsRelative(self, *args):
-		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get())
+		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def LocatorsRelativeReverseSkipLast(self, *args):
-		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraintReverse = True)
+		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraintReverse = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def LocatorsRelativeReverse(self, *args):
-		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraintReverse = True, skipLastReverse = False)
+		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraintReverse = True, skipLastReverse = False, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	
 	def LocatorsBakeAim(self, axis, rotateOnly=False, *args):
 		scale = self.floatLocatorSize.Get()
@@ -362,7 +365,7 @@ class Tools:
 		elif (axis == 5): axisVector = (0, 0, -1)
 		elif (axis == 6): axisVector = (0, 0, 1)
 
-		Locators.CreateOnSelectedAim(scale = scale, hideParent = hideParent, subLocator = subLocators, rotateOnly = rotateOnly, aimVector = axisVector, distance = distance, reverse = True)
+		Locators.CreateOnSelectedAim(scale = scale, hideParent = hideParent, subLocator = subLocators, rotateOnly = rotateOnly, aimVector = axisVector, distance = distance, reverse = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 
 		if (distance == 0):
 			cmds.warning("Aim distance is 0. Highly recommended to use non-zero value.")
@@ -394,27 +397,27 @@ class Tools:
 		
 		self.fieldBakingSamples.Set(value)
 	def BakeSelectedClassic(self, *args):
-		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True)
+		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def BakeSelectedClassicCut(self, *args):
-		Baker.BakeSelected(classic = True, preserveOutsideKeys = False, sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True)
+		Baker.BakeSelected(classic = True, preserveOutsideKeys = False, sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def BakeSelectedCustom(self, *args): # TODO , sampleBy = self.fieldBakingStep.Get()
-		Baker.BakeSelected(classic = False, preserveOutsideKeys = True, selectedRange = True, channelBox = True)
+		Baker.BakeSelected(classic = False, preserveOutsideKeys = True, selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def BakeSelectedCustomCut(self, *args): # TODO , sampleBy = self.fieldBakingStep.Get()
-		Baker.BakeSelected(classic = False, preserveOutsideKeys = False, selectedRange = True, channelBox = True)
+		Baker.BakeSelected(classic = False, preserveOutsideKeys = False, selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def BakeSelectedByLastObject(self, translate=True, rotate=True, *args):
 		if (translate and rotate):
-			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True)
+			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (translate and not rotate):
-			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateShort)
+			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateShort, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (not translate and rotate):
-			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateShort)
+			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateShort, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def BakeSelectedByWorld(self, translate=True, rotate=True, *args):
 		if (translate and rotate):
-			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True)
+			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (translate and not rotate):
-			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateShort)
+			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateShort, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (not translate and rotate):
-			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateShort)
+			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateShort, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 
 
 	# ANIMATION

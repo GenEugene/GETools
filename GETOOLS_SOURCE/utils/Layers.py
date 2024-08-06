@@ -31,7 +31,7 @@ LayerPrefix = "_layer_"
 
 
 def Create(layerName, parent=LayerBase, *args):
-	# if(cmds.objExists(layerName)):
+	# if (cmds.objExists(layerName)):
 	# 	cmds.warning("Layer \"{0}\" already exists".format(layerName))
 	# 	return None
 	# else:
@@ -50,7 +50,7 @@ def CreateForSelected(selected, parent=LayerBase, prefix=LayerPrefix, *args):
 	return layers
 
 def Delete(layerName, *args):
-	if(cmds.objExists(layerName)):
+	if (cmds.objExists(layerName)):
 		cmds.delete(layerName)
 		print("Layer \"{0}\" deleted".format(layerName))
 	else:
@@ -58,11 +58,11 @@ def Delete(layerName, *args):
 
 def MoveChildrenToParent(children, parent): # TODO rework
 	# Check child layer
-	# if(not cmds.objExists(layerChild)):
+	# if (not cmds.objExists(layerChild)):
 	# 	cmds.warning("Layer \"{0}\" doesn't exist".format(layerChild))
 	# 	return
 	# # Check parent layer
-	# if(not cmds.objExists(layerParent)):
+	# if (not cmds.objExists(layerParent)):
 	# 	cmds.warning("Layer \"{0}\" doesn't exist".format(layerParent))
 	# 	return
 	

@@ -29,6 +29,7 @@ from ..modules import CenterOfMass
 from ..modules import Overlappy
 from ..modules import Rigging
 from ..modules import Tools
+from ..utils import Annotation
 from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Install
@@ -37,23 +38,28 @@ from ..utils import MayaSettings
 from ..utils import MotionTrail
 from ..utils import Scene
 from ..utils import Selector
+from ..utils import Shelf
 from ..utils import Skinning
 from ..utils import Toggles
+from ..utils import UI
 from ..values import Icons
 
 
 class GeneralWindow:
-	version = "v1.1.0"
+	version = "v1.2.5"
 	name = "GETools"
 	title = name + " " + version
 
 	def __init__(self):
 		self.directory = ""
+		
 		self.frameTools = None
 		self.frameRigging = None
 		self.frameOverlappy = None
 		self.frameCenterOfMass = None
 		self.frameExperimental = None
+
+		self.menuCheckboxEulerFilter = None
 	def CreateUI(self):
 		if cmds.window(Settings.windowName, exists = True):
 			cmds.deleteUI(Settings.windowName)
@@ -107,6 +113,8 @@ class GeneralWindow:
 		cmds.menuItem(label = "Select Skinned Meshes Or Joints", command = Skinning.SelectSkinnedMeshesOrJoints)
 		# cmds.menuItem(label = "Create Reset Button", command = Install.CreateResetButton)
 		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Annotate selected", command = Annotation.AnnotateSelected)
+		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected, image = Icons.text)
 		cmds.menuItem(label = "Print channel box selected attributes", command = PrintChannelBoxAttributes, image = Icons.text)
 		cmds.menuItem(dividerLabel = "Blendshapes", divider = True)
@@ -147,8 +155,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Subdiv Surfaces", command = Toggles.ToggleSubdivSurfaces)
 		cmds.menuItem(label = "Textures", command = Toggles.ToggleTextures, image = Icons.image)
 
-
-		self.LayoutMenuInstall()
+		self.LayoutMenuOptions()
 
 		cmds.menu(label = "Help", tearOff = True) # , helpMenu = True
 		def LinkVersionHistory(self): cmds.showHelp("https://github.com/GenEugene/GETools/blob/master/changelog.txt", absolute = True)
@@ -162,7 +169,7 @@ class GeneralWindow:
 		def LinkShareIdeas(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/ideas", absolute = True)
 		def LinkReport(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/report-a-problem", absolute = True)
 		
-		cmds.menuItem(label = "About GETools", enable = False, image = self.directory + Icons.get1) # TODO add window with information
+		cmds.menuItem(label = "About GETools", enable = False, image = self.directory + Icons.get1[0]) # TODO add window with information
 		cmds.menuItem(label = "Version History", command = LinkVersionHistory)
 		cmds.menuItem(dividerLabel = "Links", divider = True)
 		cmds.menuItem(label = "GitHub", command = LinkGithub, image = Icons.home)
@@ -177,7 +184,9 @@ class GeneralWindow:
 		cmds.menuItem(dividerLabel = "Support", divider = True)
 		cmds.menuItem(label = "Share your Ideas", command = LinkShareIdeas, image = Icons.light)
 		cmds.menuItem(label = "Report a Problem", command = LinkReport, image = Icons.warning)
-
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Change Icon", command = partial(Shelf.ToggleButtonIcons, self.directory))
+		
 		# DEV ZONE
 		def LayerCreate(*args):
 			Layers.Create("testLayer")
@@ -206,9 +215,15 @@ class GeneralWindow:
 		# cmds.menuItem(label = "Layer Get Selected", command = LayerGetSelected)
 		# cmds.menuItem(label = "Layer Move", command = LayerMove)
 		pass
-	def LayoutMenuInstall(self):
-		cmds.menu(label = "To Shelf", tearOff = True)
-		
+	def LayoutMenuOptions(self):
+		cmds.menu(label = "Options", tearOff = True)
+
+		self.menuCheckboxEulerFilter = UI.MenuCheckbox(label = "Euler Filter After Baking", value = False, valueDefault = False)
+
+		cmds.menuItem(dividerLabel = "Install", divider = True)
+
+		# Install
+		cmds.menuItem(subMenu = True, label = "Install Buttons To Current Shelf", tearOff = True, image = Icons.fileOpen)
 		cmds.menuItem(subMenu = True, label = "File", tearOff = True, image = Icons.fileOpen)
 		cmds.menuItem(label = "Reload Scene (force)", command = partial(Install.ToShelf_ReloadScene, self.directory), image = Icons.reset)
 		cmds.menuItem(label = "Exit Maya (force)", command = partial(Install.ToShelf_ExitMaya, self.directory), image = Icons.off)
@@ -344,7 +359,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Static", command = partial(Install.ToShelf_DeleteStatic, self.directory))
 		cmds.setParent('..', menu = True)
 		#
-		cmds.menuItem(label = "Euler Filter", command = partial(Install.ToShelf_EulerFilter, self.directory), image = Icons.filterActive)
+		cmds.menuItem(label = "Euler Filter", command = partial(Install.ToShelf_EulerFilterOnSelected, self.directory), image = Icons.filterActive)
 		#
 		cmds.menuItem(subMenu = True, label = "Infinity", tearOff = True, image = Icons.infinity)
 		cmds.menuItem(label = "Constant", command = partial(Install.ToShelf_SetInfinity, self.directory, 1))
@@ -427,7 +442,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Reconstruct", command = partial(Install.ToShelf_BlendshapesReconstruct, self.directory), image = Icons.blendshape)
 		cmds.menuItem(label = "Extract Shapes", command = partial(Install.ToShelf_BlendshapesExtractShapes, self.directory), image = Icons.polyMesh)
 		cmds.menuItem(label = "Zero Weights", command = partial(Install.ToShelf_BlendshapesZeroWeights, self.directory), image = Icons.zero)
-		cmds.setParent('..', menu = True)
+		# cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(dividerLabel = "EXPERIMENTAL", divider = True)
 		###
@@ -441,21 +456,21 @@ class GeneralWindow:
 	def LayoutTitle(self, parentLayout): # TODO figure out how to use resizeable images
 		cmds.columnLayout("layoutTitle", parent = parentLayout, adjustableColumn = False)
 		size = 30
-		cmds.iconTextButton(label = "GETOOLS", style = "iconAndTextHorizontal", image = self.directory + Icons.get1, width = size, height = size)
+		cmds.iconTextButton(label = "GETOOLS", style = "iconAndTextHorizontal", image = self.directory + Icons.get1[0], width = size, height = size)
 		# cmds.image(image = self.directory + Icons.get, width = size, height = size)
 
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = "1. " + Tools.Tools.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		Tools.Tools().UICreate(self.frameTools)
+		Tools.Tools(self).UICreate(self.frameTools)
 	def LayoutRigging(self, parentLayout):
 		self.frameRigging = cmds.frameLayout("layoutRigging", parent = parentLayout, label = "2. " + Rigging.Rigging.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		Rigging.Rigging().UICreate(self.frameRigging)
 	def LayoutOverlappy(self, parentLayout):
 		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = "3. " + Overlappy.Overlappy.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		Overlappy.Overlappy().UICreate(self.frameOverlappy)
+		Overlappy.Overlappy(self).UICreate(self.frameOverlappy)
 	def LayoutCenterOfMass(self, parentLayout):
 		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = "4. " + CenterOfMass.CenterOfMass.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		CenterOfMass.CenterOfMass().UICreate(self.frameCenterOfMass)
+		CenterOfMass.CenterOfMass(self).UICreate(self.frameCenterOfMass)
 	def LayoutExperimental(self, parentLayout):
 		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "5. " + "EXPERIMENTAL", collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		cmds.popupMenu()

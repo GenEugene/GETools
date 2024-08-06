@@ -256,3 +256,25 @@ class Slider:
 	def ResetCached(self, *args):
 		self.valueCached = 0
 
+class MenuCheckbox:
+	def __init__(self,
+			# parent=None, # TODO
+			label="label",
+			value=False,
+			valueDefault=False,
+			enable=True,
+			command="pass",
+			):
+		
+		self.valueDefault = valueDefault
+		self.checkbox = cmds.menuItem(label = label, checkBox = value, enable = enable, command = command)
+
+	def Get(self, *args):
+		return cmds.menuItem(self.checkbox, query = True, checkBox = True)
+	
+	def Set(self, value=False, *args):
+		cmds.menuItem(self.checkbox, edit = True, checkBox = value)
+	
+	def Reset(self, *args):
+		cmds.menuItem(self.checkbox, edit = True, checkBox = self.valueDefault)
+

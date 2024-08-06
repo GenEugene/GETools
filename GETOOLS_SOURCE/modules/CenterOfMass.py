@@ -88,7 +88,12 @@ class CenterOfMass:
 	name = "CENTER OF MASS"
 	title = name + " " + version
 
-	def __init__(self):
+	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
+	# from ..modules import GeneralWindow
+	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow):
+	def __init__(self, generalInstance):
+		self.generalInstance = generalInstance
+
 		self.COMObject = None
 		self.CachedSelectedObjects = None
 
@@ -283,7 +288,7 @@ class CenterOfMass:
 			cmds.select(clear = True)
 			return
 
-		self.CachedSelectedObjects = Locators.CreateAndBakeAsChildrenFromLastSelected()
+		self.CachedSelectedObjects = Locators.CreateAndBakeAsChildrenFromLastSelected(euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		return self.CachedSelectedObjects
 	def BakeScenario3(self, *args):
 		objects = self.BakeScenario2()
@@ -299,7 +304,7 @@ class CenterOfMass:
 			return
 		
 		cmds.select(self.CachedSelectedObjects[0][0:-1])
-		Baker.BakeSelected()
+		Baker.BakeSelected(euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		cmds.delete(self.CachedSelectedObjects[1][-1])
 	
 	def LinkCached(self, maintainOffset=False, *args):

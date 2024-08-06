@@ -23,19 +23,61 @@
 
 import maya.cmds as cmds
 
+from .. import Settings
+from GETOOLS_SOURCE.values import Icons
+
 
 def GetCurrentShelf():
 	return cmds.shelfTabLayout("ShelfLayout", query = True, selectTab = True)
 
-def AddToCurrentShelf(command="", label="label", labelImage="", imagePath="pythonFamily.png", imageHighlightPath="pythonFamily.png", annotation=""):
+def AddToCurrentShelf(command="", label="label", labelImage="", image="pythonFamily.png", imageHighlight="pythonFamily.png", annotation=""):
 	cmds.shelfButton(
 		command = command,
 		label = label,
 		imageOverlayLabel = labelImage,
 		annotation = annotation,
-		image = imagePath,
-		highlightImage = imageHighlightPath,
+		image = image,
+		highlightImage = imageHighlight,
 		parent = GetCurrentShelf(),
 		sourceType = "Python",
 		)
 
+def GetButtonFromShelf(buttonName):
+	currentShelf = GetCurrentShelf()
+	shelfButtons = cmds.shelfLayout(currentShelf, query = True, childArray = True)
+	result = []
+	for item in shelfButtons:
+		if (cmds.objectTypeUI(item) == "shelfButton"):
+			if (cmds.shelfButton(item, query = True, label = True) == buttonName):
+				result.append(item)
+	return None if (len(result) == 0) else result
+
+def ToggleButtonIcons(path, *args):
+	buttons = GetButtonFromShelf(Settings.buttonLabel)
+	if (buttons == None):
+		cmds.warning("No GETools button on current shelf")
+		return
+
+	for item in buttons:
+		currentImage = cmds.shelfButton(item, query = True, image = True)
+		currentImageHighlight = cmds.shelfButton(item, query = True, highlightImage = True)
+
+		changed = False
+		count = len(Icons.get1)
+		for i in range(count):
+			if (path + Icons.get1[i] == currentImage):
+				if (i + 1 < count):
+					currentImage = path + Icons.get1[i + 1]
+					currentImageHighlight = path + Icons.get2[i + 1]
+				else:
+					currentImage = path + Icons.get1[0]
+					currentImageHighlight = path + Icons.get2[0]
+				changed = True
+				break
+		
+		if (not changed):
+			currentImage = path + Icons.get1[0]
+			currentImageHighlight = path + Icons.get2[0]
+
+		cmds.shelfButton(item, edit = True, image = currentImage, highlightImage = currentImageHighlight)
+	
