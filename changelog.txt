@@ -2,11 +2,11 @@ GETools changelog
 
 v1.2.3
 - [OVERLAPPY] Added confirm dialog for zero particle offset.
-- [UTILS] Added annotation creation draft logic.
+- [UTILS] Added draft annotation creation logic.
 - [UI] Replaced button icon change approach, now simply use Help/Change Icon for toggling icons.
 - [UI] Added "Options" menu with euler filter checkbox.
 - [UI] Moved "To Shelf" menu to the new "Options" menu.
-- [UI] Changed the color of the black panel to a lighter color.
+- [UI] Changed the color of the black panel to a lighter color (0.00 => 0.13).
 - Added connection between base class instance and sub classes.
 - Improved euler filter method for using after animation baking.
 
