@@ -1,5 +1,8 @@
 GETools changelog
 
+v1.2.6
+- Added to Settings.py file default value for "checkboxEulerFilter"
+
 v1.2.5
 - [OVERLAPPY] Added confirm dialog for zero particle offset.
 - [UTILS] Added draft annotation creation logic.
