@@ -46,7 +46,7 @@ from ..values import Icons
 
 
 class GeneralWindow:
-	version = "v1.2.5"
+	version = "v1.2.6"
 	name = "GETools"
 	title = name + " " + version
 
@@ -218,7 +218,7 @@ class GeneralWindow:
 	def LayoutMenuOptions(self):
 		cmds.menu(label = "Options", tearOff = True)
 
-		self.menuCheckboxEulerFilter = UI.MenuCheckbox(label = "Euler Filter After Baking", value = False, valueDefault = False)
+		self.menuCheckboxEulerFilter = UI.MenuCheckbox(label = "Euler Filter After Baking", value = Settings.checkboxEulerFilter, valueDefault = Settings.checkboxEulerFilter)
 
 		cmds.menuItem(dividerLabel = "Install", divider = True)
 
