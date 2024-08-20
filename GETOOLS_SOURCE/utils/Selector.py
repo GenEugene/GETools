@@ -90,7 +90,3 @@ def GetConnectionsOfType(selected, type="", source=True, destination=True):
 			result.append(None)
 	return result
 
-def GetChannelBoxAttributes(*args):
-	selected = cmds.channelBox("mainChannelBox", query = True, selectedMainAttributes = True) # selectedHistoryAttributes # selectedMainAttributes # selectedOutputAttributes # selectedShapeAttributes
-	return selected
-

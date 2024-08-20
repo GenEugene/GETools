@@ -38,7 +38,7 @@ def DeleteKeys(channelBox=False, *args):
 		timeRange = [Timeline.GetSelectedTimeRange()[0], Timeline.GetSelectedTimeRange()[1] - 1]
 
 	# Check channel box attributes
-	selectedAttributes = Selector.GetChannelBoxAttributes()
+	selectedAttributes = Selector.GetChannelBoxSelectedAttributes()
 	# TODO move logic pattern to separate function
 	cutAll = True
 	if (channelBox):
@@ -127,7 +127,7 @@ def OffsetSelected(direction=1, step=1): # use if needed later # , channelBox = 
 		return
 	
 	time = step * direction
-	selectedAttributes = Selector.GetChannelBoxAttributes()
+	selectedAttributes = Selector.GetChannelBoxSelectedAttributes()
 
 	count = len(selectedList)
 	for i in range(count):

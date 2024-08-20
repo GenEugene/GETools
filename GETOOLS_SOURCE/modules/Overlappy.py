@@ -125,7 +125,7 @@ class OverlappySettings:
 	rangeOffsetZ = (float("-inf"), float("inf"), 0, 100)
 	
 class Overlappy:
-	version = "v2.9"
+	version = "v2.10"
 	name = "OVERLAPPY"
 	title = name + " " + version
 
@@ -441,18 +441,18 @@ class Overlappy:
 		cmds.select(self.selectedObject, replace = True)
 	def _SetupCreate(self, objCurrent, *args): # TODO replace locators by locators class
 		# Names
-		_objConverted = Text.ConvertSymbols(objCurrent)
-		nameLocGoal = OverlappySettings.nameLocGoalTarget[0] + _objConverted
-		nameLocParticle = OverlappySettings.nameLocGoalTarget[1] + _objConverted
-		nameNucleus = OverlappySettings.nameNucleus + _objConverted
-		nameParticle = OverlappySettings.nameParticle + _objConverted
-		nameLocAimBase = OverlappySettings.nameLocAim[0] + _objConverted
-		nameLocAimHidden = OverlappySettings.nameLocAim[1] + _objConverted
-		nameLocAim = OverlappySettings.nameLocAim[2] + _objConverted
-		nameLocAimUp = OverlappySettings.nameLocAim[3] + _objConverted
-		nameLoftStart = OverlappySettings.nameLoft[0] + _objConverted
-		nameLoftEnd = OverlappySettings.nameLoft[1] + _objConverted
-		nameLoftShape = OverlappySettings.nameLoft[2] + _objConverted
+		objConverted = Text.ConvertSymbols(objCurrent)
+		nameLocGoal = OverlappySettings.nameLocGoalTarget[0] + objConverted
+		nameLocParticle = OverlappySettings.nameLocGoalTarget[1] + objConverted
+		nameNucleus = OverlappySettings.nameNucleus + objConverted
+		nameParticle = OverlappySettings.nameParticle + objConverted
+		nameLocAimBase = OverlappySettings.nameLocAim[0] + objConverted
+		nameLocAimHidden = OverlappySettings.nameLocAim[1] + objConverted
+		nameLocAim = OverlappySettings.nameLocAim[2] + objConverted
+		nameLocAimUp = OverlappySettings.nameLocAim[3] + objConverted
+		nameLoftStart = OverlappySettings.nameLoft[0] + objConverted
+		nameLoftEnd = OverlappySettings.nameLoft[1] + objConverted
+		nameLoftShape = OverlappySettings.nameLoft[2] + objConverted
 
 		# Create locator for goal
 		self.locGoalTarget[0] = cmds.spaceLocator(name = nameLocGoal)[0]
@@ -474,8 +474,8 @@ class Overlappy:
 		cmds.setAttr(self.nucleus + ".visibility", 0)
 
 		# Create particle, goal and get selected object position
-		_position = cmds.xform(objCurrent, query = True, worldSpace = True, rotatePivot = True)
-		self.particle = cmds.nParticle(name = nameParticle, position = _position, conserve = 1)[0]
+		position = cmds.xform(objCurrent, query = True, worldSpace = True, rotatePivot = True)
+		self.particle = cmds.nParticle(name = nameParticle, position = position, conserve = 1)[0]
 		cmds.goal(useTransformAsGoal = True, goal = self.locGoalTarget[0])
 		cmds.parent(self.particle, OverlappySettings.nameGroup)
 		# self.startPositionGoalParticle[1] = cmds.xform(self.particle, query = True, translation = True)
@@ -534,14 +534,14 @@ class Overlappy:
 		# Create aim loft
 		self.loft[0] = cmds.circle(name = nameLoftStart, degree = 1, sections = 4, normal = (0, 1, 0))[0]
 		self.loft[1] = cmds.duplicate(self.loft[0], name = nameLoftEnd)[0]
-		_scale1 = 0.001
-		_scale2 = self.sliderPRadius.Get() * OverlappySettings.loftFactor
-		cmds.setAttr(self.loft[0] + ".scaleX", _scale1)
-		cmds.setAttr(self.loft[0] + ".scaleY", _scale1)
-		cmds.setAttr(self.loft[0] + ".scaleZ", _scale1)
-		cmds.setAttr(self.loft[1] + ".scaleX", _scale2)
-		cmds.setAttr(self.loft[1] + ".scaleY", _scale2)
-		cmds.setAttr(self.loft[1] + ".scaleZ", _scale2)
+		scale1 = 0.001
+		scale2 = self.sliderPRadius.Get() * OverlappySettings.loftFactor
+		cmds.setAttr(self.loft[0] + ".scaleX", scale1)
+		cmds.setAttr(self.loft[0] + ".scaleY", scale1)
+		cmds.setAttr(self.loft[0] + ".scaleZ", scale1)
+		cmds.setAttr(self.loft[1] + ".scaleX", scale2)
+		cmds.setAttr(self.loft[1] + ".scaleY", scale2)
+		cmds.setAttr(self.loft[1] + ".scaleZ", scale2)
 		cmds.setAttr(self.loft[0] + ".visibility", 0)
 		cmds.setAttr(self.loft[1] + ".visibility", 0)
 		#
@@ -566,34 +566,34 @@ class Overlappy:
 			return
 		
 		# Get children of group
-		_children = cmds.listRelatives(OverlappySettings.nameGroup)
-		if (len(_children) == 0):
+		children = cmds.listRelatives(OverlappySettings.nameGroup)
+		if (len(children) == 0):
 			cmds.warning("Overlappy object has no children objects")
 			return
 		
 		# Try to get suffix name
-		_tempList = (OverlappySettings.nameLocGoalTarget[0], OverlappySettings.nameLocGoalTarget[1], OverlappySettings.nameParticle, OverlappySettings.nameLocAim[0], OverlappySettings.nameLoft[2])
-		_objectName = ""
-		for child in _children:
-			for item in _tempList:
-				_splitNames = child.split(item)
-				if (len(_splitNames) < 2):
+		tempList = (OverlappySettings.nameLocGoalTarget[0], OverlappySettings.nameLocGoalTarget[1], OverlappySettings.nameParticle, OverlappySettings.nameLocAim[0], OverlappySettings.nameLoft[2])
+		objectName = ""
+		for child in children:
+			for item in tempList:
+				splitNames = child.split(item)
+				if (len(splitNames) < 2):
 					continue
-				_lastName = _splitNames[-1]
-				if (_objectName == ""):
-					_objectName = _lastName
+				lastName = splitNames[-1]
+				if (objectName == ""):
+					objectName = lastName
 				else:
-					if (_objectName == _lastName):
+					if (objectName == lastName):
 						continue
 					else:
-						cmds.warning("Suffix \"{0}\" don't equals to \"{1}\"".format(_objectName, _lastName))
-		_converted = Text.ConvertSymbols(_objectName, False)
-		if (cmds.objExists(_converted)):
-			self.selectedObject = _converted
+						cmds.warning("Suffix \"{0}\" don't equals to \"{1}\"".format(objectName, lastName))
+		converted = Text.ConvertSymbols(objectName, False)
+		if (cmds.objExists(converted)):
+			self.selectedObject = converted
 		
 		def CheckAndSet(name):
-			if (cmds.objExists(name + _objectName)):
-				return name + _objectName
+			if (cmds.objExists(name + objectName)):
+				return name + objectName
 			else:
 				return
 		
@@ -648,10 +648,10 @@ class Overlappy:
 			self.sliderOffsetZ.ResetCached()
 		
 		# Check and set cached value
-		_checkX = self.sliderOffsetX.GetCached() != self.sliderOffsetX.Get()
-		_checkY = self.sliderOffsetY.GetCached() != self.sliderOffsetY.Get()
-		_checkZ = self.sliderOffsetZ.GetCached() != self.sliderOffsetZ.Get()
-		if (_checkX or _checkY or _checkZ):
+		checkX = self.sliderOffsetX.GetCached() != self.sliderOffsetX.Get()
+		checkY = self.sliderOffsetY.GetCached() != self.sliderOffsetY.Get()
+		checkZ = self.sliderOffsetZ.GetCached() != self.sliderOffsetZ.Get()
+		if (checkX or checkY or checkZ):
 			self.sliderOffsetX.SetCached()
 			self.sliderOffsetY.SetCached()
 			self.sliderOffsetZ.SetCached()
@@ -660,63 +660,63 @@ class Overlappy:
 
 		self._ValuesSetParticleOffset()
 
-		_checkSelected = self.selectedObject == "" or not cmds.objExists(self.selectedObject)
-		_checkGoal = not cmds.objExists(self.locGoalTarget[0])
-		_checkAim = not cmds.objExists(self.locAim[2])
-		_checkStartPos = self.startPositionGoalParticle[0] == None
+		checkSelected = self.selectedObject == "" or not cmds.objExists(self.selectedObject)
+		checkGoal = not cmds.objExists(self.locGoalTarget[0])
+		checkAim = not cmds.objExists(self.locAim[2])
+		checkStartPos = self.startPositionGoalParticle[0] == None
 		
-		if (_checkSelected or _checkGoal or _checkAim or _checkStartPos):
+		if (checkSelected or checkGoal or checkAim or checkStartPos):
 			return
 
 		cmds.currentTime(self.time.values[2])
 
 		# Mirrors
-		_mirror = [1, 1, 1]
+		mirror = [1, 1, 1]
 		if (self.checkboxMirrorX.Get()):
-			_mirror[0] = -1
+			mirror[0] = -1
 		if (self.checkboxMirrorY.Get()):
-			_mirror[1] = -1
+			mirror[1] = -1
 		if (self.checkboxMirrorZ.Get()):
-			_mirror[2] = -1
+			mirror[2] = -1
 		
 		# Get values from sliders
-		_values = (
-			self.sliderOffsetX.Get() * _mirror[0],
-			self.sliderOffsetY.Get() * _mirror[1],
-			self.sliderOffsetZ.Get() * _mirror[2],
+		values = (
+			self.sliderOffsetX.Get() * mirror[0],
+			self.sliderOffsetY.Get() * mirror[1],
+			self.sliderOffsetZ.Get() * mirror[2],
 			)
 		
 		# Set locGoal constraint offset
-		_goalAttributes = (
+		goalAttributes = (
 			self.locGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateX",
 			self.locGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateY",
 			self.locGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateZ",
 			)
-		cmds.setAttr(_goalAttributes[0], _values[0])
-		cmds.setAttr(_goalAttributes[1], _values[1])
-		cmds.setAttr(_goalAttributes[2], _values[2])
+		cmds.setAttr(goalAttributes[0], values[0])
+		cmds.setAttr(goalAttributes[1], values[1])
+		cmds.setAttr(goalAttributes[2], values[2])
 		
 		# Get offset
-		_goalPosition = cmds.xform(self.locGoalTarget[0], query = True, translation = True)
-		_goalOffset = (
-			self.startPositionGoalParticle[0][0] - _goalPosition[0],
-			self.startPositionGoalParticle[0][1] - _goalPosition[1],
-			self.startPositionGoalParticle[0][2] - _goalPosition[2],
+		goalPosition = cmds.xform(self.locGoalTarget[0], query = True, translation = True)
+		goalOffset = (
+			self.startPositionGoalParticle[0][0] - goalPosition[0],
+			self.startPositionGoalParticle[0][1] - goalPosition[1],
+			self.startPositionGoalParticle[0][2] - goalPosition[2],
 			)
 		
 		# Set particle attributes
-		_particleAttributes = (
+		particleAttributes = (
 			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateX",
 			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateY",
 			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateZ",
 			)
 
-		cmds.setAttr(_particleAttributes[0], self.startPositionGoalParticle[1][0] - _goalOffset[0])
-		cmds.setAttr(_particleAttributes[1], self.startPositionGoalParticle[1][1] - _goalOffset[1])
-		cmds.setAttr(_particleAttributes[2], self.startPositionGoalParticle[1][2] - _goalOffset[2])
+		cmds.setAttr(particleAttributes[0], self.startPositionGoalParticle[1][0] - goalOffset[0])
+		cmds.setAttr(particleAttributes[1], self.startPositionGoalParticle[1][1] - goalOffset[1])
+		cmds.setAttr(particleAttributes[2], self.startPositionGoalParticle[1][2] - goalOffset[2])
 		
 		# Reposition aim up locator and reconstrain aim
-		_selected = cmds.ls(selection = True)
+		selected = cmds.ls(selection = True)
 		cmds.delete(self.locAim[1] + "_aimConstraint1")
 		cmds.aimConstraint(self.locGoalTarget[1], self.locAim[1], weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "none")
 		cmds.delete(self.locAim[1] + "_aimConstraint1")
@@ -726,7 +726,7 @@ class Overlappy:
 		cmds.setAttr(self.locAim[3] + ".tz", 0)
 		cmds.parent(self.locAim[3], self.locAim[0])
 		cmds.aimConstraint(self.locGoalTarget[1], self.locAim[1], weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "object", worldUpObject = self.locAim[3])
-		cmds.select(_selected, replace = True)
+		cmds.select(selected, replace = True)
 		
 		# Reconstrain aim locator to hidden aim
 		cmds.setAttr(self.locAim[2] + ".rotateX", 0)
@@ -753,14 +753,14 @@ class Overlappy:
 
 	### VALUES
 	def _SetParticleAttribute(self, sliderValue, startName, attributeName, addSelectedName, *args):
-		_selectedName = self.selectedObject
-		if (_selectedName == ""):
+		selectedName = self.selectedObject
+		if (selectedName == ""):
 			return
 		
 		# Add selected name or not
-		_selectedName = Text.ConvertSymbols(_selectedName)
+		selectedName = Text.ConvertSymbols(selectedName)
 		if (addSelectedName):
-			resultName = startName + _selectedName + attributeName
+			resultName = startName + selectedName + attributeName
 		else:
 			resultName = startName + attributeName
 		
@@ -787,23 +787,23 @@ class Overlappy:
 		if (not cmds.objExists(self.loft[1])):
 			return
 		
-		_scale = self.sliderPRadius.Get() * OverlappySettings.loftFactor
-		cmds.setAttr(self.loft[1] + ".scaleX", _scale)
-		cmds.setAttr(self.loft[1] + ".scaleY", _scale)
-		cmds.setAttr(self.loft[1] + ".scaleZ", _scale)
+		scale = self.sliderPRadius.Get() * OverlappySettings.loftFactor
+		cmds.setAttr(self.loft[1] + ".scaleX", scale)
+		cmds.setAttr(self.loft[1] + ".scaleY", scale)
+		cmds.setAttr(self.loft[1] + ".scaleZ", scale)
 		
 		if (self._LoftGetDistance() < OverlappySettings.loftMinDistance):
 			cmds.setAttr(self.loft[2] + ".visibility", 0)
 		else:
 			cmds.setAttr(self.loft[2] + ".visibility", 1)
 	def _LoftGetDistance(self, *args):
-		_vector = (
+		vector = (
 			self.sliderOffsetX.Get(),
 			self.sliderOffsetY.Get(),
 			self.sliderOffsetZ.Get(),
 			)
 
-		return sqrt(pow(_vector[0], 2) + pow(_vector[1], 2) + pow(_vector[2], 2)) # Distance formula : V((x2 - x1)2 + (y2 - y1)2 + (z2 - z1)2)
+		return sqrt(pow(vector[0], 2) + pow(vector[1], 2) + pow(vector[2], 2)) # Distance formula : V((x2 - x1)2 + (y2 - y1)2 + (z2 - z1)2)
 
 	# def _GetSimulation(self, *args): # TODO rework scan logic
 	# 	self.sliderPConserve.Scan()
@@ -850,108 +850,109 @@ class Overlappy:
 	def _BakeLogic(self, parent, zeroOffsets=False, translation=True, deleteSetupLock=False, *args):
 		# Filter attributes
 		if (translation):
-			_attributesType = Enums.Attributes.translateShort
+			attributesType = Enums.Attributes.translateShort
 		else:
-			_attributesType = Enums.Attributes.rotateShort
-		_attrs = ["", "", ""]
+			attributesType = Enums.Attributes.rotateShort
+		attrs = ["", "", ""]
 		
-		_item = self.selectedObject
-		for i in range(len(_attrs)):
-			_attrs[i] = "{0}.{1}".format(_item, _attributesType[i])
-		_attributesFiltered = []
-		
-		for i in range(len(_attrs)):
-			_keyed = cmds.keyframe(_attrs[i], query = True)
-			if (_keyed):
-				_muted = cmds.mute(_attrs[i], query = True)
-				if (_muted):
+		item = self.selectedObject
+		for i in range(len(attrs)):
+			attrs[i] = "{0}.{1}".format(item, attributesType[i])
+		attributesFiltered = []
+
+		# TODO replace filtering by new attributes filtering method
+		for i in range(len(attrs)):
+			keyed = cmds.keyframe(attrs[i], query = True)
+			if (keyed):
+				muted = cmds.mute(attrs[i], query = True)
+				if (muted):
 					continue
 			
-			_locked = cmds.getAttr(_attrs[i], lock = True)
-			_keyable = cmds.getAttr(_attrs[i], keyable = True)
-			_settable = cmds.getAttr(_attrs[i], settable = True)
-			_constrained = False
-			_connections = cmds.listConnections(_attrs[i])
+			locked = cmds.getAttr(attrs[i], lock = True)
+			keyable = cmds.getAttr(attrs[i], keyable = True)
+			settable = cmds.getAttr(attrs[i], settable = True)
+			constrained = False
+			connections = cmds.listConnections(attrs[i])
 			
-			if (_connections):
-				for item in _connections:
-					_type = cmds.nodeType(item)
-					if (_type in Enums.Constraints.list):
-						_constrained = True
+			if (connections):
+				for item in connections:
+					type = cmds.nodeType(item)
+					if (type in Enums.Constraints.list):
+						constrained = True
 			
-			if (not _locked and _keyable and _settable and not _constrained):
-				_attributesFiltered.append(_attributesType[i])
+			if (not locked and keyable and settable and not constrained):
+				attributesFiltered.append(attributesType[i])
 		
-		if (len(_attributesFiltered) == 0):
+		if (len(attributesFiltered) == 0):
 			cmds.warning("No attributes. Overlappy setup deleted")
 			self._SetupDelete()
 			return
 		
 		# Keyframe target attributes
-		cmds.setKeyframe(_item, attribute = _attributesFiltered)
+		cmds.setKeyframe(item, attribute = attributesFiltered)
 
 		# Zero offsets
 		if (zeroOffsets):
-			_value1 = self.sliderOffsetX.Get()
-			_value2 = self.sliderOffsetY.Get()
-			_value3 = self.sliderOffsetZ.Get()
+			value1 = self.sliderOffsetX.Get()
+			value2 = self.sliderOffsetY.Get()
+			value3 = self.sliderOffsetZ.Get()
 			self.sliderOffsetX.Reset()
 			self.sliderOffsetY.Reset()
 			self.sliderOffsetZ.Reset()
 		
 		# Set time range
 		self.time.Scan()
-		_startTime = self.time.values[2]
+		startTime = self.time.values[2]
 		if (self.checkboxLoop.Get()):
-			_startTime = self.time.values[2] - self.time.values[3] * OverlappySettings.loopOffset
-			self.time.SetMin(_startTime)
-			self.time.SetCurrent(_startTime)
-		cmds.setAttr(self.nucleus + ".startFrame", _startTime) # TODO bug when select ovlp objects
+			startTime = self.time.values[2] - self.time.values[3] * OverlappySettings.loopOffset
+			self.time.SetMin(startTime)
+			self.time.SetCurrent(startTime)
+		cmds.setAttr(self.nucleus + ".startFrame", startTime) # TODO bug when select ovlp objects
 		
 		# Start logic
-		_name = "_rebake_" + Text.ConvertSymbols(_item)
-		_clone = cmds.duplicate(_item, name = _name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)
+		name = "_rebake_" + Text.ConvertSymbols(item)
+		clone = cmds.duplicate(item, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)
 		
 		for attr in Enums.Attributes.translateShort:
-			cmds.setAttr(_clone[0] + "." + attr, lock = False)
+			cmds.setAttr(clone[0] + "." + attr, lock = False)
 		for attr in Enums.Attributes.rotateShort:
-			cmds.setAttr(_clone[0] + "." + attr, lock = False)
+			cmds.setAttr(clone[0] + "." + attr, lock = False)
 		
-		cmds.parentConstraint(parent, _clone, maintainOffset = True) # skipTranslate
-		cmds.select(_clone, replace = True)
+		cmds.parentConstraint(parent, clone, maintainOffset = True) # skipTranslate
+		cmds.select(clone, replace = True)
 		
 		# Bake
 		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
-		Constraints.DeleteConstraints(_clone)
+		Constraints.DeleteConstraints(clone)
 		
 		# Copy keys, create layers and paste keys
-		cmds.copyKey(_clone, time = (self.time.values[2], self.time.values[3]), attribute = _attributesFiltered)
+		cmds.copyKey(clone, time = (self.time.values[2], self.time.values[3]), attribute = attributesFiltered)
 		
 		if (self.checkboxLayer.Get()):
 			if (translation):
-				name = OverlappySettings.nameLayers[2] + _item
+				name = OverlappySettings.nameLayers[2] + item
 			else:
-				name = OverlappySettings.nameLayers[3] + _item
-			_animLayer = self._LayerCreate(name)
+				name = OverlappySettings.nameLayers[3] + item
+			animLayer = self._LayerCreate(name)
 			
-			_attrsLayer = []
-			for item in _attributesFiltered:
-				_attrsLayer.append("{0}.{1}".format(_item, item))
+			attrsLayer = []
+			for item in attributesFiltered:
+				attrsLayer.append("{0}.{1}".format(item, item))
 			
-			cmds.animLayer(_animLayer, edit = True, attribute = _attrsLayer)
-			cmds.pasteKey(_item, option = "replace", attribute = _attributesFiltered, animLayer = _animLayer)
+			cmds.animLayer(animLayer, edit = True, attribute = attrsLayer)
+			cmds.pasteKey(item, option = "replace", attribute = attributesFiltered, animLayer = animLayer)
 		else:
-			cmds.pasteKey(_item, option = "replaceCompletely", attribute = _attributesFiltered)
-		cmds.delete(_clone)
+			cmds.pasteKey(item, option = "replaceCompletely", attribute = attributesFiltered)
+		cmds.delete(clone)
 		
 		# Set time range
 		if (self.checkboxLoop.Get()):
-			_startTime = self.time.values[2]
-			cmds.setAttr(self.nucleus + ".startFrame", _startTime)
+			startTime = self.time.values[2]
+			cmds.setAttr(self.nucleus + ".startFrame", startTime)
 			self.time.Reset()
-			Animation.SetInfinityCycle(_item)
+			Animation.SetInfinityCycle(item)
 		else:
-			Animation.SetInfinityConstant(_item)
+			Animation.SetInfinityConstant(item)
 		
 		# Delete setup
 		if (self.checkboxClean.Get()):
@@ -960,21 +961,21 @@ class Overlappy:
 		
 		# Restore offsets sliders
 		if (zeroOffsets):
-			self.sliderOffsetX.Set(_value1)
-			self.sliderOffsetY.Set(_value2)
-			self.sliderOffsetZ.Set(_value3)
+			self.sliderOffsetX.Set(value1)
+			self.sliderOffsetY.Set(value2)
+			self.sliderOffsetZ.Set(value3)
 			self._OffsetsUpdate(True)
 	def _BakeVariants(self, variant, *args):
-		_selected = Selector.MultipleObjects()
-		if (_selected == None):
+		selected = Selector.MultipleObjects()
+		if (selected == None):
 			return
 		
 		# Check zero particle offset
 		if variant in [3, 4, 5]:
-			_checkOffsetX = self.sliderOffsetX.Get() == 0
-			_checkOffsetY = self.sliderOffsetY.Get() == 0
-			_checkOffsetZ = self.sliderOffsetZ.Get() == 0
-			if (_checkOffsetX and _checkOffsetY and _checkOffsetZ):
+			checkOffsetX = self.sliderOffsetX.Get() == 0
+			checkOffsetY = self.sliderOffsetY.Get() == 0
+			checkOffsetZ = self.sliderOffsetZ.Get() == 0
+			if (checkOffsetX and checkOffsetY and checkOffsetZ):
 				dialogResult = cmds.confirmDialog(
 					title = "Zero particle offset detected",
 					message = "For ROTATION BAKING, set the particle offset to non-zero values.\nIf all XYZ values are zero, the particle will stay in the same position as the original object, and no rotation will occur.\n",
@@ -993,7 +994,7 @@ class Overlappy:
 		MayaSettings.CachedPlaybackDeactivate()
 
 		if (self.checkboxHierarchy.Get()):
-			_selected = Selector.SelectHierarchyTransforms()
+			selected = Selector.SelectHierarchyTransforms()
 		
 		def RunBakeLogicVariant():
 			if (variant == 1):
@@ -1009,12 +1010,12 @@ class Overlappy:
 				self._BakeLogic(self.locAim[2], translation = False, deleteSetupLock = True)
 				self._BakeLogic(self.locGoalTarget[1], zeroOffsets = True)
 		
-		for i in range(len(_selected)):
-			cmds.select(_selected[i], replace = True)
+		for i in range(len(selected)):
+			cmds.select(selected[i], replace = True)
 			self._SetupInit()
 			RunBakeLogicVariant()
 		
-		cmds.select(_selected, replace = True)
+		cmds.select(selected, replace = True)
 
 
 	### LAYERS
@@ -1027,64 +1028,64 @@ class Overlappy:
 		layerName = Text.ConvertSymbols(name) + "_1"
 		return Layers.Create(layerName = layerName, parent = self.layers[0])
 	def _LayerMoveToSafeOrTemp(self, safeLayer=True, *args): # TODO rework
-		_id = [0, 1]
+		id = [0, 1]
 		
 		if (not safeLayer):
-			_id = [1, 0]
+			id = [1, 0]
 		
-		_layer1 = OverlappySettings.nameLayers[_id[0]]
-		_layer2 = OverlappySettings.nameLayers[_id[1]]
+		layer1 = OverlappySettings.nameLayers[id[0]]
+		layer2 = OverlappySettings.nameLayers[id[1]]
 
 
 		# Check source layer
-		if (not cmds.objExists(_layer1)):
-			cmds.warning("Layer \"{0}\" doesn't exist".format(_layer1))
+		if (not cmds.objExists(layer1)):
+			cmds.warning("Layer \"{0}\" doesn't exist".format(layer1))
 			return
 		
 
 		# Get selected layers
-		_selectedLayers = []
+		selectedLayers = []
 		for animLayer in cmds.ls(type = "animLayer"):
 			if cmds.animLayer(animLayer, query = True, selected = True):
-				_selectedLayers.append(animLayer)
+				selectedLayers.append(animLayer)
 		
 
 		# Check selected count
-		_children = cmds.animLayer(self.layers[_id[0]], query = True, children = True)
-		_filteredLayers = []
+		children = cmds.animLayer(self.layers[id[0]], query = True, children = True)
+		filteredLayers = []
 		
-		if (len(_selectedLayers) == 0):
-			if (_children == None):
-				cmds.warning("Layer \"{0}\" is empty".format(_layer1))
+		if (len(selectedLayers) == 0):
+			if (children == None):
+				cmds.warning("Layer \"{0}\" is empty".format(layer1))
 				return
 			else:
-				for layer in _children:
-					_filteredLayers.append(layer)
+				for layer in children:
+					filteredLayers.append(layer)
 		else:
-			if (_children == None):
-				cmds.warning("Layer \"{0}\" is empty".format(_layer1))
+			if (children == None):
+				cmds.warning("Layer \"{0}\" is empty".format(layer1))
 				return
 			else:
-				for layer1 in _children:
-					for layer2 in _selectedLayers:
+				for layer1 in children:
+					for layer2 in selectedLayers:
 						if (layer1 == layer2):
-							_filteredLayers.append(layer1)
-			if (len(_filteredLayers) == 0):
+							filteredLayers.append(layer1)
+			if (len(filteredLayers) == 0):
 				cmds.warning("Nothing to move")
 				return
 		
 
 		# Create safe layer
-		if (not cmds.objExists(_layer2)):
-			self.layers[_id[1]] = cmds.animLayer(_layer2, override = True)
+		if (not cmds.objExists(layer2)):
+			self.layers[id[1]] = cmds.animLayer(layer2, override = True)
 		
 
 		# Move children or selected layers
-		for layer in _filteredLayers:
-			cmds.animLayer(layer, edit = True, parent = self.layers[_id[1]])
+		for layer in filteredLayers:
+			cmds.animLayer(layer, edit = True, parent = self.layers[id[1]])
 		
 
 		# Delete TEMP layer if no children
-		if (len(_filteredLayers) == len(_children)):
-			Layers.Delete(_layer1)
+		if (len(filteredLayers) == len(children)):
+			Layers.Delete(layer1)
 

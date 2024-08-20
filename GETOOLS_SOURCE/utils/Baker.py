@@ -48,7 +48,7 @@ def BakeSelected(classic=True, preserveOutsideKeys=True, sampleBy=1.0, selectedR
 		# Check channel box attributes
 		# TODO move logic pattern to separate function
 		bakeRegular = True
-		selectedAttributes = Selector.GetChannelBoxAttributes()
+		selectedAttributes = Selector.GetChannelBoxSelectedAttributes()
 		if (channelBox):
 			bakeRegular = selectedAttributes == None
 		if (bakeRegular):
