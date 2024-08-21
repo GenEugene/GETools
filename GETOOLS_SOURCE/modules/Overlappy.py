@@ -913,10 +913,10 @@ class Overlappy:
 		name = "_rebake_" + Text.ConvertSymbols(selected)
 		clone = cmds.duplicate(selected, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)
 		
-		for attr in Enums.Attributes.translateShort:
-			cmds.setAttr(clone[0] + "." + attr, lock = False)
-		for attr in Enums.Attributes.rotateShort:
-			cmds.setAttr(clone[0] + "." + attr, lock = False)
+		for attribute in Enums.Attributes.translateShort:
+			cmds.setAttr(clone[0] + "." + attribute, lock = False)
+		for attribute in Enums.Attributes.rotateShort:
+			cmds.setAttr(clone[0] + "." + attribute, lock = False)
 		
 		cmds.parentConstraint(parent, clone, maintainOffset = True) # skipTranslate
 		cmds.select(clone, replace = True)
@@ -936,8 +936,8 @@ class Overlappy:
 			animLayer = self._LayerCreate(name)
 			
 			attrsLayer = []
-			for attribute in attributesFiltered:
-				attrsLayer.append("{0}.{1}".format(selected, attribute))
+			for attributeFiltered in attributesFiltered:
+				attrsLayer.append("{0}.{1}".format(selected, attributeFiltered))
 			
 			cmds.animLayer(animLayer, edit = True, attribute = attrsLayer)
 			cmds.pasteKey(selected, option = "replace", attribute = attributesFiltered, animLayer = animLayer)
