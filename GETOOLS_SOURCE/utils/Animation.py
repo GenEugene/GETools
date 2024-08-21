@@ -63,7 +63,7 @@ def DeleteKeysNonkeyable(*args):
 			for j in range(len(attributes)):
 				cmds.cutKey(item + "." + attributes[j])
 				counter += 1
-	print ("\nNonkeyable attributes deleted: {0}".format(counter))
+	print("Nonkeyable attributes deleted: {0}".format(counter))
 def DeleteStaticCurves(*args):
 	# Check selected objects
 	Selector.MultipleObjects(1)
@@ -72,7 +72,7 @@ def DeleteStaticCurves(*args):
 def EulerFilterOnObject(obj):
 	cmds.filterCurve(obj)
 	cmds.selectKey(clear = True)
-	print("######## Euler Filtered {0}".format(obj))
+	print("Euler Filtered {0}".format(obj))
 def EulerFilterOnObjects(objects):
 	if (objects == None):
 		return None

@@ -35,7 +35,7 @@ def ConstrainSelectedToLastObject(reverse=False, maintainOffset=True, parent=Tru
 
 def ConstrainListToLastElement(selected=None, reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
 	if (selected == None):
-		cmds.warning("### WARNING ### selected = None")
+		cmds.warning("FIXME: selected = None")
 		return
 	
 	for i in range(len(selected)):
@@ -56,26 +56,26 @@ def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True,
 		try:
 			cmds.parentConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight)
 		except:
-			print("||||| Can't create parentConstraint on {0}".format(objectChild))
+			cmds.warning("Can't create parentConstraint on {0}".format(objectChild))
 	else:
 		if point:
 			try:
 				cmds.pointConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight)
 			except:
-				print("||||| Can't create pointConstraint on {0}".format(objectChild))
+				cmds.warning("Can't create pointConstraint on {0}".format(objectChild))
 		
 		if orient:
 			try:
 				cmds.orientConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight)
 			except:
-				print("||||| Can't create orientConstraint on {0}".format(objectChild))
+				cmds.warning("Can't create orientConstraint on {0}".format(objectChild))
 
 	if scale:
 		try:
 			# cmds.cutKey(objectChild, attribute = ("scaleX", "scaleY", "scaleZ"), clear = True, option = "keys")
 			cmds.scaleConstraint(objectParent, objectChild, maintainOffset = maintainOffset) # weight = weight
 		except:
-			print("||||| Can't create scaleConstraint on {0}".format(objectChild))
+			cmds.warning("Can't create scaleConstraint on {0}".format(objectChild))
 	
 	if aim:
 		ConstrainAim(objectParent, objectChild, maintainOffset, weight) # TODO add customization logic

@@ -35,9 +35,9 @@ def CachedPlaybackDeactivate(*args):
 		if (Enums.Types.cache in evaluators):
 			if (cmds.evaluator(query = True, name = Enums.Types.cache)):
 				cmds.evaluator(name = Enums.Types.cache, enable = False)
-				cmds.warning("GETools: Cached Playback turned off")
+				cmds.warning("Cached Playback turned off")
 		else:
-			cmds.warning("GETools: Cache evaluator not found in Maya API")
+			cmds.warning("Cache evaluator not found in Maya API")
 	except Exception as exception:
-		cmds.warning("GETools: Error deactivating cached playback - {0}".format(exception))
+		cmds.warning("Error deactivating cached playback - {0}".format(exception))
 
