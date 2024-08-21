@@ -24,6 +24,7 @@
 import maya.cmds as cmds
 import maya.mel as mel
 
+from ..utils import Attributes
 from ..utils import Selector
 from ..utils import Timeline
 
@@ -38,7 +39,7 @@ def DeleteKeys(channelBox=False, *args):
 		timeRange = [Timeline.GetSelectedTimeRange()[0], Timeline.GetSelectedTimeRange()[1] - 1]
 
 	# Check channel box attributes
-	selectedAttributes = Selector.GetChannelBoxSelectedAttributes()
+	selectedAttributes = Attributes.GetAttributesSelectedFromChannelBox()
 	# TODO move logic pattern to separate function
 	cutAll = True
 	if (channelBox):
@@ -127,7 +128,7 @@ def OffsetSelected(direction=1, step=1): # use if needed later # , channelBox = 
 		return
 	
 	time = step * direction
-	selectedAttributes = Selector.GetChannelBoxSelectedAttributes()
+	selectedAttributes = Attributes.GetAttributesSelectedFromChannelBox()
 
 	count = len(selectedList)
 	for i in range(count):

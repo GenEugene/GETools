@@ -24,7 +24,6 @@
 import maya.cmds as cmds
 
 from .. import Settings
-
 from ..utils import Colors
 
 
