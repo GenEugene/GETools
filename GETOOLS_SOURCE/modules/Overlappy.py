@@ -855,9 +855,9 @@ class Overlappy:
 			attributesType = Enums.Attributes.rotateShort
 		attrs = ["", "", ""]
 		
-		item = self.selectedObject
+		selected = self.selectedObject
 		for i in range(len(attrs)):
-			attrs[i] = "{0}.{1}".format(item, attributesType[i])
+			attrs[i] = "{0}.{1}".format(selected, attributesType[i])
 		attributesFiltered = []
 
 		# TODO replace filtering by new attributes filtering method
@@ -875,8 +875,8 @@ class Overlappy:
 			connections = cmds.listConnections(attrs[i])
 			
 			if (connections):
-				for item in connections:
-					type = cmds.nodeType(item)
+				for connection in connections:
+					type = cmds.nodeType(connection)
 					if (type in Enums.Constraints.list):
 						constrained = True
 			
@@ -889,7 +889,7 @@ class Overlappy:
 			return
 		
 		# Keyframe target attributes
-		cmds.setKeyframe(item, attribute = attributesFiltered)
+		cmds.setKeyframe(selected, attribute = attributesFiltered)
 
 		# Zero offsets
 		if (zeroOffsets):
@@ -910,8 +910,8 @@ class Overlappy:
 		cmds.setAttr(self.nucleus + ".startFrame", startTime) # TODO bug when select ovlp objects
 		
 		# Start logic
-		name = "_rebake_" + Text.ConvertSymbols(item)
-		clone = cmds.duplicate(item, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)
+		name = "_rebake_" + Text.ConvertSymbols(selected)
+		clone = cmds.duplicate(selected, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)
 		
 		for attr in Enums.Attributes.translateShort:
 			cmds.setAttr(clone[0] + "." + attr, lock = False)
@@ -930,19 +930,19 @@ class Overlappy:
 		
 		if (self.checkboxLayer.Get()):
 			if (translation):
-				name = OverlappySettings.nameLayers[2] + item
+				name = OverlappySettings.nameLayers[2] + selected
 			else:
-				name = OverlappySettings.nameLayers[3] + item
+				name = OverlappySettings.nameLayers[3] + selected
 			animLayer = self._LayerCreate(name)
 			
 			attrsLayer = []
-			for item in attributesFiltered:
-				attrsLayer.append("{0}.{1}".format(item, item))
+			for attribute in attributesFiltered:
+				attrsLayer.append("{0}.{1}".format(selected, attribute))
 			
 			cmds.animLayer(animLayer, edit = True, attribute = attrsLayer)
-			cmds.pasteKey(item, option = "replace", attribute = attributesFiltered, animLayer = animLayer)
+			cmds.pasteKey(selected, option = "replace", attribute = attributesFiltered, animLayer = animLayer)
 		else:
-			cmds.pasteKey(item, option = "replaceCompletely", attribute = attributesFiltered)
+			cmds.pasteKey(selected, option = "replaceCompletely", attribute = attributesFiltered)
 		cmds.delete(clone)
 		
 		# Set time range
@@ -950,9 +950,9 @@ class Overlappy:
 			startTime = self.time.values[2]
 			cmds.setAttr(self.nucleus + ".startFrame", startTime)
 			self.time.Reset()
-			Animation.SetInfinityCycle(item)
+			Animation.SetInfinityCycle(selected)
 		else:
-			Animation.SetInfinityConstant(item)
+			Animation.SetInfinityConstant(selected)
 		
 		# Delete setup
 		if (self.checkboxClean.Get()):
