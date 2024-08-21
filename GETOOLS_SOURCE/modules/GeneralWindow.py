@@ -112,7 +112,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Select Skinned Meshes Or Joints", command = Skinning.SelectSkinnedMeshesOrJoints)
 		cmds.menuItem(divider = True)
 		# cmds.menuItem(label = "Save Pose To Shelf", command = Install.CreateResetButton)
-		cmds.menuItem(label = "Print selected objects to console", command = Selector.PrintSelected, image = Icons.text)
+		cmds.menuItem(label = "Print selected objects to console", command = Print.PrintSelected, image = Icons.text)
 		cmds.menuItem(label = "Print animatable attributes", command = Print.PrintAttributesAnimatableOnSelected, image = Icons.text)
 		cmds.menuItem(label = "Print channel box selected attributes", command = Print.PrintAttributesSelectedFromChannelBox, image = Icons.text)
 		cmds.menuItem(dividerLabel = "Blendshapes", divider = True)

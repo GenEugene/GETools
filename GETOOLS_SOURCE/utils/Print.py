@@ -24,25 +24,35 @@
 import maya.cmds as cmds
 
 from ..utils import Attributes
+from ..utils import Selector
 
+
+textEnd = "-----"
+
+
+def PrintSelected(*args):
+	selected = Selector.MultipleObjects(transformsOnly = False)
+	if (selected == None):
+		return
+	for item in selected:
+		print(item)
+	cmds.warning("{0} objects selected".format(len(selected)))
 
 def PrintAttributesAnimatableOnSelected(*args):
 	attributes = Attributes.GetAttributesAnimatableOnSelected()
 	if (attributes == None):
 		cmds.warning("Keyable attributes not found")
 		return
-
-	print("\n# {0} keyable attributes found".format(len(attributes)))
 	for item in attributes:
 		print(item)
+	cmds.warning("{0} keyable attributes found".format(len(attributes)))
 
 def PrintAttributesSelectedFromChannelBox(*args):
 	attributes = Attributes.GetAttributesSelectedFromChannelBox()
 	if (attributes == None):
 		cmds.warning("Selected attributes not found")
 		return
-	
-	print("\n# {0} selected attributes found".format(len(attributes)))
 	for item in attributes:
 		print(item)
+	cmds.warning("{0} selected attributes found".format(len(attributes)))
 

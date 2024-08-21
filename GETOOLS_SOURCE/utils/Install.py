@@ -172,11 +172,11 @@ def ToShelf_BakeByLast(path, translate, rotate, *args):
 		parameters = "(selectedRange = True, channelBox = True)"
 	elif (translate and not rotate):
 		suffix = "POS"
-		attributes = Enums.Attributes.translateShort
+		attributes = Enums.Attributes.translateLong
 		parameters = "(selectedRange = True, channelBox = False, attributes = {0})".format(attributes)
 	elif (not translate and rotate):
 		suffix = "ROT"
-		attributes = Enums.Attributes.rotateShort
+		attributes = Enums.Attributes.rotateLong
 		parameters = "(selectedRange = True, channelBox = False, attributes = {0})".format(attributes)
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.BakeByLast) + parameters, "BakeByLast{0}".format(suffix), "BL{0}".format(suffix))
 def ToShelf_BakeByWorld(path, translate, rotate, *args):
@@ -185,11 +185,11 @@ def ToShelf_BakeByWorld(path, translate, rotate, *args):
 		parameters = "(selectedRange = True, channelBox = True)"
 	elif (translate and not rotate):
 		suffix = "POS"
-		attributes = Enums.Attributes.translateShort
+		attributes = Enums.Attributes.translateLong
 		parameters = "(selectedRange = True, channelBox = False, attributes = {0})".format(attributes)
 	elif (not translate and rotate):
 		suffix = "ROT"
-		attributes = Enums.Attributes.rotateShort
+		attributes = Enums.Attributes.rotateLong
 		parameters = "(selectedRange = True, channelBox = False, attributes = {0})".format(attributes)
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.BakeByWorld) + parameters, "BakeByWorld{0}".format(suffix), "BW{0}".format(suffix))
 

@@ -408,16 +408,16 @@ class Tools:
 		if (translate and rotate):
 			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (translate and not rotate):
-			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateShort, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (not translate and rotate):
-			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateShort, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def BakeSelectedByWorld(self, translate=True, rotate=True, *args):
 		if (translate and rotate):
 			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (translate and not rotate):
-			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateShort, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (not translate and rotate):
-			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateShort, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 
 
 	# ANIMATION

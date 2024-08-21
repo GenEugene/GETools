@@ -850,9 +850,9 @@ class Overlappy:
 	def _BakeLogic(self, parent, zeroOffsets=False, translation=True, deleteSetupLock=False, *args):
 		# Filter attributes
 		if (translation):
-			attributesType = Enums.Attributes.translateShort
+			attributesType = Enums.Attributes.translateLong
 		else:
-			attributesType = Enums.Attributes.rotateShort
+			attributesType = Enums.Attributes.rotateLong
 		attrs = ["", "", ""]
 		
 		selected = self.selectedObject
@@ -913,9 +913,9 @@ class Overlappy:
 		name = "_rebake_" + Text.ConvertSymbols(selected)
 		clone = cmds.duplicate(selected, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)
 		
-		for attribute in Enums.Attributes.translateShort:
+		for attribute in Enums.Attributes.translateLong:
 			cmds.setAttr(clone[0] + "." + attribute, lock = False)
-		for attribute in Enums.Attributes.rotateShort:
+		for attribute in Enums.Attributes.rotateLong:
 			cmds.setAttr(clone[0] + "." + attribute, lock = False)
 		
 		cmds.parentConstraint(parent, clone, maintainOffset = True) # skipTranslate

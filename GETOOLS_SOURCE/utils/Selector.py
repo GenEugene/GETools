@@ -61,17 +61,6 @@ def SelectHierarchyTransforms(*args):
 	
 	return list
 
-def PrintSelected(*args):
-	selected = MultipleObjects(transformsOnly = False)
-	if (selected == None):
-		return
-
-	print("\nSelected Objects Printed Below: {0}".format(len(selected)))
-	print("-------------------------------")
-	for item in selected:
-		print(item)
-	print("")
-
 def GetChildrenOfType(selected, type=""):
 	result = []
 	for item in selected:

@@ -96,6 +96,6 @@ def GetAttributesAnimatableOnSelected(*args):
 	return finalAttributesList
 
 def GetAttributesSelectedFromChannelBox(*args):
-	attributes = cmds.channelBox("mainChannelBox", query = True, selectedMainAttributes = True) # selectedHistoryAttributes # selectedMainAttributes # selectedOutputAttributes # selectedShapeAttributes
+	attributes = cmds.channelBox("mainChannelBox", query = True, selectedMainAttributes = True) # selectedShapeAttributes = True
 	return attributes
 
