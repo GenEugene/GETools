@@ -28,6 +28,7 @@ from .. import Settings
 from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Constraints
+from ..utils import Curves
 from ..utils import Deformers
 from ..utils import Other
 from ..utils import Skinning
@@ -66,8 +67,11 @@ class RiggingAnnotations:
 	blendshapeExtract = "Extract blendshapes as duplicated meshes.\nPaint weights before extraction if needed."
 	blendshapeZeroWeights = "Zero all blendshape weights on selected objects"
 
+	# Curves
+	curveCreate = "Create a curve on selected objects.\nEach curve point will be created in the pivot."
+
 class Rigging:
-	version = "v1.2"
+	version = "v1.3"
 	name = "RIGGING"
 	title = name + " " + version
 
@@ -133,6 +137,14 @@ class Rigging:
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Zero Weights", command = Blendshapes.ZeroBlendshapeWeightsOnSelected, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.blendshapeZeroWeights)
+		
+		# CURVES
+		layoutCurves = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CURVES", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		layoutColumnCurves = cmds.columnLayout(parent = layoutCurves, adjustableColumn = True)
+		#
+		countOffsets = 1
+		cmds.gridLayout(parent = layoutColumnCurves, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		cmds.button(label = "Create Curve", command = Curves.CreateCurveFromSelectedObjects, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.curveCreate)
 
 
 	# CONSTRAINTS

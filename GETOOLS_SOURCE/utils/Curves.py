@@ -26,36 +26,22 @@ import maya.cmds as cmds
 from ..utils import Selector
 
 
-def ParentShape(*args): # TODO improve logic
-	# Check selected objects
-	selected = Selector.MultipleObjects(minimalCount = 2, transformsOnly = False)
-	if (selected == None):
-		return
-	cmds.parent(relative = True, shape = True)
+curveName = "newCurve"
+curveDegree = 1
 
-def FirstToSecond(child, parent, maintainOffset=True):
-	cmds.parent(child, parent)
-	if (not maintainOffset):
-		cmds.matchTransform(child, parent, position = True, rotation = True)
-	
-def SelectedToLastObject(): # TODO check if redundant
-	# Check selected objects
-	selected = Selector.MultipleObjects(2)
-	if (selected == None):
-		return
-	ListToLastObjects(selected)
 
-def ListToLastObjects(selected, maintainOffset=True, reverse=False):
-	for i in range(len(selected)):
-		if (i == len(selected) - 1):
-			break
-		
-		if (reverse):
-			index1 = -1
-			index2 = i
-		else:
-			index1 = i
-			index2 = -1
-		
-		FirstToSecond(selected[index1], selected[index2], maintainOffset)
+def CreateCurveFromSelectedObjects(*args):
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(2)
+	if (selectedList == None):
+		return None
+
+	positions = []
+
+	for item in selectedList:
+		position = cmds.xform(item, query = True, translation = True, worldSpace = True)
+		positions.append(position)
+
+	curve = cmds.curve(name = curveName, degree = curveDegree, point = positions)
+	return curve
 

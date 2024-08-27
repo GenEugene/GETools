@@ -36,6 +36,7 @@ from ..utils import Install
 from ..utils import Layers
 from ..utils import MayaSettings
 from ..utils import MotionTrail
+from ..utils import Parent
 from ..utils import Print
 from ..utils import Scene
 from ..utils import Selector
@@ -110,16 +111,17 @@ class GeneralWindow:
 		cmds.menu(label = "Utils", tearOff = True)
 		cmds.menuItem(label = "Select Hiererchy", command = Selector.SelectHierarchy, image = Icons.selectByHierarchy)
 		cmds.menuItem(label = "Select Skinned Meshes Or Joints", command = Skinning.SelectSkinnedMeshesOrJoints)
-		cmds.menuItem(divider = True)
 		# cmds.menuItem(label = "Save Pose To Shelf", command = Install.CreateResetButton)
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Parent Shapes", command = Parent.ParentShape)
+		cmds.menuItem(label = "Annotate selected", command = Annotation.AnnotateSelected)
+		cmds.menuItem(dividerLabel = "Prints", divider = True)
 		cmds.menuItem(label = "Print selected objects to console", command = Print.PrintSelected, image = Icons.text)
 		cmds.menuItem(label = "Print animatable attributes", command = Print.PrintAttributesAnimatableOnSelected, image = Icons.text)
 		cmds.menuItem(label = "Print channel box selected attributes", command = Print.PrintAttributesSelectedFromChannelBox, image = Icons.text)
 		cmds.menuItem(dividerLabel = "Blendshapes", divider = True)
 		cmds.menuItem(label = "Print Blendshapes Base Nodes", command = Blendshapes.GetBlendshapeNodesFromSelected, image = Icons.text)
 		cmds.menuItem(label = "Print Blendshapes Names", command = Blendshapes.GetBlendshapeWeightsFromSelected, image = Icons.text)
-		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Annotate selected", command = Annotation.AnnotateSelected)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Open Colors Palette", command = ColorsPalette, image = Icons.color)
 		
