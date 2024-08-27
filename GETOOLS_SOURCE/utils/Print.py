@@ -38,8 +38,8 @@ def PrintSelected(*args):
 		print(item)
 	cmds.warning("{0} objects selected".format(len(selected)))
 
-def PrintAttributesAnimatableOnSelected(*args):
-	attributes = Attributes.GetAttributesAnimatableOnSelected()
+def PrintAttributesAnimatableOnSelected(useShapes=False, *args):
+	attributes = Attributes.GetAttributesAnimatableOnSelected(useShapes)
 	if (attributes == None):
 		cmds.warning("Keyable attributes not found")
 		return

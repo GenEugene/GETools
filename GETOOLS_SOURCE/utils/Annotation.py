@@ -39,7 +39,7 @@ def Annotate(target, text, point=(0, 0, 0), displayArrow=True, useNameAsText=Fal
 		cmds.setAttr(annotation + ".overrideDisplayType", 2)
 	return annotation
 
-def AnnotateSelected(*args):
+def AnnotateSelected(*args): # TODO add constraint logic and group all annotations together
 	selected = cmds.ls(selection = True)
 	for item in selected:
 		# Create annotation and get transform
@@ -53,6 +53,4 @@ def AnnotateSelected(*args):
 
 		# Parent
 		Parent.FirstToSecond(transform, item, maintainOffset = False)
-
-	# TODO add constraint logic and group all annotations together
 

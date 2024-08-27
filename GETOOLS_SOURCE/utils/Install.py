@@ -84,6 +84,8 @@ def ToShelf_ExitMaya(path, *args):
 # UTILS
 def ToShelf_SelectHierarchy(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SelectHierarchy), "SelectHierarchy", "SelHi")
+def ToShelf_SelectHierarchyTransforms(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SelectHierarchyTransforms), "SelectHierarchyTransforms", "SelHiTrans")
 def ToShelf_CreateResetButton(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.CreateResetButton), "CreateResetButton", "Reset")
 

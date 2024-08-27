@@ -43,6 +43,10 @@ def SelectHierarchy():
 	import GETOOLS_SOURCE.utils.Selector as selector
 	selector.SelectHierarchy()
 
+def SelectHierarchyTransforms():
+	import GETOOLS_SOURCE.utils.Selector as selector
+	selector.SelectHierarchyTransforms()
+
 def CreateResetButton():
 	import GETOOLS_SOURCE.utils.Install as install
 	install.CreateResetButton()

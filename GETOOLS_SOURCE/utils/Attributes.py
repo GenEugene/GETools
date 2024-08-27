@@ -67,11 +67,20 @@ def FilterAttributesAnimatable(attributes, checkMutedKeys=False):
 
 	return attributesFiltered
 
-def GetAttributesAnimatableOnSelected(*args):
+def GetAttributesAnimatableOnSelected(useShapes=False):
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(1)
+	selectedList = Selector.MultipleObjects(1, transformsOnly = False)
 	if (selectedList == None):
 		return None
+	
+	# Add shapes to the end of the selected objects list
+	if (useShapes):
+		shapesList = []
+		for selected in selectedList:
+			relatives = cmds.listRelatives(selected)
+			for relative in relatives:
+				shapesList.append(relative)
+		selectedList.extend(shapesList)
 
 	finalAttributesList = []
 
