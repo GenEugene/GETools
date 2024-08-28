@@ -34,32 +34,32 @@ def FilterAttributesAnimatable(attributes, skipMutedKeys=False):
 	
 	attributesFiltered = []
 	
-	for item in attributes:
+	for attribute in attributes:
 		# Check and skip muted keys
 		if (skipMutedKeys):
-			keyed = cmds.keyframe(item, query = True)
+			keyed = cmds.keyframe(attribute, query = True)
 			if (keyed):
-				muted = cmds.mute(item, query = True)
+				muted = cmds.mute(attribute, query = True)
 				if (muted):
 					continue
 		
 		# Check attribute if locked, if keyable, if settable
-		locked = cmds.getAttr(item, lock = True)
-		keyable = cmds.getAttr(item, keyable = True)
-		settable = cmds.getAttr(item, settable = True)
+		locked = cmds.getAttr(attribute, lock = True)
+		keyable = cmds.getAttr(attribute, keyable = True)
+		settable = cmds.getAttr(attribute, settable = True)
 		
 		# Check attribute if constrained
-		connections = cmds.listConnections(item)
+		connections = cmds.listConnections(attribute)
 		constrained = False
 		if (connections):
-			for item in connections:
-				type = cmds.nodeType(item)
-				if (type in Enums.Constraints.list):
+			for connection in connections:
+				connectionType = cmds.nodeType(connection)
+				if (connectionType in Enums.Constraints.list):
 					constrained = True
 		
 		# General check and filling final list
 		if (not locked and keyable and settable and not constrained):
-			attributesFiltered.append(item)
+			attributesFiltered.append(attribute)
 	
 	if (len(attributesFiltered) == 0):
 		cmds.warning("No attributes left after filtering")
