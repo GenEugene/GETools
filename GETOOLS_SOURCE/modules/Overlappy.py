@@ -473,6 +473,18 @@ class Overlappy:
 		cmds.setAttr(self.nucleus + ".startFrame", self.time.values[2])
 		cmds.setAttr(self.nucleus + ".visibility", 0)
 
+
+		# Collision nRigid logic # TODO connect nRigid nodes to nucleus
+		# nucleus = "ovlpNucleusttt_RS2_pCube1"
+		# mesh = "pCube6"
+		# rigidNode = cmds.createNode("nRigid", name = "myNRigid")
+		# cmds.connectAttr("time1.outTime", rigidNode + ".currentTime")
+		# cmds.connectAttr(mesh + ".worldMesh[0]", rigidNode + ".inputMesh")
+		# cmds.connectAttr(rigidNode + ".currentState", nucleus + ".inputPassive[1]")
+		# cmds.connectAttr(rigidNode + ".startState", nucleus + ".inputPassiveStart[1]")
+		# cmds.connectAttr(nucleus + ".startFrame", rigidNode + ".startFrame")
+
+
 		# Create particle, goal and get selected object position
 		position = cmds.xform(objCurrent, query = True, worldSpace = True, rotatePivot = True)
 		self.particle = cmds.nParticle(name = nameParticle, position = position, conserve = 1)[0]
