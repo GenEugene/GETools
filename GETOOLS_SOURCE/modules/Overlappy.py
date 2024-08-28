@@ -149,6 +149,8 @@ class Overlappy:
 		self.layers = ["", ""]
 		self.nucleusNodesBefore = [""]
 		self.nucleusNodesAfter = [""]
+		self.colliderObjects = []
+		self.colliderNodes = []
 		
 		# LAYOUTS
 		self.windowMain = None
@@ -474,15 +476,13 @@ class Overlappy:
 		cmds.setAttr(self.nucleus + ".visibility", 0)
 
 
-		# Collision nRigid logic # TODO connect nRigid nodes to nucleus
-		# nucleus = "ovlpNucleusttt_RS2_pCube1"
-		# mesh = "pCube6"
-		# rigidNode = cmds.createNode("nRigid", name = "myNRigid")
-		# cmds.connectAttr("time1.outTime", rigidNode + ".currentTime")
-		# cmds.connectAttr(mesh + ".worldMesh[0]", rigidNode + ".inputMesh")
-		# cmds.connectAttr(rigidNode + ".currentState", nucleus + ".inputPassive[1]")
-		# cmds.connectAttr(rigidNode + ".startState", nucleus + ".inputPassiveStart[1]")
-		# cmds.connectAttr(nucleus + ".startFrame", rigidNode + ".startFrame")
+		# TODO Connect collision nRigid nodes to nucleus # TODO Need to define colliderObject before this logic
+		# self.colliderNodes[0] = cmds.createNode("nRigid", name = "myNRigid")
+		# cmds.connectAttr("time1.outTime", self.colliderNodes[0] + ".currentTime")
+		# cmds.connectAttr(self.colliderObjects[0] + ".worldMesh[0]", self.colliderNodes[0] + ".inputMesh")
+		# cmds.connectAttr(self.colliderNodes[0] + ".currentState", self.nucleus + ".inputPassive[0]")
+		# cmds.connectAttr(self.colliderNodes[0] + ".startState", self.nucleus + ".inputPassiveStart[0]")
+		# cmds.connectAttr(self.nucleus + ".startFrame", self.colliderNodes[0] + ".startFrame")
 
 
 		# Create particle, goal and get selected object position
