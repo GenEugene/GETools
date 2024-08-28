@@ -27,7 +27,7 @@ from ..utils import Selector
 from ..values import Enums
 
 
-def FilterAttributesAnimatable(attributes, checkMutedKeys=False):
+def FilterAttributesAnimatable(attributes, skipMutedKeys=False):
 	if (attributes == None):
 		cmds.warning("No attributes provided")
 		return None
@@ -35,8 +35,8 @@ def FilterAttributesAnimatable(attributes, checkMutedKeys=False):
 	attributesFiltered = []
 	
 	for item in attributes:
-		# Check muted keys
-		if (checkMutedKeys):
+		# Check and skip muted keys
+		if (skipMutedKeys):
 			keyed = cmds.keyframe(item, query = True)
 			if (keyed):
 				muted = cmds.mute(item, query = True)

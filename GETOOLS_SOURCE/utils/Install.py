@@ -21,10 +21,12 @@
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
+import maya.cmds as cmds
 import os
 import sys
 import inspect
 
+from ..utils import Attributes
 from ..utils import Shelf
 from ..values import CodeSamples
 from ..values import Enums
@@ -282,15 +284,23 @@ def ToShelf_MotionTrailSelect(path, *args):
 def ToShelf_MotionTrailDelete(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.MotionTrailDelete), "MotionTrailDelete", "MTDelete")
 
-# RESET BUTTON
-def CreateResetButton(*args): # TODO get all published attributes
-	# get namespace
-	# get all published attributes
-	# generate reset code
-	# create button and fill command
+# POSE BUTTON
+def CreatePoseButton(*args): # TODO
 
-	# nameNamespace = "rig_Staff_01:"
-	# cmds.setAttr(nameNamespace + "ct_Root.translateX", 0)
-	
-	print("Reset button for objects")
+	attributes = Attributes.GetAttributesAnimatableOnSelected(useShapes = False)
+	if (attributes == None):
+		cmds.warning("No attributes detected for pose saving (FEATURE IN DEVELOPMENT)")
+		return
+
+	command = "import maya.cmds as cmds\n"
+
+	for item in attributes:
+		value = cmds.getAttr(item)
+		command = command + "cmds.setAttr(\"{0}\", {1})\n".format(item, value)
+
+	Shelf.AddToCurrentShelf(
+		command = command,
+		label = "getools_pose",
+		labelImage = "pose"
+		)
 

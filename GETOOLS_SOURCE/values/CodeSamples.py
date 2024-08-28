@@ -49,7 +49,7 @@ def SelectHierarchyTransforms():
 
 def CreateResetButton():
 	import GETOOLS_SOURCE.utils.Install as install
-	install.CreateResetButton()
+	install.CreatePoseButton()
 
 
 # TOGGLES
