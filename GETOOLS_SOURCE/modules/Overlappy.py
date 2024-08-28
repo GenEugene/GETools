@@ -67,6 +67,9 @@ class OverlappyAnnotations:
 	checkboxLoop = "Use for cycles. \nImportant to have cycle constant animation curves"
 	checkboxClean = "Remove particle setup after baking end"
 
+	# Collisions
+	checkboxCollisions = "Use collisions"
+
 	# Particle
 	particleRadius = "Particle Radius"
 	particleConserve = "Particle Conserve"
@@ -103,6 +106,7 @@ class OverlappySettings:
 	
 	# SIMULATION SETTINGS # TODO: move to preset
 	checkboxesOptions = (False, True, False, True)
+	checkboxCollisions = True
 	particleRadius = 5
 	particleConserve = 1
 	particleDrag = 0.01
@@ -125,7 +129,7 @@ class OverlappySettings:
 	rangeOffsetZ = (float("-inf"), float("inf"), 0, 100)
 	
 class Overlappy:
-	version = "v2.9"
+	version = "v3.0"
 	name = "OVERLAPPY"
 	title = name + " " + version
 
@@ -157,6 +161,7 @@ class Overlappy:
 		self.layoutButtons = None
 		self.layoutLayers = None
 		self.layoutOptions = None
+		self.layoutCollisions = None
 		self.layoutSimulation = None
 		self.layoutOffset = None
 		
@@ -165,6 +170,7 @@ class Overlappy:
 		self.checkboxLayer = None
 		self.checkboxLoop = None
 		self.checkboxClean = None
+		self.checkboxCollisions = None
 		self.checkboxMirrorX = None
 		self.checkboxMirrorY = None
 		self.checkboxMirrorZ = None
@@ -180,11 +186,15 @@ class Overlappy:
 		self.sliderOffsetX = None
 		self.sliderOffsetY = None
 		self.sliderOffsetZ = None
+
+		# SCROLL LISTS
+		self.scrollListColliders = None
 	def UICreate(self, layoutMain):
 		self.UILayoutMenuBar(layoutMain)
 		self.UILayoutButtons(layoutMain)
 		self.UILayoutLayers(layoutMain)
 		self.UILayoutOptions(layoutMain)
+		self.UILayoutCollisions(layoutMain)
 		self.UILayoutParticleAttributes(layoutMain)
 		self.UILayoutParticleOffset(layoutMain)
 	def UILayoutMenuBar(self, layoutMain):
@@ -255,6 +265,37 @@ class Overlappy:
 		self.checkboxLayer = UI.Checkbox(label = "Layer", value = OverlappySettings.checkboxesOptions[1], annotation = OverlappyAnnotations.checkboxLayer)
 		self.checkboxLoop = UI.Checkbox(label = "Loop", value = OverlappySettings.checkboxesOptions[2], annotation = OverlappyAnnotations.checkboxLoop) # FIXME make cycle infinity before bake
 		self.checkboxClean = UI.Checkbox(label = "Clean", value = OverlappySettings.checkboxesOptions[3], annotation = OverlappyAnnotations.checkboxClean)
+	def UILayoutCollisions(self, layoutMain): # TODO
+		self.layoutCollisions = cmds.frameLayout("layoutCollisions", label = Settings.frames2Prefix + "COLLISIONS - WORK IN PROGRESS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		layoutColumn = cmds.columnLayout(parent = self.layoutCollisions, adjustableColumn = True)
+		
+		count = 1
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+		self.checkboxCollisions = UI.Checkbox(label = "Activate", value = OverlappySettings.checkboxCollisions, annotation = OverlappyAnnotations.checkboxCollisions)
+
+		count = 4
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+		#
+		cmds.button(label = "ADD", backgroundColor = Colors.green10)
+		cmds.button(label = "REMOVE", backgroundColor = Colors.red10)
+		cmds.button(label = "REFRESH", backgroundColor = Colors.yellow10)
+		cmds.button(label = "CLEAR", backgroundColor = Colors.red50)
+
+		# TODO Scroll list with colliders
+		# https://help.autodesk.com/cloudhelp/2023/ENU/Maya-Tech-Docs/CommandsPython/textScrollList.html
+		layoutScroll = cmds.frameLayout("layoutScroll", label = "Colliders List", labelIndent = 80, parent = self.layoutCollisions, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.scrollListColliders = cmds.textScrollList(parent = layoutScroll, allowMultiSelection = True, height = 120)
+
+		for i in range(20): # test list items
+			cmds.textScrollList(self.scrollListColliders, edit = True, append = "item {0}".format(i))
+
+		# append
+		# selectItem
+		# deselectAll
+		# removeAll
+		# doubleClickCommand
+
+
 	def UILayoutParticleAttributes(self, layoutMain):
 		self.layoutSimulation = cmds.frameLayout("layoutParticleSliders", label = Settings.frames2Prefix + "PARTICLE ATTRIBUTES", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutSimulation, adjustableColumn = True)
