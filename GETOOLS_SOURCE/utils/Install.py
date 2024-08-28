@@ -285,14 +285,14 @@ def ToShelf_MotionTrailDelete(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.MotionTrailDelete), "MotionTrailDelete", "MTDelete")
 
 # POSE BUTTON
-def CreatePoseButton(*args): # TODO
+def CreatePoseButton(*args): # TODO get attributes from shapes # TODO alternative mode with namespace detection
 
 	attributes = Attributes.GetAttributesAnimatableOnSelected(useShapes = False)
 	if (attributes == None):
 		cmds.warning("No attributes detected for pose saving (FEATURE IN DEVELOPMENT)")
 		return
 
-	command = "import maya.cmds as cmds\n"
+	command = "# GETools pose. Press button to set attributes back to objects\nimport maya.cmds as cmds\n\n"
 
 	for item in attributes:
 		value = cmds.getAttr(item)
