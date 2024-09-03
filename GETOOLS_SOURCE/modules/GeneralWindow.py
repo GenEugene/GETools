@@ -46,6 +46,8 @@ from ..utils import Toggles
 from ..utils import UI
 from ..values import Icons
 
+from .._prototypes import Physics
+
 
 class GeneralWindow:
 	version = "v1.3.0"
@@ -59,6 +61,7 @@ class GeneralWindow:
 		self.frameRigging = None
 		self.frameOverlappy = None
 		self.frameCenterOfMass = None
+		self.frameMotionTrail = None
 		self.frameExperimental = None
 
 		self.menuCheckboxEulerFilter = None
@@ -78,6 +81,7 @@ class GeneralWindow:
 		self.LayoutRigging(layoutScroll)
 		self.LayoutOverlappy(layoutScroll)
 		self.LayoutCenterOfMass(layoutScroll)
+		self.LayoutMotionTrail(layoutScroll)
 		self.LayoutExperimental(layoutScroll)
 
 	# UI LAYOUTS
@@ -477,24 +481,25 @@ class GeneralWindow:
 	def LayoutCenterOfMass(self, parentLayout):
 		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = "4. " + CenterOfMass.CenterOfMass.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		CenterOfMass.CenterOfMass(self).UICreate(self.frameCenterOfMass)
-	def LayoutExperimental(self, parentLayout):
-		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "5. " + "EXPERIMENTAL", collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		cmds.popupMenu()
-		cmds.menuItem(label = "Right-Click test")
+	def LayoutMotionTrail(self, parentLayout):
+		self.frameMotionTrail = cmds.frameLayout("layoutMotionTrail", parent = parentLayout, label = "5. " + "MOTION TRAIL", collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		
 		countOffsets = 3
-		cmds.gridLayout(parent = self.frameExperimental, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = self.frameMotionTrail, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Trails Create", command = MotionTrail.Create, backgroundColor = Colors.orange10)
 		cmds.button(label = "Trails Select", command = MotionTrail.Select, backgroundColor = Colors.orange50)
 		cmds.button(label = "Trails Delete", command = MotionTrail.Delete, backgroundColor = Colors.orange100)
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Select", command = MotionTrail.Select)
 		# cmds.menuItem(label = "Delete", command = MotionTrail.Delete)
+	def LayoutExperimental(self, parentLayout):
+		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "EXPERIMENTAL", collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		# cmds.popupMenu()
+		# cmds.menuItem(label = "Right-Click test")
 		
-		# countOffsets = 1
-		# cmds.gridLayout(parent = self.frameExperimental, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		# cmds.button(label = "Print function", command = Install.TEST_INSPECT)
-		pass
+		countOffsets = 4
+		cmds.gridLayout(parent = self.frameExperimental, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		cmds.button(label = "Nucleus", command = Physics.CreateNucleus)
 
 	# WINDOW
 	def WindowCheck(self, *args):
@@ -526,6 +531,8 @@ class GeneralWindow:
 			cmds.frameLayout(self.frameOverlappy, edit = True, collapse = value)
 		if (self.frameCenterOfMass != None):
 			cmds.frameLayout(self.frameCenterOfMass, edit = True, collapse = value)
+		if (self.frameMotionTrail != None):
+			cmds.frameLayout(self.frameMotionTrail, edit = True, collapse = value)
 		if (self.frameExperimental != None):
 			cmds.frameLayout(self.frameExperimental, edit = True, collapse = value)
 

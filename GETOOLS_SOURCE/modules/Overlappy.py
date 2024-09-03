@@ -33,6 +33,7 @@ from ..utils import Colors
 from ..utils import Constraints
 from ..utils import Layers
 from ..utils import MayaSettings
+# from ..utils import PhysicsHair
 from ..utils import Selector
 from ..utils import Text
 from ..utils import Timeline
@@ -130,7 +131,7 @@ class OverlappySettings:
 	rangeOffsetX = (float("-inf"), float("inf"), 0, 100)
 	rangeOffsetY = (float("-inf"), float("inf"), 0, 100)
 	rangeOffsetZ = (float("-inf"), float("inf"), 0, 100)
-	
+
 class Overlappy:
 	version = "v3.0"
 	name = "OVERLAPPY"
@@ -146,7 +147,7 @@ class Overlappy:
 		self.time = Timeline.TimeRangeHandler()
 		
 		# OBJECTS
-		self.selectedObject = ""
+		self.selectedObjects = ""
 		self.layers = ["", ""]
 		self.nucleus = ""
 		self.nucleusNodesBefore = [""]
@@ -166,6 +167,7 @@ class Overlappy:
 		self.layoutLayers = None
 		self.layoutCollisions = None # TODO
 		self.layoutChainMode = None # TODO
+		self.layoutChainButtons = None
 		self.layoutChainDynamicProperties = None # TODO
 		self.layoutParticleMode = None
 		self.layoutParticleButtons = None
@@ -203,6 +205,8 @@ class Overlappy:
 		self.UILayoutChainMode(layoutMain)
 		self.UILayoutParticleMode(layoutMain)
 	
+
+	### MAIN UI
 	def UILayoutMenuBar(self, layoutMain):
 		cmds.columnLayout("layoutMenuBar", parent = layoutMain, adjustableColumn = True, width = Settings.windowWidthMargin)
 		cmds.menuBarLayout()
@@ -218,11 +222,11 @@ class Overlappy:
 		self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions", value = OverlappySettings.checkboxCollisions, valueDefault = OverlappySettings.checkboxCollisions)
 
 		cmds.menu(label = "Particle", tearOff = True)
-		cmds.menuItem(label = "Object", command = self._SelectObject, image = Icons.cursor)
-		cmds.menuItem(label = "Particle", command = self._SelectParticle, image = Icons.particle)
+		cmds.menuItem(label = "Object", command = self._SelectSelectedObjects, image = Icons.cursor)
+		cmds.menuItem(label = "Particle", command = self._SelectParticleObject, image = Icons.particle)
 		cmds.menuItem(label = "Nucleus", command = self._SelectNucleus, image = Icons.nucleus)
-		cmds.menuItem(label = "Target locator", command = self._SelectTarget, image = Icons.locator)
-		cmds.menuItem(label = "Aim locator", command = self._SelectAim, image = Icons.locator)
+		cmds.menuItem(label = "Target locator", command = self._SelectParticleTarget, image = Icons.locator)
+		cmds.menuItem(label = "Aim locator", command = self._SelectParticleAim, image = Icons.locator)
 	def UILayoutBake(self, layoutMain):
 		# SETUP
 		self.layoutBake = cmds.frameLayout("layoutBake", label = Settings.frames2Prefix + "BAKE", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -284,6 +288,8 @@ class Overlappy:
 		# removeAll
 		# doubleClickCommand
 	
+	
+	### CHAIN UI
 	def UILayoutChainMode(self, layoutMain):
 		self.layoutChainMode = cmds.frameLayout("layoutChainMode", label = Settings.frames2Prefix + "CHAIN MODE - WORK IN PROGRESS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		
@@ -291,7 +297,19 @@ class Overlappy:
 		cmds.menu(label = "Edit")
 		cmds.menuItem(label = "Reset Settings", command = self._ResetAllChainValues, image = Icons.rotateClockwise)
 				
+		# self.UILayoutChainButtons(self.layoutChainMode)
 		self.UILayoutChainDynamicProperties(self.layoutChainMode)
+		pass
+	def UILayoutChainButtons(self, layoutMain):
+		# SETUP
+		self.layoutChainButtons = cmds.frameLayout("layoutChainButtons", label = "Buttons", labelIndent = 100, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		layoutColumn = cmds.columnLayout(parent = self.layoutChainButtons, adjustableColumn = True)
+
+		# count = 2
+		# cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+		#
+		# cmds.button(label = "CREATE", command = PhysicsHair.CreateNHairOnSelected, backgroundColor = Colors.green10) # TODO annotation
+		# cmds.button(label = "REMOVE", command = self._SetupDelete, backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
 	def UILayoutChainDynamicProperties(self, layoutMain):
 		self.layoutChainDynamicProperties = cmds.frameLayout("layoutChainDynamicProperties", label = "Dynamic Properties", labelIndent = 70, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		# layoutColumn = cmds.columnLayout(parent = self.layoutSimulation, adjustableColumn = True)
@@ -397,6 +415,8 @@ class Overlappy:
 
 		pass
 	
+	
+	### PARTICLE UI
 	def UILayoutParticleMode(self, layoutMain):
 		self.layoutParticleMode = cmds.frameLayout("layoutParticleMode", label = Settings.frames2Prefix + "PARTICLE MODE", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		
@@ -415,16 +435,16 @@ class Overlappy:
 		count = 2
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		#
-		cmds.button(label = "SETUP", command = self._SetupInit, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
+		cmds.button(label = "CREATE", command = self._ParticleSetupInit, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
 		# cmds.button(label = "Scan setup in scene", command = self._SetupScan, backgroundColor = Colors.green10)
-		cmds.button(label = "DELETE", command = self._SetupDelete, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupDelete)
+		cmds.button(label = "REMOVE", command = self._ParticleSetupDelete, backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
 	def UILayoutParticleDynamicProperties(self, layoutMain):
 		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 70, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click") # TODO add reset all function
 
-		commandDefault = self._UpdateParticleAttributes
+		commandDefault = self._ParticleDynamicPropertiesUpdate
 
 		layoutSliders1 = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = Settings.windowWidthMargin, cellHeight = Settings.lineHeight)
 		self.sliderParticleRadius = UI.Slider(
@@ -532,13 +552,13 @@ class Overlappy:
 		# cmds.separator()
 		# , commandResetAll = self._ResetOffsets
 		self.checkboxAutoOffset = UI.Checkbox(label = "Auto") # TODO
-		self.checkboxesParticleMirror[0] = UI.Checkbox(label = "Mirror X", command = partial(self._OffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorX)
-		self.checkboxesParticleMirror[1] = UI.Checkbox(label = "Mirror Y", command = partial(self._OffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorY)
-		self.checkboxesParticleMirror[2] = UI.Checkbox(label = "Mirror Z", command = partial(self._OffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorZ)
+		self.checkboxesParticleMirror[0] = UI.Checkbox(label = "Mirror X", command = partial(self._ParticleOffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorX)
+		self.checkboxesParticleMirror[1] = UI.Checkbox(label = "Mirror Y", command = partial(self._ParticleOffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorY)
+		self.checkboxesParticleMirror[2] = UI.Checkbox(label = "Mirror Z", command = partial(self._ParticleOffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorZ)
 		
 		layoutSliders = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = Settings.windowWidthMargin, cellHeight = Settings.lineHeight)
 
-		commandDefault = self._OffsetsUpdate
+		commandDefault = self._ParticleOffsetsUpdate
 
 		self.slidersParticleOffset[0] = UI.Slider(
 			parent = layoutSliders,
@@ -577,22 +597,22 @@ class Overlappy:
 		)
 
 
-	### LOGIC
-	def _SetupInit(self, *args):
+	### PARTICLE LOGIC
+	def _ParticleSetupInit(self, *args):
 		# Get min/max anim range time and reset time slider
 		self.time.Scan()
 		self.time.SetCurrent(self.time.values[2])
 		
 		# Remove previous setup if exists
-		self._SetupDelete(deselect = False)
+		self._ParticleSetupDelete(deselect = False)
 		
 		# Get selected objects
-		self.selectedObject = Selector.MultipleObjects()
-		if (self.selectedObject == None):
-			self.selectedObject = ""
+		self.selectedObjects = Selector.MultipleObjects(minimalCount = 1)
+		if (self.selectedObjects == None):
+			self.selectedObjects = ""
 			return
 		
-		self.selectedObject = self.selectedObject[0]
+		self.selectedObjects = self.selectedObjects[0]
 
 		# Create group
 		cmds.select(clear = True)
@@ -601,10 +621,10 @@ class Overlappy:
 		cmds.group(empty = True, name = OverlappySettings.nameGroup)
 		
 		# Run setup logic
-		self._SetupCreate(self.selectedObject)
-		self._OffsetsUpdate(cacheReset = True)
-		cmds.select(self.selectedObject, replace = True)
-	def _SetupCreate(self, objCurrent, *args): # TODO replace locators by locators class
+		self._ParticleSetupCreate(self.selectedObjects)
+		self._ParticleOffsetsUpdate(cacheReset = True)
+		cmds.select(self.selectedObjects, replace = True)
+	def _ParticleSetupCreate(self, objCurrent, *args): # TODO replace locators by locators class
 		# Names
 		objConverted = Text.ConvertSymbols(objCurrent)
 		nameLocGoal = OverlappySettings.nameLocGoalTarget[0] + objConverted
@@ -734,7 +754,7 @@ class Overlappy:
 		
 		if (self._ParticleLoftGetDistance() < OverlappySettings.loftMinDistance):
 			cmds.setAttr(self.particleLoft[2] + ".visibility", 0)
-	def _SetupScan(self, *args): # TODO rework or delete
+	def _ParticleSetupScan(self, *args): # TODO rework or delete
 		# Check overlappy group
 		if (not cmds.objExists(OverlappySettings.nameGroup)):
 			cmds.warning("Overlappy object doesn't exists")
@@ -764,7 +784,7 @@ class Overlappy:
 						cmds.warning("Suffix \"{0}\" don't equals to \"{1}\"".format(objectName, lastName))
 		converted = Text.ConvertSymbols(objectName, False)
 		if (cmds.objExists(converted)):
-			self.selectedObject = converted
+			self.selectedObjects = converted
 		
 		def CheckAndSet(name):
 			if (cmds.objExists(name + objectName)):
@@ -800,8 +820,8 @@ class Overlappy:
 		# self._GetSimulation()
 		# self._GetOffsets()
 		pass
-	def _SetupDelete(self, deselect=True, *args):
-		self.selectedObject = ""
+	def _ParticleSetupDelete(self, deselect=True, *args):
+		self.selectedObjects = ""
 		self.particleLocGoalTarget = ["", ""]
 		self.particleLocAim = ["", "", "", ""]
 		self.particle = ""
@@ -814,7 +834,7 @@ class Overlappy:
 		
 		if (deselect):
 			cmds.select(clear = True)
-	def _OffsetsUpdate(self, cacheReset=False, *args): # TODO rework
+	def _ParticleOffsetsUpdate(self, cacheReset=False, *args): # TODO rework
 		if (type(cacheReset) is float):
 			cacheReset = False
 		if (cacheReset):
@@ -833,9 +853,9 @@ class Overlappy:
 		else:
 			return
 
-		self._ValuesSetParticleOffset()
+		self._ParticleOffsetSetValues()
 
-		checkSelected = self.selectedObject == "" or not cmds.objExists(self.selectedObject)
+		checkSelected = self.selectedObjects == "" or not cmds.objExists(self.selectedObjects)
 		checkGoal = not cmds.objExists(self.particleLocGoalTarget[0])
 		checkAim = not cmds.objExists(self.particleLocAim[2])
 		checkStartPos = self.particleGoalStartPosition[0] == None
@@ -881,9 +901,9 @@ class Overlappy:
 		
 		# Set particle attributes
 		particleAttributes = (
-			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateX",
-			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateY",
-			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObject) + ".translateZ",
+			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObjects) + ".translateX",
+			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObjects) + ".translateY",
+			OverlappySettings.nameParticle + Text.ConvertSymbols(self.selectedObjects) + ".translateZ",
 			)
 
 		cmds.setAttr(particleAttributes[0], self.particleGoalStartPosition[1][0] - goalOffset[0])
@@ -919,16 +939,19 @@ class Overlappy:
 				cmds.warning("\"{0}\" object doesn't exists".format(name))
 		else:
 			cmds.warning("Object name is not specified")
-	def _SelectObject(self, *args): self._Select(self.selectedObject)
-	def _SelectParticle(self, *args): self._Select(self.particle)
+	def _SelectSelectedObjects(self, *args): self._Select(self.selectedObjects)
 	def _SelectNucleus(self, *args): self._Select(self.nucleus)
-	def _SelectTarget(self, *args): self._Select(self.particleLocGoalTarget[1])
-	def _SelectAim(self, *args): self._Select(self.particleLocAim[2])
 	
 
-	### VALUES
-	def _SetParticleAttribute(self, sliderValue, startName, attributeName, addSelectedName, *args):
-		selectedName = self.selectedObject
+	### PARTICLE SELECT NODES
+	def _SelectParticleObject(self, *args): self._Select(self.particle)
+	def _SelectParticleTarget(self, *args): self._Select(self.particleLocGoalTarget[1])
+	def _SelectParticleAim(self, *args): self._Select(self.particleLocAim[2])
+	
+
+	### SET SLIDER VALUES
+	def _SetSliderValue(self, sliderValue, startName, attributeName, addSelectedName, *args):
+		selectedName = self.selectedObjects
 		if (selectedName == ""):
 			return
 		
@@ -940,21 +963,26 @@ class Overlappy:
 			resultName = startName + attributeName
 		
 		cmds.setAttr(resultName, sliderValue)
-	def _UpdateParticleAttributes(self, *args):
-		self._SetParticleAttribute(self.sliderParticleRadius.Get(), OverlappySettings.nameParticle, "Shape.radius", True)
-		self._SetParticleAttribute(self.sliderParticleConserve.Get(), OverlappySettings.nameParticle, "Shape.conserve", True)
-		self._SetParticleAttribute(self.sliderParticleDrag.Get(), OverlappySettings.nameParticle, "Shape.drag", True)
-		self._SetParticleAttribute(self.sliderParticleDamp.Get(), OverlappySettings.nameParticle, "Shape.damp", True)
-		self._SetParticleAttribute(self.sliderParticleGoalSmooth.Get(), OverlappySettings.nameParticle, "Shape.goalSmoothness", True)
-		self._SetParticleAttribute(self.sliderParticleGoalWeight.Get(), OverlappySettings.nameParticle, "Shape.goalWeight[0]", True)
-		self._SetParticleAttribute(self.sliderNucleusTimeScale.Get(), self.nucleus, ".timeScale", False)
+	
+	
+	### PARTICLE VALUES
+	def _ParticleDynamicPropertiesUpdate(self, *args):
+		self._SetSliderValue(self.sliderParticleRadius.Get(), OverlappySettings.nameParticle, "Shape.radius", True)
+		self._SetSliderValue(self.sliderParticleConserve.Get(), OverlappySettings.nameParticle, "Shape.conserve", True)
+		self._SetSliderValue(self.sliderParticleDrag.Get(), OverlappySettings.nameParticle, "Shape.drag", True)
+		self._SetSliderValue(self.sliderParticleDamp.Get(), OverlappySettings.nameParticle, "Shape.damp", True)
+		self._SetSliderValue(self.sliderParticleGoalSmooth.Get(), OverlappySettings.nameParticle, "Shape.goalSmoothness", True)
+		self._SetSliderValue(self.sliderParticleGoalWeight.Get(), OverlappySettings.nameParticle, "Shape.goalWeight[0]", True)
+		self._SetSliderValue(self.sliderNucleusTimeScale.Get(), self.nucleus, ".timeScale", False)
 		self._ParticleLoftUpdate()
-	def _ValuesSetParticleOffset(self, *args):
-		self._SetParticleAttribute(self.slidersParticleOffset[0].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateX", True)
-		self._SetParticleAttribute(self.slidersParticleOffset[1].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateY", True)
-		self._SetParticleAttribute(self.slidersParticleOffset[2].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateZ", True)
+	def _ParticleOffsetSetValues(self, *args):
+		self._SetSliderValue(self.slidersParticleOffset[0].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateX", True)
+		self._SetSliderValue(self.slidersParticleOffset[1].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateY", True)
+		self._SetSliderValue(self.slidersParticleOffset[2].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateZ", True)
 		self._ParticleLoftUpdate()
 	
+
+	### PARTICLE LOFT
 	def _ParticleLoftUpdate(self, *args):
 		if (self.particleLoft[1] == ""):
 			return
@@ -992,6 +1020,7 @@ class Overlappy:
 	# 	self.sliderOffset[1].Scan()
 	# 	self.sliderOffset[2].Scan()
 	
+
 	### RESET VALUES
 	def _ResetAllValues(self, *args):
 		self._ResetOptions()
@@ -1018,7 +1047,7 @@ class Overlappy:
 		self.sliderParticleGoalSmooth.Reset()
 		self.sliderParticleGoalWeight.Reset()
 		self.sliderNucleusTimeScale.Reset() # TODO move out from particle specific logic
-		self._UpdateParticleAttributes()
+		self._ParticleDynamicPropertiesUpdate()
 	def _ResetParticleOffsets(self, *args):
 		self.checkboxesParticleMirror[0].Reset()
 		self.checkboxesParticleMirror[1].Reset()
@@ -1026,7 +1055,7 @@ class Overlappy:
 		self.slidersParticleOffset[0].Reset()
 		self.slidersParticleOffset[1].Reset()
 		self.slidersParticleOffset[2].Reset()
-		self._ValuesSetParticleOffset()
+		self._ParticleOffsetSetValues()
 	
 
 	### BAKE
@@ -1038,7 +1067,7 @@ class Overlappy:
 			attributesType = Enums.Attributes.rotateLong
 		attrs = ["", "", ""]
 		
-		selected = self.selectedObject
+		selected = self.selectedObjects
 		for i in range(len(attrs)):
 			attrs[i] = "{0}.{1}".format(selected, attributesType[i])
 		attributesFiltered = []
@@ -1068,7 +1097,7 @@ class Overlappy:
 		
 		if (len(attributesFiltered) == 0):
 			cmds.warning("No attributes. Overlappy setup deleted")
-			self._SetupDelete()
+			self._ParticleSetupDelete()
 			return
 		
 		# Keyframe target attributes
@@ -1140,14 +1169,14 @@ class Overlappy:
 		# Delete setup
 		if (self.menuCheckboxClean.Get()):
 			if (not deleteSetupLock):
-				self._SetupDelete()
+				self._ParticleSetupDelete()
 		
 		# Restore offsets sliders
 		if (zeroOffsets):
 			self.slidersParticleOffset[0].Set(value1)
 			self.slidersParticleOffset[1].Set(value2)
 			self.slidersParticleOffset[2].Set(value3)
-			self._OffsetsUpdate(True)
+			self._ParticleOffsetsUpdate(True)
 	def _BakeVariants(self, variant, *args):
 		selected = Selector.MultipleObjects()
 		if (selected == None):
@@ -1195,7 +1224,7 @@ class Overlappy:
 		
 		for i in range(len(selected)):
 			cmds.select(selected[i], replace = True)
-			self._SetupInit()
+			self._ParticleSetupInit()
 			RunBakeLogicVariant()
 		
 		cmds.select(selected, replace = True)
