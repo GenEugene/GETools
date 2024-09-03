@@ -47,6 +47,7 @@ from ..utils import UI
 from ..values import Icons
 
 from .._prototypes import Physics
+from .._prototypes import PhysicsParticle
 
 
 class GeneralWindow:
@@ -500,6 +501,7 @@ class GeneralWindow:
 		countOffsets = 4
 		cmds.gridLayout(parent = self.frameExperimental, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Nucleus", command = Physics.CreateNucleus)
+		cmds.button(label = "Particle", command = PhysicsParticle.CreateOnSelected)
 
 	# WINDOW
 	def WindowCheck(self, *args):

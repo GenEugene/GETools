@@ -29,7 +29,7 @@ import maya.cmds as cmds
 
 
 nameNucleus = "myNucleus"
-nucleusTimeScale = 1
+# nucleusTimeScale = 1
 
 
 def CreateNucleus(*args): # parent
@@ -56,7 +56,5 @@ def CreateNucleus(*args): # parent
 	# 		cmds.warning("extra node deleted {0}".format(item))
 	# 		cmds.delete(item)
 
-	print(nucleus)
-	
 	return nucleus
 
