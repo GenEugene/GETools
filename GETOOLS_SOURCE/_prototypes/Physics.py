@@ -28,33 +28,23 @@ import maya.cmds as cmds
 # from . import Text
 
 
-nameNucleus = "myNucleus"
 # nucleusTimeScale = 1
 
 
-def CreateNucleus(*args): # parent
-	# Nucleus node
-	# nucleusNodesBefore = cmds.ls(type = "nucleus")
-	nucleus = cmds.createNode("nucleus", name = nameNucleus)
+def CreateNucleus(name="myNucleus", parent=None, *args):
+	nucleus = cmds.createNode("nucleus", name = name)
 	
 	cmds.connectAttr("time1.outTime", nucleus + ".currentTime")
-	# cmds.parent(nucleus, parent)
+
+	# Parent to specific object
+	if (parent != None):
+		cmds.parent(nucleus, parent)
+	
 	# self.sliderNTimeScale.startName = nucleus
 	# cmds.setAttr(nucleus + ".gravity", 0)
 	# cmds.setAttr(nucleus + ".timeScale", self.sliderNucleusTimeScale.Get())
 	# cmds.setAttr(nucleus + ".startFrame", self.time.values[2])
 	# cmds.setAttr(nucleus + ".visibility", 0)
-
-
-	# Reconnect particle to temp nucleus and remove extra nodes
-	# mel.eval("assignNSolver {0}".format(nameNucleus))
-	# nucleusNodesAfter = cmds.ls(type = "nucleus")
-	# nodesForRemoving = [item for item in nucleusNodesAfter if item not in nucleusNodesBefore]
-	
-	# for item in nodesForRemoving:
-	# 	if (item != nucleus):
-	# 		cmds.warning("extra node deleted {0}".format(item))
-	# 		cmds.delete(item)
 
 	return nucleus
 

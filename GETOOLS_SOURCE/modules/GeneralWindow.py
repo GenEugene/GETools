@@ -500,7 +500,7 @@ class GeneralWindow:
 		
 		countOffsets = 4
 		cmds.gridLayout(parent = self.frameExperimental, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Nucleus", command = Physics.CreateNucleus)
+		cmds.button(label = "Nucleus", command = partial(Physics.CreateNucleus, "testNucleus", None))
 		cmds.button(label = "Particle", command = PhysicsParticle.CreateOnSelected)
 
 	# WINDOW
