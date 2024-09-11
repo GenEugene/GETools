@@ -46,9 +46,9 @@ from ..utils import Toggles
 from ..utils import UI
 from ..values import Icons
 
-from .._prototypes import Physics
-from .._prototypes import PhysicsParticle
-from .._prototypes import PhysicsHair
+from ..experimental import Physics
+from ..experimental import PhysicsParticle
+from ..experimental import PhysicsHair
 
 
 class GeneralWindow:

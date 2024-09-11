@@ -28,7 +28,7 @@ import maya.mel as mel
 from ..utils import Selector
 from ..utils import Text
 from ..values import Enums
-from .._prototypes import Physics
+from ..experimental import Physics
 
 
 _defaultPrefix = "physics"
