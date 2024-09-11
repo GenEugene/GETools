@@ -37,6 +37,7 @@ _defaultNameGroupAim = _defaultPrefix + "GrpAim"
 _defaultNameNucleus = _defaultPrefix + "Nucleus"
 _defaultNameParticle = _defaultPrefix + "Particle"
 _defaultNameLocGoal = _defaultPrefix + "LocGoal"
+_defaultNameLocGoalOffset = _defaultPrefix + "LocGoalOffset"
 _defaultNameLocParticle = _defaultPrefix + "LocParticle"
 _defaultNameLocAimBase = _defaultPrefix + "LocAimBase"
 _defaultNameLocAim = _defaultPrefix + "LocAim"
@@ -61,6 +62,7 @@ def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0
 	nameNucleus = _defaultNameNucleus + nameTargetObjectConverted
 	nameParticle = _defaultNameParticle + nameTargetObjectConverted
 	nameLocGoal = _defaultNameLocGoal + nameTargetObjectConverted
+	nameLocGoalOffset = _defaultNameLocGoalOffset + nameTargetObjectConverted
 	nameLocParticle = _defaultNameLocParticle + nameTargetObjectConverted
 
 	### Create group
@@ -101,24 +103,27 @@ def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0
 		targetObjectForConstraint = customParentObject
 	cmds.parentConstraint(targetObjectForConstraint, locatorGoal, maintainOffset = True)
 
+	### Create locator goal offset
+	locatorGoalOffset = cmds.spaceLocator(name = nameLocGoalOffset)[0]
+	cmds.select(clear = True)
+	cmds.parent(locatorGoalOffset, locatorGoal)
+	cmds.select(clear = True)
+	cmds.matchTransform(locatorGoalOffset, locatorGoal, position = True, rotation = True)
 
-
-	### Position offset locator goal # FIXME issue with constraint axes, need to find different solution and replace this code
-	cmds.setAttr(locatorGoal + "_parentConstraint1.target[0].targetOffsetTranslateX", positionOffset[0])
-	cmds.setAttr(locatorGoal + "_parentConstraint1.target[0].targetOffsetTranslateY", positionOffset[1])
-	cmds.setAttr(locatorGoal + "_parentConstraint1.target[0].targetOffsetTranslateZ", positionOffset[2])
-
-
+	### Position locator goal  offset # TODO move to external method to control separately
+	cmds.setAttr(locatorGoalOffset + ".translateX", positionOffset[0])
+	cmds.setAttr(locatorGoalOffset + ".translateY", positionOffset[1])
+	cmds.setAttr(locatorGoalOffset + ".translateZ", positionOffset[2])
 
 	### Create particle
-	position = cmds.xform(locatorGoal, query = True, worldSpace = True, rotatePivot = True)
+	position = cmds.xform(locatorGoalOffset, query = True, worldSpace = True, rotatePivot = True)
 	particle = cmds.nParticle(name = nameParticle, position = position, conserve = 1)[0]
 	cmds.select(clear = True)
 	cmds.parent(particle, group)
 	cmds.select(clear = True)
 
 	### Create particle goal and get selected object position
-	cmds.goal(particle, useTransformAsGoal = True, goal = locatorGoal)
+	cmds.goal(particle, useTransformAsGoal = True, goal = locatorGoalOffset)
 	## startPositionGoalParticle[1] = cmds.xform(particle, query = True, translation = True) # XXX probably deprecated
 
 	### Reconnect particle to temp nucleus
@@ -194,6 +199,7 @@ def CreateAimSetup(nameTargetObjectConverted="", group="", targetObject="", loca
 	cmds.matchTransform(locatorAim, locatorAimBase, position = True, rotation = True)
 	cmds.parent(locatorAim, locatorAimBase)
 	cmds.select(clear = True)
+	cmds.setAttr(locatorAim + ".displayLocalAxis", True)
 
 
 	# constraintAim = cmds.aimConstraint(locatorParticle, locatorAim, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "none") # XXX probably deprecated
