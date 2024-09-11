@@ -31,15 +31,16 @@ from ..values import Enums
 from .._prototypes import Physics
 
 
-_defaultPrefix = "prt"
+_defaultPrefix = "physics"
 _defaultNameGroup = _defaultPrefix + "Grp"
+_defaultNameGroupAim = _defaultPrefix + "GrpAim"
 _defaultNameNucleus = _defaultPrefix + "Nucleus"
 _defaultNameParticle = _defaultPrefix + "Particle"
 _defaultNameLocGoal = _defaultPrefix + "LocGoal"
-_defaultNameLocParticle = _defaultPrefix + "LocTarget"
+_defaultNameLocParticle = _defaultPrefix + "LocParticle"
 _defaultNameLocAimBase = _defaultPrefix + "LocAimBase"
 _defaultNameLocAimHidden = _defaultPrefix + "LocAimHidden"
-_defaultNameLocAim = _defaultPrefix + "LocAim"
+# _defaultNameLocAim = _defaultPrefix + "LocAim"
 _defaultNameLocAimUp = _defaultPrefix + "LocAimUp"
 
 _valueParticleRadius = 0.1
@@ -50,8 +51,10 @@ _valueGoalSmooth = 3
 _valueGoalWeight = 0.5
 # _nucleusTimeScale = 1
 
+_valueAimUpDistance = 1
 
-def CreateParticle(targetObject):
+
+def CreateParticleSetup(targetObject, positionOffset=(0,0,0)):
 	### Names
 	nameTargetObjectConverted = "_" + Text.ConvertSymbols(targetObject)
 	nameGroup = _defaultNameGroup + nameTargetObjectConverted
@@ -72,6 +75,7 @@ def CreateParticle(targetObject):
 	nucleus = Physics.CreateNucleus(name = nameNucleus, parent = group)
 	cmds.select(clear = True)
 
+
 	### TODO Need to define colliderObjects before this logic
 	### TODO Connect collision nRigid nodes to nucleus
 	## colliderNodes[0] = cmds.createNode("nRigid", name = "myNRigid")
@@ -81,12 +85,6 @@ def CreateParticle(targetObject):
 	## cmds.connectAttr(colliderNodes[0] + ".startState", nucleus + ".inputPassiveStart[0]")
 	## cmds.connectAttr(nucleus + ".startFrame", colliderNodes[0] + ".startFrame")
 
-	### Create particle
-	position = cmds.xform(targetObject, query = True, worldSpace = True, rotatePivot = True)
-	particle = cmds.nParticle(name = nameParticle, position = position, conserve = 1)[0]
-	cmds.select(clear = True)
-	cmds.parent(particle, group)
-	cmds.select(clear = True)
 
 	### Create locator goal
 	locatorGoal = cmds.spaceLocator(name = nameLocGoal)[0]
@@ -96,11 +94,23 @@ def CreateParticle(targetObject):
 	cmds.matchTransform(locatorGoal, targetObject, position = True, rotation = True)
 	cmds.parentConstraint(targetObject, locatorGoal, maintainOffset = True)
 	## cmds.setAttr(locatorGoal + ".visibility", 0) # TODO use when hidden
-	## goalStartPosition = cmds.xform(locatorGoal, query = True, translation = True) # XXX unused old code, probably need to remove
-	
+	## goalStartPosition = cmds.xform(locatorGoal, query = True, translation = True) # XXX probably deprecated
+
+	### Position offset locator goal
+	cmds.setAttr(locatorGoal + "_parentConstraint1.target[0].targetOffsetTranslateX", positionOffset[0])
+	cmds.setAttr(locatorGoal + "_parentConstraint1.target[0].targetOffsetTranslateY", positionOffset[1])
+	cmds.setAttr(locatorGoal + "_parentConstraint1.target[0].targetOffsetTranslateZ", positionOffset[2])
+
+	### Create particle
+	position = cmds.xform(locatorGoal, query = True, worldSpace = True, rotatePivot = True)
+	particle = cmds.nParticle(name = nameParticle, position = position, conserve = 1)[0]
+	cmds.select(clear = True)
+	cmds.parent(particle, group)
+	cmds.select(clear = True)
+
 	### Create particle goal and get selected object position
 	cmds.goal(particle, useTransformAsGoal = True, goal = locatorGoal)
-	## startPositionGoalParticle[1] = cmds.xform(particle, query = True, translation = True)
+	## startPositionGoalParticle[1] = cmds.xform(particle, query = True, translation = True) # XXX probably deprecated
 
 	### Reconnect particle to temp nucleus
 	cmds.select(particle, replace = True)
@@ -136,50 +146,71 @@ def CreateParticle(targetObject):
 	## cmds.setAttr(locatorParticle + ".visibility", 0) # TODO use when hidden
 
 	return nameTargetObjectConverted, group, targetObject, locatorParticle
-
-
-def CreateAimSetup(nameTargetObjectConverted="", group="", targetObject="", locatorParticle=""):
+def CreateAimSetup(nameTargetObjectConverted="", group="", targetObject="", locatorParticle="", aimUpDistance=_valueAimUpDistance):
 	### Names
+	nameGroupAim = _defaultNameGroupAim + nameTargetObjectConverted
 	nameLocAimBase = _defaultNameLocAimBase + nameTargetObjectConverted
 	nameLocAimHidden = _defaultNameLocAimHidden + nameTargetObjectConverted
 	nameLocAimUp = _defaultNameLocAimUp + nameTargetObjectConverted		
 	# nameLocAim = _defaultNameLocAim + nameTargetObjectConverted
 
+	### Create group
+	cmds.select(clear = True)
+	if (cmds.objExists(nameGroupAim)):
+		cmds.delete(nameGroupAim)
+	groupAim = cmds.group(empty = True, name = nameGroupAim)
+	cmds.select(clear = True)
+	cmds.parent(groupAim, group)
+	cmds.select(clear = True)
+
 	### Create locator base aim
 	locatorAimBase = cmds.spaceLocator(name = nameLocAimBase)[0]
 	cmds.select(clear = True)
-	cmds.parent(locatorAimBase, group)
+	cmds.parent(locatorAimBase, groupAim)
 	cmds.select(clear = True)
 	cmds.matchTransform(locatorAimBase, targetObject, position = True, rotation = True)
 	cmds.parentConstraint(targetObject, locatorAimBase, maintainOffset = True)
 	## cmds.setAttr(locatorAimBase + ".visibility", 0) # TODO use when hidden
 
-	### Create locator hidden aim # TODO
+
+	### Create locator hidden aim # TODO rename
 	locatorAimHidden = cmds.spaceLocator(name = nameLocAimHidden)[0]
 	cmds.select(clear = True)
 	cmds.matchTransform(locatorAimHidden, locatorAimBase, position = True, rotation = True)
 	cmds.parent(locatorAimHidden, locatorAimBase)
 	cmds.select(clear = True)
 
-	# constraintAimHidden = cmds.aimConstraint(locatorParticle, locatorAimHidden, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "none") # TODO
-	# cmds.delete(constraintAimHidden) # locatorAimHidden + "_aimConstraint1" # TODO use or not?
 
-	### Create locator aim up
+	# constraintAimHidden = cmds.aimConstraint(locatorParticle, locatorAimHidden, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "none") # XXX probably deprecated
+	# cmds.delete(constraintAimHidden) # locatorAimHidden + "_aimConstraint1" # XXX probably deprecated
+
+
+	### Create locator aim up # TODO
 	locatorAimUp = cmds.duplicate(locatorAimHidden, name = nameLocAimUp)[0]
 	cmds.parent(locatorAimUp, locatorAimHidden)
 	cmds.select(clear = True)
-	cmds.setAttr(locatorAimUp + "." + Enums.Attributes.translateShort[1], 100) # TODO set aim up distance
+	cmds.setAttr(locatorAimUp + "." + Enums.Attributes.translateShort[1], aimUpDistance)
 	cmds.parent(locatorAimUp, locatorAimBase)
 	cmds.select(clear = True)
-	cmds.aimConstraint(locatorParticle, locatorAimHidden, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "object", worldUpObject = locatorAimUp) # "scene" "object" "objectrotation" "vector" "none"
+	cmds.setAttr(locatorAimUp + ".visibility", 0)
 
-	### Create aim locator
+
+	### Create aim up particle setup
+	particleUpSetup = CreateParticleSetup(locatorAimUp)
+	cmds.parent(particleUpSetup[1], nameGroupAim)
+	cmds.select(clear = True)
+
+
+	### Create aim constraint
+	cmds.aimConstraint(locatorParticle, locatorAimHidden, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "object", worldUpObject = particleUpSetup[3])
+	
+
+	### Create locator aim # XXX probably deprecated
 	# locatorAim = cmds.spaceLocator(name = nameLocAim)[0]
 	# cmds.select(clear = True)
 	# cmds.matchTransform(locatorAim, locatorAimBase, position = True, rotation = True)
 	# cmds.parent(locatorAim, locatorAimBase)
 	# cmds.select(clear = True)
-
 
 def CreateOnSelected(*args):
 	# Check selected objects
@@ -188,15 +219,16 @@ def CreateOnSelected(*args):
 		return
 	
 	for item in selectedList:
-		CreateParticle(item)
-
+		CreateParticleSetup(item)
 def CreateAimOnSelected(*args):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
 		return
 	
+	offsetDistance = 4
+	
 	for item in selectedList:
-		particleOutput = CreateParticle(item)
-		CreateAimSetup(particleOutput[0], particleOutput[1], particleOutput[2], particleOutput[3])
+		particleSetup = CreateParticleSetup(item, (0, 0, offsetDistance)) # HACK for testing
+		CreateAimSetup(particleSetup[0], particleSetup[1], particleSetup[2], particleSetup[3], aimUpDistance = offsetDistance)
 

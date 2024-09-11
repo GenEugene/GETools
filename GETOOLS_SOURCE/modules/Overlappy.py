@@ -881,7 +881,7 @@ class Overlappy:
 			self.slidersParticleOffset[2].Get() * mirror[2],
 			)
 		
-		# Set locGoal constraint offset
+		# Set locGoal constraint offset # TODO simplify
 		goalAttributes = (
 			self.particleLocGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateX",
 			self.particleLocGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateY",
