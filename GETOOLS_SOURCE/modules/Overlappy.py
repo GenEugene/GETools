@@ -133,9 +133,9 @@ class OverlappySettings:
 	rangeOffsetZ = (float("-inf"), float("inf"), 0, 100)
 
 class Overlappy:
-	version = "v3.0"
-	name = "OVERLAPPY"
-	title = name + " " + version
+	_version = "v3.0"
+	_name = "OVERLAPPY"
+	_title = _name + " " + _version
 
 	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
 	# from ..modules import GeneralWindow

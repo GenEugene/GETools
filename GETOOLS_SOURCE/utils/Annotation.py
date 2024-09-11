@@ -27,7 +27,7 @@ from ..utils import Parent
 from ..utils import Text
 
 
-prefix = "ann_"
+_prefix = "ann_"
 
 
 def Annotate(target, text, point=(0, 0, 0), displayArrow=True, useNameAsText=False, freeze=True):
@@ -47,7 +47,7 @@ def AnnotateSelected(*args): # TODO add constraint logic and group all annotatio
 		transform = cmds.listRelatives(annotation, allParents = True)[0]
 
 		# Rename
-		nameFinal = prefix + item
+		nameFinal = _prefix + item
 		nameFinal = Text.ConvertSymbols(nameFinal)
 		transform = cmds.rename(transform, nameFinal)
 

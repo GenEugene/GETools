@@ -26,8 +26,8 @@ import maya.cmds as cmds
 from ..utils import Selector
 
 
-curveName = "newCurve"
-curveDegree = 1
+_curveName = "newCurve"
+_curveDegree = 1
 
 
 def CreateCurveFromSelectedObjects(*args):
@@ -42,6 +42,6 @@ def CreateCurveFromSelectedObjects(*args):
 		position = cmds.xform(item, query = True, translation = True, worldSpace = True)
 		positions.append(position)
 
-	curve = cmds.curve(name = curveName, degree = curveDegree, point = positions)
+	curve = cmds.curve(name = _curveName, degree = _curveDegree, point = positions)
 	return curve
 

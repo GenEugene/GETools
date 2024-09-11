@@ -71,9 +71,9 @@ class RiggingAnnotations:
 	curveCreate = "Create a curve on selected objects.\nEach curve point will be created in the pivot."
 
 class Rigging:
-	version = "v1.3"
-	name = "RIGGING"
-	title = name + " " + version
+	_version = "v1.3"
+	_name = "RIGGING"
+	_title = _name + " " + _version
 
 	def __init__(self):
 		self.checkboxConstraintReverse = None

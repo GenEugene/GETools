@@ -104,9 +104,9 @@ class ToolsSettings:
 	rangeLocatorAimOffset = (0, float("inf"), 0, 200)
 
 class Tools:
-	version = "v1.0"
-	name = "TOOLS"
-	title = name + " " + version
+	_version = "v1.0"
+	_name = "TOOLS"
+	_title = _name + " " + _version
 
 	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
 	# from ..modules import GeneralWindow

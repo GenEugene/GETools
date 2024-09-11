@@ -48,12 +48,13 @@ from ..values import Icons
 
 from .._prototypes import Physics
 from .._prototypes import PhysicsParticle
+from .._prototypes import PhysicsHair
 
 
 class GeneralWindow:
-	version = "v1.3.0"
-	name = "GETools"
-	title = name + " " + version
+	_version = "v1.3.0"
+	_name = "GETools"
+	_title = _name + " " + _version
 
 	def __init__(self):
 		self.directory = ""
@@ -69,7 +70,7 @@ class GeneralWindow:
 	def CreateUI(self):
 		if cmds.window(Settings.windowName, exists = True):
 			cmds.deleteUI(Settings.windowName)
-		cmds.window(Settings.windowName, title = GeneralWindow.title, maximizeButton = False, sizeable = True, widthHeight = (Settings.windowWidth, Settings.windowHeight))
+		cmds.window(Settings.windowName, title = GeneralWindow._title, maximizeButton = False, sizeable = True, widthHeight = (Settings.windowWidth, Settings.windowHeight))
 		
 		# layoutRoot = cmds.columnLayout(adjustableColumn = True, width = Settings.windowWidth)
 		layoutRoot = cmds.menuBarLayout(width = Settings.windowWidth)
@@ -471,23 +472,23 @@ class GeneralWindow:
 		# cmds.image(image = self.directory + Icons.get, width = size, height = size)
 
 	def LayoutTools(self, parentLayout):
-		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = "1. " + Tools.Tools.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = "1. " + Tools.Tools._title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		Tools.Tools(self).UICreate(self.frameTools)
 	def LayoutRigging(self, parentLayout):
-		self.frameRigging = cmds.frameLayout("layoutRigging", parent = parentLayout, label = "2. " + Rigging.Rigging.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		self.frameRigging = cmds.frameLayout("layoutRigging", parent = parentLayout, label = "2. " + Rigging.Rigging._title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		Rigging.Rigging().UICreate(self.frameRigging)
 	def LayoutOverlappy(self, parentLayout):
-		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = "3. " + Overlappy.Overlappy.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		self.frameOverlappy = cmds.frameLayout("layoutOverlappy", parent = parentLayout, label = "3. " + Overlappy.Overlappy._title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		Overlappy.Overlappy(self).UICreate(self.frameOverlappy)
 	def LayoutCenterOfMass(self, parentLayout):
-		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = "4. " + CenterOfMass.CenterOfMass.title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		self.frameCenterOfMass = cmds.frameLayout("layoutCenterOfMass", parent = parentLayout, label = "4. " + CenterOfMass.CenterOfMass._title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		CenterOfMass.CenterOfMass(self).UICreate(self.frameCenterOfMass)
 	def LayoutMotionTrail(self, parentLayout):
-		version = "v1.0" # TODO move to Motion Trail class when possible
-		name = "MOTION TRAIL"
-		title = name + " " + version
+		versionMT = "v1.0" # TODO move to Motion Trail class when possible
+		nameMT = "MOTION TRAIL"
+		titleMT = nameMT + " " + versionMT
 				
-		self.frameMotionTrail = cmds.frameLayout("layoutMotionTrail", parent = parentLayout, label = "5. " + title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		self.frameMotionTrail = cmds.frameLayout("layoutMotionTrail", parent = parentLayout, label = "5. " + titleMT, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		
 		countOffsets = 3
 		cmds.gridLayout(parent = self.frameMotionTrail, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
@@ -502,10 +503,12 @@ class GeneralWindow:
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click test")
 		
-		countOffsets = 4
+		countOffsets = 3
 		cmds.gridLayout(parent = self.frameExperimental, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Nucleus", command = partial(Physics.CreateNucleus, "testNucleus", None))
-		cmds.button(label = "Particle", command = PhysicsParticle.CreateOnSelected)
+		cmds.button(label = "Particle simple", command = PhysicsParticle.CreateOnSelected)
+		cmds.button(label = "Particle aim", command = PhysicsParticle.CreateAimOnSelected)
+		# cmds.button(label = "Hair", command = partial(PhysicsHair.CreateNHairOnSelected, None))
 
 	# WINDOW
 	def WindowCheck(self, *args):
@@ -557,15 +560,15 @@ class GeneralWindow:
 	def DockOff(self, *args):
 		if self.DockCheck():
 			cmds.dockControl(Settings.dockName, edit = True, floating = True, height = Settings.windowHeight)
-			print("{0} undocked".format(GeneralWindow.title))
+			print("{0} undocked".format(GeneralWindow._title))
 		else:
 			cmds.warning("Dock Controls wasn't found")
 	def DockToSide(self, areaSide, *args):
 		if self.DockCheck():
 			cmds.dockControl(Settings.dockName, edit = True, floating = False, area = areaSide)
 		else:
-			cmds.dockControl(Settings.dockName, label = GeneralWindow.title, content = Settings.windowName, area = areaSide, allowedArea = Settings.dockAllowedAreas) # , backgroundColor = Colors.lightBlue10
-		print("{0} docked to {1}".format(GeneralWindow.title, areaSide))
+			cmds.dockControl(Settings.dockName, label = GeneralWindow._title, content = Settings.windowName, area = areaSide, allowedArea = Settings.dockAllowedAreas) # , backgroundColor = Colors.lightBlue10
+		print("{0} docked to {1}".format(GeneralWindow._title, areaSide))
 
 	# EXECUTION
 	def WindowCreate(self, *args):
@@ -577,7 +580,7 @@ class GeneralWindow:
 		if (not forced and self.DockCheck()): # for script toggling. Comment these 3 lines if you need to deactivate toggling
 			if (self.DockCheckVisible()):
 				self.DockDelete()
-				print("{0} closed".format(GeneralWindow.title))
+				print("{0} closed".format(GeneralWindow._title))
 				return
 
 		self.DockDelete()

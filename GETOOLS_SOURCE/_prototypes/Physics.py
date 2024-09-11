@@ -24,8 +24,8 @@
 import maya.cmds as cmds
 # import maya.mel as mel
 
-# from . import Selector
-# from . import Text
+# from ..utils import Selector
+# from ..utils import Text
 
 
 # nucleusTimeScale = 1

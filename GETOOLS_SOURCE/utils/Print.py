@@ -27,7 +27,7 @@ from ..utils import Attributes
 from ..utils import Selector
 
 
-textEnd = "-----"
+_textEnd = "-----"
 
 
 def PrintSelected(*args):

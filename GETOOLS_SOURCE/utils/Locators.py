@@ -32,10 +32,10 @@ from ..utils import Text
 from ..values import Enums
 
 
-nameBase = "gLoc"
-nameAim = "{0}Aim".format(nameBase)
-scale = 1.0
-minSelectedCount = 1
+_nameBase = "gLoc"
+_nameAim = "{0}Aim".format(_nameBase)
+_scale = 1.0
+_minSelectedCount = 1
 
 
 # SIZE
@@ -87,7 +87,7 @@ def SelectedLocatorsSizeSet(value, *args):
 			SetSize(item, value, value, value)
 
 # CREATE
-def Create(name=nameBase, scale=scale, hideParent=False, subLocator=False):
+def Create(name=_nameBase, scale=_scale, hideParent=False, subLocator=False):
 	locatorCurrent = cmds.spaceLocator(name = Text.SetUniqueFromText(name))[0]
 	SetSize(locatorCurrent, scale, scale, scale)
 	cmds.select(locatorCurrent)
@@ -105,7 +105,7 @@ def Create(name=nameBase, scale=scale, hideParent=False, subLocator=False):
 		return locatorCurrent, subLocator
 	else:
 		return locatorCurrent
-def CreateOnSelected(name=nameBase, scale=scale, minSelectedCount=minSelectedCount, hideParent=False, subLocator=False, constraint=False, bake=False, parentToLastSelected=False, constrainReverse=False, constrainTranslate=True, constrainRotate=True, euler=False):
+def CreateOnSelected(name=_nameBase, scale=_scale, minSelectedCount=_minSelectedCount, hideParent=False, subLocator=False, constraint=False, bake=False, parentToLastSelected=False, constrainReverse=False, constrainTranslate=True, constrainRotate=True, euler=False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minSelectedCount)
 	if (selectedList == None):
@@ -162,7 +162,7 @@ def CreateOnSelected(name=nameBase, scale=scale, minSelectedCount=minSelectedCou
 	else:
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
-def CreateAndBakeAsChildrenFromLastSelected(scale=scale, minSelectedCount=2, hideParent=False, subLocator=False, constraintReverse=False, skipLastReverse=True, euler=False):
+def CreateAndBakeAsChildrenFromLastSelected(scale=_scale, minSelectedCount=2, hideParent=False, subLocator=False, constraintReverse=False, skipLastReverse=True, euler=False):
 	# Check selected objects
 	objects = CreateOnSelected(scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator, constraint = True, bake = True, parentToLastSelected = True, euler = euler)
 	if (objects == None):
@@ -184,7 +184,7 @@ def CreateAndBakeAsChildrenFromLastSelected(scale=scale, minSelectedCount=2, hid
 	else:
 		cmds.select(objects[1][-1])
 	return objects
-def CreateOnSelectedAim(name=nameAim, scale=scale, minSelectedCount=minSelectedCount, hideParent=False, subLocator=False, rotateOnly=False, aimVector=(1,0,0), distance=100, reverse=True, euler=False):
+def CreateOnSelectedAim(name=_nameAim, scale=_scale, minSelectedCount=_minSelectedCount, hideParent=False, subLocator=False, rotateOnly=False, aimVector=(1,0,0), distance=100, reverse=True, euler=False):
 	# Check selected objects
 	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator, euler = euler)
 	if (objects == None):

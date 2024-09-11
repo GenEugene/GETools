@@ -84,9 +84,9 @@ class CenterOfMassSettings:
 	partFoot = ("foot", 1.9)
 
 class CenterOfMass:
-	version = "v1.3"
-	name = "CENTER OF MASS"
-	title = name + " " + version
+	_version = "v1.3"
+	_name = "CENTER OF MASS"
+	_title = _name + " " + _version
 
 	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
 	# from ..modules import GeneralWindow

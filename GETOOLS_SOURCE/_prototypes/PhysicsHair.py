@@ -24,12 +24,13 @@
 import maya.mel as mel
 import maya.cmds as cmds
 
-from . import Selector
+from ..utils import Selector
 
 
-nameHairSystem = "getools_HairSystem"
-nameFollicle = "getools_Follicle"
-nameOutputCurve = "getools_OutputCurve"
+_prefix = "getools_"
+_nameHairSystem = _prefix + "HairSystem"
+_nameFollicle = _prefix + "Follicle"
+_nameOutputCurve = _prefix + "OutputCurve"
 
 
 def CreateNHairOnCurve(curve, nucleus): # TODO
@@ -38,12 +39,12 @@ def CreateNHairOnCurve(curve, nucleus): # TODO
 		return
 
 	# Create hair rig nodes
-	hairSystemTransformNode = cmds.createNode("transform", name = nameHairSystem, skipSelect = True)
-	hairSystemShapeNode = cmds.createNode("hairSystem", name = nameHairSystem + "Shape", parent = hairSystemTransformNode, skipSelect = True)
-	follicleTransformNode = cmds.createNode("transform", name = nameFollicle, skipSelect = True)
-	follicleShapeNode = cmds.createNode("follicle", name = nameFollicle + "Shape", parent = follicleTransformNode, skipSelect = True)
-	outputCurveTransformNode = cmds.createNode("transform", name = nameOutputCurve, skipSelect = True)
-	outputCurveShapeNode = cmds.createNode("nurbsCurve", name = nameOutputCurve + "Shape", parent = outputCurveTransformNode, skipSelect = True)
+	hairSystemTransformNode = cmds.createNode("transform", name = _nameHairSystem, skipSelect = True)
+	hairSystemShapeNode = cmds.createNode("hairSystem", name = _nameHairSystem + "Shape", parent = hairSystemTransformNode, skipSelect = True)
+	follicleTransformNode = cmds.createNode("transform", name = _nameFollicle, skipSelect = True)
+	follicleShapeNode = cmds.createNode("follicle", name = _nameFollicle + "Shape", parent = follicleTransformNode, skipSelect = True)
+	outputCurveTransformNode = cmds.createNode("transform", name = _nameOutputCurve, skipSelect = True)
+	outputCurveShapeNode = cmds.createNode("nurbsCurve", name = _nameOutputCurve + "Shape", parent = outputCurveTransformNode, skipSelect = True)
 
 	# Connect hair rig attributes
 	cmds.connectAttr("time1.outTime", hairSystemShapeNode + ".currentTime")
