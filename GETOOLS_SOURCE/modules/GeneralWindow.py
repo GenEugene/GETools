@@ -503,11 +503,12 @@ class GeneralWindow:
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click test")
 		
-		countOffsets = 3
+		countOffsets = 4
 		cmds.gridLayout(parent = self.frameExperimental, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Nucleus", command = partial(Physics.CreateNucleus, "testNucleus", None))
-		cmds.button(label = "Particle simple", command = PhysicsParticle.CreateOnSelected)
-		cmds.button(label = "Particle aim", command = PhysicsParticle.CreateAimOnSelected)
+		cmds.button(label = "Particle", command = PhysicsParticle.CreateOnSelected)
+		cmds.button(label = "P Aim", command = PhysicsParticle.CreateAimOnSelected)
+		cmds.button(label = "P Chain", command = PhysicsParticle.CreateAimChainOnSelected)
 		# cmds.button(label = "Hair", command = partial(PhysicsHair.CreateNHairOnSelected, None))
 
 	# WINDOW
