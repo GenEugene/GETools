@@ -48,11 +48,9 @@ _valueParticleRadius = 0.1
 _valueParticleConserve = 1
 _valueParticleDrag = 0.01
 _valueParticleDamp = 0
-_valueGoalSmooth = 3
-_valueGoalWeight = 0.5
-# _nucleusTimeScale = 1
-
-_valueAimUpDistance = 1
+_valueGoalSmooth = 1
+_valueGoalWeight = 0.2
+_nucleusTimeScale = 0.5
 
 
 def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0,0,0)): # TODO
@@ -76,6 +74,11 @@ def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0
 	nucleusNodesBefore = cmds.ls(type = "nucleus")
 	nucleus = Physics.CreateNucleus(name = nameNucleus, parent = group)
 	cmds.select(clear = True)
+
+	cmds.setAttr(nucleus + ".gravity", 0)
+	cmds.setAttr(nucleus + ".timeScale", _nucleusTimeScale)
+	# cmds.setAttr(nucleus + ".startFrame", self.time.values[2])
+	# cmds.setAttr(nucleus + ".visibility", 0)
 
 
 	### TODO Need to define colliderObjects before this logic
@@ -160,7 +163,7 @@ def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0
 	## cmds.setAttr(locatorParticle + ".visibility", 0) # TODO use when hidden
 
 	return nameTargetObjectConverted, group, targetObject, locatorParticle
-def CreateAimSetup(nameTargetObjectConverted="", group="", targetObject="", locatorParticle="", customParentObject=None, aimUpDistance=_valueAimUpDistance):
+def CreateAimSetup(nameTargetObjectConverted="", group="", targetObject="", locatorParticle="", customParentObject=None, aimUpDistance=1):
 	### Names
 	nameGroupAim = _defaultNameGroupAim + nameTargetObjectConverted
 	nameLocAimBase = _defaultNameLocAimBase + nameTargetObjectConverted
