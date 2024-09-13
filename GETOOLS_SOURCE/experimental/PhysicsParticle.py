@@ -105,7 +105,7 @@ def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0
 	## cmds.setAttr(locatorGoal + ".visibility", 0) # TODO use when hidden
 	## goalStartPosition = cmds.xform(locatorGoal, query = True, translation = True) # XXX probably deprecated
 
-	### Constraint locator goal to specific parent object
+	### Constrain locator goal to specific parent object
 	targetObjectForConstraint = targetObject
 	if (customParentObject != None):
 		targetObjectForConstraint = customParentObject
@@ -170,8 +170,19 @@ def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0
 	cmds.connectAttr(particle + ".center", locatorParticle + ".translate", force = True)
 	## cmds.setAttr(locatorParticle + ".visibility", 0) # TODO use when hidden
 
-	return nameTargetObjectConverted, group, targetObject, locatorParticle
-def CreateAimSetup(nameTargetObjectConverted="", group="", targetObject="", locatorParticle="", customParentObject=None, aimUpDistance=1):
+	return nameTargetObjectConverted, group, targetObject, locatorGoal, locatorParticle
+def CreateAimSetup(particleSetup=None, aimUpDistance=1):
+	if (particleSetup == None):
+		cmds.warning("No Particle Setup specified. Cancel algorithm")
+		return
+
+	### Get particle setup variables
+	nameTargetObjectConverted = particleSetup[0]
+	group = particleSetup[1]
+	targetObject = particleSetup[2]
+	locatorGoal = particleSetup[3]
+	locatorParticle = particleSetup[4]
+
 	### Names
 	nameGroupAim = _defaultNameGroupAim + nameTargetObjectConverted
 	nameLocAimBase = _defaultNameLocAimBase + nameTargetObjectConverted
@@ -199,11 +210,8 @@ def CreateAimSetup(nameTargetObjectConverted="", group="", targetObject="", loca
 	cmds.setAttr(locatorAimBase + "Shape.localScaleZ", _scaleLocatorsOne)
 
 
-	### Constraint locator goal to specific parent object
-	targetObjectForConstraint = targetObject
-	if (customParentObject != None):
-		targetObjectForConstraint = customParentObject
-	cmds.parentConstraint(targetObjectForConstraint, locatorAimBase, maintainOffset = True)
+	### Constrain locator aim base to locator goal
+	cmds.parentConstraint(locatorGoal, locatorAimBase, maintainOffset = True)
 	## cmds.setAttr(locatorAimBase + ".visibility", 0) # TODO use when hidden
 
 
@@ -270,7 +278,7 @@ def CreateAimOnSelected(*args): # TODO
 	
 	for item in selectedList:
 		particleSetup = CreateParticleSetup(targetObject = item, positionOffset = (0, 0, offsetDistance)) # HACK for testing
-		CreateAimSetup(particleSetup[0], particleSetup[1], particleSetup[2], particleSetup[3], aimUpDistance = offsetDistance)
+		CreateAimSetup(particleSetup, aimUpDistance = offsetDistance)
 def CreateAimChainOnSelected(*args): # TODO
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
@@ -290,7 +298,7 @@ def CreateAimChainOnSelected(*args): # TODO
 			customParentObject = particleAimSetupList[i - 1]
 		
 		particleSetup = CreateParticleSetup(targetObject = selectedList[i], customParentObject = customParentObject, positionOffset = (0, 0, distanceAim)) # HACK for testing
-		particleAimSetup = CreateAimSetup(particleSetup[0], particleSetup[1], particleSetup[2], particleSetup[3], customParentObject = customParentObject, aimUpDistance = distanceAimUp)
+		particleAimSetup = CreateAimSetup(particleSetup, aimUpDistance = distanceAimUp)
 		particleAimSetupList.append(particleAimSetup)
 	
 
