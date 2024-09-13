@@ -52,6 +52,8 @@ _valueGoalSmooth = 1
 _valueGoalWeight = 0.2
 _nucleusTimeScale = 0.5
 
+_scaleLocatorsOne = 0.1
+
 
 def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0,0,0)): # TODO
 	### Names
@@ -97,6 +99,9 @@ def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0
 	cmds.parent(locatorGoal, group)
 	cmds.select(clear = True)
 	cmds.matchTransform(locatorGoal, targetObject, position = True, rotation = True)
+	cmds.setAttr(locatorGoal + "Shape.localScaleX", _scaleLocatorsOne)
+	cmds.setAttr(locatorGoal + "Shape.localScaleY", _scaleLocatorsOne)
+	cmds.setAttr(locatorGoal + "Shape.localScaleZ", _scaleLocatorsOne)
 	## cmds.setAttr(locatorGoal + ".visibility", 0) # TODO use when hidden
 	## goalStartPosition = cmds.xform(locatorGoal, query = True, translation = True) # XXX probably deprecated
 
@@ -112,8 +117,11 @@ def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0
 	cmds.parent(locatorGoalOffset, locatorGoal)
 	cmds.select(clear = True)
 	cmds.matchTransform(locatorGoalOffset, locatorGoal, position = True, rotation = True)
+	cmds.setAttr(locatorGoalOffset + "Shape.localScaleX", _scaleLocatorsOne)
+	cmds.setAttr(locatorGoalOffset + "Shape.localScaleY", _scaleLocatorsOne)
+	cmds.setAttr(locatorGoalOffset + "Shape.localScaleZ", _scaleLocatorsOne)
 
-	### Position locator goal  offset # TODO move to external method to control separately
+	### Position locator goal offset # TODO move to external method to control separately
 	cmds.setAttr(locatorGoalOffset + ".translateX", positionOffset[0])
 	cmds.setAttr(locatorGoalOffset + ".translateY", positionOffset[1])
 	cmds.setAttr(locatorGoalOffset + ".translateZ", positionOffset[2])
@@ -186,6 +194,9 @@ def CreateAimSetup(nameTargetObjectConverted="", group="", targetObject="", loca
 	cmds.parent(locatorAimBase, groupAim)
 	cmds.select(clear = True)
 	cmds.matchTransform(locatorAimBase, targetObject, position = True, rotation = True)
+	cmds.setAttr(locatorAimBase + "Shape.localScaleX", _scaleLocatorsOne)
+	cmds.setAttr(locatorAimBase + "Shape.localScaleY", _scaleLocatorsOne)
+	cmds.setAttr(locatorAimBase + "Shape.localScaleZ", _scaleLocatorsOne)
 
 
 	### Constraint locator goal to specific parent object
@@ -217,6 +228,9 @@ def CreateAimSetup(nameTargetObjectConverted="", group="", targetObject="", loca
 	cmds.parent(locatorAimUp, locatorAimBase)
 	cmds.select(clear = True)
 	cmds.setAttr(locatorAimUp + ".visibility", 0)
+	cmds.setAttr(locatorAimUp + "Shape.localScaleX", _scaleLocatorsOne)
+	cmds.setAttr(locatorAimUp + "Shape.localScaleY", _scaleLocatorsOne)
+	cmds.setAttr(locatorAimUp + "Shape.localScaleZ", _scaleLocatorsOne)
 
 
 	### Create aim up particle setup
