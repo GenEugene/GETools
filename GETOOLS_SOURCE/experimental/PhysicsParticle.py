@@ -21,6 +21,9 @@
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
+# TODO Set different time scale values. Aim and up should use slightly different values
+# TODO Use one general nucleus node
+
 import maya.cmds as cmds
 import maya.mel as mel
 # from math import pow, sqrt
@@ -55,7 +58,7 @@ _nucleusTimeScale = 0.5
 _scaleLocatorsOne = 0.1
 
 
-def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0,0,0)): # TODO
+def CreateParticleSetup(targetObject, parentGroup=None, customParentObject=None, positionOffset=(0,0,0)): # TODO
 	### Names
 	nameTargetObjectConverted = "_" + Text.ConvertSymbols(targetObject)
 	nameGroup = _defaultNameGroup + nameTargetObjectConverted
@@ -66,12 +69,15 @@ def CreateParticleSetup(targetObject, customParentObject=None, positionOffset=(0
 	nameLocParticle = _defaultNameLocParticle + nameTargetObjectConverted
 
 	### Create group
-	cmds.select(clear = True)
-	if (cmds.objExists(nameGroup)):
-		cmds.delete(nameGroup)
-	group = cmds.group(empty = True, name = nameGroup)
-	cmds.select(clear = True)
-	
+	if (parentGroup == None):
+		cmds.select(clear = True)
+		if (cmds.objExists(nameGroup)):
+			cmds.delete(nameGroup)
+		group = cmds.group(empty = True, name = nameGroup)
+		cmds.select(clear = True)
+	else:
+		group = parentGroup
+
 	### Nucleus node
 	nucleusNodesBefore = cmds.ls(type = "nucleus")
 	nucleus = Physics.CreateNucleus(name = nameNucleus, parent = group)
@@ -285,9 +291,6 @@ def CreateAimChainOnSelected(*args): # TODO
 	if (selectedList == None):
 		return
 	
-	# TODO set different time scale values # aim and up should use slightly different values
-	# TODO use one general nucleus node
-
 	distanceAim = 5
 	distanceAimUp = 5
 	particleAimSetupList = []
@@ -301,4 +304,3 @@ def CreateAimChainOnSelected(*args): # TODO
 		particleAimSetup = CreateAimSetup(particleSetup, aimUpDistance = distanceAimUp)
 		particleAimSetupList.append(particleAimSetup)
 	
-
