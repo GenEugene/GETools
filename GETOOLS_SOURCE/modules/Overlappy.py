@@ -182,7 +182,7 @@ class Overlappy:
 		self.menuCheckboxCollisions = None # TODO
 
 		# CHECKBOXES
-		self.checkboxAutoOffset = None # TODO
+		# self.checkboxAutoOffset = None # TODO
 		self.checkboxesParticleMirror = [None, None, None]
 		
 		# SLIDERS
@@ -201,8 +201,8 @@ class Overlappy:
 		self.UILayoutMenuBar(layoutMain)
 		self.UILayoutBake(layoutMain)
 		self.UILayoutLayers(layoutMain)
-		self.UILayoutCollisions(layoutMain)
-		self.UILayoutChainMode(layoutMain)
+		# self.UILayoutCollisions(layoutMain) # TODO
+		# self.UILayoutChainMode(layoutMain) # TODO
 		self.UILayoutParticleMode(layoutMain)
 	
 
@@ -220,13 +220,6 @@ class Overlappy:
 		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop Mode", value = OverlappySettings.optionCheckboxLoop, valueDefault = OverlappySettings.optionCheckboxLoop) # FIXME make cycle infinity before bake
 		self.menuCheckboxClean = UI.MenuCheckbox(label = "Clean after bake", value = OverlappySettings.optionCheckboxClean, valueDefault = OverlappySettings.optionCheckboxClean)
 		self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions", value = OverlappySettings.checkboxCollisions, valueDefault = OverlappySettings.checkboxCollisions)
-
-		cmds.menu(label = "Particle", tearOff = True)
-		cmds.menuItem(label = "Object", command = self._SelectSelectedObjects, image = Icons.cursor)
-		cmds.menuItem(label = "Particle", command = self._SelectParticleObject, image = Icons.particle)
-		cmds.menuItem(label = "Nucleus", command = self._SelectNucleus, image = Icons.nucleus)
-		cmds.menuItem(label = "Target locator", command = self._SelectParticleTarget, image = Icons.locator)
-		cmds.menuItem(label = "Aim locator", command = self._SelectParticleAim, image = Icons.locator)
 	def UILayoutBake(self, layoutMain):
 		# SETUP
 		self.layoutBake = cmds.frameLayout("layoutBake", label = Settings.frames2Prefix + "BAKE", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -290,7 +283,7 @@ class Overlappy:
 	
 	
 	### CHAIN UI
-	def UILayoutChainMode(self, layoutMain):
+	def UILayoutChainMode(self, layoutMain): # TODO
 		self.layoutChainMode = cmds.frameLayout("layoutChainMode", label = Settings.frames2Prefix + "CHAIN MODE - WORK IN PROGRESS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		
 		cmds.menuBarLayout()
@@ -423,21 +416,28 @@ class Overlappy:
 		cmds.menuBarLayout()
 		cmds.menu(label = "Edit")
 		cmds.menuItem(label = "Reset Settings", command = self._ResetAllParticleValues, image = Icons.rotateClockwise)
+
+		cmds.menu(label = "Select", tearOff = True)
+		cmds.menuItem(label = "Object", command = self._SelectSelectedObjects, image = Icons.cursor)
+		cmds.menuItem(label = "Particle", command = self._SelectParticleObject, image = Icons.particle)
+		cmds.menuItem(label = "Nucleus", command = self._SelectNucleus, image = Icons.nucleus)
+		cmds.menuItem(label = "Target locator", command = self._SelectParticleTarget, image = Icons.locator)
+		cmds.menuItem(label = "Aim locator", command = self._SelectParticleAim, image = Icons.locator)
 		
 		self.UILayoutParticleButtons(self.layoutParticleMode)
 		self.UILayoutParticleDynamicProperties(self.layoutParticleMode)
 		self.UILayoutParticleOffset(self.layoutParticleMode)
 	def UILayoutParticleButtons(self, layoutMain):
 		# SETUP
-		self.layoutParticleButtons = cmds.frameLayout("layoutParticleButtons", label = "Buttons", labelIndent = 100, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleButtons = cmds.frameLayout("layoutParticleButtons", label = "Create Particle Rig", labelIndent = 100, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleButtons, adjustableColumn = True)
 
 		count = 2
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		#
-		cmds.button(label = "CREATE", command = self._ParticleSetupInit, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
+		cmds.button(label = "Create", command = self._ParticleSetupInit, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
 		# cmds.button(label = "Scan setup in scene", command = self._SetupScan, backgroundColor = Colors.green10)
-		cmds.button(label = "REMOVE", command = self._ParticleSetupDelete, backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
+		cmds.button(label = "Remove", command = self._ParticleSetupDelete, backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
 	def UILayoutParticleDynamicProperties(self, layoutMain):
 		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 70, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
@@ -547,11 +547,11 @@ class Overlappy:
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click") # TODO add reset all function
 
-		count = 4
+		count = 3
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		# cmds.separator()
 		# , commandResetAll = self._ResetOffsets
-		self.checkboxAutoOffset = UI.Checkbox(label = "Auto") # TODO
+		# self.checkboxAutoOffset = UI.Checkbox(label = "Auto") # TODO
 		self.checkboxesParticleMirror[0] = UI.Checkbox(label = "Mirror X", command = partial(self._ParticleOffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorX)
 		self.checkboxesParticleMirror[1] = UI.Checkbox(label = "Mirror Y", command = partial(self._ParticleOffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorY)
 		self.checkboxesParticleMirror[2] = UI.Checkbox(label = "Mirror Z", command = partial(self._ParticleOffsetsUpdate, True), annotation = OverlappyAnnotations.offsetMirrorZ)

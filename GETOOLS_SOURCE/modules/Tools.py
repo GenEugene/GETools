@@ -178,7 +178,7 @@ class Tools:
 		cmds.button(label = "Parent", command = self.LocatorsParent, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorParent)
 		cmds.button(label = "Pin", command = partial(self.LocatorsBakeReverse, True, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverse)
 		cmds.popupMenu()
-		cmds.menuItem(label = "without reverse constraint", command = self.LocatorsBake)
+		cmds.menuItem(label = "Without Reverse Constraint", command = self.LocatorsBake)
 		cmds.button(label = "P-POS", command = partial(self.LocatorsBakeReverse, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReversePos)
 		cmds.button(label = "P-ROT", command = partial(self.LocatorsBakeReverse, False, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverseRot)
 		#
@@ -186,8 +186,8 @@ class Tools:
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Relative", command = self.LocatorsRelativeReverse, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorsRelativeReverse)
 		cmds.popupMenu()
-		cmds.menuItem(label = "skip last object reverse constraint", command = self.LocatorsRelativeReverseSkipLast)
-		cmds.menuItem(label = "without reverse constraint", command = self.LocatorsRelative)
+		cmds.menuItem(label = "Skip Last Object Reverse Constraint", command = self.LocatorsRelativeReverseSkipLast)
+		cmds.menuItem(label = "Without Reverse Constraint", command = self.LocatorsRelative)
 		#
 		layoutAim = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = Settings.windowWidthMargin, cellHeight = Settings.lineHeight)
 		countOffsets = 12

@@ -126,7 +126,7 @@ class CenterOfMass:
 
 		count = 1
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Disconnect from Center Of Mass", command = self.COMDisconnectTargets, backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.disconnectTargets)
+		cmds.button(label = "Disconnect From Center Of Mass", command = self.COMDisconnectTargets, backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.disconnectTargets)
 		
 		def PartButton(partInfo = ("", 0), minMaxValue = CenterOfMassSettings.weightMinMax, onlyValue = False, annotation = ""):
 			value = partInfo[1]
@@ -176,13 +176,13 @@ class CenterOfMass:
 		count = 3
 		cmds.gridLayout(numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 
-		cmds.button(label = "BAKE TO COM", command = self.BakeScenario2, backgroundColor = Colors.orange10, annotation = CenterOfMassAnnotations.bakeToCOM)
-		cmds.button(label = "BAKE + LINK", command = self.BakeScenario3, backgroundColor = Colors.orange50, annotation = CenterOfMassAnnotations.bakeToCOMLink)
-		cmds.button(label = "BAKE ORIGINAL", command = self.BakeCached, backgroundColor = Colors.orange100, annotation = CenterOfMassAnnotations.bakeOriginal)
+		cmds.button(label = "Bake To COM", command = self.BakeScenario2, backgroundColor = Colors.orange10, annotation = CenterOfMassAnnotations.bakeToCOM)
+		cmds.button(label = "Bake + Link", command = self.BakeScenario3, backgroundColor = Colors.orange50, annotation = CenterOfMassAnnotations.bakeToCOMLink)
+		cmds.button(label = "Bake Original", command = self.BakeCached, backgroundColor = Colors.orange100, annotation = CenterOfMassAnnotations.bakeOriginal)
 		
-		cmds.button(label = "LINK", command = partial(self.LinkCached, False), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.link)
-		cmds.button(label = "LINK OFFSET", command = partial(self.LinkCached, True), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.linkOffset)
-		cmds.button(label = "SELECT ROOT", command = self.SelectParent, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.selectRoot)
+		cmds.button(label = "Link", command = partial(self.LinkCached, False), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.link)
+		cmds.button(label = "Link Offset", command = partial(self.LinkCached, True), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.linkOffset)
+		cmds.button(label = "Select Root", command = self.SelectParent, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.selectRoot)
 
 
 	# Center of mass functions
