@@ -30,7 +30,7 @@ import maya.mel as mel
 
 from ..utils import Selector
 from ..utils import Text
-from ..values import Enums
+# from ..values import Enums
 from ..experimental import Physics
 
 
@@ -44,18 +44,16 @@ _defaultNameLocGoalOffset = _defaultPrefix + "LocGoalOffset"
 _defaultNameLocParticle = _defaultPrefix + "LocParticle"
 _defaultNameLocAimBase = _defaultPrefix + "LocAimBase"
 _defaultNameLocAim = _defaultPrefix + "LocAim"
-# _defaultNameLocAimOLD = _defaultPrefix + "LocAimOLD"
 _defaultNameLocAimUp = _defaultPrefix + "LocAimUp"
 
-_valueParticleRadius = 0.1
+_valueParticleRadius = 1
 _valueParticleConserve = 1
 _valueParticleDrag = 0.01
 _valueParticleDamp = 0
 _valueGoalSmooth = 1
 _valueGoalWeight = 0.2
 
-_nucleusTimeScale = 0.5 # TODO
-
+# _nucleusTimeScale = 0.5
 _scaleLocatorsOne = 0.1
 
 
@@ -84,10 +82,10 @@ def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, custom
 		nucleusNodesBefore = cmds.ls(type = "nucleus")
 		nucleus = Physics.CreateNucleus(name = nameNucleus, parent = group)
 		cmds.select(clear = True)
-		cmds.setAttr(nucleus + ".gravity", 0) # TODO
-		cmds.setAttr(nucleus + ".timeScale", _nucleusTimeScale) # TODO
-		## cmds.setAttr(nucleus + ".startFrame", self.time.values[2])
-		## cmds.setAttr(nucleus + ".visibility", 0)
+		## cmds.setAttr(nucleus + ".gravity", 0) # TODO
+		## cmds.setAttr(nucleus + ".timeScale", _nucleusTimeScale) # TODO
+		## cmds.setAttr(nucleus + ".startFrame", self.time.values[2]) # TODO
+		## cmds.setAttr(nucleus + ".visibility", 0) # TODO
 	else:
 		nucleus = nucleusNode
 
@@ -111,8 +109,7 @@ def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, custom
 	cmds.setAttr(locatorGoal + "Shape.localScaleX", _scaleLocatorsOne)
 	cmds.setAttr(locatorGoal + "Shape.localScaleY", _scaleLocatorsOne)
 	cmds.setAttr(locatorGoal + "Shape.localScaleZ", _scaleLocatorsOne)
-	## cmds.setAttr(locatorGoal + ".visibility", 0) # TODO use when hidden
-	## goalStartPosition = cmds.xform(locatorGoal, query = True, translation = True) # XXX probably deprecated
+	## cmds.setAttr(locatorGoal + ".visibility", 0) # use when hidden
 
 	### Constrain locator goal to specific parent object
 	targetObjectForConstraint = targetObject
@@ -144,7 +141,6 @@ def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, custom
 
 	### Create particle goal and get selected object position
 	cmds.goal(particle, useTransformAsGoal = True, goal = locatorGoalOffset)
-	## startPositionGoalParticle[1] = cmds.xform(particle, query = True, translation = True) # XXX probably deprecated
 
 	### Reconnect particle to temp nucleus
 	cmds.select(particle, replace = True)
@@ -178,9 +174,9 @@ def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, custom
 	cmds.select(clear = True)
 	cmds.matchTransform(locatorParticle, targetObject, position = True, rotation = True)
 	cmds.connectAttr(particle + ".center", locatorParticle + ".translate", force = True)
-	## cmds.setAttr(locatorParticle + ".visibility", 0) # TODO use when hidden
+	## cmds.setAttr(locatorParticle + ".visibility", 0) # use when hidden
 
-	return targetObject, nameTargetObjectConverted, group, nucleusNode, locatorGoal, locatorParticle
+	return targetObject, nameTargetObjectConverted, group, nucleusNode, particle, locatorGoal, locatorParticle
 def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	if (particleSetup == None):
 		cmds.warning("No Particle Setup specified. Cancel algorithm")
@@ -191,8 +187,9 @@ def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	nameTargetObjectConverted = particleSetup[1]
 	group = particleSetup[2]
 	nucleusNode = particleSetup[3]
-	locatorGoal = particleSetup[4]
-	locatorParticle = particleSetup[5]
+	particle = particleSetup[4]
+	locatorGoal = particleSetup[5]
+	locatorParticle = particleSetup[6]
 
 	### Names
 	nameGroupAim = _defaultNameGroupAim + nameTargetObjectConverted
@@ -221,7 +218,7 @@ def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 
 	### Constrain locator aim base to locator goal
 	cmds.parentConstraint(locatorGoal, locatorAimBase, maintainOffset = True)
-	## cmds.setAttr(locatorAimBase + ".visibility", 0) # TODO use when hidden
+	## cmds.setAttr(locatorAimBase + ".visibility", 0) # use when hidden
 
 	### Create locator aim
 	locatorAim = cmds.spaceLocator(name = nameLocAim)[0]
@@ -250,7 +247,7 @@ def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 
 	### Get particle up setup variables
 	groupUp = particleUpSetup[2]
-	locatorParticleUp = particleUpSetup[5]
+	locatorParticleUp = particleUpSetup[6]
 
 	### Set parent for aim up particle setup
 	cmds.parent(groupUp, nameGroupAim)
