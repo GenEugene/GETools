@@ -39,6 +39,7 @@ from ..utils import Timeline
 from ..utils import UI
 from ..values import Enums
 from ..values import Icons
+from ..experimental import Physics
 from ..experimental import PhysicsParticle
 
 
@@ -609,10 +610,14 @@ class Overlappy:
 		if (cmds.objExists(OverlappySettings.nameGroup)):
 			cmds.delete(OverlappySettings.nameGroup)
 		cmds.group(empty = True, name = OverlappySettings.nameGroup)
-	
+
+		### Create nucleus node
+		self.nucleus = Physics.CreateNucleus(name = "ovlp" + PhysicsParticle._defaultNameNucleus, parent = OverlappySettings.nameGroup)
+		cmds.select(clear = True)
+
 	def _ParticleSetupPoint(self, *args):
 		self._ParticleSetupInit()
-		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, parentGroup = OverlappySettings.nameGroup)
+		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus, parentGroup = OverlappySettings.nameGroup)
 		cmds.select(self.selectedObjects, replace = True)
 
 	def _ParticleSetupAim(self, *args):
@@ -645,7 +650,7 @@ class Overlappy:
 		if (valuesAimOffset[1][1][2]):
 			offsetUp = [0, 0, valueAimUp]
 		
-		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, parentGroup = OverlappySettings.nameGroup, positionOffset = offsetTarget)
+		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus, parentGroup = OverlappySettings.nameGroup, positionOffset = offsetTarget)
 		particleAimSetup = PhysicsParticle.CreateAimSetup(particleSetup, positionOffset = offsetUp)
 
 

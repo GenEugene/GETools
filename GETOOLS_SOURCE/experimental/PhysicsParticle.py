@@ -53,12 +53,13 @@ _valueParticleDrag = 0.01
 _valueParticleDamp = 0
 _valueGoalSmooth = 1
 _valueGoalWeight = 0.2
-_nucleusTimeScale = 0.5
+
+_nucleusTimeScale = 0.5 # TODO
 
 _scaleLocatorsOne = 0.1
 
 
-def CreateParticleSetup(targetObject, parentGroup=None, customParentObject=None, positionOffset=(0,0,0)): # TODO
+def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, customParentObject=None, positionOffset=(0,0,0)): # TODO
 	### Names
 	nameTargetObjectConverted = "_" + Text.ConvertSymbols(targetObject)
 	nameGroup = _defaultNameGroup + nameTargetObjectConverted
@@ -79,14 +80,16 @@ def CreateParticleSetup(targetObject, parentGroup=None, customParentObject=None,
 		group = parentGroup
 
 	### Nucleus node
-	nucleusNodesBefore = cmds.ls(type = "nucleus")
-	nucleus = Physics.CreateNucleus(name = nameNucleus, parent = group)
-	cmds.select(clear = True)
-
-	cmds.setAttr(nucleus + ".gravity", 0)
-	cmds.setAttr(nucleus + ".timeScale", _nucleusTimeScale)
-	# cmds.setAttr(nucleus + ".startFrame", self.time.values[2])
-	# cmds.setAttr(nucleus + ".visibility", 0)
+	if (nucleusNode == None):
+		nucleusNodesBefore = cmds.ls(type = "nucleus")
+		nucleus = Physics.CreateNucleus(name = nameNucleus, parent = group)
+		cmds.select(clear = True)
+		cmds.setAttr(nucleus + ".gravity", 0) # TODO
+		cmds.setAttr(nucleus + ".timeScale", _nucleusTimeScale) # TODO
+		## cmds.setAttr(nucleus + ".startFrame", self.time.values[2])
+		## cmds.setAttr(nucleus + ".visibility", 0)
+	else:
+		nucleus = nucleusNode
 
 
 	### TODO Need to define colliderObjects before this logic
@@ -149,12 +152,13 @@ def CreateParticleSetup(targetObject, parentGroup=None, customParentObject=None,
 	cmds.select(clear = True)
 
 	### Remove leftover nucleus nodes
-	nucleusNodesAfter = cmds.ls(type = "nucleus")
-	nucleusNodesToRemove = [item for item in nucleusNodesAfter if item not in nucleusNodesBefore]
-	for item in nucleusNodesToRemove:
-		if (item != nucleus):
-			print("Leftover nucleus node {0} deleted".format(item))
-			cmds.delete(item)
+	if (nucleusNode == None):
+		nucleusNodesAfter = cmds.ls(type = "nucleus")
+		nucleusNodesToRemove = [item for item in nucleusNodesAfter if item not in nucleusNodesBefore]
+		for item in nucleusNodesToRemove:
+			if (item != nucleus):
+				print("Leftover nucleus node {0} deleted".format(item))
+				cmds.delete(item)
 
 	### Set simulation attributes
 	cmds.setAttr(particle + ".overrideEnabled", 1)
@@ -176,25 +180,25 @@ def CreateParticleSetup(targetObject, parentGroup=None, customParentObject=None,
 	cmds.connectAttr(particle + ".center", locatorParticle + ".translate", force = True)
 	## cmds.setAttr(locatorParticle + ".visibility", 0) # TODO use when hidden
 
-	return nameTargetObjectConverted, group, targetObject, locatorGoal, locatorParticle
+	return targetObject, nameTargetObjectConverted, group, nucleusNode, locatorGoal, locatorParticle
 def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	if (particleSetup == None):
 		cmds.warning("No Particle Setup specified. Cancel algorithm")
 		return
 
 	### Get particle setup variables
-	nameTargetObjectConverted = particleSetup[0]
-	group = particleSetup[1]
-	targetObject = particleSetup[2]
-	locatorGoal = particleSetup[3]
-	locatorParticle = particleSetup[4]
+	targetObject = particleSetup[0]
+	nameTargetObjectConverted = particleSetup[1]
+	group = particleSetup[2]
+	nucleusNode = particleSetup[3]
+	locatorGoal = particleSetup[4]
+	locatorParticle = particleSetup[5]
 
 	### Names
 	nameGroupAim = _defaultNameGroupAim + nameTargetObjectConverted
 	nameLocAimBase = _defaultNameLocAimBase + nameTargetObjectConverted
 	nameLocAim = _defaultNameLocAim + nameTargetObjectConverted
-	nameLocAimUp = _defaultNameLocAimUp + nameTargetObjectConverted		
-	# nameLocAimOLD = _defaultNameLocAimOLD + nameTargetObjectConverted
+	nameLocAimUp = _defaultNameLocAimUp + nameTargetObjectConverted
 
 	### Create group
 	cmds.select(clear = True)
@@ -215,11 +219,9 @@ def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	cmds.setAttr(locatorAimBase + "Shape.localScaleY", _scaleLocatorsOne)
 	cmds.setAttr(locatorAimBase + "Shape.localScaleZ", _scaleLocatorsOne)
 
-
 	### Constrain locator aim base to locator goal
 	cmds.parentConstraint(locatorGoal, locatorAimBase, maintainOffset = True)
 	## cmds.setAttr(locatorAimBase + ".visibility", 0) # TODO use when hidden
-
 
 	### Create locator aim
 	locatorAim = cmds.spaceLocator(name = nameLocAim)[0]
@@ -229,12 +231,7 @@ def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	cmds.select(clear = True)
 	cmds.setAttr(locatorAim + ".displayLocalAxis", True)
 
-
-	# constraintAim = cmds.aimConstraint(locatorParticle, locatorAim, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "none") # XXX probably deprecated
-	# cmds.delete(constraintAim) # locatorAim + "_aimConstraint1" # XXX probably deprecated
-
-
-	### TODO Create locator aim up
+	### Create locator aim up
 	locatorAimUp = cmds.duplicate(locatorAim, name = nameLocAimUp)[0]
 	cmds.parent(locatorAimUp, locatorAim)
 	cmds.select(clear = True)
@@ -248,28 +245,20 @@ def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	cmds.setAttr(locatorAimUp + "Shape.localScaleY", _scaleLocatorsOne)
 	cmds.setAttr(locatorAimUp + "Shape.localScaleZ", _scaleLocatorsOne)
 
-
 	### Create aim up particle setup
-	particleUpSetup = CreateParticleSetup(locatorAimUp)
+	particleUpSetup = CreateParticleSetup(targetObject = locatorAimUp, nucleusNode = nucleusNode)
 
 	### Get particle up setup variables
-	groupUp = particleUpSetup[1]
-	locatorParticleUp = particleUpSetup[4]
+	groupUp = particleUpSetup[2]
+	locatorParticleUp = particleUpSetup[5]
 
+	### Set parent for aim up particle setup
 	cmds.parent(groupUp, nameGroupAim)
 	cmds.select(clear = True)
 
 	### Create aim constraint
 	cmds.aimConstraint(locatorParticle, locatorAim, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "object", worldUpObject = locatorParticleUp)
 	
-
-	### Create locator aim OLD # XXX probably deprecated
-	# locatorAimOLD = cmds.spaceLocator(name = nameLocAimOLD)[0]
-	# cmds.select(clear = True)
-	# cmds.matchTransform(locatorAimOLD, locatorAimBase, position = True, rotation = True)
-	# cmds.parent(locatorAimOLD, locatorAimBase)
-	# cmds.select(clear = True)
-
 	return locatorAim
 
 def CreateOnSelected(*args):
@@ -279,7 +268,7 @@ def CreateOnSelected(*args):
 		return
 	
 	for item in selectedList:
-		CreateParticleSetup(item)
+		CreateParticleSetup(targetObject = item)
 def CreateAimOnSelected(*args): # TODO
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
@@ -291,7 +280,6 @@ def CreateAimOnSelected(*args): # TODO
 	for item in selectedList:
 		particleSetup = CreateParticleSetup(targetObject = item, positionOffset = (0, 0, offsetDistance)) # HACK for testing
 		CreateAimSetup(particleSetup, positionOffset = (offsetDistance, 0, 0))
-		# CreateAimSetup(particleSetup, positionOffset = (0, offsetDistance, 0))
 def CreateAimChainOnSelected(*args): # TODO
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
@@ -311,5 +299,3 @@ def CreateAimChainOnSelected(*args): # TODO
 		particleAimSetup = CreateAimSetup(particleSetup, positionOffset = (0, distanceAimUp, 0))
 		particleAimSetupList.append(particleAimSetup)
 
-
-# Enums.Main.axes
