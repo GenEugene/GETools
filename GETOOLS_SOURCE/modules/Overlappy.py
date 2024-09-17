@@ -159,7 +159,7 @@ class Overlappy:
 		self.particle = ""
 		self.particleLocGoalTarget = ["", ""]
 		self.particleLocAim = ["", "", "", ""]
-		self.particleGoalStartPosition = [None, (0, 0, 0)]
+		self.particleGoalStartPosition = [None, (0, 0, 0)] # TODO simplify
 		## self.particleLoft = ["", "", ""]
 		
 		### LAYOUTS
@@ -181,9 +181,14 @@ class Overlappy:
 		self.menuCheckboxClean = None
 		self.menuCheckboxCollisions = None # TODO
 
-		### CHECKBOXES
+		### AIM OFFSET
 		## self.checkboxAutoOffset = None # TODO
-		# self.checkboxesParticleMirror = [None, None, None]
+		self.aimOffsetFloatGroup = [None, None] # text, float
+		self.aimOffsetRadioCollection = [None, [None, None, None]] # collection, (element 1, 2, 3)
+		self.aimOffsetCheckbox = None
+		self.aimOffsetUpFloatGroup = [None, None] # text, float
+		self.aimOffsetUpRadioCollection = [None, [None, None, None]] # collection, (element 1, 2, 3)
+		self.aimOffsetUpCheckbox = None
 		
 		### SLIDERS
 		self.sliderParticleRadius = None
@@ -194,8 +199,6 @@ class Overlappy:
 		self.sliderParticleGoalWeight = None
 		self.sliderNucleusTimeScale = None
 		self.slidersParticleOffset = [None, None, None] # XXX
-		self.sliderParticleAimOffset = None
-		self.sliderParticleAimOffsetUp = None
 
 		### SCROLL LISTS
 		self.scrollListColliders = None
@@ -448,24 +451,31 @@ class Overlappy:
 		count = 6
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		
-		cmds.text(label = "Aim")
-		cmds.floatField(value = 5, precision = 1, minValue = 0)
-		radioCollectionAim = cmds.radioCollection()
-		radioButtonAimX = cmds.radioButton(label = "X")
-		radioButtonAimY = cmds.radioButton(label = "Y")
-		radioButtonAimZ = cmds.radioButton(label = "Z")
-		UI.Checkbox(label = "-", annotation = "Reverse Axis")
-		cmds.radioCollection(radioCollectionAim, edit = True, select = radioButtonAimX)
+		self.aimOffsetFloatGroup[0] = cmds.text(label = "Aim")
+		self.aimOffsetFloatGroup[1] = cmds.floatField(value = 5, precision = 1, minValue = 0)
+		self.aimOffsetRadioCollection[0] = cmds.radioCollection()
+		self.aimOffsetRadioCollection[1][0] = cmds.radioButton(label = "X")
+		self.aimOffsetRadioCollection[1][1] = cmds.radioButton(label = "Y")
+		self.aimOffsetRadioCollection[1][2] = cmds.radioButton(label = "Z")
+		self.aimOffsetCheckbox = UI.Checkbox(label = "-", annotation = "Reverse Axis")
+		cmds.radioCollection(self.aimOffsetRadioCollection[0], edit = True, select = self.aimOffsetRadioCollection[1][0])
 
-		cmds.text(label = "Up")
-		cmds.floatField(value = 5, precision = 1, minValue = 0)
-		radioCollectionAimUp = cmds.radioCollection()
-		radioButtonAimUpX = cmds.radioButton(label = "X")
-		radioButtonAimUpY = cmds.radioButton(label = "Y")
-		radioButtonAimUpZ = cmds.radioButton(label = "Z")
-		UI.Checkbox(label = "-", annotation = "Reverse Axis")
-		cmds.radioCollection(radioCollectionAimUp, edit = True, select = radioButtonAimUpY)
-
+		self.aimOffsetUpFloatGroup[0] = cmds.text(label = "Up")
+		self.aimOffsetUpFloatGroup[1] = cmds.floatField(value = 5, precision = 1, minValue = 0)
+		self.aimOffsetUpRadioCollection[0] = cmds.radioCollection()
+		self.aimOffsetUpRadioCollection[1][0] = cmds.radioButton(label = "X")
+		self.aimOffsetUpRadioCollection[1][1] = cmds.radioButton(label = "Y")
+		self.aimOffsetUpRadioCollection[1][2] = cmds.radioButton(label = "Z")
+		self.aimOffsetUpCheckbox = UI.Checkbox(label = "-", annotation = "Reverse Axis")
+		cmds.radioCollection(self.aimOffsetUpRadioCollection[0], edit = True, select = self.aimOffsetUpRadioCollection[1][1])
+	def GetAimOffsetValues(self):
+		valueAimFloat = cmds.floatField(self.aimOffsetFloatGroup[1], query = True, value = True)
+		valueAimCollection = cmds.radioCollection(self.aimOffsetRadioCollection[0], query = True, select = True)
+		valueAimCheckbox = self.aimOffsetCheckbox.Get()
+		valueAimUpFloat = cmds.floatField(self.aimOffsetUpFloatGroup[1], query = True, value = True)
+		valueAimUpCollection = cmds.radioCollection(self.aimOffsetUpRadioCollection[0], query = True, select = True)
+		valueAimUpCheckbox = self.aimOffsetUpCheckbox.Get()
+		return (valueAimFloat, valueAimCollection, valueAimCheckbox), (valueAimUpFloat, valueAimUpCollection, valueAimUpCheckbox) # aim, aimUp
 	def UILayoutParticleDynamicProperties(self, layoutMain):
 		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 70, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
