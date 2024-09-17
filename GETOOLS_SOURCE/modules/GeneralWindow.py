@@ -26,6 +26,7 @@ from functools import partial
 
 from .. import Settings
 from ..modules import CenterOfMass
+from ..modules import Experimental
 from ..modules import Overlappy
 from ..modules import Rigging
 from ..modules import Tools
@@ -45,10 +46,6 @@ from ..utils import Skinning
 from ..utils import Toggles
 from ..utils import UI
 from ..values import Icons
-
-from ..experimental import Physics
-from ..experimental import PhysicsParticle
-from ..experimental import PhysicsHair
 
 
 class GeneralWindow:
@@ -499,18 +496,9 @@ class GeneralWindow:
 		# cmds.menuItem(label = "Select", command = MotionTrail.Select)
 		# cmds.menuItem(label = "Delete", command = MotionTrail.Delete)
 	def LayoutExperimental(self, parentLayout):
-		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = "EXPERIMENTAL", collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
-		# cmds.popupMenu()
-		# cmds.menuItem(label = "Right-Click test")
-		
-		countOffsets = 4
-		cmds.gridLayout(parent = self.frameExperimental, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		# cmds.button(label = "**Nucleus", command = partial(Physics.CreateNucleus, "testNucleus", None)) # TODO
-		cmds.button(label = "Particle", command = PhysicsParticle.CreateOnSelected)
-		cmds.button(label = "P Aim", command = PhysicsParticle.CreateAimOnSelected)
-		# cmds.button(label = "**P Chain", command = PhysicsParticle.CreateAimChainOnSelected) # TODO
-		# cmds.button(label = "Hair", command = partial(PhysicsHair.CreateNHairOnSelected, None)) # TODO
-
+		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = Experimental.Experimental._title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
+		Experimental.Experimental().UICreate(self.frameExperimental)
+	
 	# WINDOW
 	def WindowCheck(self, *args):
 		return cmds.window(Settings.windowName, exists = True)
