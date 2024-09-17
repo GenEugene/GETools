@@ -177,7 +177,7 @@ def CreateParticleSetup(targetObject, parentGroup=None, customParentObject=None,
 	## cmds.setAttr(locatorParticle + ".visibility", 0) # TODO use when hidden
 
 	return nameTargetObjectConverted, group, targetObject, locatorGoal, locatorParticle
-def CreateAimSetup(particleSetup=None, aimUpDistance=1):
+def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	if (particleSetup == None):
 		cmds.warning("No Particle Setup specified. Cancel algorithm")
 		return
@@ -234,11 +234,13 @@ def CreateAimSetup(particleSetup=None, aimUpDistance=1):
 	# cmds.delete(constraintAim) # locatorAim + "_aimConstraint1" # XXX probably deprecated
 
 
-	### Create locator aim up # TODO
+	### TODO Create locator aim up
 	locatorAimUp = cmds.duplicate(locatorAim, name = nameLocAimUp)[0]
 	cmds.parent(locatorAimUp, locatorAim)
 	cmds.select(clear = True)
-	cmds.setAttr(locatorAimUp + "." + Enums.Attributes.translateShort[1], aimUpDistance)
+	cmds.setAttr(locatorAimUp + "." + "translateX", positionOffset[0])
+	cmds.setAttr(locatorAimUp + "." + "translateY", positionOffset[1])
+	cmds.setAttr(locatorAimUp + "." + "translateZ", positionOffset[2])
 	cmds.parent(locatorAimUp, locatorAimBase)
 	cmds.select(clear = True)
 	cmds.setAttr(locatorAimUp + ".visibility", 0)
@@ -249,12 +251,16 @@ def CreateAimSetup(particleSetup=None, aimUpDistance=1):
 
 	### Create aim up particle setup
 	particleUpSetup = CreateParticleSetup(locatorAimUp)
-	cmds.parent(particleUpSetup[1], nameGroupAim)
+
+	### Get particle up setup variables
+	groupUp = particleUpSetup[1]
+	locatorParticleUp = particleUpSetup[4]
+
+	cmds.parent(groupUp, nameGroupAim)
 	cmds.select(clear = True)
 
-
 	### Create aim constraint
-	cmds.aimConstraint(locatorParticle, locatorAim, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "object", worldUpObject = particleUpSetup[3])
+	cmds.aimConstraint(locatorParticle, locatorAim, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "object", worldUpObject = locatorParticleUp)
 	
 
 	### Create locator aim OLD # XXX probably deprecated
@@ -280,19 +286,20 @@ def CreateAimOnSelected(*args): # TODO
 	if (selectedList == None):
 		return
 	
-	offsetDistance = 4
+	offsetDistance = 5 # HACK for testing
 	
 	for item in selectedList:
 		particleSetup = CreateParticleSetup(targetObject = item, positionOffset = (0, 0, offsetDistance)) # HACK for testing
-		CreateAimSetup(particleSetup, aimUpDistance = offsetDistance)
+		CreateAimSetup(particleSetup, positionOffset = (offsetDistance, 0, 0))
+		# CreateAimSetup(particleSetup, positionOffset = (0, offsetDistance, 0))
 def CreateAimChainOnSelected(*args): # TODO
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(1)
 	if (selectedList == None):
 		return
 	
-	distanceAim = 5
-	distanceAimUp = 5
+	distanceAim = 5 # HACK for testing
+	distanceAimUp = 5 # HACK for testing
 	particleAimSetupList = []
 	
 	for i in range(len(selectedList)):
@@ -301,6 +308,8 @@ def CreateAimChainOnSelected(*args): # TODO
 			customParentObject = particleAimSetupList[i - 1]
 		
 		particleSetup = CreateParticleSetup(targetObject = selectedList[i], customParentObject = customParentObject, positionOffset = (0, 0, distanceAim)) # HACK for testing
-		particleAimSetup = CreateAimSetup(particleSetup, aimUpDistance = distanceAimUp)
+		particleAimSetup = CreateAimSetup(particleSetup, positionOffset = (0, distanceAimUp, 0))
 		particleAimSetupList.append(particleAimSetup)
-	
+
+
+# Enums.Main.axes

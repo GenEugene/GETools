@@ -452,7 +452,7 @@ class Overlappy:
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		
 		self.aimOffsetFloatGroup[0] = cmds.text(label = "Aim")
-		self.aimOffsetFloatGroup[1] = cmds.floatField(value = 5, precision = 1, minValue = 0)
+		self.aimOffsetFloatGroup[1] = cmds.floatField(value = 10, precision = 1, minValue = 0)
 		self.aimOffsetRadioCollection[0] = cmds.radioCollection()
 		self.aimOffsetRadioCollection[1][0] = cmds.radioButton(label = "X")
 		self.aimOffsetRadioCollection[1][1] = cmds.radioButton(label = "Y")
@@ -461,7 +461,7 @@ class Overlappy:
 		cmds.radioCollection(self.aimOffsetRadioCollection[0], edit = True, select = self.aimOffsetRadioCollection[1][0])
 
 		self.aimOffsetUpFloatGroup[0] = cmds.text(label = "Up")
-		self.aimOffsetUpFloatGroup[1] = cmds.floatField(value = 5, precision = 1, minValue = 0)
+		self.aimOffsetUpFloatGroup[1] = cmds.floatField(value = 10, precision = 1, minValue = 0)
 		self.aimOffsetUpRadioCollection[0] = cmds.radioCollection()
 		self.aimOffsetUpRadioCollection[1][0] = cmds.radioButton(label = "X")
 		self.aimOffsetUpRadioCollection[1][1] = cmds.radioButton(label = "Y")
@@ -470,12 +470,18 @@ class Overlappy:
 		cmds.radioCollection(self.aimOffsetUpRadioCollection[0], edit = True, select = self.aimOffsetUpRadioCollection[1][1])
 	def GetAimOffsetValues(self):
 		valueAimFloat = cmds.floatField(self.aimOffsetFloatGroup[1], query = True, value = True)
-		valueAimCollection = cmds.radioCollection(self.aimOffsetRadioCollection[0], query = True, select = True)
+		valueAimAxisX = cmds.radioButton(self.aimOffsetRadioCollection[1][0], query = True, select = True)
+		valueAimAxisY = cmds.radioButton(self.aimOffsetRadioCollection[1][1], query = True, select = True)
+		valueAimAxisZ = cmds.radioButton(self.aimOffsetRadioCollection[1][2], query = True, select = True)
 		valueAimCheckbox = self.aimOffsetCheckbox.Get()
+		
 		valueAimUpFloat = cmds.floatField(self.aimOffsetUpFloatGroup[1], query = True, value = True)
-		valueAimUpCollection = cmds.radioCollection(self.aimOffsetUpRadioCollection[0], query = True, select = True)
+		valueAimUpAxisX = cmds.radioButton(self.aimOffsetUpRadioCollection[1][0], query = True, select = True)
+		valueAimUpAxisY = cmds.radioButton(self.aimOffsetUpRadioCollection[1][1], query = True, select = True)
+		valueAimUpAxisZ = cmds.radioButton(self.aimOffsetUpRadioCollection[1][2], query = True, select = True)
 		valueAimUpCheckbox = self.aimOffsetUpCheckbox.Get()
-		return (valueAimFloat, valueAimCollection, valueAimCheckbox), (valueAimUpFloat, valueAimUpCollection, valueAimUpCheckbox) # aim, aimUp
+		
+		return (valueAimFloat, (valueAimAxisX, valueAimAxisY, valueAimAxisZ), valueAimCheckbox), (valueAimUpFloat, (valueAimUpAxisX, valueAimUpAxisY, valueAimUpAxisZ), valueAimUpCheckbox) # aimTarget, aimUp
 	def UILayoutParticleDynamicProperties(self, layoutMain):
 		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 70, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
@@ -615,10 +621,32 @@ class Overlappy:
 		### Run setup logic
 		# self._ParticleSetupCreate(self.selectedObjects)
 
-		offsetDistance = 5
-		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, parentGroup = OverlappySettings.nameGroup, positionOffset = (0, 0, offsetDistance))
-		particleAimSetup = PhysicsParticle.CreateAimSetup(particleSetup, offsetDistance)
 
+		### Get aim offset values from UI and put to aim target offset and aim up offset
+		valuesAimOffset = self.GetAimOffsetValues()
+
+		valueAimTarget = valuesAimOffset[0][0] * (-1 if valuesAimOffset[0][2] else 1)
+		valueAimUp = valuesAimOffset[1][0] * (-1 if valuesAimOffset[1][2] else 1)
+
+		offsetTarget = [0, 0, 0]
+		offsetUp = [0, 0, 0]
+
+		if (valuesAimOffset[0][1][0]):
+			offsetTarget = [valueAimTarget, 0, 0]
+		if (valuesAimOffset[0][1][1]):
+			offsetTarget = [0, valueAimTarget, 0]
+		if (valuesAimOffset[0][1][2]):
+			offsetTarget = [0, 0, valueAimTarget]
+		
+		if (valuesAimOffset[1][1][0]):
+			offsetUp = [valueAimUp, 0, 0]
+		if (valuesAimOffset[1][1][1]):
+			offsetUp = [0, valueAimUp, 0]
+		if (valuesAimOffset[1][1][2]):
+			offsetUp = [0, 0, valueAimUp]
+		
+		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, parentGroup = OverlappySettings.nameGroup, positionOffset = offsetTarget)
+		particleAimSetup = PhysicsParticle.CreateAimSetup(particleSetup, positionOffset = offsetUp)
 
 
 		### TODO Names
