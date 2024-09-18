@@ -43,6 +43,9 @@ from ..experimental import Physics
 from ..experimental import PhysicsParticle
 
 
+# TODO make cycle infinity before loop bake
+
+
 class OverlappyAnnotations: # TODO simplify
 	### Setup
 	setup = "Create particle rig for first selected object. Use this step for setup settings. \nSetup runs every time for each selected object."
@@ -150,10 +153,10 @@ class Overlappy:
 		self.selectedObjects = ""
 		self.layers = ["", ""]
 		self.nucleus = ""
-		# self.nucleusNodesBefore = [""]
-		# self.nucleusNodesAfter = [""]
-		## self.colliderObjects = [] # TODO
-		## self.colliderNodes = [] # TODO
+		# self.nucleusNodesBefore = [""] # TODO
+		# self.nucleusNodesAfter = [""] # TODO
+		## self.colliderObjects = [] # XXX
+		## self.colliderNodes = [] # XXX
 
 		### PARTICLE MODE
 		self.particle = "" # TODO rename later to "self.particleTarget"
@@ -174,12 +177,13 @@ class Overlappy:
 		self.layoutParticleDynamicProperties = None
 		self.layoutParticleOffset = None
 		
-		### UI MENU CHECKBOXES
+		### UI MENU OPTIONS
 		self.menuCheckboxHierarchy = None
 		self.menuCheckboxLayer = None
 		self.menuCheckboxLoop = None
 		self.menuCheckboxClean = None
 		self.menuCheckboxCollisions = None # TODO
+		self.menuRadioButtonsLoop = [None, None, None, None]
 
 		### UI AIM OFFSET
 		## self.checkboxAutoOffset = None # TODO
@@ -222,9 +226,19 @@ class Overlappy:
 		cmds.menu(label = "Options", tearOff = True)
 		self.menuCheckboxHierarchy = UI.MenuCheckbox(label = "Use Hierarchy", value = OverlappySettings.optionCheckboxHierarchy, valueDefault = OverlappySettings.optionCheckboxHierarchy)
 		self.menuCheckboxLayer = UI.MenuCheckbox(label = "Bake To Layer", value = OverlappySettings.optionCheckboxLayer, valueDefault = OverlappySettings.optionCheckboxLayer)
-		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop Mode", value = OverlappySettings.optionCheckboxLoop, valueDefault = OverlappySettings.optionCheckboxLoop) # FIXME make cycle infinity before bake
+		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop Mode", value = OverlappySettings.optionCheckboxLoop, valueDefault = OverlappySettings.optionCheckboxLoop)
 		self.menuCheckboxClean = UI.MenuCheckbox(label = "Clean After Bake", value = OverlappySettings.optionCheckboxClean, valueDefault = OverlappySettings.optionCheckboxClean)
 		self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions", value = OverlappySettings.optionCheckboxCollisions, valueDefault = OverlappySettings.optionCheckboxCollisions)
+
+		cmds.menuItem(dividerLabel = "Pre Loop Cycles", divider = True)
+		
+		# TODO connect loop settings
+		cmds.radioCollection()
+		self.menuRadioButtonsLoop[0] = cmds.menuItem(label = "0", radioButton = True, command = lambda *args: print("Option 0 selected"))
+		self.menuRadioButtonsLoop[1] = cmds.menuItem(label = "1", radioButton = True, command = lambda *args: print("Option 1 selected"))
+		self.menuRadioButtonsLoop[2] = cmds.menuItem(label = "2", radioButton = True, command = lambda *args: print("Option 2 selected"))
+		self.menuRadioButtonsLoop[3] = cmds.menuItem(label = "3", radioButton = True, command = lambda *args: print("Option 3 selected"))
+		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = True)
 	def UILayoutBake(self, layoutMain):
 		### SETUP
 		self.layoutBake = cmds.frameLayout("layoutBake", label = Settings.frames2Prefix + "BAKE", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -944,6 +958,11 @@ class Overlappy:
 	
 
 	### PARTICLE VALUES
+	def _ParticleOffsetSetValues(self, *args): # TODO rework with new aim offset logic
+		# self._SetSliderValue(self.slidersParticleOffset[0].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateX")
+		# self._SetSliderValue(self.slidersParticleOffset[1].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateY")
+		# self._SetSliderValue(self.slidersParticleOffset[2].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateZ")
+		cmds.warning("TODO: _ParticleOffsetSetValues")
 	def _ParticleDynamicPropertiesUpdate(self, *args):
 		cmds.setAttr(self.particle + "Shape.radius", self.sliderParticleRadius.Get())
 		cmds.setAttr(self.particle + "Shape.conserve", self.sliderParticleConserve.Get())
@@ -952,11 +971,6 @@ class Overlappy:
 		cmds.setAttr(self.particle + "Shape.goalSmoothness", self.sliderParticleGoalSmooth.Get())
 		cmds.setAttr(self.particle + "Shape.goalWeight[0]", self.sliderParticleGoalWeight.Get())
 		cmds.setAttr(self.nucleus + ".timeScale", self.sliderNucleusTimeScale.Get())
-	def _ParticleOffsetSetValues(self, *args): # TODO rework with new aim offset logic
-		# self._SetSliderValue(self.slidersParticleOffset[0].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateX")
-		# self._SetSliderValue(self.slidersParticleOffset[1].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateY")
-		# self._SetSliderValue(self.slidersParticleOffset[2].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateZ")
-		cmds.warning("TODO: _ParticleOffsetSetValues")
 	
 
 	### RESET VALUES
@@ -968,7 +982,7 @@ class Overlappy:
 	# 	cmds.warning("TODO: Reset Chain Values")
 	# 	pass
 	def _ResetAllParticleValues(self, *args):
-		self._ResetParticleDynamicProperties(True)
+		self._ResetParticleDynamicProperties()
 		self._ResetParticleOffsets()
 	def _ResetOptions(self, *args):
 		self.menuCheckboxHierarchy.Reset()
@@ -985,9 +999,8 @@ class Overlappy:
 		# self.slidersParticleOffset[2].Reset()
 		cmds.warning("TODO: _ResetParticleOffsets")
 		self._ParticleOffsetSetValues()
-	def _ResetParticleDynamicProperties(self, full=False, *args):
-		if (full):
-			self.sliderParticleRadius.Reset()
+	def _ResetParticleDynamicProperties(self, *args):
+		self.sliderParticleRadius.Reset()
 		self.sliderParticleConserve.Reset()
 		self.sliderParticleDrag.Reset()
 		self.sliderParticleDamp.Reset()
