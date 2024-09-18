@@ -75,6 +75,9 @@ class OverlappyAnnotations: # TODO simplify
 	### Collisions
 	checkboxCollisions = "Use collisions"
 
+	### Nucleus
+	particleTimeScale = "Nucleus Time Scale"
+
 	### Particle
 	particleRadius = "Particle Radius"
 	particleConserve = "Particle Conserve"
@@ -82,7 +85,6 @@ class OverlappyAnnotations: # TODO simplify
 	particleDamp = "Particle Damp"
 	particleGoalSmooth = "Particle Goal Smooth"
 	particleGoalWeight = "Particle Goal Weight"
-	particleTimeScale = "Nucleus Time Scale"
 
 	### Offset
 	offsetMirrorX = "Mirror particle offset value to opposite"
@@ -172,10 +174,11 @@ class Overlappy:
 		self.layoutChainMode = None # TODO
 		self.layoutChainButtons = None
 		self.layoutChainDynamicProperties = None # TODO
+		self.layoutNucleusProperties = None
 		self.layoutParticleMode = None
 		self.layoutParticleButtons = None
-		self.layoutParticleDynamicProperties = None
 		self.layoutParticleOffset = None
+		self.layoutParticleDynamicProperties = None
 		
 		### UI MENU OPTIONS
 		self.menuCheckboxHierarchy = None
@@ -183,7 +186,7 @@ class Overlappy:
 		self.menuCheckboxLoop = None
 		self.menuCheckboxClean = None
 		self.menuCheckboxCollisions = None # TODO
-		self.menuRadioButtonsLoop = [None, None, None, None]
+		self.menuRadioButtonsLoop = [None, None, None, None] # TODO
 
 		### UI AIM OFFSET
 		## self.checkboxAutoOffset = None # TODO
@@ -193,6 +196,9 @@ class Overlappy:
 		self.aimOffsetUpFloatGroup = [None, None] # text, float
 		self.aimOffsetUpRadioCollection = [None, [None, None, None]] # collection, (element 1, 2, 3)
 		self.aimOffsetUpCheckbox = None
+
+		### UI SLIDERS NUCLEUS PROPERTIES
+		self.sliderNucleusTimeScale = None
 		
 		### UI SLIDERS PARTICLE DYNAMIC PROPERTIES
 		self.sliderParticleRadius = None
@@ -201,8 +207,6 @@ class Overlappy:
 		self.sliderParticleDamp = None
 		self.sliderParticleGoalSmooth = None
 		self.sliderParticleGoalWeight = None
-		self.sliderNucleusTimeScale = None
-		# self.slidersParticleOffset = [None, None, None] # XXX
 
 		### UI SCROLL LISTS
 		self.scrollListColliders = None
@@ -444,6 +448,7 @@ class Overlappy:
 		
 		self.UILayoutParticleButtons(self.layoutParticleMode)
 		self.UILayoutParticleOffset(self.layoutParticleMode)
+		self.UILayoutNucleusProperties(self.layoutParticleMode)
 		self.UILayoutParticleDynamicProperties(self.layoutParticleMode)
 	def UILayoutParticleButtons(self, layoutMain):
 		### SETUP
@@ -496,17 +501,47 @@ class Overlappy:
 		valueAimUpCheckbox = self.aimOffsetUpCheckbox.Get()
 		
 		return (valueAimFloat, (valueAimAxisX, valueAimAxisY, valueAimAxisZ), valueAimCheckbox), (valueAimUpFloat, (valueAimUpAxisX, valueAimUpAxisY, valueAimUpAxisZ), valueAimUpCheckbox) # aimTarget, aimUp
+	def UILayoutNucleusProperties(self, layoutMain):
+		self.layoutNucleusProperties = cmds.frameLayout("layoutNucleusProperties", label = "Nucleus Properties", labelIndent = 70, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		layoutColumn = cmds.columnLayout(parent = self.layoutNucleusProperties, adjustableColumn = True)
+
+		commandDefault = self._UpdateNucleusProperties
+
+		self.sliderNucleusTimeScale = UI.Slider(
+			parent = layoutColumn,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
+			command = commandDefault,
+			label = "Time Scale",
+			annotation = OverlappyAnnotations.particleTimeScale,
+			value = OverlappySettings.nucleusTimeScale,
+			minMax = OverlappySettings.rangeNucleusTimeScale,
+			menuReset = True,
+		)
+
+		# self.sliderNucleusTimeScale = UI.Slider( # TODO
+		# 	parent = layoutColumn,
+		# 	widthWindow = Settings.windowWidthMargin,
+		# 	widthMarker = Settings.sliderWidthMarker,
+		# 	columnWidth3 = Settings.sliderWidth,
+		# 	command = commandDefault,
+		# 	label = "**Gravity",
+		# 	annotation = OverlappyAnnotations.particleTimeScale,
+		# 	value = OverlappySettings.nucleusTimeScale,
+		# 	minMax = OverlappySettings.rangeNucleusTimeScale,
+		# 	menuReset = True,
+		# )
 	def UILayoutParticleDynamicProperties(self, layoutMain):
-		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 70, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Particle Dynamic Properties", labelIndent = 50, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
 		## cmds.popupMenu()
 		## cmds.menuItem(label = "Right-Click") # TODO add reset all function
 
-		commandDefault = self._ParticleDynamicPropertiesUpdate
+		commandDefault = self._UpdateParticleDynamicProperties
 
-		layoutSliders1 = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = Settings.windowWidthMargin, cellHeight = Settings.lineHeight)
 		self.sliderParticleRadius = UI.Slider(
-			parent = layoutSliders1,
+			parent = layoutColumn,
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
@@ -521,9 +556,8 @@ class Overlappy:
 		## cmds.separator(parent = self.layoutSimulation, style = "in", height = 1)
 		cmds.separator(parent = layoutColumn, style = "in")
 		
-		layoutSliders2 = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = Settings.windowWidthMargin, cellHeight = Settings.lineHeight)
 		self.sliderParticleConserve = UI.Slider(
-			parent = layoutSliders2,
+			parent = layoutColumn,
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
@@ -536,7 +570,7 @@ class Overlappy:
 		)
 		
 		self.sliderParticleDrag = UI.Slider(
-			parent = layoutSliders2,
+			parent = layoutColumn,
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
@@ -549,7 +583,7 @@ class Overlappy:
 		)
 		
 		self.sliderParticleDamp = UI.Slider(
-			parent = layoutSliders2,
+			parent = layoutColumn,
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
@@ -560,9 +594,11 @@ class Overlappy:
 			minMax = OverlappySettings.rangePDamp,
 			menuReset = True,
 		)
+
+		cmds.separator(parent = layoutColumn, style = "in")
 		
 		self.sliderParticleGoalSmooth = UI.Slider(
-			parent = layoutSliders2,
+			parent = layoutColumn,
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
@@ -575,7 +611,7 @@ class Overlappy:
 		)
 		
 		self.sliderParticleGoalWeight = UI.Slider(
-			parent = layoutSliders2,
+			parent = layoutColumn,
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
@@ -584,19 +620,6 @@ class Overlappy:
 			annotation = OverlappyAnnotations.particleGoalWeight,
 			value = OverlappySettings.particleGoalWeight,
 			minMax = OverlappySettings.rangeGWeight,
-			menuReset = True,
-		)
-		
-		self.sliderNucleusTimeScale = UI.Slider(
-			parent = layoutSliders2,
-			widthWindow = Settings.windowWidthMargin,
-			widthMarker = Settings.sliderWidthMarker,
-			columnWidth3 = Settings.sliderWidth,
-			command = commandDefault,
-			label = "Time Scale",
-			annotation = OverlappyAnnotations.particleTimeScale,
-			value = OverlappySettings.nucleusTimeScale,
-			minMax = OverlappySettings.rangeNucleusTimeScale,
 			menuReset = True,
 		)
 
@@ -627,15 +650,12 @@ class Overlappy:
 		### Create nucleus node
 		self.nucleus = Physics.CreateNucleus(name = OverlappySettings.prefix + PhysicsParticle._defaultNameNucleus, parent = OverlappySettings.nameGroup)
 		cmds.select(clear = True)
-
 	def _ParticleSetupPoint(self, *args):
 		self._ParticleSetupInit()
 		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus, parentGroup = OverlappySettings.nameGroup)
 		cmds.select(self.selectedObjects, replace = True)
 
 		self.particle = particleSetup[4]
-
-
 	def _ParticleSetupAim(self, *args):
 		self._ParticleSetupInit()
 
@@ -767,72 +787,6 @@ class Overlappy:
 		### Offset
 		# self._ParticleOffsetsUpdate(cacheReset = True) # TODO
 		cmds.select(self.selectedObjects, replace = True)
-	
-	# def _ParticleSetupScan(self, *args): # TODO extract old logic and delete
-	# 	# Check overlappy group
-	# 	if (not cmds.objExists(OverlappySettings.nameGroup)):
-	# 		cmds.warning("Overlappy object doesn't exists")
-	# 		return
-		
-	# 	# Get children of group
-	# 	children = cmds.listRelatives(OverlappySettings.nameGroup)
-	# 	if (len(children) == 0):
-	# 		cmds.warning("Overlappy object has no children objects")
-	# 		return
-		
-	# 	# Try to get suffix name
-	# 	tempList = (OverlappySettings.nameLocGoalTarget[0], OverlappySettings.nameLocGoalTarget[1], self.particle, OverlappySettings.nameLocAim[0])
-	# 	objectName = ""
-	# 	for child in children:
-	# 		for item in tempList:
-	# 			splitNames = child.split(item)
-	# 			if (len(splitNames) < 2):
-	# 				continue
-	# 			lastName = splitNames[-1]
-	# 			if (objectName == ""):
-	# 				objectName = lastName
-	# 			else:
-	# 				if (objectName == lastName):
-	# 					continue
-	# 				else:
-	# 					cmds.warning("Suffix \"{0}\" don't equals to \"{1}\"".format(objectName, lastName))
-	# 	converted = Text.ConvertSymbols(objectName, False)
-	# 	if (cmds.objExists(converted)):
-	# 		self.selectedObjects = converted
-		
-	# 	def CheckAndSet(name):
-	# 		if (cmds.objExists(name + objectName)):
-	# 			return name + objectName
-	# 		else:
-	# 			return
-		
-	# 	# Objects
-	# 	self.particleLocGoalTarget[0] = CheckAndSet(OverlappySettings.nameLocGoalTarget[0])
-	# 	self.particleLocGoalTarget[1] = CheckAndSet(OverlappySettings.nameLocGoalTarget[1])
-	# 	self.particleLocAim[0] = CheckAndSet(OverlappySettings.nameLocAim[0])
-	# 	self.particleLocAim[1] = CheckAndSet(OverlappySettings.nameLocAim[1])
-	# 	self.particleLocAim[2] = CheckAndSet(OverlappySettings.nameLocAim[2])
-	# 	self.particle = CheckAndSet(self.particle)
-		
-	# 	# Time and offset
-	# 	self.time.Scan()
-	# 	self.time.SetCurrent(self.time.values[2])
-	# 	self.particleGoalStartPosition[0] = cmds.xform(self.particleLocAim[0], query = True, translation = True)
-	# 	self.time.SetCurrentCached()
-		
-	# 	# Nucleus
-	# 	# _nucleus = cmds.ls(type = "nucleus")
-	# 	# if (len(_nucleus) > 0):
-	# 	# 	self.nucleus = _nucleus[0]
-	# 		# self.sliderNTimeScale.startName = self.nucleus
-		
-	# 	# Get sliders
-	# 	# self.sliderPRadius.Scan()
-	# 	# self._GetSimulation()
-	# 	# self._GetOffsets()
-	# 	pass
-	
-	
 	def _ParticleSetupDelete(self, deselect=True, *args): # TODO simplify redundancy
 		self.selectedObjects = ""
 		self.particleLocGoalTarget = ["", ""]
@@ -963,14 +917,15 @@ class Overlappy:
 		# self._SetSliderValue(self.slidersParticleOffset[1].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateY")
 		# self._SetSliderValue(self.slidersParticleOffset[2].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateZ")
 		cmds.warning("TODO: _ParticleOffsetSetValues")
-	def _ParticleDynamicPropertiesUpdate(self, *args):
+	def _UpdateNucleusProperties(self, *args):
+		cmds.setAttr(self.nucleus + ".timeScale", self.sliderNucleusTimeScale.Get())
+	def _UpdateParticleDynamicProperties(self, *args):
 		cmds.setAttr(self.particle + "Shape.radius", self.sliderParticleRadius.Get())
 		cmds.setAttr(self.particle + "Shape.conserve", self.sliderParticleConserve.Get())
 		cmds.setAttr(self.particle + "Shape.drag", self.sliderParticleDrag.Get())
 		cmds.setAttr(self.particle + "Shape.damp", self.sliderParticleDamp.Get())
 		cmds.setAttr(self.particle + "Shape.goalSmoothness", self.sliderParticleGoalSmooth.Get())
 		cmds.setAttr(self.particle + "Shape.goalWeight[0]", self.sliderParticleGoalWeight.Get())
-		cmds.setAttr(self.nucleus + ".timeScale", self.sliderNucleusTimeScale.Get())
 	
 
 	### RESET VALUES
@@ -982,6 +937,7 @@ class Overlappy:
 	# 	cmds.warning("TODO: Reset Chain Values")
 	# 	pass
 	def _ResetAllParticleValues(self, *args):
+		self._ResetNucleusProperties()
 		self._ResetParticleDynamicProperties()
 		self._ResetParticleOffsets()
 	def _ResetOptions(self, *args):
@@ -992,13 +948,12 @@ class Overlappy:
 		self.menuCheckboxCollisions.Reset()
 	def _ResetParticleOffsets(self, *args): # TODO
 		# self.checkboxesParticleMirror[0].Reset()
-		# self.checkboxesParticleMirror[1].Reset()
-		# self.checkboxesParticleMirror[2].Reset()
 		# self.slidersParticleOffset[0].Reset()
-		# self.slidersParticleOffset[1].Reset()
-		# self.slidersParticleOffset[2].Reset()
 		cmds.warning("TODO: _ResetParticleOffsets")
 		self._ParticleOffsetSetValues()
+	def _ResetNucleusProperties(self, *args):
+		self.sliderNucleusTimeScale.Reset()
+		self._UpdateNucleusProperties()
 	def _ResetParticleDynamicProperties(self, *args):
 		self.sliderParticleRadius.Reset()
 		self.sliderParticleConserve.Reset()
@@ -1006,8 +961,7 @@ class Overlappy:
 		self.sliderParticleDamp.Reset()
 		self.sliderParticleGoalSmooth.Reset()
 		self.sliderParticleGoalWeight.Reset()
-		self.sliderNucleusTimeScale.Reset() # TODO move out from particle specific logic
-		self._ParticleDynamicPropertiesUpdate()
+		self._UpdateParticleDynamicProperties()
 	
 
 	### BAKE
