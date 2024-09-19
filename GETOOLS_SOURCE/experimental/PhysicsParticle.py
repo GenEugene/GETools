@@ -256,7 +256,7 @@ def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	### Create aim constraint
 	cmds.aimConstraint(locatorParticle, locatorAim, weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "object", worldUpObject = locatorParticleUp)
 	
-	return locatorAim
+	return locatorAim, particleUpSetup
 
 def CreateOnSelected(*args):
 	# Check selected objects

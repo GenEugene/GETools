@@ -162,6 +162,7 @@ class Overlappy:
 
 		### PARTICLE MODE
 		self.particle = "" # TODO rename later to "self.particleTarget"
+		self.particleUp = ""
 		self.particleLocator = ""
 		self.particleLocatorAim = ""
 		self.particleGoalStartPosition = [None, (0, 0, 0)] # TODO simplify
@@ -450,7 +451,7 @@ class Overlappy:
 		##
 		cmds.button(label = "Point", command = self._ParticleSetupPoint, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
 		cmds.button(label = "Aim", command = self._ParticleSetupAim, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
-		## cmds.button(label = "Scan setup in scene", command = self._SetupScan, backgroundColor = Colors.green10)
+		# cmds.button(label = "Combo", command = self._ParticleSetupAim, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup) # TODO translate + aim mode
 		cmds.button(label = "Remove", command = self._ParticleSetupDelete, backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
 	def UILayoutParticleOffset(self, layoutMain): # TODO
 		self.layoutParticleOffset = cmds.frameLayout("layoutParticleOffset", label = "Aim Offset", labelIndent = 85, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -643,6 +644,7 @@ class Overlappy:
 	def _ParticleSetupPoint(self, *args):
 		self._ParticleSetupInit()
 		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus, parentGroup = OverlappySettings.nameGroup)
+		self.setupCreatedPoint = True
 
 		### Cache setup elements names
 		self.particle = particleSetup[4]
@@ -650,7 +652,6 @@ class Overlappy:
 
 		self._UpdateSettings()
 		cmds.select(self.selectedObjects, replace = True)
-		self.setupCreatedPoint = True
 	def _ParticleSetupAim(self, *args):
 		self._ParticleSetupInit()
 
@@ -677,13 +678,17 @@ class Overlappy:
 		if (valuesAimOffset[1][1][2]):
 			offsetUp = [0, 0, valueAimUp]
 		
+
+		### Create aim setup
 		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus, parentGroup = OverlappySettings.nameGroup, positionOffset = offsetTarget)
 		particleAimSetup = PhysicsParticle.CreateAimSetup(particleSetup, positionOffset = offsetUp)
+		self.setupCreatedAim = True
 
 		### Cache setup elements names
 		self.particle = particleSetup[4]
+		self.particleUp = particleAimSetup[1][4]
 		self.particleLocator = particleSetup[6]
-		self.particleLocatorAim = particleAimSetup
+		self.particleLocatorAim = particleAimSetup[0]
 
 
 		# TODO Need to define colliderObject before this logic
@@ -698,7 +703,6 @@ class Overlappy:
 
 		self._UpdateSettings()
 		cmds.select(self.selectedObjects, replace = True)
-		self.setupCreatedAim = True
 	# def _ParticleAimOffsetUpdate(self, cacheReset=False, *args): # TODO rework with new aim offset logic
 	# 	if (type(cacheReset) is float):
 	# 		cacheReset = False
@@ -831,12 +835,23 @@ class Overlappy:
 		# self._SetSliderValue(self.slidersParticleOffset[0].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateX")
 
 		cmds.setAttr(self.nucleus + ".timeScale", self.sliderNucleusTimeScale.Get())
+
+		### Particle
 		cmds.setAttr(self.particle + "Shape.radius", self.sliderParticleRadius.Get())
 		cmds.setAttr(self.particle + "Shape.goalSmoothness", self.sliderParticleGoalSmooth.Get())
 		cmds.setAttr(self.particle + "Shape.goalWeight[0]", self.sliderParticleGoalWeight.Get())
 		cmds.setAttr(self.particle + "Shape.conserve", self.sliderParticleConserve.Get())
 		cmds.setAttr(self.particle + "Shape.drag", self.sliderParticleDrag.Get())
 		cmds.setAttr(self.particle + "Shape.damp", self.sliderParticleDamp.Get())
+		
+		### Particle up
+		if (self.setupCreatedAim):
+			cmds.setAttr(self.particleUp + "Shape.radius", self.sliderParticleRadius.Get())
+			cmds.setAttr(self.particleUp + "Shape.goalSmoothness", self.sliderParticleGoalSmooth.Get())
+			cmds.setAttr(self.particleUp + "Shape.goalWeight[0]", self.sliderParticleGoalWeight.Get())
+			cmds.setAttr(self.particleUp + "Shape.conserve", self.sliderParticleConserve.Get())
+			cmds.setAttr(self.particleUp + "Shape.drag", self.sliderParticleDrag.Get())
+			cmds.setAttr(self.particleUp + "Shape.damp", self.sliderParticleDamp.Get())
 	def _ResetSettings(self, *args):
 		### Options
 		self.menuCheckboxHierarchy.Reset()
