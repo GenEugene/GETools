@@ -120,7 +120,7 @@ class OverlappySettings: # TODO simplify
 	nucleusTimeScale = 1
 	particleRadius = 1
 	particleGoalSmooth = 1
-	particleGoalWeight = 0.2
+	particleGoalWeight = 0.3
 	particleConserve = 1
 	particleDrag = 0.01
 	particleDamp = 0
@@ -162,8 +162,8 @@ class Overlappy:
 
 		### PARTICLE MODE
 		self.particle = "" # TODO rename later to "self.particleTarget"
-		self.particleLocGoalTarget = ""
-		self.particleLocAim = ""
+		self.particleLocator = ""
+		self.particleLocatorAim = ""
 		self.particleGoalStartPosition = [None, (0, 0, 0)] # TODO simplify
 		
 		### UI LAYOUTS
@@ -616,19 +616,19 @@ class Overlappy:
 		return (valueAimFloat, (valueAimAxisX, valueAimAxisY, valueAimAxisZ), valueAimCheckbox), (valueAimUpFloat, (valueAimUpAxisX, valueAimUpAxisY, valueAimUpAxisZ), valueAimUpCheckbox) # aimTarget, aimUp
 	
 	def _ParticleSetupInit(self, *args):
+		### Get selected objects
+		self.selectedObjects = Selector.MultipleObjects(minimalCount = 1)
+		if (self.selectedObjects == None):
+			return
+		
+		### Remove previous setup if exists
+		self._ParticleSetupDelete()
+		
 		### Get min/max anim range time and reset time slider
 		self.time.Scan()
 		self.time.SetCurrent(self.time.values[2])
 		
-		### Remove previous setup if exists
-		self._ParticleSetupDelete(deselect = False)
-		
-		### Get selected objects
-		self.selectedObjects = Selector.MultipleObjects(minimalCount = 1)
-		if (self.selectedObjects == None):
-			self.selectedObjects = ""
-			return
-		
+		### Get first selected object
 		self.selectedObjects = self.selectedObjects[0] # HACK is it ok to limit only by first element?
 
 		### Create group
@@ -643,17 +643,13 @@ class Overlappy:
 	def _ParticleSetupPoint(self, *args):
 		self._ParticleSetupInit()
 		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus, parentGroup = OverlappySettings.nameGroup)
-		cmds.select(self.selectedObjects, replace = True)
 
-		self.particleLocGoalTarget = particleSetup[6]
-
-		### Offset
-		# self._ParticleOffsetsUpdate(cacheReset = True) # TODO
-
+		### Cache setup elements names
 		self.particle = particleSetup[4]
+		self.particleLocator = particleSetup[6]
 
 		self._UpdateSettings()
-
+		cmds.select(self.selectedObjects, replace = True)
 		self.setupCreatedPoint = True
 	def _ParticleSetupAim(self, *args):
 		self._ParticleSetupInit()
@@ -684,11 +680,14 @@ class Overlappy:
 		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus, parentGroup = OverlappySettings.nameGroup, positionOffset = offsetTarget)
 		particleAimSetup = PhysicsParticle.CreateAimSetup(particleSetup, positionOffset = offsetUp)
 
-		# self.particleLocGoalTarget = particleSetup[6]
-		# self.particleLocAim
+		### Cache setup elements names
+		self.particle = particleSetup[4]
+		self.particleLocator = particleSetup[6]
+		self.particleLocatorAim = particleAimSetup
 
 
-		### TODO Connect collision nRigid nodes to nucleus # TODO Need to define colliderObject before this logic
+		# TODO Need to define colliderObject before this logic
+		### TODO Connect collision nRigid nodes to nucleus
 		# self.colliderNodes[0] = cmds.createNode("nRigid", name = "myNRigid")
 		# cmds.connectAttr("time1.outTime", self.colliderNodes[0] + ".currentTime")
 		# cmds.connectAttr(self.colliderObjects[0] + ".worldMesh[0]", self.colliderNodes[0] + ".inputMesh")
@@ -697,12 +696,8 @@ class Overlappy:
 		# cmds.connectAttr(self.nucleus + ".startFrame", self.colliderNodes[0] + ".startFrame")
 
 
-		### Offset
-		# self._ParticleOffsetsUpdate(cacheReset = True) # TODO
-		cmds.select(self.selectedObjects, replace = True)
-
 		self._UpdateSettings()
-
+		cmds.select(self.selectedObjects, replace = True)
 		self.setupCreatedAim = True
 	# def _ParticleAimOffsetUpdate(self, cacheReset=False, *args): # TODO rework with new aim offset logic
 	# 	if (type(cacheReset) is float):
@@ -728,8 +723,8 @@ class Overlappy:
 		# self._UpdateSettings()
 
 		# checkSelected = self.selectedObjects == "" or not cmds.objExists(self.selectedObjects)
-		# checkGoal = not cmds.objExists(self.particleLocGoalTarget[0])
-		# checkAim = not cmds.objExists(self.particleLocAim[2])
+		# checkGoal = not cmds.objExists(self.particleLocator[0])
+		# checkAim = not cmds.objExists(self.particleLocatorAim[2])
 		# checkStartPos = self.particleGoalStartPosition[0] == None
 		
 		# if (checkSelected or checkGoal or checkAim or checkStartPos):
@@ -755,16 +750,16 @@ class Overlappy:
 		
 		### TODO Set locGoal constraint offset # simplify
 		# goalAttributes = (
-		# 	self.particleLocGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateX",
-		# 	self.particleLocGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateY",
-		# 	self.particleLocGoalTarget[0] + "_parentConstraint1.target[0].targetOffsetTranslateZ",
+		# 	self.particleLocator[0] + "_parentConstraint1.target[0].targetOffsetTranslateX",
+		# 	self.particleLocator[0] + "_parentConstraint1.target[0].targetOffsetTranslateY",
+		# 	self.particleLocator[0] + "_parentConstraint1.target[0].targetOffsetTranslateZ",
 		# 	)
 		# cmds.setAttr(goalAttributes[0], values[0])
 		# cmds.setAttr(goalAttributes[1], values[1])
 		# cmds.setAttr(goalAttributes[2], values[2])
 		
 		### TODO Get offset
-		# goalPosition = cmds.xform(self.particleLocGoalTarget[0], query = True, translation = True)
+		# goalPosition = cmds.xform(self.particleLocator[0], query = True, translation = True)
 		# goalOffset = (
 		# 	self.particleGoalStartPosition[0][0] - goalPosition[0],
 		# 	self.particleGoalStartPosition[0][1] - goalPosition[1],
@@ -784,60 +779,56 @@ class Overlappy:
 		
 		### Reposition aim up locator and reconstrain aim
 		# selected = cmds.ls(selection = True)
-		# cmds.delete(self.particleLocAim[1] + "_aimConstraint1")
-		# cmds.aimConstraint(self.particleLocGoalTarget[1], self.particleLocAim[1], weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "none")
-		# cmds.delete(self.particleLocAim[1] + "_aimConstraint1")
-		# cmds.parent(self.particleLocAim[3], self.particleLocAim[1])
-		# cmds.setAttr(self.particleLocAim[3] + ".tx", 0)
-		# cmds.setAttr(self.particleLocAim[3] + ".ty", 100)
-		# cmds.setAttr(self.particleLocAim[3] + ".tz", 0)
-		# cmds.parent(self.particleLocAim[3], self.particleLocAim[0])
-		# cmds.aimConstraint(self.particleLocGoalTarget[1], self.particleLocAim[1], weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "object", worldUpObject = self.particleLocAim[3])
+		# cmds.delete(self.particleLocatorAim[1] + "_aimConstraint1")
+		# cmds.aimConstraint(self.particleLocator[1], self.particleLocatorAim[1], weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "none")
+		# cmds.delete(self.particleLocatorAim[1] + "_aimConstraint1")
+		# cmds.parent(self.particleLocatorAim[3], self.particleLocatorAim[1])
+		# cmds.setAttr(self.particleLocatorAim[3] + ".tx", 0)
+		# cmds.setAttr(self.particleLocatorAim[3] + ".ty", 100)
+		# cmds.setAttr(self.particleLocatorAim[3] + ".tz", 0)
+		# cmds.parent(self.particleLocatorAim[3], self.particleLocatorAim[0])
+		# cmds.aimConstraint(self.particleLocator[1], self.particleLocatorAim[1], weight = 1, aimVector = (1, 0, 0), upVector = (0, 1, 0), worldUpType = "object", worldUpObject = self.particleLocatorAim[3])
 		# cmds.select(selected, replace = True)
 		
 		### Reconstrain aim locator to hidden aim
-		# cmds.setAttr(self.particleLocAim[2] + ".rotateX", 0)
-		# cmds.setAttr(self.particleLocAim[2] + ".rotateY", 0)
-		# cmds.setAttr(self.particleLocAim[2] + ".rotateZ", 0)
-		# cmds.orientConstraint(self.particleLocAim[1], self.particleLocAim[2], maintainOffset = True)
-	def _ParticleSetupDelete(self, deselect=True, *args): # TODO simplify redundancy
-		self.selectedObjects = ""
-		self.nucleus = ""
-		self.particle = ""
-		self.particleLocGoalTarget = ""
-		self.particleLocAim = ""
+		# cmds.setAttr(self.particleLocatorAim[2] + ".rotateX", 0)
+		# cmds.setAttr(self.particleLocatorAim[2] + ".rotateY", 0)
+		# cmds.setAttr(self.particleLocatorAim[2] + ".rotateZ", 0)
+		# cmds.orientConstraint(self.particleLocatorAim[1], self.particleLocatorAim[2], maintainOffset = True)
+	def _ParticleSetupDelete(self, deselect=False, *args):
+		### Deselect objects
+		if (deselect):
+			cmds.select(clear = True)
 		
 		### Delete group
 		if (cmds.objExists(OverlappySettings.nameGroup)):
 			cmds.delete(OverlappySettings.nameGroup)
 		
-		if (deselect):
-			cmds.select(clear = True)
-		
+		### Reset flags
 		self.setupCreatedPoint = False
 		self.setupCreatedAim = False
 
 
 	### SELECT
-	def _Select(self, name="", *args):
-		if (name != ""):
-			if (cmds.objExists(name)):
-				cmds.select(name, replace = True)
-			else:
-				cmds.warning("\"{0}\" object doesn't exists".format(name))
-		else:
-			cmds.warning("Object name is not specified")
-	def _SelectSelectedObjects(self, *args): self._Select(self.selectedObjects)
-	def _SelectNucleus(self, *args): self._Select(self.nucleus)
+	# def _Select(self, name="", *args):
+		# if (name != ""):
+		# 	if (cmds.objExists(name)):
+		# 		cmds.select(name, replace = True)
+		# 	else:
+		# 		cmds.warning("\"{0}\" object doesn't exists".format(name))
+		# else:
+		# 	cmds.warning("Object name is not specified")
+	# def _SelectSelectedObjects(self, *args): self._Select(self.selectedObjects)
+	# def _SelectNucleus(self, *args): self._Select(self.nucleus)
 	
 
 	### SETTINGS
-	def _UpdateSettings(self, *args): # TODO
+	def _UpdateSettings(self, *args): # TODO adapt for new features
 		if (not self.setupCreatedPoint and not self.setupCreatedAim):
 			return
 
+		### TODO Set aim offset values
 		# self._SetSliderValue(self.slidersParticleOffset[0].Get(), OverlappySettings.nameLocGoalTarget[0], "_parentConstraint1.target[0].targetOffsetTranslateX")
-		cmds.warning("TODO: _SetParticleOffsetValues")
 
 		cmds.setAttr(self.nucleus + ".timeScale", self.sliderNucleusTimeScale.Get())
 		cmds.setAttr(self.particle + "Shape.radius", self.sliderParticleRadius.Get())
@@ -846,16 +837,31 @@ class Overlappy:
 		cmds.setAttr(self.particle + "Shape.conserve", self.sliderParticleConserve.Get())
 		cmds.setAttr(self.particle + "Shape.drag", self.sliderParticleDrag.Get())
 		cmds.setAttr(self.particle + "Shape.damp", self.sliderParticleDamp.Get())
-	def _ResetSettings(self, *args): # TODO
+	def _ResetSettings(self, *args):
+		### Options
 		self.menuCheckboxHierarchy.Reset()
 		self.menuCheckboxLayer.Reset()
 		self.menuCheckboxLoop.Reset()
 		self.menuCheckboxClean.Reset()
 		self.menuCheckboxCollisions.Reset()
-		
-		cmds.warning("TODO: _ResetParticleOffsets") # TODO
-		
+
+		### Loop cycles # TODO move values to settings
+		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = True)
+
+		### Aim offset target # TODO move values to settings
+		cmds.floatField(self.aimOffsetFloatGroup[1], edit = True, value = 10)
+		self.aimOffsetCheckbox.Reset()
+		cmds.radioCollection(self.aimOffsetRadioCollection[0], edit = True, select = self.aimOffsetRadioCollection[1][0])
+
+		### Aim offset up # TODO move values to settings
+		cmds.floatField(self.aimOffsetUpFloatGroup[1], edit = True, value = 10)
+		self.aimOffsetUpCheckbox.Reset()
+		cmds.radioCollection(self.aimOffsetUpRadioCollection[0], edit = True, select = self.aimOffsetUpRadioCollection[1][1])
+
+		### Nucleus
 		self.sliderNucleusTimeScale.Reset()
+
+		### Particle dynamic properties
 		self.sliderParticleRadius.Reset()
 		self.sliderParticleGoalSmooth.Reset()
 		self.sliderParticleGoalWeight.Reset()
@@ -890,6 +896,7 @@ class Overlappy:
 			attrs[i] = "{0}.{1}".format(selected, attributesType[i])
 		attributesFiltered = []
 
+
 		# TODO replace filtering by new attributes filtering method
 		for i in range(len(attrs)):
 			keyed = cmds.keyframe(attrs[i], query = True)
@@ -918,6 +925,7 @@ class Overlappy:
 			self._ParticleSetupDelete()
 			return
 		
+
 		### Set time range
 		self.time.Scan()
 		startTime = self.time.values[2]
@@ -986,7 +994,7 @@ class Overlappy:
 		# 	self.slidersParticleOffset[1].Set(value2)
 		# 	self.slidersParticleOffset[2].Set(value3)
 		# 	self._ParticleOffsetsUpdate(True)
-	def _BakeParticleVariants(self, variant, *args): # TODO
+	def _BakeParticleVariants(self, variant, *args): # TODO simplify
 		# selected = Selector.MultipleObjects()
 		# if (selected == None):
 		# 	return
@@ -1016,14 +1024,13 @@ class Overlappy:
 
 		# if (self.menuCheckboxHierarchy.Get()):
 		# 	selected = Selector.SelectHierarchyTransforms()
+
+		### Run baking process
+		if (variant == 1):
+			self._BakeParticleLogic(self.particleLocator, translation = True, rotation = False)
+		elif (variant == 2):
+			self._BakeParticleLogic(self.particleLocatorAim, translation = False, rotation = True)
 		
-		def RunBakeLogicVariant():
-			if (variant == 1):
-				self._BakeParticleLogic(self.particleLocGoalTarget, translation = True, rotation = False)
-			elif (variant == 2):
-				self._BakeParticleLogic(self.particleLocAim, translation = False, rotation = True)
-		
-		RunBakeLogicVariant()
 		# for i in range(len(selected)):
 		# 	cmds.select(selected[i], replace = True)
 			# self._ParticleSetupPoint()

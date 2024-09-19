@@ -51,7 +51,7 @@ _valueParticleConserve = 1
 _valueParticleDrag = 0.01
 _valueParticleDamp = 0
 _valueGoalSmooth = 1
-_valueGoalWeight = 0.2
+_valueGoalWeight = 0.3
 
 # _nucleusTimeScale = 0.5
 _scaleLocatorsOne = 0.1
