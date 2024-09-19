@@ -238,10 +238,10 @@ class Overlappy:
 		
 		# TODO connect loop settings
 		cmds.radioCollection()
-		self.menuRadioButtonsLoop[0] = cmds.menuItem(label = "0", radioButton = True, command = lambda *args: print("Option 0 selected"))
-		self.menuRadioButtonsLoop[1] = cmds.menuItem(label = "1", radioButton = True, command = lambda *args: print("Option 1 selected"))
-		self.menuRadioButtonsLoop[2] = cmds.menuItem(label = "2", radioButton = True, command = lambda *args: print("Option 2 selected"))
-		self.menuRadioButtonsLoop[3] = cmds.menuItem(label = "3", radioButton = True, command = lambda *args: print("Option 3 selected"))
+		self.menuRadioButtonsLoop[0] = cmds.menuItem(label = "0", radioButton = True) # , command = lambda *args: print("Option 0 selected")
+		self.menuRadioButtonsLoop[1] = cmds.menuItem(label = "1", radioButton = True)
+		self.menuRadioButtonsLoop[2] = cmds.menuItem(label = "2", radioButton = True)
+		self.menuRadioButtonsLoop[3] = cmds.menuItem(label = "3", radioButton = True)
 		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = True)
 	def UILayoutBake(self, layoutMain):
 		### SETUP
