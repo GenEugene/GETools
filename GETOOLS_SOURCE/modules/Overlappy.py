@@ -117,25 +117,22 @@ class OverlappySettings: # TODO simplify
 	loopBakeOffset = 2 # TODO set count of pre cycles via ui
 
 	# SETTINGS DYNAMIC PROPERTIES # TODO: move to preset
+	nucleusTimeScale = 1
 	particleRadius = 1
+	particleGoalSmooth = 1
+	particleGoalWeight = 0.2
 	particleConserve = 1
 	particleDrag = 0.01
 	particleDamp = 0
-	particleGoalSmooth = 1
-	particleGoalWeight = 0.2
-	nucleusTimeScale = 1
-	
+		
 	# SLIDERS (field min/max, slider min/max)
+	rangeNucleusTimeScale = (0.001, float("inf"), 0.001, 1)
 	rangePRadius = (0, float("inf"), 0, 10)
-	rangePConserve = (0, 1, 0, 1)
-	rangePDrag = (0, 10, 0, 1)
-	rangePDamp = (0, 10, 0, 1)
-	rangeGSmooth = (0, 100, 0, 10)
+	rangeGSmooth = (0, float("inf"), 0, 10)
 	rangeGWeight = (0, 1, 0, 1)
-	rangeNucleusTimeScale = (0.001, 100, 0.001, 4)
-	# rangeOffsetX = (float("-inf"), float("inf"), 0, 100) # XXX
-	# rangeOffsetY = (float("-inf"), float("inf"), 0, 100) # XXX
-	# rangeOffsetZ = (float("-inf"), float("inf"), 0, 100) # XXX
+	rangePConserve = (0, 1, 0, 1)
+	rangePDrag = (0, float("inf"), 0, 1)
+	rangePDamp = (0, float("inf"), 0, 1)
 
 class Overlappy:
 	_version = "v3.0"
