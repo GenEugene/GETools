@@ -56,8 +56,7 @@ class OverlappyAnnotations: # TODO simplify
 	translation = "Bake simulation for translation attributes"
 	translationWithOffset = "Bake simulation for translation attributes with offset"
 	rotation = "Bake simulation for rotation attributes"
-	comboTranslateRotate = "Bake translation and rotation in order"
-	comboRotateTranslate = "Bake rotation and translation in order"
+	comboTranslateRotate = "Bake simulation translation and rotation"
 	scale = "Bake simulation for scale attributes"
 
 	### Layers
@@ -168,7 +167,7 @@ class Overlappy:
 		# self.particleGoalStartPosition = [None, (0, 0, 0)] # TODO simplify
 		
 		### UI LAYOUTS
-		self.layoutBake = None
+		# self.layoutBake = None
 		self.layoutLayers = None
 		self.layoutCollisions = None # TODO
 		# self.layoutChainMode = None # TODO
@@ -212,10 +211,11 @@ class Overlappy:
 		self.scrollListColliders = None
 	def UICreate(self, layoutMain):
 		self.UILayoutMenuBar(layoutMain)
-		self.UILayoutBake(layoutMain)
+		# self.UILayoutBake(layoutMain)
 		self.UILayoutLayers(layoutMain)
 		## self.UILayoutCollisions(layoutMain) # TODO
 		## self.UILayoutChainMode(layoutMain) # TODO
+		self.UILayoutNucleusProperties(layoutMain)
 		self.UILayoutParticleMode(layoutMain)
 
 
@@ -243,22 +243,22 @@ class Overlappy:
 		self.menuRadioButtonsLoop[2] = cmds.menuItem(label = "2", radioButton = True)
 		self.menuRadioButtonsLoop[3] = cmds.menuItem(label = "3", radioButton = True)
 		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = True)
-	def UILayoutBake(self, layoutMain):
-		### SETUP
-		self.layoutBake = cmds.frameLayout("layoutBake", label = Settings.frames2Prefix + "BAKE ANIMATION", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		layoutColumn = cmds.columnLayout(parent = self.layoutBake, adjustableColumn = True)
+	# def UILayoutBake(self, layoutMain):
+	# 	### SETUP
+	# 	self.layoutBake = cmds.frameLayout("layoutBake", label = Settings.frames2Prefix + "BAKE ANIMATION", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+	# 	layoutColumn = cmds.columnLayout(parent = self.layoutBake, adjustableColumn = True)
 
-		count = 2
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Translation", command = partial(self._BakeParticleVariants, 1), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.translation)
-		cmds.button(label = "Rotation", command = partial(self._BakeParticleVariants, 2), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.rotation)
+	# 	count = 2
+	# 	cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+	# 	cmds.button(label = "Translation", command = partial(self._BakeParticleVariants, 1), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.translation)
+	# 	cmds.button(label = "Rotation", command = partial(self._BakeParticleVariants, 2), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.rotation)
 	def UILayoutLayers(self, layoutMain):
 		self.layoutLayers = cmds.frameLayout("layoutLayers", label = Settings.frames2Prefix + "LAYERS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutLayers, adjustableColumn = True)
 		
 		count = 1
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Delete BaseAnimation layer", command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteBase)
+		cmds.button(label = "Delete All Layers", command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteBase)
 
 		count = 2
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
@@ -292,7 +292,38 @@ class Overlappy:
 		## deselectAll
 		## removeAll
 		## doubleClickCommand
-	
+	def UILayoutNucleusProperties(self, layoutMain):
+		self.layoutNucleusProperties = cmds.frameLayout("layoutNucleusProperties", label = Settings.frames2Prefix + "NUCLEUS PROPERTIES", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		layoutColumn = cmds.columnLayout(parent = self.layoutNucleusProperties, adjustableColumn = True)
+
+		commandDefault = self._UpdateSettings
+
+		self.sliderNucleusTimeScale = UI.Slider(
+			parent = layoutColumn,
+			widthWindow = Settings.windowWidthMargin,
+			widthMarker = Settings.sliderWidthMarker,
+			columnWidth3 = Settings.sliderWidth,
+			command = commandDefault,
+			label = "Time Scale",
+			annotation = OverlappyAnnotations.particleTimeScale,
+			value = OverlappySettings.nucleusTimeScale,
+			minMax = OverlappySettings.rangeNucleusTimeScale,
+			menuReset = True,
+		)
+
+		# self.sliderNucleusTimeScale = UI.Slider( # TODO
+		# 	parent = layoutColumn,
+		# 	widthWindow = Settings.windowWidthMargin,
+		# 	widthMarker = Settings.sliderWidthMarker,
+		# 	columnWidth3 = Settings.sliderWidth,
+		# 	command = commandDefault,
+		# 	label = "**Gravity",
+		# 	annotation = OverlappyAnnotations.particleTimeScale,
+		# 	value = OverlappySettings.nucleusTimeScale,
+		# 	minMax = OverlappySettings.rangeNucleusTimeScale,
+		# 	menuReset = True,
+		# )
+
 	
 	### CHAIN UI
 	def UILayoutChainMode(self, layoutMain): # TODO
@@ -437,24 +468,27 @@ class Overlappy:
 		# cmds.menuItem(label = "Target locator", command = self._SelectParticleTarget, image = Icons.locator)
 		# cmds.menuItem(label = "Aim locator", command = self._SelectParticleAim, image = Icons.locator)
 		
-		self.UILayoutParticleButtons(self.layoutParticleMode)
-		self.UILayoutParticleOffset(self.layoutParticleMode)
-		self.UILayoutNucleusProperties(self.layoutParticleMode)
+		self.UILayoutParticleSetup(self.layoutParticleMode)
+		self.UILayoutParticleAimOffset(self.layoutParticleMode)
 		self.UILayoutParticleDynamicProperties(self.layoutParticleMode)
-	def UILayoutParticleButtons(self, layoutMain):
-		### SETUP
-		self.layoutParticleButtons = cmds.frameLayout("layoutParticleButtons", label = "Create Particle Rig", labelIndent = 70, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+	def UILayoutParticleSetup(self, layoutMain):
+		self.layoutParticleButtons = cmds.frameLayout("layoutParticleButtons", label = "Setup", labelIndent = 105, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleButtons, adjustableColumn = True)
-
+		
 		count = 4
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		##
 		cmds.button(label = "Point", command = self._ParticleSetupPoint, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
 		cmds.button(label = "Aim", command = self._ParticleSetupAim, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
 		cmds.button(label = "Combo", command = self._ParticleSetupCombo, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
 		cmds.button(label = "Remove", command = self._ParticleSetupDelete, backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
-	def UILayoutParticleOffset(self, layoutMain): # TODO
-		self.layoutParticleOffset = cmds.frameLayout("layoutParticleOffset", label = "Aim Offset", labelIndent = 85, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+
+		count = 3
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+		cmds.button(label = "Bake Point", command = partial(self._BakeParticleVariants, 1), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.translation)
+		cmds.button(label = "Bake Aim", command = partial(self._BakeParticleVariants, 2), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.rotation)
+		cmds.button(label = "Bake Combo", command = partial(self._BakeParticleVariants, 3), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.comboTranslateRotate)
+	def UILayoutParticleAimOffset(self, layoutMain): # TODO
+		self.layoutParticleOffset = cmds.frameLayout("layoutParticleOffset", label = "Aim Offset", labelIndent = 88, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleOffset, adjustableColumn = True)
 		# self.checkboxAutoOffset = UI.Checkbox(label = "Auto") # TODO
 
@@ -478,39 +512,8 @@ class Overlappy:
 		self.aimOffsetUpRadioCollection[1][2] = cmds.radioButton(label = "Z")
 		self.aimOffsetUpCheckbox = UI.Checkbox(label = "-", annotation = "Reverse Axis")
 		cmds.radioCollection(self.aimOffsetUpRadioCollection[0], edit = True, select = self.aimOffsetUpRadioCollection[1][1])
-	def UILayoutNucleusProperties(self, layoutMain):
-		self.layoutNucleusProperties = cmds.frameLayout("layoutNucleusProperties", label = "Nucleus Properties", labelIndent = 70, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		layoutColumn = cmds.columnLayout(parent = self.layoutNucleusProperties, adjustableColumn = True)
-
-		commandDefault = self._UpdateSettings
-
-		self.sliderNucleusTimeScale = UI.Slider(
-			parent = layoutColumn,
-			widthWindow = Settings.windowWidthMargin,
-			widthMarker = Settings.sliderWidthMarker,
-			columnWidth3 = Settings.sliderWidth,
-			command = commandDefault,
-			label = "Time Scale",
-			annotation = OverlappyAnnotations.particleTimeScale,
-			value = OverlappySettings.nucleusTimeScale,
-			minMax = OverlappySettings.rangeNucleusTimeScale,
-			menuReset = True,
-		)
-
-		# self.sliderNucleusTimeScale = UI.Slider( # TODO
-		# 	parent = layoutColumn,
-		# 	widthWindow = Settings.windowWidthMargin,
-		# 	widthMarker = Settings.sliderWidthMarker,
-		# 	columnWidth3 = Settings.sliderWidth,
-		# 	command = commandDefault,
-		# 	label = "**Gravity",
-		# 	annotation = OverlappyAnnotations.particleTimeScale,
-		# 	value = OverlappySettings.nucleusTimeScale,
-		# 	minMax = OverlappySettings.rangeNucleusTimeScale,
-		# 	menuReset = True,
-		# )
 	def UILayoutParticleDynamicProperties(self, layoutMain):
-		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Particle Dynamic Properties", labelIndent = 50, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 72, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
 		## cmds.popupMenu()
 		## cmds.menuItem(label = "Right-Click") # TODO add reset all function
@@ -952,7 +955,6 @@ class Overlappy:
 		for i in range(len(attrs)):
 			attrs[i] = "{0}.{1}".format(self.selectedObjects, attributesType[i])
 		
-
 		### Filter attributes
 		attributesFiltered = Attributes.FilterAttributesAnimatable(attributes = attrs, skipMutedKeys = True)
 		if (attributesFiltered == None):
@@ -979,16 +981,14 @@ class Overlappy:
 		### Start logic
 		name = "_rebake_" + Text.ConvertSymbols(self.selectedObjects)
 		clone = cmds.duplicate(self.selectedObjects, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)
-		
 		for attribute in Enums.Attributes.translateLong:
 			cmds.setAttr(clone[0] + "." + attribute, lock = False)
 		for attribute in Enums.Attributes.rotateLong:
 			cmds.setAttr(clone[0] + "." + attribute, lock = False)
-		
 		cmds.parentConstraint(parent, clone, maintainOffset = True) # skipTranslate
 		cmds.select(clone, replace = True)
 		
-		### Bake
+		### Bake animation
 		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		Constraints.DeleteConstraints(clone)
 		
@@ -1024,14 +1024,7 @@ class Overlappy:
 		### Delete setup
 		if (self.menuCheckboxClean.Get()):
 			self._ParticleSetupDelete()
-		
-		### TODO Restore offsets sliders
-		# if (zeroOffsets):
-		# 	self.slidersParticleOffset[0].Set(value1)
-		# 	self.slidersParticleOffset[1].Set(value2)
-		# 	self.slidersParticleOffset[2].Set(value3)
-		# 	self._ParticleOffsetsUpdate(True)
-	def _BakeParticleVariants(self, variant, *args): # TODO simplify
+	def _BakeParticleVariants(self, variant, *args): # TODO rework
 		# selected = Selector.MultipleObjects()
 		# if (selected == None):
 		# 	return
@@ -1059,6 +1052,7 @@ class Overlappy:
 
 		MayaSettings.CachedPlaybackDeactivate()
 
+		### TODO Check hierarchy and get objects
 		# if (self.menuCheckboxHierarchy.Get()):
 		# 	selected = Selector.SelectHierarchyTransforms()
 
@@ -1070,11 +1064,13 @@ class Overlappy:
 		elif (variant == 3): # Translation + Rotation
 			self._BakeParticleLogic(self.particleLocatorAim, translation = True, rotation = True)
 		
+		### TODO
 		# for i in range(len(selected)):
 		# 	cmds.select(selected[i], replace = True)
 			# self._ParticleSetupPoint()
 			# RunBakeLogicVariant()
 		
+		### TODO Select original objects
 		# cmds.select(selected, replace = True)
 
 
