@@ -47,6 +47,7 @@ class Experimental:
 		# cmds.button(label = "**Nucleus", command = partial(Physics.CreateNucleus, "testNucleus", None))
 		cmds.button(label = "Particle", command = PhysicsParticle.CreateOnSelected)
 		cmds.button(label = "P Aim", command = PhysicsParticle.CreateAimOnSelected)
+		cmds.button(label = "P Combo", command = PhysicsParticle.CreateComboOnSelected)
 		# cmds.button(label = "**P Chain", command = PhysicsParticle.CreateAimChainOnSelected)
 		# cmds.button(label = "Hair", command = partial(PhysicsHair.CreateNHairOnSelected, None))
 

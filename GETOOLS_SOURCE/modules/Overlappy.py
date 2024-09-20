@@ -45,10 +45,11 @@ from ..experimental import PhysicsParticle
 
 
 # TODO make cycle infinity before loop bake
+# TODO fix nucleus double nodes
 
 
 class OverlappyAnnotations: # TODO simplify
-	### Setup
+	### TODO Setup
 	setup = "Create particle rig for first selected object. Use this step for setup settings. \nSetup runs every time for each selected object."
 	setupDelete = "Delete particle rig if exists"
 
@@ -60,7 +61,7 @@ class OverlappyAnnotations: # TODO simplify
 	scale = "Bake simulation for scale attributes"
 
 	### Layers
-	layerDeleteBase = "All animation layers will be deleted"
+	layerDeleteAll = "All animation layers will be deleted"
 	layerDeleteTemp = "Only Temp layer and child layers will be deleted"
 	layerDeleteSafe = "Only Safe layer and child layers will be deleted"
 	layerMoveTemp = "Move Temp layer sublayers to Safe layer"
@@ -86,19 +87,19 @@ class OverlappyAnnotations: # TODO simplify
 	particleDrag = "Specifies the amount of drag applied to the current nParticle object.\nDrag is the component of aerodynamic force parallel to the relative wind which causes resistance.\nDrag is 0.05 by default."
 	particleDamp = "Specifies the amount the motion of the current nParticles are damped.\nDamping progressively diminishes the movement and oscillation of nParticles by dissipating energy."
 
-	### Offset
-	offsetMirrorX = "Mirror particle offset value to opposite"
-	offsetMirrorY = offsetMirrorX
-	offsetMirrorZ = offsetMirrorX
-	offsetX = "Move particle from original object. Important to use offset for Rotation baking"
-	offsetY = offsetX
-	offsetZ = offsetX
+	### Aim Offset
+	# offsetMirrorX = "Mirror particle offset value to opposite" # XXX
+	# offsetMirrorY = offsetMirrorX # XXX
+	# offsetMirrorZ = offsetMirrorX # XXX
+	# offsetX = "Move particle from original object. Important to use offset for Rotation baking" # XXX
+	# offsetY = offsetX # XXX
+	# offsetZ = offsetX # XXX
 
 class OverlappySettings: # TODO simplify
 	# NAMING
 	prefix = "ovlp"
 	prefixLayer = "_" + prefix
-	nameLayers = (prefixLayer + "TEMP_", prefixLayer + "SAFE_", "pos_", "rot_")
+	nameLayers = (prefixLayer + "TEMP_", prefixLayer + "SAFE_", "pos_", "rot_", "combo_")
 	nameGroup = prefix + "Group"
 
 	# XXX remove later
@@ -231,7 +232,7 @@ class Overlappy:
 		self.menuCheckboxHierarchy = UI.MenuCheckbox(label = "Use Hierarchy", value = OverlappySettings.optionCheckboxHierarchy, valueDefault = OverlappySettings.optionCheckboxHierarchy)
 		self.menuCheckboxLayer = UI.MenuCheckbox(label = "Bake To Layer", value = OverlappySettings.optionCheckboxLayer, valueDefault = OverlappySettings.optionCheckboxLayer)
 		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop Mode", value = OverlappySettings.optionCheckboxLoop, valueDefault = OverlappySettings.optionCheckboxLoop)
-		self.menuCheckboxClean = UI.MenuCheckbox(label = "Clean After Bake", value = OverlappySettings.optionCheckboxClean, valueDefault = OverlappySettings.optionCheckboxClean)
+		self.menuCheckboxClean = UI.MenuCheckbox(label = "Delete Setup After Bake", value = OverlappySettings.optionCheckboxClean, valueDefault = OverlappySettings.optionCheckboxClean)
 		self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions", value = OverlappySettings.optionCheckboxCollisions, valueDefault = OverlappySettings.optionCheckboxCollisions)
 
 		cmds.menuItem(dividerLabel = "Pre Loop Cycles", divider = True)
@@ -258,7 +259,7 @@ class Overlappy:
 		
 		count = 1
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Delete All Layers", command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteBase)
+		cmds.button(label = "Delete All Layers", command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteAll)
 
 		count = 2
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
@@ -472,7 +473,7 @@ class Overlappy:
 		self.UILayoutParticleAimOffset(self.layoutParticleMode)
 		self.UILayoutParticleDynamicProperties(self.layoutParticleMode)
 	def UILayoutParticleSetup(self, layoutMain):
-		self.layoutParticleButtons = cmds.frameLayout("layoutParticleButtons", label = "Setup", labelIndent = 105, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleButtons = cmds.frameLayout("layoutParticleButtons", label = "Setup and Bake", labelIndent = 77, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleButtons, adjustableColumn = True)
 		
 		count = 4
@@ -704,7 +705,7 @@ class Overlappy:
 		### End
 		self._UpdateSettings()
 		cmds.select(self.selectedObjects, replace = True)
-	def _ParticleSetupCombo(self, *args): # TODO particle hierarchy
+	def _ParticleSetupCombo(self, *args): # FIXME solve nucleus parallel update issue
 		self._ParticleSetupInit()
 
 		### Get aim offset values from UI and put to aim target offset and aim up offset
@@ -729,14 +730,11 @@ class Overlappy:
 			offsetUp = [0, valueAimUp, 0]
 		if (valuesAimOffset[1][1][2]):
 			offsetUp = [0, 0, valueAimUp]
-		
-		### Create aim setup
-		particleSetupBase = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus, parentGroup = OverlappySettings.nameGroup)
 
-		particleSetupOffset = PhysicsParticle.CreateParticleSetup(targetObject = particleSetupBase[6], nucleusNode = self.nucleus, parentGroup = particleSetupBase[6], positionOffset = offsetTarget)
-		
+		### Create particle setup
+		particleSetupBase = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus, parentGroup = OverlappySettings.nameGroup)
+		particleSetupOffset = PhysicsParticle.CreateParticleSetup(targetObject = particleSetupBase[6], nucleusNode = self.nucleus, parentGroup = OverlappySettings.nameGroup, positionOffset = offsetTarget)
 		particleAimSetup = PhysicsParticle.CreateAimSetup(particleSetupOffset, positionOffset = offsetUp)
-		
 		self.setupCreatedCombo = True
 
 		### Cache setup elements names
@@ -931,24 +929,28 @@ class Overlappy:
 
 
 	### BAKE ANIMATION
-	def _BakeParticleLogic(self, parent, translation=True, rotation=False, *args):
+	def _BakeParticleLogic(self, parent, translation=False, rotation=False, combo=False, *args):
 		### Check created setups
-		if (translation and not self.setupCreatedPoint):
-			cmds.warning("Point setup is not created")
-			return
-		if (rotation and not self.setupCreatedAim):
-			cmds.warning("Aim setup is not created")
-			return
+		if (not combo):
+			if (translation and not self.setupCreatedPoint):
+				cmds.warning("Point setup is not created")
+				return
+			if (rotation and not self.setupCreatedAim):
+				cmds.warning("Aim setup is not created")
+				return
 
 		### Get raw attributes
 		attributesType = ()
-		if (translation):
-			attributesType = Enums.Attributes.translateLong
-		if (rotation):
-			attributesType = attributesType + Enums.Attributes.rotateLong
-		if (len(attributesType) == 0):
-			cmds.warning("No baking attributes specified")
-			return
+		if (combo):
+			attributesType = Enums.Attributes.translateLong + Enums.Attributes.rotateLong
+		else:
+			if (translation):
+				attributesType = Enums.Attributes.translateLong
+			if (rotation):
+				attributesType = attributesType + Enums.Attributes.rotateLong
+			if (len(attributesType) == 0):
+				cmds.warning("No baking attributes specified")
+				return
 		
 		### Construct attributes with object name
 		attrs = ["", "", ""]
@@ -996,10 +998,13 @@ class Overlappy:
 		cmds.copyKey(clone, time = (self.time.values[2], self.time.values[3]), attribute = attributesFiltered)
 		
 		if (self.menuCheckboxLayer.Get()):
-			if (translation):
-				name = OverlappySettings.nameLayers[2] + self.selectedObjects
+			if (combo):
+				name = OverlappySettings.nameLayers[4] + self.selectedObjects
 			else:
-				name = OverlappySettings.nameLayers[3] + self.selectedObjects
+				if (translation):
+					name = OverlappySettings.nameLayers[2] + self.selectedObjects
+				elif (rotation):
+					name = OverlappySettings.nameLayers[3] + self.selectedObjects
 			animLayer = self._LayerCreate(name)
 			
 			attrsLayer = []
@@ -1058,11 +1063,11 @@ class Overlappy:
 
 		### Run baking process
 		if (variant == 1): # Translation
-			self._BakeParticleLogic(self.particleLocator, translation = True, rotation = False)
+			self._BakeParticleLogic(self.particleLocator, translation = True)
 		elif (variant == 2): # Rotation
-			self._BakeParticleLogic(self.particleLocatorAim, translation = False, rotation = True)
+			self._BakeParticleLogic(self.particleLocatorAim, rotation = True)
 		elif (variant == 3): # Translation + Rotation
-			self._BakeParticleLogic(self.particleLocatorAim, translation = True, rotation = True)
+			self._BakeParticleLogic(self.particleLocatorAim, combo = True)
 		
 		### TODO
 		# for i in range(len(selected)):

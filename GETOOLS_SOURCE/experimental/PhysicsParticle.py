@@ -58,7 +58,7 @@ _scaleLocatorsOne = 0.1
 
 
 def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, customParentObject=None, positionOffset=(0,0,0)): # TODO
-	### Names
+	### Generate names
 	nameTargetObjectConverted = "_" + Text.ConvertSymbols(targetObject)
 	nameGroup = _defaultNameGroup + nameTargetObjectConverted
 	nameNucleus = _defaultNameNucleus + nameTargetObjectConverted
@@ -77,7 +77,7 @@ def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, custom
 	else:
 		group = parentGroup
 
-	### Nucleus node
+	### TODO Nucleus node
 	if (nucleusNode == None):
 		nucleusNodesBefore = cmds.ls(type = "nucleus")
 		nucleus = Physics.CreateNucleus(name = nameNucleus, parent = group)
@@ -109,7 +109,7 @@ def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, custom
 	cmds.setAttr(locatorGoal + "Shape.localScaleX", _scaleLocatorsOne)
 	cmds.setAttr(locatorGoal + "Shape.localScaleY", _scaleLocatorsOne)
 	cmds.setAttr(locatorGoal + "Shape.localScaleZ", _scaleLocatorsOne)
-	## cmds.setAttr(locatorGoal + ".visibility", 0) # use when hidden
+	# cmds.setAttr(locatorGoal + ".visibility", 0) # use when hidden
 
 	### Constrain locator goal to specific parent object
 	targetObjectForConstraint = targetObject
@@ -174,7 +174,10 @@ def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, custom
 	cmds.select(clear = True)
 	cmds.matchTransform(locatorParticle, targetObject, position = True, rotation = True)
 	cmds.connectAttr(particle + ".center", locatorParticle + ".translate", force = True)
-	## cmds.setAttr(locatorParticle + ".visibility", 0) # use when hidden
+	# cmds.setAttr(locatorParticle + ".visibility", 0) # use when hidden
+
+	### Orient constrain for particle locator
+	cmds.orientConstraint(targetObject, locatorParticle, maintainOffset = True)
 
 	return targetObject, nameTargetObjectConverted, group, nucleusNode, particle, locatorGoal, locatorParticle
 def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
@@ -215,10 +218,10 @@ def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	cmds.setAttr(locatorAimBase + "Shape.localScaleX", _scaleLocatorsOne)
 	cmds.setAttr(locatorAimBase + "Shape.localScaleY", _scaleLocatorsOne)
 	cmds.setAttr(locatorAimBase + "Shape.localScaleZ", _scaleLocatorsOne)
+	# cmds.setAttr(locatorAimBase + ".visibility", 0) # use when hidden
 
 	### Constrain locator aim base to locator goal
 	cmds.parentConstraint(locatorGoal, locatorAimBase, maintainOffset = True)
-	## cmds.setAttr(locatorAimBase + ".visibility", 0) # use when hidden
 
 	### Create locator aim
 	locatorAim = cmds.spaceLocator(name = nameLocAim)[0]
@@ -260,15 +263,15 @@ def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 
 def CreateOnSelected(*args):
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(1)
+	selectedList = Selector.MultipleObjects(minimalCount = 1)
 	if (selectedList == None):
 		return
 	
 	for item in selectedList:
 		CreateParticleSetup(targetObject = item)
-def CreateAimOnSelected(*args): # TODO
+def CreateAimOnSelected(*args):
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(1)
+	selectedList = Selector.MultipleObjects(minimalCount = 1)
 	if (selectedList == None):
 		return
 	
@@ -276,10 +279,23 @@ def CreateAimOnSelected(*args): # TODO
 	
 	for item in selectedList:
 		particleSetup = CreateParticleSetup(targetObject = item, positionOffset = (0, 0, offsetDistance)) # HACK for testing
-		CreateAimSetup(particleSetup, positionOffset = (offsetDistance, 0, 0))
+		CreateAimSetup(particleSetup = particleSetup, positionOffset = (0, offsetDistance, 0))
+def CreateComboOnSelected(*args): # TODO
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(minimalCount = 1)
+	if (selectedList == None):
+		return
+	
+	offsetDistance = 5 # HACK for testing
+	
+	for item in selectedList:
+		particleSetupBase = CreateParticleSetup(targetObject = item)
+		particleSetup = CreateParticleSetup(targetObject = particleSetupBase[6], parentGroup = particleSetupBase[2], positionOffset = (0, 0, offsetDistance)) # HACK for testing
+		aimSetup = CreateAimSetup(particleSetup, positionOffset = (0, offsetDistance, 0))
+
 def CreateAimChainOnSelected(*args): # TODO
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(1)
+	selectedList = Selector.MultipleObjects(minimalCount = 1)
 	if (selectedList == None):
 		return
 	
