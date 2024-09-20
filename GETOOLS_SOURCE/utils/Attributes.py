@@ -27,7 +27,7 @@ from ..utils import Selector
 from ..values import Enums
 
 
-def FilterAttributesAnimatable(attributes, skipMutedKeys=False):
+def FilterAttributesAnimatable(attributes, skipLockedKeys=True, skipNonKeyableKeys=True, skipHiddenKeys=True, skipMutedKeys=False):
 	if (attributes == None):
 		cmds.warning("No attributes provided")
 		return None
@@ -58,9 +58,13 @@ def FilterAttributesAnimatable(attributes, skipMutedKeys=False):
 					constrained = True
 		
 		# General check and filling final list
-		if (not locked and keyable and settable and not constrained):
-			attributesFiltered.append(attribute)
-	
+		if (skipLockedKeys and locked or
+	  		skipNonKeyableKeys and not keyable or
+			skipHiddenKeys and not settable or
+			constrained):
+			continue
+		attributesFiltered.append(attribute)
+
 	if (len(attributesFiltered) == 0):
 		cmds.warning("No attributes left after filtering")
 		return None
@@ -69,7 +73,7 @@ def FilterAttributesAnimatable(attributes, skipMutedKeys=False):
 
 def GetAttributesAnimatableOnSelected(useShapes=False):
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(1, transformsOnly = False)
+	selectedList = Selector.MultipleObjects(minimalCount = 1, transformsOnly = False)
 	if (selectedList == None):
 		return None
 	
@@ -97,7 +101,7 @@ def GetAttributesAnimatableOnSelected(useShapes=False):
 			attributesFull.append(selected + "." + attributes[i])
 
 		# Check filtered attributes and add to final list
-		attributesFullFiltered = FilterAttributesAnimatable(attributesFull)
+		attributesFullFiltered = FilterAttributesAnimatable(attributes = attributesFull)
 		if (attributesFullFiltered != None):
 			for attribute in attributesFullFiltered:
 				finalAttributesList.append(attribute)
