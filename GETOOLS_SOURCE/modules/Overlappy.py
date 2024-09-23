@@ -46,7 +46,6 @@ from ..experimental import PhysicsParticle
 
 # TODO make cycle infinity before loop bake
 # TODO fix nucleus double nodes
-# TODO fix particle combo baling result
 
 
 class OverlappyAnnotations: # TODO simplify
@@ -96,24 +95,21 @@ class OverlappyAnnotations: # TODO simplify
 	# offsetY = offsetX # XXX
 	# offsetZ = offsetX # XXX
 
-class OverlappySettings: # TODO simplify
+class OverlappySettings: # TODO simplify and move to preset
 	# NAMING
 	prefix = "ovlp"
 	prefixLayer = "_" + prefix
 	nameLayers = (prefixLayer + "TEMP_", prefixLayer + "SAFE_", "pos_", "rot_", "combo_")
 	nameGroup = prefix + "Group"
-
-	# nameNucleus = prefix + "Nucleus" # XXX remove later
 		
-	# SETTINGS CHECKBOXES # TODO: move to preset
+	# SETTINGS CHECKBOXES
 	optionCheckboxHierarchy = False
 	optionCheckboxLayer = True
 	optionCheckboxLoop = False
 	optionCheckboxClean = True
 	optionCheckboxCollisions = True
-	loopBakeOffset = 2 # TODO set count of pre cycles via ui
 
-	# SETTINGS DYNAMIC PROPERTIES # TODO: move to preset
+	# SETTINGS DYNAMIC PROPERTIES
 	nucleusTimeScale = 1
 	particleRadius = 1
 	particleGoalSmooth = 1
@@ -169,7 +165,7 @@ class Overlappy:
 		
 		### UI LAYOUTS
 		self.layoutLayers = None
-		self.layoutCollisions = None # TODO
+		# self.layoutCollisions = None # TODO
 		# self.layoutChainMode = None # TODO
 		# self.layoutChainButtons = None # TODO
 		# self.layoutChainDynamicProperties = None # TODO
@@ -184,8 +180,8 @@ class Overlappy:
 		self.menuCheckboxLayer = None
 		self.menuCheckboxLoop = None
 		self.menuCheckboxClean = None
-		self.menuCheckboxCollisions = None # TODO
-		self.menuRadioButtonsLoop = [None, None, None, None]
+		# self.menuCheckboxCollisions = None # TODO
+		self.menuRadioButtonsLoop = [None, None, None, None, None]
 
 		### UI AIM OFFSET
 		## self.checkboxAutoOffset = None # TODO
@@ -231,15 +227,15 @@ class Overlappy:
 		self.menuCheckboxLayer = UI.MenuCheckbox(label = "Bake To Layer", value = OverlappySettings.optionCheckboxLayer, valueDefault = OverlappySettings.optionCheckboxLayer)
 		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop Mode", value = OverlappySettings.optionCheckboxLoop, valueDefault = OverlappySettings.optionCheckboxLoop)
 		self.menuCheckboxClean = UI.MenuCheckbox(label = "Delete Setup After Bake", value = OverlappySettings.optionCheckboxClean, valueDefault = OverlappySettings.optionCheckboxClean)
-		self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions", value = OverlappySettings.optionCheckboxCollisions, valueDefault = OverlappySettings.optionCheckboxCollisions)
+		# self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions", value = OverlappySettings.optionCheckboxCollisions, valueDefault = OverlappySettings.optionCheckboxCollisions)
 
 		cmds.menuItem(dividerLabel = "Pre Loop Cycles", divider = True)
 		
-		cmds.radioCollection()
 		self.menuRadioButtonsLoop[0] = cmds.menuItem(label = "0", radioButton = True) # , command = lambda *args: print("Option 0 selected")
 		self.menuRadioButtonsLoop[1] = cmds.menuItem(label = "1", radioButton = True)
 		self.menuRadioButtonsLoop[2] = cmds.menuItem(label = "2", radioButton = True)
 		self.menuRadioButtonsLoop[3] = cmds.menuItem(label = "3", radioButton = True)
+		self.menuRadioButtonsLoop[4] = cmds.menuItem(label = "4", radioButton = True)
 		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = True)
 	def UILayoutLayers(self, layoutMain):
 		self.layoutLayers = cmds.frameLayout("layoutLayers", label = Settings.frames2Prefix + "LAYERS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -256,24 +252,24 @@ class Overlappy:
 		
 		cmds.button(label = "Delete Safe layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
 		cmds.button(label = "Move To Temp Layer", command = partial(self.LayerMoveToSafeOrTemp, False), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveSafe)
-	def UILayoutCollisions(self, layoutMain): # TODO
-		self.layoutCollisions = cmds.frameLayout("layoutCollisions", label = Settings.frames2Prefix + "COLLISIONS - WORK IN PROGRESS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		layoutColumn = cmds.columnLayout(parent = self.layoutCollisions, adjustableColumn = True)
+	# def UILayoutCollisions(self, layoutMain): # TODO
+	# 	self.layoutCollisions = cmds.frameLayout("layoutCollisions", label = Settings.frames2Prefix + "COLLISIONS - WORK IN PROGRESS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+	# 	layoutColumn = cmds.columnLayout(parent = self.layoutCollisions, adjustableColumn = True)
 		
-		count = 4
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Add", backgroundColor = Colors.green10)
-		cmds.button(label = "Remove", backgroundColor = Colors.red10)
-		cmds.button(label = "Refresh", backgroundColor = Colors.yellow10)
-		cmds.button(label = "Clear", backgroundColor = Colors.red50)
+	# 	count = 4
+	# 	cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+	# 	cmds.button(label = "Add", backgroundColor = Colors.green10)
+	# 	cmds.button(label = "Remove", backgroundColor = Colors.red10)
+	# 	cmds.button(label = "Refresh", backgroundColor = Colors.yellow10)
+	# 	cmds.button(label = "Clear", backgroundColor = Colors.red50)
 
-		# TODO Scroll list with colliders
-		## https://help.autodesk.com/cloudhelp/2023/ENU/Maya-Tech-Docs/CommandsPython/textScrollList.html
-		layoutScroll = cmds.frameLayout("layoutScroll", label = "Colliders List", labelIndent = 80, parent = self.layoutCollisions, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		self.scrollListColliders = cmds.textScrollList(parent = layoutScroll, allowMultiSelection = True, height = 120)
+	# 	# TODO Scroll list with colliders
+	# 	## https://help.autodesk.com/cloudhelp/2023/ENU/Maya-Tech-Docs/CommandsPython/textScrollList.html
+	# 	layoutScroll = cmds.frameLayout("layoutScroll", label = "Colliders List", labelIndent = 80, parent = self.layoutCollisions, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+	# 	self.scrollListColliders = cmds.textScrollList(parent = layoutScroll, allowMultiSelection = True, height = 120)
 
-		for i in range(20): # test list items
-			cmds.textScrollList(self.scrollListColliders, edit = True, append = "item {0}".format(i)) # append, selectItem, deselectAll, removeAll, doubleClickCommand
+	# 	for i in range(20): # test list items
+	# 		cmds.textScrollList(self.scrollListColliders, edit = True, append = "item {0}".format(i)) # append, selectItem, deselectAll, removeAll, doubleClickCommand
 	def UILayoutNucleusProperties(self, layoutMain):
 		self.layoutNucleusProperties = cmds.frameLayout("layoutNucleusProperties", label = Settings.frames2Prefix + "NUCLEUS PROPERTIES", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutNucleusProperties, adjustableColumn = True)
@@ -586,7 +582,8 @@ class Overlappy:
 
 
 	### PARTICLE LOGIC
-	def GetAimOffsetValues(self):
+	def CompileParticleAimOffset(self):
+		### Get aim offset values from UI
 		valueAimFloat = cmds.floatField(self.aimOffsetFloatGroup[1], query = True, value = True)
 		valueAimAxisX = cmds.radioButton(self.aimOffsetRadioCollection[1][0], query = True, select = True)
 		valueAimAxisY = cmds.radioButton(self.aimOffsetRadioCollection[1][1], query = True, select = True)
@@ -598,36 +595,31 @@ class Overlappy:
 		valueAimUpAxisY = cmds.radioButton(self.aimOffsetUpRadioCollection[1][1], query = True, select = True)
 		valueAimUpAxisZ = cmds.radioButton(self.aimOffsetUpRadioCollection[1][2], query = True, select = True)
 		valueAimUpCheckbox = self.aimOffsetUpCheckbox.Get()
-		
-		return (valueAimFloat, (valueAimAxisX, valueAimAxisY, valueAimAxisZ), valueAimCheckbox), (valueAimUpFloat, (valueAimUpAxisX, valueAimUpAxisY, valueAimUpAxisZ), valueAimUpCheckbox) # aimTarget, aimUp
-	def CompileParticleAimOffset(self):
-		### Get aim offset values from UI and put to aim target offset and aim up offset
-		valuesAimOffset = self.GetAimOffsetValues()
 
+		### Compile aim target value
 		self.particleAimOffsetTarget = [0, 0, 0]
-		valueAimTarget = valuesAimOffset[0][0] * (-1 if valuesAimOffset[0][2] else 1)
-		
-		if (valuesAimOffset[0][1][0]):
+		valueAimTarget = valueAimFloat * (-1 if valueAimCheckbox else 1)
+		if (valueAimAxisX):
 			self.particleAimOffsetTarget = [valueAimTarget, 0, 0]
-		if (valuesAimOffset[0][1][1]):
+		if (valueAimAxisY):
 			self.particleAimOffsetTarget = [0, valueAimTarget, 0]
-		if (valuesAimOffset[0][1][2]):
+		if (valueAimAxisZ):
 			self.particleAimOffsetTarget = [0, 0, valueAimTarget]
 		
+		### Compile aim up value
 		self.particleAimOffsetUp = [0, 0, 0]
-		valueAimUp = valuesAimOffset[1][0] * (-1 if valuesAimOffset[1][2] else 1)
-		
-		if (valuesAimOffset[1][1][0]):
+		valueAimUp = valueAimUpFloat * (-1 if valueAimUpCheckbox else 1)
+		if (valueAimUpAxisX):
 			self.particleAimOffsetUp = [valueAimUp, 0, 0]
-		if (valuesAimOffset[1][1][1]):
+		if (valueAimUpAxisY):
 			self.particleAimOffsetUp = [0, valueAimUp, 0]
-		if (valuesAimOffset[1][1][2]):
+		if (valueAimUpAxisZ):
 			self.particleAimOffsetUp = [0, 0, valueAimUp]
 	def ParticleSetupInit(self, *args):
 		### Get selected objects
 		self.selectedObjects = Selector.MultipleObjects(minimalCount = 1)
 		if (self.selectedObjects == None):
-			return
+			return False
 		
 		### Remove previous setup if exists
 		self.ParticleSetupDelete()
@@ -657,8 +649,12 @@ class Overlappy:
 		# cmds.connectAttr(self.colliderNodes[0] + ".currentState", self.nucleus1 + ".inputPassive[0]")
 		# cmds.connectAttr(self.colliderNodes[0] + ".startState", self.nucleus1 + ".inputPassiveStart[0]")
 		# cmds.connectAttr(self.nucleus1 + ".startFrame", self.colliderNodes[0] + ".startFrame")
+		return True
 	def ParticleSetupPoint(self, *args):
-		self.ParticleSetupInit()
+		isInitDone = self.ParticleSetupInit()
+		if (not isInitDone):
+			return
+
 		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus1, parentGroup = OverlappySettings.nameGroup)
 		self.setupCreatedPoint = True
 
@@ -670,7 +666,10 @@ class Overlappy:
 		self.UpdateSettings()
 		cmds.select(self.selectedObjects, replace = True)
 	def ParticleSetupAim(self, *args):
-		self.ParticleSetupInit()
+		isInitDone = self.ParticleSetupInit()
+		if (not isInitDone):
+			return
+		
 		self.CompileParticleAimOffset()
 		
 		### Create aim setup
@@ -688,7 +687,10 @@ class Overlappy:
 		self.UpdateSettings()
 		cmds.select(self.selectedObjects, replace = True)
 	def ParticleSetupCombo(self, *args):
-		self.ParticleSetupInit()
+		isInitDone = self.ParticleSetupInit()
+		if (not isInitDone):
+			return
+		
 		self.CompileParticleAimOffset()
 
 		### Create particle base setup
@@ -861,7 +863,7 @@ class Overlappy:
 		SetParticleAttributes(self.particleBase)
 		SetParticleAttributes(self.particleTarget)
 		SetParticleAttributes(self.particleUp)
-	def ResetSettings(self, *args):
+	def ResetSettings(self, *args): # TODO move values to settings
 		### Options
 		self.menuCheckboxHierarchy.Reset()
 		self.menuCheckboxLayer.Reset()
@@ -869,15 +871,15 @@ class Overlappy:
 		self.menuCheckboxClean.Reset()
 		self.menuCheckboxCollisions.Reset()
 
-		### Loop cycles # TODO move values to settings
+		### Loop cycles
 		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = True)
 
-		### Aim offset target # TODO move values to settings
+		### Aim offset target
 		cmds.floatField(self.aimOffsetFloatGroup[1], edit = True, value = 10)
 		self.aimOffsetCheckbox.Reset()
 		cmds.radioCollection(self.aimOffsetRadioCollection[0], edit = True, select = self.aimOffsetRadioCollection[1][0])
 
-		### Aim offset up # TODO move values to settings
+		### Aim offset up
 		cmds.floatField(self.aimOffsetUpFloatGroup[1], edit = True, value = 10)
 		self.aimOffsetUpCheckbox.Reset()
 		cmds.radioCollection(self.aimOffsetUpRadioCollection[0], edit = True, select = self.aimOffsetUpRadioCollection[1][1])
@@ -892,6 +894,14 @@ class Overlappy:
 		self.sliderParticleConserve.Reset()
 		self.sliderParticleDrag.Reset()
 		self.sliderParticleDamp.Reset()
+	
+
+	### VALUES
+	def GetLoopCyclesIndex(self):
+		for i, item in enumerate(self.menuRadioButtonsLoop):
+			if cmds.menuItem(item, query = True, radioButton = True):
+				return i
+		return -1
 
 
 	### BAKE ANIMATION
@@ -932,13 +942,13 @@ class Overlappy:
 		### Cut object name from attributes
 		for i in range(len(attributesFiltered)):
 			attributesFiltered[i] = attributesFiltered[i].replace(self.selectedObjects + ".", "")
-			
+		
 		### Set time range
 		self.time.Scan()
 		startTime = self.time.values[2]
 		self.time.SetCurrent(startTime)
 		if (self.menuCheckboxLoop.Get()):
-			startTime = self.time.values[2] - self.time.values[3] * OverlappySettings.loopBakeOffset # TODO use loop cycle variable
+			startTime = self.time.values[2] - self.time.values[3] * self.GetLoopCyclesIndex()
 			self.time.SetMin(startTime)
 			self.time.SetCurrent(startTime)
 		cmds.setAttr(self.nucleus1 + ".startFrame", startTime) # TODO bug when select ovlp objects
