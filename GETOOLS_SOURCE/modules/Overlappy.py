@@ -919,12 +919,12 @@ class Overlappy:
 				return
 		
 		### Construct attributes with object name
-		attrs = ["", "", ""]
-		for i in range(len(attrs)):
-			attrs[i] = "{0}.{1}".format(self.selectedObjects, attributesType[i])
+		attributes = []
+		for i in range(len(attributesType)):
+			attributes.append("{0}.{1}".format(self.selectedObjects, attributesType[i]))
 		
 		### Filter attributes
-		attributesFiltered = Attributes.FilterAttributesAnimatable(attributes = attrs, skipMutedKeys = True)
+		attributesFiltered = Attributes.FilterAttributesAnimatable(attributes = attributes, skipMutedKeys = True)
 		if (attributesFiltered == None):
 			self.ParticleSetupDelete()
 			return
@@ -945,26 +945,26 @@ class Overlappy:
 		if (cmds.objExists(self.nucleus2)):
 			cmds.setAttr(self.nucleus2 + ".startFrame", startTime)
 
-		### Keyframe target attributes
+		### Set key for target object attributes
 		cmds.setKeyframe(self.selectedObjects, attribute = attributesFiltered)
 
 		### Start logic
 		name = "_rebake_" + Text.ConvertSymbols(self.selectedObjects)
-		clone = cmds.duplicate(self.selectedObjects, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)
+		objectDuplicate = cmds.duplicate(self.selectedObjects, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)
+		cmds.select(clear = True)
 		for attribute in Enums.Attributes.translateLong:
-			cmds.setAttr(clone[0] + "." + attribute, lock = False)
+			cmds.setAttr(objectDuplicate[0] + "." + attribute, lock = False)
 		for attribute in Enums.Attributes.rotateLong:
-			cmds.setAttr(clone[0] + "." + attribute, lock = False)
-		cmds.parentConstraint(parent, clone, maintainOffset = True) # skipTranslate
-		cmds.select(clone, replace = True)
-		
+			cmds.setAttr(objectDuplicate[0] + "." + attribute, lock = False)
+		cmds.parentConstraint(parent, objectDuplicate, maintainOffset = True) # skipTranslate
+		cmds.select(objectDuplicate, replace = True)
+
 		### Bake animation
 		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
-		Constraints.DeleteConstraints(clone)
-		
+		Constraints.DeleteConstraints(objectDuplicate)
+
 		### Copy keys, create layers and paste keys
-		cmds.copyKey(clone, time = (self.time.values[2], self.time.values[3]), attribute = attributesFiltered)
-		
+		cmds.copyKey(objectDuplicate, time = (self.time.values[2], self.time.values[3]), attribute = attributesFiltered)
 		if (self.menuCheckboxLayer.Get()):
 			if (combo):
 				name = OverlappySettings.nameLayers[4] + self.selectedObjects
@@ -983,7 +983,7 @@ class Overlappy:
 			cmds.pasteKey(self.selectedObjects, option = "replace", attribute = attributesFiltered, animLayer = animLayer)
 		else:
 			cmds.pasteKey(self.selectedObjects, option = "replaceCompletely", attribute = attributesFiltered)
-		cmds.delete(clone)
+		cmds.delete(objectDuplicate)
 		
 		### Set time range
 		if (self.menuCheckboxLoop.Get()):
