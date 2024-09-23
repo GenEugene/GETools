@@ -106,7 +106,7 @@ class OverlappySettings: # TODO simplify and move to preset
 	optionCheckboxHierarchy = False
 	optionCheckboxLayer = True
 	optionCheckboxLoop = False
-	optionCheckboxClean = True
+	optionCheckboxDeleteSetup = True
 	optionCheckboxCollisions = True
 
 	# SETTINGS DYNAMIC PROPERTIES
@@ -179,7 +179,7 @@ class Overlappy:
 		self.menuCheckboxHierarchy = None
 		self.menuCheckboxLayer = None
 		self.menuCheckboxLoop = None
-		self.menuCheckboxClean = None
+		self.menuCheckboxDeleteSetup = None
 		# self.menuCheckboxCollisions = None # TODO
 		self.menuRadioButtonsLoop = [None, None, None, None, None]
 
@@ -210,8 +210,8 @@ class Overlappy:
 		self.UILayoutLayers(layoutMain)
 		## self.UILayoutCollisions(layoutMain) # TODO
 		## self.UILayoutChainMode(layoutMain) # TODO
-		self.UILayoutNucleusProperties(layoutMain)
-		self.UILayoutParticleMode(layoutMain)
+		self.UILayoutNucleus(layoutMain)
+		self.UILayoutParticle(layoutMain)
 
 
 	### MAIN UI
@@ -225,8 +225,8 @@ class Overlappy:
 		cmds.menu(label = "Options", tearOff = True)
 		self.menuCheckboxHierarchy = UI.MenuCheckbox(label = "Use Hierarchy", value = OverlappySettings.optionCheckboxHierarchy, valueDefault = OverlappySettings.optionCheckboxHierarchy)
 		self.menuCheckboxLayer = UI.MenuCheckbox(label = "Bake To Layer", value = OverlappySettings.optionCheckboxLayer, valueDefault = OverlappySettings.optionCheckboxLayer)
-		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop Mode", value = OverlappySettings.optionCheckboxLoop, valueDefault = OverlappySettings.optionCheckboxLoop)
-		self.menuCheckboxClean = UI.MenuCheckbox(label = "Delete Setup After Bake", value = OverlappySettings.optionCheckboxClean, valueDefault = OverlappySettings.optionCheckboxClean)
+		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop", value = OverlappySettings.optionCheckboxLoop, valueDefault = OverlappySettings.optionCheckboxLoop)
+		self.menuCheckboxDeleteSetup = UI.MenuCheckbox(label = "Delete Setup After Bake", value = OverlappySettings.optionCheckboxDeleteSetup, valueDefault = OverlappySettings.optionCheckboxDeleteSetup)
 		# self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions", value = OverlappySettings.optionCheckboxCollisions, valueDefault = OverlappySettings.optionCheckboxCollisions)
 
 		cmds.menuItem(dividerLabel = "Pre Loop Cycles", divider = True)
@@ -270,7 +270,7 @@ class Overlappy:
 
 	# 	for i in range(20): # test list items
 	# 		cmds.textScrollList(self.scrollListColliders, edit = True, append = "item {0}".format(i)) # append, selectItem, deselectAll, removeAll, doubleClickCommand
-	def UILayoutNucleusProperties(self, layoutMain):
+	def UILayoutNucleus(self, layoutMain):
 		self.layoutNucleusProperties = cmds.frameLayout("layoutNucleusProperties", label = Settings.frames2Prefix + "NUCLEUS PROPERTIES", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutNucleusProperties, adjustableColumn = True)
 
@@ -304,7 +304,7 @@ class Overlappy:
 
 	
 	### CHAIN UI
-	def UILayoutChainMode(self, layoutMain): # TODO
+	# def UILayoutChainMode(self, layoutMain): # TODO
 		# self.layoutChainMode = cmds.frameLayout("layoutChainMode", label = Settings.frames2Prefix + "CHAIN MODE - WORK IN PROGRESS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		
 		# cmds.menuBarLayout()
@@ -313,8 +313,8 @@ class Overlappy:
 				
 		## self.UILayoutChainButtons(self.layoutChainMode)
 		# self.UILayoutChainDynamicProperties(self.layoutChainMode)
-		pass
-	def UILayoutChainButtons(self, layoutMain): # TODO
+		# pass
+	# def UILayoutChainButtons(self, layoutMain): # TODO
 		## SETUP
 		# self.layoutChainButtons = cmds.frameLayout("layoutChainButtons", label = "Buttons", labelIndent = 100, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		# layoutColumn = cmds.columnLayout(parent = self.layoutChainButtons, adjustableColumn = True)
@@ -324,8 +324,8 @@ class Overlappy:
 		##
 		## cmds.button(label = "CREATE", command = PhysicsHair.CreateNHairOnSelected, backgroundColor = Colors.green10) # TODO annotation
 		## cmds.button(label = "REMOVE", command = self._SetupDelete, backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
-		pass
-	def UILayoutChainDynamicProperties(self, layoutMain): # TODO
+		# pass
+	# def UILayoutChainDynamicProperties(self, layoutMain): # TODO
 		# self.layoutChainDynamicProperties = cmds.frameLayout("layoutChainDynamicProperties", label = "Dynamic Properties", labelIndent = 70, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		# layoutColumn = cmds.columnLayout(parent = self.layoutSimulation, adjustableColumn = True)
 		# cmds.popupMenu()
@@ -428,11 +428,11 @@ class Overlappy:
 		# 	menuReset = True,
 		# )
 
-		pass
+		# pass
 	
 	
 	### PARTICLE UI
-	def UILayoutParticleMode(self, layoutMain):
+	def UILayoutParticle(self, layoutMain):
 		self.layoutParticleMode = cmds.frameLayout("layoutParticleMode", label = Settings.frames2Prefix + "PARTICLE MODE", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		
 		# cmds.menuBarLayout() # TODO simplify
@@ -868,8 +868,8 @@ class Overlappy:
 		self.menuCheckboxHierarchy.Reset()
 		self.menuCheckboxLayer.Reset()
 		self.menuCheckboxLoop.Reset()
-		self.menuCheckboxClean.Reset()
-		self.menuCheckboxCollisions.Reset()
+		self.menuCheckboxDeleteSetup.Reset()
+		# self.menuCheckboxCollisions.Reset()
 
 		### Loop cycles
 		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = True)
@@ -1007,7 +1007,7 @@ class Overlappy:
 			Animation.SetInfinityConstant(self.selectedObjects)
 		
 		### Delete setup
-		if (self.menuCheckboxClean.Get()):
+		if (self.menuCheckboxDeleteSetup.Get()):
 			self.ParticleSetupDelete()
 	def BakeParticleVariants(self, variant, *args): # TODO rework
 		# selected = Selector.MultipleObjects()
