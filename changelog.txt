@@ -1,5 +1,12 @@
 GETools changelog
 
+***v1.4.0*** - FUTURE PLAN
+- [OVERLAPPY] added collisions panel
+- [OVERLAPPY] added Overlappy nRigid collision logic
+- [OVERLAPPY] Overlappy Chain mode
+- [PHYSICS] added new physics with nHair logic
+
+
 v1.3.0 - In Development (NOT PRODUCTION READY)
 - [UTILS] added button "Print Animatable Attributes"
 - [UTILS] added button "Parent Shapes"
@@ -7,12 +14,15 @@ v1.3.0 - In Development (NOT PRODUCTION READY)
 - [UTILS] added button "Save Pose To Shelf"
 - [RIGGING] added button "Create Curve" (from selected objects)
 - [UI] moved motion trail buttons from "Experimental" to "Motion Trail" group
+- [PHYSICS] added new physics scripts with nParticle
+- [OVERLAPPY] reworked Overlappy module
+- [OVERLAPPY] separated rig creation buttons for point, aim and combo
+- [OVERLAPPY] reworked aim offset UI
+- [OVERLAPPY] added loop cycles in option menu
+- [OVERLAPPY] moved nucleus timeScale slider to separate panel
+
 
 ### TODO: IN PROGRESS
-- [OVERLAPPY] added collisions panel
-- [OVERLAPPY] added Overlappy nRigid collision logic
-- [OVERLAPPY] rework Overlappy module and init Chain mode
-- [PHYSICS] added new physics scripts with nParticle and nHair logic
 - added new features to shelf setup logic
 
 
