@@ -34,7 +34,6 @@ from ..utils import Annotation
 from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Install
-from ..utils import Layers
 from ..utils import MayaSettings
 from ..utils import MotionTrail
 from ..utils import Parent
@@ -191,35 +190,6 @@ class GeneralWindow:
 		cmds.menuItem(label = "Report a Problem", command = LinkReport, image = Icons.warning)
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Change Icon", command = partial(Shelf.ToggleButtonIcons, self.directory))
-		
-		### DEV ZONE
-		def LayerCreate(*args):
-			Layers.Create("testLayer")
-		def LayerCreateForSelected(*args):
-			selected = Selector.MultipleObjects()
-			if (selected == None):
-				return
-			Layers.CreateForSelected(selected)
-		def LayerDelete(*args):
-			Layers.Delete("testLayer")
-		def LayerGetSelected(*args):
-			Layers.GetSelected()
-		def LayerMove(*args):
-			selected = Layers.GetSelected()
-			if (selected == None or len(selected) < 2):
-				cmds.warning("Need to select at least 2 layers")
-				return
-			Layers.MoveChildrenToParent(selected[:-1], selected[-1]) # FIXME main problem is layers have no selection order, they just listed from top to bottom
-
-		# cmds.menu(label = "---", enable = False)
-		# cmds.menu(label = "DEV", tearOff = True)
-		# cmds.menuItem(dividerLabel = "Layers", divider = True)
-		# cmds.menuItem(label = "Layer Create", command = LayerCreate)
-		# cmds.menuItem(label = "Layer Create For Selected", command = LayerCreateForSelected)
-		# cmds.menuItem(label = "Layer Delete", command = LayerDelete)
-		# cmds.menuItem(label = "Layer Get Selected", command = LayerGetSelected)
-		# cmds.menuItem(label = "Layer Move", command = LayerMove)
-		pass
 	def LayoutMenuOptions(self):
 		cmds.menu(label = "Options", tearOff = True)
 
@@ -462,13 +432,11 @@ class GeneralWindow:
 		cmds.menuItem(label = "Delete", command = partial(Install.ToShelf_MotionTrailDelete, self.directory), image = Icons.minus)
 		cmds.setParent('..', menu = True)
 		#
-
 	def LayoutTitle(self, parentLayout): # TODO figure out how to use resizeable images
 		cmds.columnLayout("layoutTitle", parent = parentLayout, adjustableColumn = False)
 		size = 30
 		cmds.iconTextButton(label = "GETOOLS", style = "iconAndTextHorizontal", image = self.directory + Icons.get1[0], width = size, height = size)
 		# cmds.image(image = self.directory + Icons.get, width = size, height = size)
-
 	def LayoutTools(self, parentLayout):
 		self.frameTools = cmds.frameLayout("layoutTools", parent = parentLayout, label = "1. " + Tools.Tools._title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		Tools.Tools(self).UICreate(self.frameTools)

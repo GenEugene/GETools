@@ -25,6 +25,8 @@ import maya.cmds as cmds
 # from functools import partial
 
 from .. import Settings
+from ..utils import Layers
+from ..utils import Selector
 # from ..utils import Blendshapes
 # from ..experimental import Physics
 # from ..experimental import PhysicsHair
@@ -40,14 +42,49 @@ class Experimental:
 	def UICreate(self, layoutMain):
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click test")
+		# cmds.menuItem(dividerLabel = "label", divider = True)
+
+		### MENU
+		cmds.columnLayout("layoutMenuBar", parent = layoutMain, adjustableColumn = True, width = Settings.windowWidthScroll)
+		cmds.menuBarLayout()
+		cmds.menu(label = "Layers", tearOff = True)
+		cmds.menuItem(label = "Layer Create", command = self.LayerCreate)
+		cmds.menuItem(label = "Layer Create For Selected", command = self.LayerCreateForSelected)
+		cmds.menuItem(label = "Layer Delete", command = self.LayerDelete)
+		cmds.menuItem(label = "Layer Get Selected", command = self.LayerGetSelected)
+		cmds.menuItem(label = "Layer Move", command = self.LayerMove)
 		
+		### BUTTONS
 		countOffsets = 4
 		cmds.gridLayout(parent = layoutMain, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		
 		# cmds.button(label = "**Nucleus", command = partial(Physics.CreateNucleus, "testNucleus", None))
 		cmds.button(label = "Particle", command = PhysicsParticle.CreateOnSelected)
 		cmds.button(label = "P Aim", command = PhysicsParticle.CreateAimOnSelected)
 		cmds.button(label = "P Combo", command = PhysicsParticle.CreateComboOnSelected)
 		# cmds.button(label = "**P Chain", command = PhysicsParticle.CreateAimChainOnSelected)
 		# cmds.button(label = "Hair", command = partial(PhysicsHair.CreateNHairOnSelected, None))
+
+
+	### TEST LEAYER METHODS
+	def LayerCreate(*args):
+		Layers.Create("testLayer")
+	
+	def LayerCreateForSelected(*args):
+		selected = Selector.MultipleObjects()
+		if (selected == None):
+			return
+		Layers.CreateForSelected(selected)
+	
+	def LayerDelete(*args):
+		Layers.Delete("testLayer")
+	
+	def LayerGetSelected(*args):
+		Layers.GetSelected()
+	
+	def LayerMove(*args):
+		selected = Layers.GetSelected()
+		if (selected == None or len(selected) < 2):
+			cmds.warning("Need to select at least 2 layers")
+			return
+		Layers.MoveChildrenToParent(selected[:-1], selected[-1]) # FIXME main problem is layers have no selection order, they just listed from top to bottom
 
