@@ -60,35 +60,3 @@ def Delete(*args):
 	for item in selected:
 		cmds.delete(item + Enums.MotionTrail.handle)
 
-def CreateCurveFromTrajectory(): # TODO rework tool and add to module
-	# Variables
-	step = 1
-	degree = 3
-	# Names
-	mtName = "newMotionTrail"
-	mtFinalName = mtName + Enums.MotionTrail.handle
-	curveName = "testCurve"
-
-
-	# Get time start/end
-	start = cmds.playbackOptions(query = 1, min = 1)
-	end = cmds.playbackOptions(query = 1, max = 1)
-	# Create motion trail
-	cmds.snapshot(name = mtName, motionTrail = 1, increment = step, startTime = start, endTime = end)
-
-	# Get points from motion trail
-	cmds.select(mtFinalName, replace = 1)
-	selected = cmds.ls(selection = 1, dagObjects = 1, exactType = Enums.MotionTrail.snapshotShape)
-	pts = cmds.getAttr(selected[0] + "." + Enums.MotionTrail.pts)
-	size = len(pts)
-	for i in range(size):
-		pts[i] = pts[i][0:3]
-		#print "{0}: {1}".format(i, pts[i])
-
-	# Create curve
-	newCurve = cmds.curve(name = curveName, degree = degree, point = pts)
-
-	# End
-	cmds.delete(mtFinalName)
-	cmds.select(clear = 1)
-

@@ -68,7 +68,8 @@ class RiggingAnnotations:
 	blendshapeZeroWeights = "Zero all blendshape weights on selected objects"
 
 	# Curves
-	curveCreate = "Create a curve on selected objects.\nEach curve point will be created in the pivot."
+	curveCreateFromSelectedObjects = "Create a curve from selected objects.\nEach curve point will be created in the pivot."
+	curveCreateFromTrajectory = "Create a curve from objects trajectories."
 
 class Rigging:
 	_version = "v1.3"
@@ -142,9 +143,10 @@ class Rigging:
 		layoutCurves = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CURVES", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumnCurves = cmds.columnLayout(parent = layoutCurves, adjustableColumn = True)
 		#
-		countOffsets = 1
+		countOffsets = 2
 		cmds.gridLayout(parent = layoutColumnCurves, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Create Curve", command = Curves.CreateCurveFromSelectedObjects, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.curveCreate)
+		cmds.button(label = "From Selected Objects", command = Curves.CreateCurveFromSelectedObjects, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.curveCreateFromSelectedObjects)
+		cmds.button(label = "From Trajectory", command = Curves.CreateCurveFromTrajectory, backgroundColor = Colors.orange10, annotation = RiggingAnnotations.curveCreateFromTrajectory)
 
 
 	# CONSTRAINTS
