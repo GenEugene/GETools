@@ -88,8 +88,12 @@ def ToShelf_SelectHierarchy(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SelectHierarchy), "SelectHierarchy", "SelHi")
 def ToShelf_SelectHierarchyTransforms(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SelectHierarchyTransforms), "SelectHierarchyTransforms", "SelHiTrans")
-def ToShelf_CreateResetButton(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.CreateResetButton), "CreateResetButton", "Reset")
+def ToShelf_SavePoseToShelf(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SavePoseToShelf), "SavePoseToShelf", "SavePoseToShelf")
+def ToShelf_ParentShapes(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.ParentShapes), "ParentShapes", "ParentShapes")
+def ToShelf_AnnotateSelected(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.AnnotateSelected), "AnnotateSelected", "AnnotateSelected")
 
 # TOGGLES
 # def ToShelf_ToggleAllObjects(path, *args): MoveToShelf(path, ReadFunctionAsString(CodeSamples.), "ToggleAllObjects", "tglAllObjects") # TODO
@@ -286,7 +290,6 @@ def ToShelf_MotionTrailDelete(path, *args):
 
 # POSE BUTTON
 def CreatePoseButton(*args): # TODO get attributes from shapes # TODO alternative mode with namespace detection
-
 	attributes = Attributes.GetAttributesAnimatableOnSelected(useShapes = False)
 	if (attributes == None):
 		cmds.warning("No attributes detected for pose saving (FEATURE IN DEVELOPMENT)")

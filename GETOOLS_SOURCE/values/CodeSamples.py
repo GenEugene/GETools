@@ -47,9 +47,17 @@ def SelectHierarchyTransforms():
 	import GETOOLS_SOURCE.utils.Selector as selector
 	selector.SelectHierarchyTransforms()
 
-def CreateResetButton():
+def SavePoseToShelf():
 	import GETOOLS_SOURCE.utils.Install as install
 	install.CreatePoseButton()
+
+def ParentShapes():
+	import GETOOLS_SOURCE.utils.Parent as Parent
+	Parent.ParentShape()
+
+def AnnotateSelected():
+	import GETOOLS_SOURCE.utils.Annotation as Annotation
+	Annotation.AnnotateSelected()
 
 
 # TOGGLES

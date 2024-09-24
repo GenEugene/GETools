@@ -69,11 +69,8 @@ class GeneralWindow:
 			cmds.deleteUI(Settings.windowName)
 		cmds.window(Settings.windowName, title = GeneralWindow._title, maximizeButton = False, sizeable = True, widthHeight = (Settings.windowWidth, Settings.windowHeight))
 		
-		# layoutRoot = cmds.columnLayout(adjustableColumn = True, width = Settings.windowWidth)
 		layoutRoot = cmds.menuBarLayout(width = Settings.windowWidth)
 		self.LayoutMenuBar(layoutRoot)
-		
-		# self.LayoutTitle(layoutRoot) # TODO title
 
 		layoutScroll = cmds.scrollLayout(parent = layoutRoot, width = Settings.windowWidth)
 		self.LayoutTools(layoutScroll)
@@ -241,7 +238,11 @@ class GeneralWindow:
 		cmds.menuItem(label = "Select Hiererchy", command = partial(Install.ToShelf_SelectHierarchy, self.directory), image = Icons.selectByHierarchy)
 		cmds.menuItem(label = "Select Hiererchy Transforms", command = partial(Install.ToShelf_SelectHierarchyTransforms, self.directory), image = Icons.selectByHierarchy)
 		cmds.menuItem(label = "Select Skinned Meshes Or Joints", command = partial(Install.ToShelf_SelectSkinnedMeshesOrJoints, self.directory))
-		# cmds.menuItem(label = "Create Reset Button", command = partial(Install.ToShelf_CreateResetButton, self.directory), image = Icons.reset)
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Save Pose To Shelf", command = partial(Install.ToShelf_SavePoseToShelf, self.directory))
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Parent Shapes", command = partial(Install.ToShelf_ParentShapes, self.directory))
+		cmds.menuItem(label = "Annotate Selected", command = partial(Install.ToShelf_AnnotateSelected, self.directory))
 		cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(subMenu = True, label = "Toggle", tearOff = True)

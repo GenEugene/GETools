@@ -45,10 +45,10 @@ from ..experimental import PhysicsParticle
 
 
 # TODO make cycle infinity before loop bake
-# TODO fix nucleus double nodes
+# TODO fix nucleus double nodes (need to catch this bug)
 
 
-class OverlappyAnnotations: # TODO simplify
+class OverlappyAnnotations:
 	### Setup
 	setupEnding = "Tweak values to preview the simulation.\nTo bake the rig, deselect all and press any bake button."
 	setupPoint = "Simple particle rig for translation.\n" + setupEnding
@@ -306,6 +306,7 @@ class Overlappy:
 		self.nucleusGravityDirectionFloatFieldGrp = cmds.floatFieldGrp(parent = layoutRow, changeCommand = self.UpdateSettings, numberOfFields = 3, columnWidth4 = [47, 35, 35, 35], label = "Direction", value = (OverlappySettings.nucleusGravityDirection[0], OverlappySettings.nucleusGravityDirection[1], OverlappySettings.nucleusGravityDirection[2], 0))
 		self.nucleusGravityDirectionFloatFieldGrp = self.nucleusGravityDirectionFloatFieldGrp.replace(Settings.windowName + "|", "") # HACK fix for docked window only. Don't know how to avoid issue
 
+
 	### CHAIN UI
 	# def UILayoutChainMode(self, layoutMain): # TODO
 		# self.layoutChainMode = cmds.frameLayout("layoutChainMode", label = Settings.frames2Prefix + "CHAIN MODE - WORK IN PROGRESS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -340,7 +341,6 @@ class Overlappy:
 		# cmds.menuItem(label = "Particle", command = self.SelectParticleObject, image = Icons.particle)
 		# cmds.menuItem(label = "Nucleus", command = self.SelectNucleus, image = Icons.nucleus)
 		# cmds.menuItem(label = "Target locator", command = self.SelectParticleTarget, image = Icons.locator)
-		# cmds.menuItem(label = "Aim locator", command = self.SelectParticleAim, image = Icons.locator)
 		
 		self.UILayoutParticleSetup(self.layoutParticleMode)
 		self.UILayoutParticleAimOffset(self.layoutParticleMode)
@@ -364,6 +364,7 @@ class Overlappy:
 	def UILayoutParticleAimOffset(self, layoutMain): # TODO
 		self.layoutParticleOffset = cmds.frameLayout("layoutParticleOffset", label = "Aim Offset", labelIndent = 88, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleOffset, adjustableColumn = True)
+		
 		# self.checkboxAutoOffset = UI.Checkbox(label = "Auto") # TODO
 
 		def CustomRadioButtonGroup(label="label"):
