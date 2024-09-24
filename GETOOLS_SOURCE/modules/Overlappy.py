@@ -199,10 +199,10 @@ class Overlappy:
 		### UI AIM OFFSET
 		## self.checkboxAutoOffset = None # TODO
 		self.aimOffsetFloatGroup = [None, None] # text, float
-		self.aimOffsetRadioCollection = [None, [None, None, None]] # collection, (element 1, 2, 3)
+		self.aimOffsetRadioCollection = [None, None, None]
 		self.aimOffsetCheckbox = None
 		self.aimOffsetUpFloatGroup = [None, None] # text, float
-		self.aimOffsetUpRadioCollection = [None, [None, None, None]] # collection, (element 1, 2, 3)
+		self.aimOffsetUpRadioCollection = [None, None, None]
 		self.aimOffsetUpCheckbox = None
 		
 		### UI PARTICLE DYNAMIC PROPERTIES
@@ -366,26 +366,34 @@ class Overlappy:
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleOffset, adjustableColumn = True)
 		# self.checkboxAutoOffset = UI.Checkbox(label = "Auto") # TODO
 
-		count = 6
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+		def CustomRadioButtonGroup(label="label"):
+			layout = cmds.rowLayout(parent = layoutColumn, numberOfColumns = 6, columnWidth6 = (40, 50, 28, 28, 28, 60), columnAlign = [1, "center"], columnAttach = [(1, 'both', 0)])
+			text = cmds.text(label = label)
+			floatField = cmds.floatField(value = 10, precision = 1, minValue = 0)
+			cmds.radioCollection()
+			radioButton1 = cmds.radioButton(label = "X")
+			radioButton2 = cmds.radioButton(label = "Y")
+			radioButton3 = cmds.radioButton(label = "Z")
+			checkbox = UI.Checkbox(label = "Reverse")
+			return layout, text, floatField, radioButton1, radioButton2, radioButton3, checkbox
 		
-		self.aimOffsetFloatGroup[0] = cmds.text(label = "Aim")
-		self.aimOffsetFloatGroup[1] = cmds.floatField(value = 10, precision = 1, minValue = 0)
-		self.aimOffsetRadioCollection[0] = cmds.radioCollection()
-		self.aimOffsetRadioCollection[1][0] = cmds.radioButton(label = "X")
-		self.aimOffsetRadioCollection[1][1] = cmds.radioButton(label = "Y")
-		self.aimOffsetRadioCollection[1][2] = cmds.radioButton(label = "Z")
-		self.aimOffsetCheckbox = UI.Checkbox(label = "-", annotation = "Reverse Axis")
-		cmds.radioCollection(self.aimOffsetRadioCollection[0], edit = True, select = self.aimOffsetRadioCollection[1][0])
-
-		self.aimOffsetUpFloatGroup[0] = cmds.text(label = "Up")
-		self.aimOffsetUpFloatGroup[1] = cmds.floatField(value = 10, precision = 1, minValue = 0)
-		self.aimOffsetUpRadioCollection[0] = cmds.radioCollection()
-		self.aimOffsetUpRadioCollection[1][0] = cmds.radioButton(label = "X")
-		self.aimOffsetUpRadioCollection[1][1] = cmds.radioButton(label = "Y")
-		self.aimOffsetUpRadioCollection[1][2] = cmds.radioButton(label = "Z")
-		self.aimOffsetUpCheckbox = UI.Checkbox(label = "-", annotation = "Reverse Axis")
-		cmds.radioCollection(self.aimOffsetUpRadioCollection[0], edit = True, select = self.aimOffsetUpRadioCollection[1][1])
+		radioGroup1 = CustomRadioButtonGroup(label = "Aim")
+		self.aimOffsetFloatGroup[0] = radioGroup1[1]
+		self.aimOffsetFloatGroup[1] = radioGroup1[2]
+		self.aimOffsetRadioCollection[0] = radioGroup1[3]
+		self.aimOffsetRadioCollection[1] = radioGroup1[4]
+		self.aimOffsetRadioCollection[2] = radioGroup1[5]
+		self.aimOffsetCheckbox = radioGroup1[6]
+		cmds.radioButton(self.aimOffsetRadioCollection[0], edit = True, select = True)
+		
+		radioGroup2 = CustomRadioButtonGroup(label = "Up")
+		self.aimOffsetUpFloatGroup[0] = radioGroup2[1]
+		self.aimOffsetUpFloatGroup[1] = radioGroup2[2]
+		self.aimOffsetUpRadioCollection[0] = radioGroup2[3]
+		self.aimOffsetUpRadioCollection[1] = radioGroup2[4]
+		self.aimOffsetUpRadioCollection[2] = radioGroup2[5]
+		self.aimOffsetUpCheckbox = radioGroup2[6]
+		cmds.radioButton(self.aimOffsetRadioCollection[0], edit = True, select = True)
 	def UILayoutParticleDynamicProperties(self, layoutMain):
 		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 72, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
@@ -481,15 +489,15 @@ class Overlappy:
 	def CompileParticleAimOffset(self):
 		### Get aim offset values from UI
 		valueAimFloat = cmds.floatField(self.aimOffsetFloatGroup[1], query = True, value = True)
-		valueAimAxisX = cmds.radioButton(self.aimOffsetRadioCollection[1][0], query = True, select = True)
-		valueAimAxisY = cmds.radioButton(self.aimOffsetRadioCollection[1][1], query = True, select = True)
-		valueAimAxisZ = cmds.radioButton(self.aimOffsetRadioCollection[1][2], query = True, select = True)
+		valueAimAxisX = cmds.radioButton(self.aimOffsetRadioCollection[0], query = True, select = True)
+		valueAimAxisY = cmds.radioButton(self.aimOffsetRadioCollection[1], query = True, select = True)
+		valueAimAxisZ = cmds.radioButton(self.aimOffsetRadioCollection[2], query = True, select = True)
 		valueAimCheckbox = self.aimOffsetCheckbox.Get()
 		
 		valueAimUpFloat = cmds.floatField(self.aimOffsetUpFloatGroup[1], query = True, value = True)
-		valueAimUpAxisX = cmds.radioButton(self.aimOffsetUpRadioCollection[1][0], query = True, select = True)
-		valueAimUpAxisY = cmds.radioButton(self.aimOffsetUpRadioCollection[1][1], query = True, select = True)
-		valueAimUpAxisZ = cmds.radioButton(self.aimOffsetUpRadioCollection[1][2], query = True, select = True)
+		valueAimUpAxisX = cmds.radioButton(self.aimOffsetUpRadioCollection[0], query = True, select = True)
+		valueAimUpAxisY = cmds.radioButton(self.aimOffsetUpRadioCollection[1], query = True, select = True)
+		valueAimUpAxisZ = cmds.radioButton(self.aimOffsetUpRadioCollection[2], query = True, select = True)
 		valueAimUpCheckbox = self.aimOffsetUpCheckbox.Get()
 
 		### Compile aim target value
@@ -797,12 +805,12 @@ class Overlappy:
 		### Aim offset target
 		cmds.floatField(self.aimOffsetFloatGroup[1], edit = True, value = 10)
 		self.aimOffsetCheckbox.Reset()
-		cmds.radioCollection(self.aimOffsetRadioCollection[0], edit = True, select = self.aimOffsetRadioCollection[1][0])
+		cmds.radioButton(self.aimOffsetRadioCollection[0], edit = True, select = True)
 
 		### Aim offset up
 		cmds.floatField(self.aimOffsetUpFloatGroup[1], edit = True, value = 10)
 		self.aimOffsetUpCheckbox.Reset()
-		cmds.radioCollection(self.aimOffsetUpRadioCollection[0], edit = True, select = self.aimOffsetUpRadioCollection[1][1])
+		cmds.radioButton(self.aimOffsetUpRadioCollection[1], edit = True, select = True)
 
 		### Particle dynamic properties
 		self.sliderParticleRadius.Reset()
