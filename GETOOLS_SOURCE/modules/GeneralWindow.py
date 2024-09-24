@@ -83,7 +83,7 @@ class GeneralWindow:
 		self.LayoutMotionTrail(layoutScroll)
 		self.LayoutExperimental(layoutScroll)
 
-	# UI LAYOUTS
+	### UI LAYOUTS
 	def LayoutMenuBar(self, parentLayout):
 		cmds.columnLayout("layoutMenuBar", parent = parentLayout, adjustableColumn = True, width = Settings.windowWidthScroll)
 		cmds.menuBarLayout()
@@ -195,7 +195,7 @@ class GeneralWindow:
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "Change Icon", command = partial(Shelf.ToggleButtonIcons, self.directory))
 		
-		# DEV ZONE
+		### DEV ZONE
 		def LayerCreate(*args):
 			Layers.Create("testLayer")
 		def LayerCreateForSelected(*args):
@@ -499,7 +499,7 @@ class GeneralWindow:
 		self.frameExperimental = cmds.frameLayout("layoutExperimental", parent = parentLayout, label = Experimental.Experimental._title, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = Settings.margin, marginHeight = Settings.margin)
 		Experimental.Experimental().UICreate(self.frameExperimental)
 	
-	# WINDOW
+	### WINDOW
 	def WindowCheck(self, *args):
 		return cmds.window(Settings.windowName, exists = True)
 	def WindowShow(self, *args):
@@ -534,7 +534,7 @@ class GeneralWindow:
 		if (self.frameExperimental != None):
 			cmds.frameLayout(self.frameExperimental, edit = True, collapse = value)
 
-	# DOCKING
+	### DOCKING
 	def DockCheckVisible(self, *args):
 		return cmds.dockControl(Settings.dockName, query = True, visible = True)
 	def DockCheck(self, *args):
@@ -559,7 +559,7 @@ class GeneralWindow:
 			cmds.dockControl(Settings.dockName, label = GeneralWindow._title, content = Settings.windowName, area = areaSide, allowedArea = Settings.dockAllowedAreas) # , backgroundColor = Colors.lightBlue10
 		print("{0} docked to {1}".format(GeneralWindow._title, areaSide))
 
-	# EXECUTION
+	### EXECUTION
 	def WindowCreate(self, *args):
 		self.CreateUI()
 		self.FramesCollapse(True)

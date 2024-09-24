@@ -191,7 +191,7 @@ class Slider:
 			)
 		
 		windowName = Settings.windowName
-		self.slider = self.slider.replace(windowName + "|", "") # fix for docked window only. Don't know how to avoid issue
+		self.slider = self.slider.replace(windowName + "|", "") # HACK fix for docked window only. Don't know how to avoid issue
 		
 		if (menuReset):
 			cmds.popupMenu(parent = self.slider)
