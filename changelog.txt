@@ -2,14 +2,16 @@ GETools changelog
 
 
 ***v1.4.0*** - FUTURE PLAN
-- [PHYSICS] added new physics with nHair logic
-- [OVERLAPPY] added Chain mode with nHair
-- [OVERLAPPY] added collisions UI
-- [OVERLAPPY] added nRigid collision logic
+- TODO [PHYSICS] added new physics with nHair logic
+- TODO [OVERLAPPY] added Chain mode with nHair
+- TODO [OVERLAPPY] added collisions UI
+- TODO [OVERLAPPY] added nRigid collision logic
+- TODO added non-cycle origin animation with loop mode
 **********************************************
 
 
 v1.3.0 - In Development
+- TODO [UI] added new features to shelf buttons
 - [UI] moved motion trail buttons from "Experimental" to "Motion Trail" group
 - [UTILS] added button "Print Animatable Attributes"
 - [UTILS] added button "Parent Shapes"
@@ -21,8 +23,7 @@ v1.3.0 - In Development
 - [OVERLAPPY] reworked aim offset UI
 - [OVERLAPPY] added loop cycles in option menu
 - [OVERLAPPY] moved nucleus timeScale slider to separate panel
-- TODO added new features to shelf buttons
-- TODO added non-cycle origin animation with loop mode
+- [OVERLAPPY] added nucleus gravity settings
 
 v1.2.6
 - added to Settings.py file default value for "checkboxEulerFilter".
