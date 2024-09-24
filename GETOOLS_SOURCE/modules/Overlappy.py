@@ -50,22 +50,26 @@ from ..experimental import PhysicsParticle
 
 class OverlappyAnnotations: # TODO simplify
 	### Setup
-	setup = "Create particle rig for first selected object. Use this step for setup settings. \nSetup runs every time for each selected object."
-	setupDelete = "Delete particle rig if exists"
+	setupEnding = "Tweak values to preview the simulation.\nTo bake the rig, deselect all and press any bake button."
+	setupPoint = "Simple particle rig for translation.\n" + setupEnding
+	setupAim = "Aim rig for rotation using 2 particles: 1 for aim target, 1 for aim up.\n" + setupEnding
+	setupCombo = "Combined rig for translation and rotation using 3 particles: 1 for translation, 1 for aim target, and 1 for aim up.\n" + setupEnding
+	setupDelete = "Delete particle rig if it exists."
 
 	### Baking
-	translation = "Bake simulation for translation attributes"
-	translationWithOffset = "Bake simulation for translation attributes with offset"
-	rotation = "Bake simulation for rotation attributes"
-	comboTranslateRotate = "Bake simulation translation and rotation"
-	scale = "Bake simulation for scale attributes"
+	bakeEnding = "If no objects are selected, the rig (point, aim, or combo) is baked to its object.\nIf objects are selected, previous rigs are deleted, new rigs created, and all are baked."
+	bakeTranslation = "Bake point rig for translation attributes.\n" + bakeEnding
+	bakeRotation = "Bake aim rig for rotation attributes.\n" + bakeEnding
+	bakeCombo = "Bake combo rig for translation and rotation attributes.\n" + bakeEnding
+	# bakeScale = "Bake simulation for scale attributes"
 
 	### Layers
-	layerDeleteAll = "All animation layers will be deleted"
-	layerDeleteTemp = "Only Temp layer and child layers will be deleted"
-	layerDeleteSafe = "Only Safe layer and child layers will be deleted"
-	layerMoveTemp = "Move Temp layer sublayers to Safe layer"
-	layerMoveSafe = "Move Safe layer sublayers to Temp layer"
+	layerDeleteAll = "All animation layers will be deleted."
+	layerDeleteTemp = "Only the Temp layer and its child layers will be deleted."
+	layerDeleteSafe = "Only the Safe layer and its child layers will be deleted."
+	layerMoveTemp = "Move Temp layer sublayers to the Safe layer."
+	layerMoveSafe = "Move Safe layer sublayers to the Temp layer."
+
 
 	### Options
 	# checkboxHierarchy = "Bake simulation for all child hierarhy of selected objects"
@@ -80,9 +84,9 @@ class OverlappyAnnotations: # TODO simplify
 	particleTimeScale = "Nucleus Time Scale"
 
 	### Particle
-	particleRadius = "Particle Radius"
+	particleRadius = "Particle sphere size. Just visual, no physics influence."
 	particleGoalSmooth = "This value is used to control the “smoothness” of the change in the goal forces as the weight changes from 0.0 to 1.0.\nThis is purely an aesthetic effect, with no scientific basis.\nThe higher the number, the smoother the change."
-	particleGoalWeight = "Particle Goal Weight"
+	particleGoalWeight = "Particle Goal Weight. Value 1 means 100% of stiffness."
 	particleConserve = "The Conserve value controls how much of a particle object’s velocity is retained from frame to frame.\nSpecifically, Conserve scales a particle’s velocity attribute at the beginning of each frame’s execution.\nAfter scaling the velocity, Maya applies any applicable dynamics to the particles to create the final positioning at the end of the frame."
 	particleDrag = "Specifies the amount of drag applied to the current nParticle object.\nDrag is the component of aerodynamic force parallel to the relative wind which causes resistance.\nDrag is 0.05 by default."
 	particleDamp = "Specifies the amount the motion of the current nParticles are damped.\nDamping progressively diminishes the movement and oscillation of nParticles by dissipating energy."
@@ -453,16 +457,16 @@ class Overlappy:
 		
 		count = 4
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Point", command = self.ParticleSetupPoint, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
-		cmds.button(label = "Aim", command = self.ParticleSetupAim, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
-		cmds.button(label = "Combo", command = self.ParticleSetupCombo, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setup)
+		cmds.button(label = "Point", command = self.ParticleSetupPoint, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupPoint)
+		cmds.button(label = "Aim", command = self.ParticleSetupAim, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupAim)
+		cmds.button(label = "Combo", command = self.ParticleSetupCombo, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupCombo)
 		cmds.button(label = "Remove", command = partial(self.ParticleSetupDelete, False, True), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
 
 		count = 3
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Bake Point", command = partial(self.BakeParticleVariants, 1), backgroundColor = Colors.orange10)
-		cmds.button(label = "Bake Aim", command = partial(self.BakeParticleVariants, 2), backgroundColor = Colors.orange10)
-		cmds.button(label = "Bake Combo", command = partial(self.BakeParticleVariants, 3), backgroundColor = Colors.orange10)
+		cmds.button(label = "Bake Point", command = partial(self.BakeParticleVariants, 1), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeTranslation)
+		cmds.button(label = "Bake Aim", command = partial(self.BakeParticleVariants, 2), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeRotation)
+		cmds.button(label = "Bake Combo", command = partial(self.BakeParticleVariants, 3), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeCombo)
 	def UILayoutParticleAimOffset(self, layoutMain): # TODO
 		self.layoutParticleOffset = cmds.frameLayout("layoutParticleOffset", label = "Aim Offset", labelIndent = 88, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleOffset, adjustableColumn = True)
