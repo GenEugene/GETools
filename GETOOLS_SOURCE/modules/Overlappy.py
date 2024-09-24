@@ -160,7 +160,7 @@ class Overlappy:
 		## self.colliderObjects = [] # XXX
 		## self.colliderNodes = [] # XXX
 
-		### PARTICLE MODE
+		### PARTICLE SIMULATION OBJECTS
 		self.particleAimOffsetTarget = [0, 0, 0]
 		self.particleAimOffsetUp = [0, 0, 0]
 		self.particleBase = ""
@@ -334,7 +334,7 @@ class Overlappy:
 
 	### PARTICLE UI
 	def UILayoutParticle(self, layoutMain):
-		self.layoutParticleMode = cmds.frameLayout("layoutParticleMode", label = Settings.frames2Prefix + "PARTICLE MODE", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleMode = cmds.frameLayout("layoutParticleMode", label = Settings.frames2Prefix + "PARTICLE SIMULATION", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		# cmds.menu(label = "Select", tearOff = True) # TODO use or remove later
 		# cmds.menuItem(label = "Object", command = self.SelectSelectedObjects, image = Icons.cursor)
 		# cmds.menuItem(label = "Particle", command = self.SelectParticleObject, image = Icons.particle)
