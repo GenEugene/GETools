@@ -83,17 +83,17 @@ class OverlappyAnnotations: # TODO simplify
 	### Nucleus
 	particleTimeScale = "Nucleus Time Scale"
 
+	### TODO Aim Offset
+	# offset = "Move particle from original object. Important to use offset for Rotation baking"
+	# offsetReverse = "Mirror particle offset value to opposite"
+
 	### Particle
 	particleRadius = "Particle sphere size. Just visual, no physics influence."
-	particleGoalSmooth = "This value is used to control the “smoothness” of the change in the goal forces as the weight changes from 0.0 to 1.0.\nThis is purely an aesthetic effect, with no scientific basis.\nThe higher the number, the smoother the change."
+	particleGoalSmooth = "This value is used to control the \"smoothness\" of the change in the goal forces as the weight changes from 0.0 to 1.0.\nThis is purely an aesthetic effect, with no scientific basis.\nThe higher the number, the smoother the change."
 	particleGoalWeight = "Particle Goal Weight. Value 1 means 100% of stiffness."
-	particleConserve = "The Conserve value controls how much of a particle object’s velocity is retained from frame to frame.\nSpecifically, Conserve scales a particle’s velocity attribute at the beginning of each frame’s execution.\nAfter scaling the velocity, Maya applies any applicable dynamics to the particles to create the final positioning at the end of the frame."
+	particleConserve = "The Conserve value controls how much of a particle object's velocity is retained from frame to frame.\nSpecifically, Conserve scales a particle's velocity attribute at the beginning of each frame's execution.\nAfter scaling the velocity, Maya applies any applicable dynamics to the particles to create the final positioning at the end of the frame."
 	particleDrag = "Specifies the amount of drag applied to the current nParticle object.\nDrag is the component of aerodynamic force parallel to the relative wind which causes resistance.\nDrag is 0.05 by default."
 	particleDamp = "Specifies the amount the motion of the current nParticles are damped.\nDamping progressively diminishes the movement and oscillation of nParticles by dissipating energy."
-
-	### XXX Aim Offset
-	# offsetMirrorX = "Mirror particle offset value to opposite"
-	# offsetX = "Move particle from original object. Important to use offset for Rotation baking"
 
 class OverlappySettings: # TODO simplify and move to preset
 	# NAMING
