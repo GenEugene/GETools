@@ -30,26 +30,26 @@ def GeneralWindow(): # brackets added when method used
 
 # FILE
 def SceneReload():
-	import GETOOLS_SOURCE.utils.Scene as scene
-	scene.Reload()
+	import GETOOLS_SOURCE.utils.Scene as Scene
+	Scene.Reload()
 
 def ExitMaya():
-	import GETOOLS_SOURCE.utils.Scene as scene
-	scene.ExitMaya()
+	import GETOOLS_SOURCE.utils.Scene as Scene
+	Scene.ExitMaya()
 
 
 # UTILS
 def SelectHierarchy():
-	import GETOOLS_SOURCE.utils.Selector as selector
-	selector.SelectHierarchy()
+	import GETOOLS_SOURCE.utils.Selector as Selector
+	Selector.SelectHierarchy()
 
 def SelectHierarchyTransforms():
-	import GETOOLS_SOURCE.utils.Selector as selector
-	selector.SelectHierarchyTransforms()
+	import GETOOLS_SOURCE.utils.Selector as Selector
+	Selector.SelectHierarchyTransforms()
 
 def SavePoseToShelf():
-	import GETOOLS_SOURCE.utils.Install as install
-	install.CreatePoseButton()
+	import GETOOLS_SOURCE.utils.Install as Install
+	Install.CreatePoseButton()
 
 def ParentShapes():
 	import GETOOLS_SOURCE.utils.Parent as Parent
@@ -62,288 +62,288 @@ def AnnotateSelected():
 
 # TOGGLES
 def ToggleCameras():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleCameras()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleCameras()
 
 def ToggleControlVertices():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleControlVertices()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleControlVertices()
 
 def ToggleDeformers():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleDeformers()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleDeformers()
 
 def ToggleDimensions():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleDimensions()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleDimensions()
 
 def ToggleDynamicConstraints():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleDynamicConstraints()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleDynamicConstraints()
 
 def ToggleDynamics():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleDynamics()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleDynamics()
 
 def ToggleFluids():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleFluids()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleFluids()
 
 def ToggleFollicles():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleFollicles()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleFollicles()
 
 def ToggleGrid():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleGrid()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleGrid()
 
 def ToggleHairSystems():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleHairSystems()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleHairSystems()
 
 def ToggleHandles():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleHandles()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleHandles()
 
 def ToggleHulls():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleHulls()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleHulls()
 
 def ToggleIkHandles():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleIkHandles()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleIkHandles()
 
 def ToggleJoints():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleJoints()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleJoints()
 
 def ToggleLights():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleLights()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleLights()
 
 def ToggleLocators():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleLocators()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleLocators()
 
 def ToggleManipulators():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleManipulators()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleManipulators()
 
 def ToggleNCloths():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleNCloths()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleNCloths()
 
 def ToggleNParticles():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleNParticles()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleNParticles()
 
 def ToggleNRigids():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleNRigids()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleNRigids()
 
 def ToggleNurbsCurves():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleNurbsCurves()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleNurbsCurves()
 
 def ToggleNurbsSurfaces():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleNurbsSurfaces()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleNurbsSurfaces()
 
 def TogglePivots():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.TogglePivots()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.TogglePivots()
 
 def TogglePlanes():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.TogglePlanes()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.TogglePlanes()
 
 def TogglePolymeshes():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.TogglePolymeshes()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.TogglePolymeshes()
 
 def ToggleShadows():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleShadows()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleShadows()
 
 def ToggleStrokes():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleStrokes()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleStrokes()
 
 def ToggleSubdivSurfaces():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleSubdivSurfaces()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleSubdivSurfaces()
 
 def ToggleTextures():
-	import GETOOLS_SOURCE.utils.Toggles as toggles
-	toggles.ToggleTextures()
+	import GETOOLS_SOURCE.utils.Toggles as Toggles
+	Toggles.ToggleTextures()
 
 
 # LOCATORS
 def LocatorsSizeScale(): # brackets added when method used
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.SelectedLocatorsSizeScale
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.SelectedLocatorsSizeScale
 
 def LocatorsSizeSet():
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.SelectedLocatorsSizeSet()
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.SelectedLocatorsSizeSet()
 
 def LocatorCreate():
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.Create()
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.Create()
 
 def LocatorsMatch():
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.CreateOnSelected(constraint = False)
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.CreateOnSelected(constraint = False)
 
 def LocatorsParent():
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.CreateOnSelected(constraint = True)
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.CreateOnSelected(constraint = True)
 
 def LocatorsPin():
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = True, constrainRotate = True)
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = True, constrainRotate = True)
 
 def LocatorsPinWithoutReverse():
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.CreateOnSelected(constraint = True, bake = True)
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.CreateOnSelected(constraint = True, bake = True)
 
 def LocatorsPinPos():
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = True, constrainRotate = False)
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = True, constrainRotate = False)
 
 def LocatorsPinRot():
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = False, constrainRotate = True)
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.CreateOnSelected(constraint = True, bake = True, constrainReverse = True, constrainTranslate = False, constrainRotate = True)
 
 def LocatorsRelative():
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.CreateAndBakeAsChildrenFromLastSelected(constraintReverse = True, skipLastReverse = False)
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.CreateAndBakeAsChildrenFromLastSelected(constraintReverse = True, skipLastReverse = False)
 
 def LocatorsRelativeSkipLast():
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.CreateAndBakeAsChildrenFromLastSelected(constraintReverse = True)
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.CreateAndBakeAsChildrenFromLastSelected(constraintReverse = True)
 
 def LocatorsRelativeWithoutReverse():
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.CreateAndBakeAsChildrenFromLastSelected()
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.CreateAndBakeAsChildrenFromLastSelected()
 
 def LocatorsAim(): # brackets added when method used
-	import GETOOLS_SOURCE.utils.Locators as locators
-	locators.CreateOnSelectedAim
+	import GETOOLS_SOURCE.utils.Locators as Locators
+	Locators.CreateOnSelectedAim
 
 
 # BAKINNG
 def BakeClassic(): # brackets added when method used
-    import GETOOLS_SOURCE.utils.Baker as baker
-    baker.BakeSelected
+    import GETOOLS_SOURCE.utils.Baker as Baker
+    Baker.BakeSelected
 
 def BakeCustom(): # brackets added when method used
-    import GETOOLS_SOURCE.utils.Baker as baker
-    baker.BakeSelected
+    import GETOOLS_SOURCE.utils.Baker as Baker
+    Baker.BakeSelected
 
 def BakeByLast(): # brackets added when method used
-    import GETOOLS_SOURCE.utils.Baker as baker
-    baker.BakeSelectedByLastObject
+    import GETOOLS_SOURCE.utils.Baker as Baker
+    Baker.BakeSelectedByLastObject
 
 def BakeByWorld(): # brackets added when method used
-    import GETOOLS_SOURCE.utils.Baker as baker
-    baker.BakeSelectedByWorld
+    import GETOOLS_SOURCE.utils.Baker as Baker
+    Baker.BakeSelectedByWorld
 
 
 # ANIMATION
 def AnimOffsetSelected(): # brackets added when method used
-	import GETOOLS_SOURCE.utils.Animation as animation
-	animation.OffsetSelected
+	import GETOOLS_SOURCE.utils.Animation as Animation
+	Animation.OffsetSelected
 
 def DeleteKeys():
-	import GETOOLS_SOURCE.utils.Animation as animation
-	animation.DeleteKeys(True)
+	import GETOOLS_SOURCE.utils.Animation as Animation
+	Animation.DeleteKeys(True)
 
 def DeleteNonkeyable():
-	import GETOOLS_SOURCE.utils.Animation as animation
-	animation.DeleteKeysNonkeyable()
+	import GETOOLS_SOURCE.utils.Animation as Animation
+	Animation.DeleteKeysNonkeyable()
 
 def DeleteStatic():
-	import GETOOLS_SOURCE.utils.Animation as animation
-	animation.DeleteStaticCurves()
+	import GETOOLS_SOURCE.utils.Animation as Animation
+	Animation.DeleteStaticCurves()
 
 def EulerFilterOnSelected():
-	import GETOOLS_SOURCE.utils.Animation as animation
-	animation.EulerFilterOnSelected()
+	import GETOOLS_SOURCE.utils.Animation as Animation
+	Animation.EulerFilterOnSelected()
 
 def SetInfinity(): # brackets added when method used
-	import GETOOLS_SOURCE.utils.Animation as animation
-	animation.SetInfinity
+	import GETOOLS_SOURCE.utils.Animation as Animation
+	Animation.SetInfinity
 
 def SetTimeline(): # brackets added when method used
-	import GETOOLS_SOURCE.utils.Timeline as timeline
-	timeline.SetTime
+	import GETOOLS_SOURCE.utils.Timeline as Timeline
+	Timeline.SetTime
 
 
 # RIGGING
 def Constraint(): # brackets added when method used
-	import GETOOLS_SOURCE.utils.Constraints as constraints
-	constraints.ConstrainSelectedToLastObject
+	import GETOOLS_SOURCE.utils.Constraints as Constraints
+	Constraints.ConstrainSelectedToLastObject
 
 def DeleteConstraints():
-	import GETOOLS_SOURCE.utils.Constraints as constraints
-	constraints.DeleteConstraintsOnSelected()
+	import GETOOLS_SOURCE.utils.Constraints as Constraints
+	Constraints.DeleteConstraintsOnSelected()
 
 def DisconnectTargets():
-	import GETOOLS_SOURCE.utils.Constraints as constraints
-	constraints.DisconnectTargetsFromConstraintOnSelected()
+	import GETOOLS_SOURCE.utils.Constraints as Constraints
+	Constraints.DisconnectTargetsFromConstraintOnSelected()
 
 def RotateOrder(): # brackets added when method used
-	import GETOOLS_SOURCE.utils.Other as other
-	other.RotateOrderVisibility
+	import GETOOLS_SOURCE.utils.Other as Other
+	Other.RotateOrderVisibility
 
 def SegmentScaleCompensate(): # brackets added when method used
-	import GETOOLS_SOURCE.utils.Other as other
-	other.SegmentScaleCompensate
+	import GETOOLS_SOURCE.utils.Other as Other
+	Other.SegmentScaleCompensate
 
 def JointDrawStyle(): # brackets added when method used
-	import GETOOLS_SOURCE.utils.Other as other
-	other.JointDrawStyle
+	import GETOOLS_SOURCE.utils.Other as Other
+	Other.JointDrawStyle
 
 def CopySkin():
-	import GETOOLS_SOURCE.utils.Skinning as skinning
-	skinning.CopySkinWeightsFromLastMesh()
+	import GETOOLS_SOURCE.utils.Skinning as Skinning
+	Skinning.CopySkinWeightsFromLastMesh()
 
 def SelectSkinnedMeshesOrJoints():
-	import GETOOLS_SOURCE.utils.Skinning as skinning
-	skinning.SelectSkinnedMeshesOrJoints()
+	import GETOOLS_SOURCE.utils.Skinning as Skinning
+	Skinning.SelectSkinnedMeshesOrJoints()
 
 def WrapsCreate():
-	import GETOOLS_SOURCE.utils.Deformers as deformers
-	deformers.WrapsCreateOnSelected()
+	import GETOOLS_SOURCE.utils.Deformers as Deformers
+	Deformers.WrapsCreateOnSelected()
 
 def WrapsConvert(): # TODO
-	import GETOOLS_SOURCE.utils.Deformers as deformers
-	deformers.WrapsConvertFromSelected()
+	import GETOOLS_SOURCE.utils.Deformers as Deformers
+	Deformers.WrapsConvertFromSelected()
 
 def BlendshapesReconstruct():
-	import GETOOLS_SOURCE.utils.Deformers as deformers
-	deformers.BlendshapesReconstruction()
+	import GETOOLS_SOURCE.utils.Deformers as Deformers
+	Deformers.BlendshapesReconstruction()
 
 def BlendshapesExtractShapes():
-	import GETOOLS_SOURCE.utils.Blendshapes as blendshapes
-	blendshapes.ExtractShapesFromSelected()
+	import GETOOLS_SOURCE.utils.Blendshapes as Blendshapes
+	Blendshapes.ExtractShapesFromSelected()
 
 def BlendshapesZeroWeights():
-	import GETOOLS_SOURCE.utils.Blendshapes as blendshapes
-	blendshapes.ZeroBlendshapeWeightsOnSelected()
+	import GETOOLS_SOURCE.utils.Blendshapes as Blendshapes
+	Blendshapes.ZeroBlendshapeWeightsOnSelected()
 
 
-# EXPERIMENTAL
+# MOTION TRAIL
 def MotionTrailCreate():
-	import GETOOLS_SOURCE.utils.MotionTrail as mtrail
-	mtrail.Create()
+	import GETOOLS_SOURCE.utils.MotionTrail as MotionTrail
+	MotionTrail.Create()
 
 def MotionTrailSelect():
-	import GETOOLS_SOURCE.utils.MotionTrail as mtrail
-	mtrail.Select()
+	import GETOOLS_SOURCE.utils.MotionTrail as MotionTrail
+	MotionTrail.Select()
 
 def MotionTrailDelete():
-	import GETOOLS_SOURCE.utils.MotionTrail as mtrail
-	mtrail.Delete()
+	import GETOOLS_SOURCE.utils.MotionTrail as MotionTrail
+	MotionTrail.Delete()
 
