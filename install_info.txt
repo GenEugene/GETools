@@ -1,9 +1,7 @@
-1. Put the GETools folder where you want it to be.
+1. Extract archive and put the GETools folder where you want it to be.
 For example: "C:/Users/Username/Documents/maya/scripts/GETools"
 
 2. Drag and Drop the "DRAG_AND_DROP_INSTALL.py" file into Maya viewport.
 GETools will be added to the current shelf as new button.
 
-3. Hover your mouse over any UI element to read a description of the tools, if necessary.
-
-4. Enjoy..
+3. It's done!
