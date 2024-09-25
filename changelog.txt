@@ -11,13 +11,14 @@ GETools changelog
 
 
 v1.3.0 - In Development
-- TODO [UI] added new features to shelf buttons
+- [UI] added new features to shelf buttons
 - [UI] moved motion trail buttons from "Experimental" to "Motion Trail" group
 - [UTILS] added button "Print Animatable Attributes"
 - [UTILS] added button "Parent Shapes"
 - [UTILS] added button "Select Hierarchy Transforms" (for selecting hierarchy by transforms only)
 - [UTILS] added button "Save Pose To Shelf"
-- [RIGGING] added button "Create Curve" (from selected objects)
+- [RIGGING] added button "Create Curve From Selected Objects"
+- [RIGGING] added button "Create Curve From Trajectory" as a draft tool
 - [OVERLAPPY] reworked main script
 - [OVERLAPPY] separated rig creation buttons for point, aim and combo
 - [OVERLAPPY] reworked aim offset UI

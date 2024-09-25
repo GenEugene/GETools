@@ -310,7 +310,6 @@ class GeneralWindow:
 		cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(dividerLabel = "TOOLS - Baking", divider = True)
-		###
 		cmds.menuItem(subMenu = True, label = "Bake", tearOff = True, image = Icons.bake)
 		cmds.menuItem(label = "Classic", command = partial(Install.ToShelf_BakeClassic, self.directory))
 		cmds.menuItem(label = "Classic Cut Out", command = partial(Install.ToShelf_BakeClassicCutOut, self.directory))
@@ -362,7 +361,6 @@ class GeneralWindow:
 		cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(dividerLabel = "TOOLS - Timeline", divider = True)
-		###
 		cmds.menuItem(subMenu = True, label = "Timeline", tearOff = True)
 		cmds.menuItem(label = "Min Out", command = partial(Install.ToShelf_SetTimelineMinOut, self.directory))
 		cmds.menuItem(label = "Min In", command = partial(Install.ToShelf_SetTimelineMinIn, self.directory))
@@ -377,7 +375,6 @@ class GeneralWindow:
 		cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(dividerLabel = "RIGGING - Constraints", divider = True)
-		###
 		cmds.menuItem(subMenu = True, label = "Constraints", tearOff = True, image = Icons.constraint)
 		cmds.menuItem(label = "Parent", command = partial(Install.ToShelf_Constraint, self.directory, False, True, False, False, False))
 		cmds.menuItem(label = "Point", command = partial(Install.ToShelf_Constraint, self.directory, False, False, True, False, False))
@@ -396,7 +393,6 @@ class GeneralWindow:
 		cmds.setParent('..', menu = True)
 		
 		cmds.menuItem(dividerLabel = "RIGGING - Utils", divider = True)
-		###
 		cmds.menuItem(subMenu = True, label = "Rotate Order", tearOff = True)
 		cmds.menuItem(label = "Show", command = partial(Install.ToShelf_RotateOrder, self.directory, True), image = Icons.visibleOn)
 		cmds.menuItem(label = "Hide", command = partial(Install.ToShelf_RotateOrder, self.directory, False), image = Icons.visibleOff)
@@ -415,7 +411,6 @@ class GeneralWindow:
 		cmds.menuItem(label = "Copy Skin Weights From Last Selected", command = partial(Install.ToShelf_CopySkin, self.directory), image = Icons.copySkinWeights)
 		
 		cmds.menuItem(dividerLabel = "RIGGING - Blendshapes", divider = True)
-		###
 		# cmds.menuItem(subMenu = True, label = "Rotate Order", tearOff = True)
 		cmds.menuItem(label = "Wraps Create", command = partial(Install.ToShelf_WrapsCreate, self.directory), image = Icons.wrap)
 		# cmds.menuItem(label = "Wraps Convert", command = partial(Install.ToShelf_WrapsCreate, self.directory), image = Icons.wrap) # TODO
@@ -424,14 +419,16 @@ class GeneralWindow:
 		cmds.menuItem(label = "Zero Weights", command = partial(Install.ToShelf_BlendshapesZeroWeights, self.directory), image = Icons.zero)
 		# cmds.setParent('..', menu = True)
 		
-		cmds.menuItem(dividerLabel = "EXPERIMENTAL", divider = True)
-		###
+		cmds.menuItem(dividerLabel = "RIGGING - Curves", divider = True)
+		cmds.menuItem(label = "Create Curve From Selected Objects", command = partial(Install.ToShelf_CreateCurveFromSelectedObjects, self.directory), image = Icons.nurbsCurve)
+		cmds.menuItem(label = "Create Curve From Trajectory", command = partial(Install.ToShelf_CreateCurveFromTrajectory, self.directory), image = Icons.nurbsCurve)
+		
+		cmds.menuItem(dividerLabel = "MOTION TRAIL", divider = True)
 		cmds.menuItem(subMenu = True, label = "Motion Trail", tearOff = True, image = Icons.motionTrail)
 		cmds.menuItem(label = "Create", command = partial(Install.ToShelf_MotionTrailCreate, self.directory), image = Icons.plus)
 		cmds.menuItem(label = "Select", command = partial(Install.ToShelf_MotionTrailSelect, self.directory), image = Icons.cursor)
 		cmds.menuItem(label = "Delete", command = partial(Install.ToShelf_MotionTrailDelete, self.directory), image = Icons.minus)
 		cmds.setParent('..', menu = True)
-		#
 	def LayoutTitle(self, parentLayout): # TODO figure out how to use resizeable images
 		cmds.columnLayout("layoutTitle", parent = parentLayout, adjustableColumn = False)
 		size = 30

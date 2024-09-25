@@ -333,6 +333,14 @@ def BlendshapesZeroWeights():
 	import GETOOLS_SOURCE.utils.Blendshapes as Blendshapes
 	Blendshapes.ZeroBlendshapeWeightsOnSelected()
 
+def CreateCurveFromSelectedObjects():
+	import GETOOLS_SOURCE.utils.Curves as Curves
+	Curves.CreateCurveFromSelectedObjects()
+
+def CreateCurveFromTrajectory():
+	import GETOOLS_SOURCE.utils.Curves as Curves
+	Curves.CreateCurveFromTrajectory()
+
 
 # MOTION TRAIL
 def MotionTrailCreate():

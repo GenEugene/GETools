@@ -280,6 +280,11 @@ def ToShelf_BlendshapesExtractShapes(path, *args):
 def ToShelf_BlendshapesZeroWeights(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.BlendshapesZeroWeights), "BSZeroWeights", "BSZeroWeights")
 
+def ToShelf_CreateCurveFromSelectedObjects(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.CreateCurveFromSelectedObjects), "CurveFromSelectedObjects", "CurveFromSelectedObjects")
+def ToShelf_CreateCurveFromTrajectory(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.CreateCurveFromTrajectory), "CurveFromTrajectory", "CurveFromTrajectory")
+
 # MOTION TRAIL
 def ToShelf_MotionTrailCreate(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.MotionTrailCreate), "MotionTrailCreate", "MTCreate")
