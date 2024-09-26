@@ -54,13 +54,13 @@ class OverlappyAnnotations:
 	setupPoint = "Simple particle rig for translation.\n" + setupEnding
 	setupAim = "Aim rig for rotation using 2 particles: 1 for aim target, 1 for aim up.\n" + setupEnding
 	setupCombo = "Combined rig for translation and rotation using 3 particles: 1 for translation, 1 for aim target, and 1 for aim up.\n" + setupEnding
-	setupDelete = "Delete particle rig if it exists."
+	setupDelete = "Delete particle rig if it exists"
 
 	### Baking
-	bakeEnding = "If no objects are selected, the rig (point, aim, or combo) is baked to its object.\nIf objects are selected, previous rigs are deleted, new rigs created, and all are baked."
-	bakeTranslation = "Bake point rig for translation attributes.\n" + bakeEnding
-	bakeRotation = "Bake aim rig for rotation attributes.\n" + bakeEnding
-	bakeCombo = "Bake combo rig for translation and rotation attributes.\n" + bakeEnding
+	bakeTranslation = "Bake point rig for translation attributes"
+	bakeRotation = "Bake aim rig for rotation attributes"
+	bakeCombo = "Bake combo rig for translation and rotation attributes"
+	bakeCurrent = "Bake current rig if exist"
 	# bakeScale = "Bake simulation for scale attributes"
 
 	### Layers
@@ -96,26 +96,30 @@ class OverlappyAnnotations:
 	particleDamp = "Specifies the amount the motion of the current nParticles are damped.\nDamping progressively diminishes the movement and oscillation of nParticles by dissipating energy."
 
 class OverlappySettings: # TODO simplify and move to preset
-	# NAMING
+	### NAMING
 	prefix = "ovlp"
 	nameGroup = prefix + "Group"
 	prefixLayer = "_" + prefix
 	nameLayers = (prefixLayer + "TEMP_", prefixLayer + "SAFE_", prefixLayer + "_")
 		
-	# SETTINGS CHECKBOXES
+	### SETTINGS CHECKBOXES
 	optionCheckboxHierarchy = False
 	optionCheckboxLayer = True
 	optionCheckboxLoop = False
 	optionCheckboxDeleteSetup = True
 	optionCheckboxCollisions = True
 
-	# SETTINGS NUCLEUS
+	### SETTINGS NUCLEUS
 	nucleusTimeScale = 1
 	nucleusGravityActivated = True
-	nucleusGravityValue = 9.8
+	nucleusGravityValue = 9.81
 	nucleusGravityDirection = (0, -1, 0)
 
-	# SETTINGS DYNAMIC PROPERTIES
+	### PARTICLE AIM OFFSET
+	particleAimOffsetsAxes = (0, 1) # Aim X, Up Y
+	particleAimOffsetsValues = (10, 10) # Aim, Up
+
+	### SETTINGS DYNAMIC PROPERTIES
 	particleRadius = 1
 	particleGoalSmooth = 1
 	particleGoalWeight = 0.3
@@ -123,7 +127,7 @@ class OverlappySettings: # TODO simplify and move to preset
 	particleDrag = 0.01
 	particleDamp = 0
 		
-	# SLIDERS (field min/max, slider min/max)
+	### SLIDERS (field min/max, slider min/max)
 	rangeNucleusTimeScale = (0.001, float("inf"), 0.001, 1)
 	rangePRadius = (0, float("inf"), 0, 10)
 	rangeGSmooth = (0, float("inf"), 0, 10)
@@ -234,7 +238,7 @@ class Overlappy:
 		
 		cmds.menu(label = "Options", tearOff = True)
 		self.menuCheckboxHierarchy = UI.MenuCheckbox(label = "Use Hierarchy", value = OverlappySettings.optionCheckboxHierarchy, valueDefault = OverlappySettings.optionCheckboxHierarchy)
-		self.menuCheckboxLayer = UI.MenuCheckbox(label = "Bake To Layer", value = OverlappySettings.optionCheckboxLayer, valueDefault = OverlappySettings.optionCheckboxLayer)
+		self.menuCheckboxLayer = UI.MenuCheckbox(label = "Bake To Override Layer", value = OverlappySettings.optionCheckboxLayer, valueDefault = OverlappySettings.optionCheckboxLayer)
 		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop", value = OverlappySettings.optionCheckboxLoop, valueDefault = OverlappySettings.optionCheckboxLoop)
 		self.menuCheckboxDeleteSetup = UI.MenuCheckbox(label = "Delete Setup After Bake", value = OverlappySettings.optionCheckboxDeleteSetup, valueDefault = OverlappySettings.optionCheckboxDeleteSetup)
 		# self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions", value = OverlappySettings.optionCheckboxCollisions, valueDefault = OverlappySettings.optionCheckboxCollisions)
@@ -299,11 +303,11 @@ class Overlappy:
 		)
 
 		### Gravity
-		layoutRow = cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = (14, 35, 35, 200))
+		layoutRow = cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = (14, 35, 40, 200))
 		self.nucleusGravityCheckbox = cmds.checkBox(parent = layoutRow, changeCommand = self.UpdateSettings, value = True)
 		cmds.text(parent = layoutRow, label = "Gravity")
 		self.nucleusGravityFloatField = cmds.floatField(parent = layoutRow, changeCommand = self.UpdateSettings, value = OverlappySettings.nucleusGravityValue, precision = 2)
-		self.nucleusGravityDirectionFloatFieldGrp = cmds.floatFieldGrp(parent = layoutRow, changeCommand = self.UpdateSettings, numberOfFields = 3, columnWidth4 = [47, 35, 35, 35], label = "Direction", value = (OverlappySettings.nucleusGravityDirection[0], OverlappySettings.nucleusGravityDirection[1], OverlappySettings.nucleusGravityDirection[2], 0))
+		self.nucleusGravityDirectionFloatFieldGrp = cmds.floatFieldGrp(parent = layoutRow, changeCommand = self.UpdateSettings, numberOfFields = 3, columnWidth4 = [48, 40, 40, 40], label = "Direction", value = (OverlappySettings.nucleusGravityDirection[0], OverlappySettings.nucleusGravityDirection[1], OverlappySettings.nucleusGravityDirection[2], 0))
 		self.nucleusGravityDirectionFloatFieldGrp = self.nucleusGravityDirectionFloatFieldGrp.replace(Settings.windowName + "|", "") # HACK fix for docked window only. Don't know how to avoid issue
 
 
@@ -356,21 +360,22 @@ class Overlappy:
 		cmds.button(label = "Combo", command = self.ParticleSetupCombo, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupCombo)
 		cmds.button(label = "Remove", command = partial(self.ParticleSetupDelete, False, True), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
 
-		count = 3
+		count = 4
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Bake Point", command = partial(self.BakeParticleVariants, 1), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeTranslation)
 		cmds.button(label = "Bake Aim", command = partial(self.BakeParticleVariants, 2), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeRotation)
 		cmds.button(label = "Bake Combo", command = partial(self.BakeParticleVariants, 3), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeCombo)
+		cmds.button(label = "Bake Current", command = partial(self.BakeParticleVariants, 0), backgroundColor = Colors.orange50, annotation = OverlappyAnnotations.bakeCurrent)
 	def UILayoutParticleAimOffset(self, layoutMain): # TODO
 		self.layoutParticleOffset = cmds.frameLayout("layoutParticleOffset", label = "Aim Offset", labelIndent = 88, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleOffset, adjustableColumn = True)
 		
 		# self.checkboxAutoOffset = UI.Checkbox(label = "Auto") # TODO
 
-		def CustomRadioButtonGroup(label="label"):
-			layout = cmds.rowLayout(parent = layoutColumn, numberOfColumns = 6, columnWidth6 = (40, 50, 28, 28, 28, 60), columnAlign = [1, "center"], columnAttach = [(1, 'both', 0)])
+		def CustomRadioButtonGroup(label="label", value=0):
+			layout = cmds.rowLayout(parent = layoutColumn, numberOfColumns = 6, columnWidth6 = (45, 50, 35, 35, 35, 60), columnAlign = [1, "center"], columnAttach = [(1, 'both', 0)])
 			text = cmds.text(label = label)
-			floatField = cmds.floatField(value = 10, precision = 1, minValue = 0)
+			floatField = cmds.floatField(value = value, precision = 1, minValue = 0)
 			cmds.radioCollection()
 			radioButton1 = cmds.radioButton(label = "X")
 			radioButton2 = cmds.radioButton(label = "Y")
@@ -378,23 +383,23 @@ class Overlappy:
 			checkbox = UI.Checkbox(label = "Reverse")
 			return layout, text, floatField, radioButton1, radioButton2, radioButton3, checkbox
 		
-		radioGroup1 = CustomRadioButtonGroup(label = "Aim")
+		radioGroup1 = CustomRadioButtonGroup(label = "Aim", value = OverlappySettings.particleAimOffsetsValues[0])
 		self.aimOffsetFloatGroup[0] = radioGroup1[1]
 		self.aimOffsetFloatGroup[1] = radioGroup1[2]
 		self.aimOffsetRadioCollection[0] = radioGroup1[3]
 		self.aimOffsetRadioCollection[1] = radioGroup1[4]
 		self.aimOffsetRadioCollection[2] = radioGroup1[5]
 		self.aimOffsetCheckbox = radioGroup1[6]
-		cmds.radioButton(self.aimOffsetRadioCollection[0], edit = True, select = True)
-		
-		radioGroup2 = CustomRadioButtonGroup(label = "Up")
+		cmds.radioButton(self.aimOffsetRadioCollection[OverlappySettings.particleAimOffsetsAxes[0]], edit = True, select = True)
+
+		radioGroup2 = CustomRadioButtonGroup(label = "Up", value = OverlappySettings.particleAimOffsetsValues[1])
 		self.aimOffsetUpFloatGroup[0] = radioGroup2[1]
 		self.aimOffsetUpFloatGroup[1] = radioGroup2[2]
 		self.aimOffsetUpRadioCollection[0] = radioGroup2[3]
 		self.aimOffsetUpRadioCollection[1] = radioGroup2[4]
 		self.aimOffsetUpRadioCollection[2] = radioGroup2[5]
 		self.aimOffsetUpCheckbox = radioGroup2[6]
-		cmds.radioButton(self.aimOffsetRadioCollection[0], edit = True, select = True)
+		cmds.radioButton(self.aimOffsetUpRadioCollection[OverlappySettings.particleAimOffsetsAxes[1]], edit = True, select = True)
 	def UILayoutParticleDynamicProperties(self, layoutMain):
 		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 72, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
@@ -804,14 +809,14 @@ class Overlappy:
 		cmds.floatFieldGrp(self.nucleusGravityDirectionFloatFieldGrp, edit = True, value = (OverlappySettings.nucleusGravityDirection[0], OverlappySettings.nucleusGravityDirection[1], OverlappySettings.nucleusGravityDirection[2], 0))
 
 		### Aim offset target
-		cmds.floatField(self.aimOffsetFloatGroup[1], edit = True, value = 10)
+		cmds.floatField(self.aimOffsetFloatGroup[1], edit = True, value = OverlappySettings.particleAimOffsetsValues[0])
 		self.aimOffsetCheckbox.Reset()
-		cmds.radioButton(self.aimOffsetRadioCollection[0], edit = True, select = True)
+		cmds.radioButton(self.aimOffsetRadioCollection[OverlappySettings.particleAimOffsetsAxes[0]], edit = True, select = True)
 
 		### Aim offset up
-		cmds.floatField(self.aimOffsetUpFloatGroup[1], edit = True, value = 10)
+		cmds.floatField(self.aimOffsetUpFloatGroup[1], edit = True, value = OverlappySettings.particleAimOffsetsValues[1])
 		self.aimOffsetUpCheckbox.Reset()
-		cmds.radioButton(self.aimOffsetUpRadioCollection[1], edit = True, select = True)
+		cmds.radioButton(self.aimOffsetUpRadioCollection[OverlappySettings.particleAimOffsetsAxes[1]], edit = True, select = True)
 
 		### Particle dynamic properties
 		self.sliderParticleRadius.Reset()
@@ -835,7 +840,7 @@ class Overlappy:
 		### Check created setups
 		if (not self.setupCreated):
 			cmds.warning("Particle setup is not created")
-			return
+			return False
 
 		### Get raw attributes
 		attributesType = ()
@@ -847,7 +852,7 @@ class Overlappy:
 			attributesType = Enums.Attributes.translateLong + Enums.Attributes.rotateLong
 		if (len(attributesType) == 0):
 			cmds.warning("No baking attributes specified")
-			return
+			return False
 
 		### Construct attributes with object name
 		attributes = []
@@ -858,7 +863,7 @@ class Overlappy:
 		attributesFiltered = Attributes.FilterAttributesAnimatable(attributes = attributes, skipMutedKeys = True)
 		if (attributesFiltered == None):
 			self.ParticleSetupDelete(clearCache = True)
-			return
+			return False
 		
 		### Cut object name from attributes
 		for i in range(len(attributesFiltered)):
@@ -923,6 +928,7 @@ class Overlappy:
 		### Delete setup
 		if (self.menuCheckboxDeleteSetup.Get()):
 			self.ParticleSetupDelete(clearCache = True)
+		return True
 	def BakeParticleVariants(self, variant, *args):
 		selected = Selector.MultipleObjects(minimalCount = 1)
 		if (selected == None):
@@ -934,34 +940,36 @@ class Overlappy:
 		self.CompileParticleAimOffset()
 		sumOffsetTarget = self.particleAimOffsetTarget[0] + self.particleAimOffsetTarget[1] + self.particleAimOffsetTarget[2]
 		sumOffsetUp = self.particleAimOffsetUp[0] + self.particleAimOffsetUp[1] + self.particleAimOffsetUp[2]
-		if variant in [2, 3]:
-			if (sumOffsetTarget == 0 or sumOffsetUp == 0):
-				dialogResult = cmds.confirmDialog(
-					title = "Zero particle aim offset detected",
-					message = "For baking using aim, set the aim offset to non-zero values.\nIf aim or up offsets are zero, the particle probably will stay in the same position as the original object, and no rotation will occur.\n",
-					messageAlign = "left",
-					icon = "warning",
-					button = ["Continue anyway", "Cancel"],
-					annotation = ["Proceed with zero offset, no useful animation will be baked", "Cancel baking operation"],
-					defaultButton = "Cancel",
-					cancelButton = "Cancel",
-					dismissString = "TODO: dismissString"
-					)
-				if (dialogResult == "Cancel"):
-					cmds.warning("Overlappy Rotation Baking cancelled")
-					return
+		isBakingAimOrCombo = variant in [2, 3]
+		isBakingCurrent = variant == 0 and (self.setupCreatedAim or self.setupCreatedCombo)
+		if (isBakingAimOrCombo or isBakingCurrent):
+				if (sumOffsetTarget == 0 or sumOffsetUp == 0):
+					dialogResult = cmds.confirmDialog(
+						title = "Zero particle aim offset detected",
+						message = "For baking using aim, set the aim offset to non-zero values.\nIf aim or up offsets are zero, the particle probably will stay in the same position as the original object, and no rotation will occur.\n",
+						messageAlign = "left",
+						icon = "warning",
+						button = ["Continue anyway", "Cancel"],
+						annotation = ["Proceed with zero offset, no useful animation will be baked", "Cancel baking operation"],
+						defaultButton = "Cancel",
+						cancelButton = "Cancel",
+						dismissString = "TODO: dismissString"
+						)
+					if (dialogResult == "Cancel"):
+						cmds.warning("Overlappy Rotation Baking cancelled")
+						return
 
 		MayaSettings.CachedPlaybackDeactivate()
 
 		### Run baking process
-		if (selected == None):
-			self.BakeParticleLogic()
-			cmds.select(self.selectedObjects, replace = True)
+		if (variant == 0 or selected == None):
+			wasBakedSuccessfully = self.BakeParticleLogic()
+			if (wasBakedSuccessfully):
+				cmds.select(self.selectedObjects, replace = True)
 		else:
 			### Check hierarchy and get objects
 			if (self.menuCheckboxHierarchy.Get()):
 				selected = Selector.SelectHierarchyTransforms()
-			
 			### Bake
 			for i in range(len(selected)):
 				cmds.select(selected[i], replace = True)
@@ -972,7 +980,6 @@ class Overlappy:
 				elif (variant == 3):
 					self.ParticleSetupCombo()
 				self.BakeParticleLogic()
-			
 			### Select original objects
 			cmds.select(selected, replace = True)
 

@@ -13,6 +13,7 @@ GETools changelog
 v1.3.0 - In Development
 - [UI] added new features to shelf buttons
 - [UI] moved motion trail buttons from "Experimental" to "Motion Trail" group
+- [UI] changed window width from 280 to 300
 - [UTILS] added button "Print Animatable Attributes"
 - [UTILS] added button "Parent Shapes"
 - [UTILS] added button "Select Hierarchy Transforms" (for selecting hierarchy by transforms only)

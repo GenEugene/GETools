@@ -34,7 +34,7 @@ from ..utils import Text
 
 
 class CenterOfMassAnnotations:
-	# Setup
+	### Setup
 	create = "Create center of mass object.\nIt's just a simple joint that temporary stored in memory."
 	activate = "Make selected center of mass object as active.\nUseful if you have more than one center of mass object or if you closed script or Maya.\
 	\nCenter of mass must be activated if you want to use other features from script."
@@ -45,7 +45,7 @@ class CenterOfMassAnnotations:
 	projectorXZ = _projector + " XZ plane"
 	projectorXY = _projector + " XY plane"
 
-	# Weights
+	### Weights
 	disconnectTargets = "Disconnect selected objects from Center Of Mass"
 	weightsCustom = "Custom weights"
 	_weightInfo = "Approximate weight as percentage. In sum all weights should give 100%."
@@ -60,7 +60,7 @@ class CenterOfMassAnnotations:
 	weightKnee = "{1}\n{0}".format(_weightInfo, _weightSymmetry)
 	weightFoot = "{1}\n{0}".format(_weightInfo, _weightSymmetry)
 
-	# Baking
+	### Baking
 	bakeToCOM = "Bake selected objects as locators relative to the center of mass object."
 	bakeToCOMLink = "{0}\nAfter bake constrain selected objects back to locators.".format(bakeToCOM)
 	bakeOriginal = "Bake animation back to original objects from locators."
@@ -135,7 +135,7 @@ class CenterOfMass:
 			colorFinal = (colorValue, colorValue, colorValue)
 			cmds.button(label = text.format(partInfo[0], value), command = partial(self.COMConstrainToSelected, value), backgroundColor = colorFinal, annotation = annotation)
 
-		# WEIGHTS PALETTE
+		### WEIGHTS PALETTE
 		count = 10
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		
@@ -152,7 +152,7 @@ class CenterOfMass:
 		CustomButton(9)
 		CustomButton(10)
 
-		# BODYPARTS
+		### BODYPARTS
 		count = 3
 		layoutBodyGrid = cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight * count)
 		
@@ -185,7 +185,7 @@ class CenterOfMass:
 		cmds.button(label = "Select Root", command = self.SelectParent, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.selectRoot)
 
 
-	# Center of mass functions
+	### CENTER OF MASS
 	def COMObjectCheck(self, *args):
 		if (self.COMObject == None):
 			cmds.warning("Center of mass doesn't stored in the script memory. You need to create new COM object or select one in the scene and press \"Activate\" button")
@@ -275,7 +275,7 @@ class CenterOfMass:
 		cmds.select(selectedList[:-1], replace = True)
 
 
-	# Baking
+	### BAKING
 	def BakeScenario2(self, *args):
 		if (not self.COMObjectCheck()):
 			return

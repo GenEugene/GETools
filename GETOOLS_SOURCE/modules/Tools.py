@@ -39,7 +39,7 @@ class ToolsAnnotations:
 	_onlyForTranslation = "Only for Translation"
 	_onlyForRotation = "Only for Rotation"
 
-	# Locators
+	### Locators
 	_rightClick = "Right click for more options."
 	locatorScale = "Multiply scale of selected locators by"
 	locatorScale50 = "{0} 0.5\n{1}".format(locatorScale, _rightClick)
@@ -67,7 +67,7 @@ class ToolsAnnotations:
 	locatorsBakeAimRotate = "{0}.\nBake locators for Aim Space Switching".format(_onlyForRotation)
 	locatorAimDistance = "Locator Aim distance from original object. Need to use non-zero value"
 
-	# Bake
+	### Bake
 	bakeSamples = "Baking sample rate, keys will be baked with each N key.\nDefault value is 1.\nMinimal value is 0.001."
 	_bakeCutOutside = "Keys outside of time range or selected range will be removed"
 	bakeClassic = "Regular maya bake \"Edit/Keys/Bake Simulation\"."
@@ -81,7 +81,7 @@ class ToolsAnnotations:
 	bakeByWorldPos = "{0}.\n{1}".format(_onlyForTranslation, bakeByWorld)
 	bakeByWorldRot = "{0}.\n{1}".format(_onlyForRotation, bakeByWorld)
 
-	# Animation
+	### Animation
 	deleteAnimation = "Delete animation from selected objects.\nHighligh channel box attributes to delete them.\nHighlight key range in timeline to delete only specific range.\nIf timeline is not highlighted then all animation will be removed"
 	# deleteKeyRange = "Delete selected time range keys of selected objects. \nAlso works with selected attributes in Channel Box"
 	deleteNonkeyableKeys = "Delete animation on all nonkeyable attributes of selected objects"
@@ -100,7 +100,7 @@ class ToolsAnnotations:
 	animationOffset = "Move animation on selected objects in time.\nThe animation will move relative to the index of the selected object.\nThe best way to desync animation.\nWorks with selection in the channel box."
 
 class ToolsSettings:
-	# SLIDERS (field min/max, slider min/max)
+	### SLIDERS (field min/max, slider min/max)
 	rangeLocatorAimOffset = (0, float("inf"), 0, 200)
 
 class Tools:
@@ -301,7 +301,7 @@ class Tools:
 		cmds.button(label = "|<->|", command = partial(Timeline.SetTime, 7), backgroundColor = Colors.orange50, annotation = ToolsAnnotations.timelineSetRange)
 
 
-	# LOCATORS
+	### LOCATORS
 	def GetLocatorSize(self, *args):
 		selectedList = Selector.MultipleObjects(1)
 		if (selectedList == None):
@@ -371,7 +371,7 @@ class Tools:
 			cmds.warning("Aim distance is 0. Highly recommended to use non-zero value.")
 
 
-	# BAKING
+	### BAKING
 	def BakeSamplesSet(self, value=1, *args):
 		self.fieldBakingSamples.Set(value)
 	def BakeSamplesAdd(self, direction=1, *args):
@@ -420,7 +420,7 @@ class Tools:
 			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 
 
-	# ANIMATION
+	### ANIMATION
 	def AnimationOffset(self, direction=1, step=1, *args):
 		Animation.OffsetSelected(direction, step)
 
