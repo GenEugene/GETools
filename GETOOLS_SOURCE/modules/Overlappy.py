@@ -255,17 +255,17 @@ class Overlappy:
 	def UILayoutLayers(self, layoutMain):
 		self.layoutLayers = cmds.frameLayout("layoutLayers", label = Settings.frames2Prefix + "LAYERS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutLayers, adjustableColumn = True)
-		
-		count = 3
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Delete All Layers", command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteAll)
-		cmds.button(label = "Delete Temp Layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
-		cmds.button(label = "Delete Safe Layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
 
-		count = 2
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Move To Safe Layer", command = partial(self.LayerMoveToSafeOrTemp, True), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveTemp)
-		cmds.button(label = "Move To Temp Layer", command = partial(self.LayerMoveToSafeOrTemp, False), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveSafe)
+		sizesDelete = (120, 70, 70)
+		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 3, columnWidth3 = sizesDelete) # recomputeSize = True
+		cmds.button(label = "Delete All Layers", width = sizesDelete[0], command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteAll)
+		cmds.button(label = "Delete Temp", width = sizesDelete[1], command = partial(Layers.Delete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
+		cmds.button(label = "Delete Safe", width = sizesDelete[2], command = partial(Layers.Delete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
+
+		sizesMove = (120, 120)
+		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 2, columnWidth2 = sizesMove)
+		cmds.button(label = "Move To Safe Layer", width = sizesMove[0], command = partial(self.LayerMoveToSafeOrTemp, True), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveTemp)
+		cmds.button(label = "Move To Temp Layer", width = sizesMove[1], command = partial(self.LayerMoveToSafeOrTemp, False), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveSafe)
 	# def UILayoutCollisions(self, layoutMain): # TODO
 	# 	self.layoutCollisions = cmds.frameLayout("layoutCollisions", label = Settings.frames2Prefix + "COLLISIONS - WORK IN PROGRESS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 	# 	layoutColumn = cmds.columnLayout(parent = self.layoutCollisions, adjustableColumn = True)
