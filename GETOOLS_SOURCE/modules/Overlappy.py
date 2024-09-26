@@ -112,7 +112,7 @@ class OverlappySettings: # TODO simplify and move to preset
 
 	### SETTINGS NUCLEUS
 	nucleusTimeScale = 1
-	nucleusGravityActivated = True
+	nucleusGravityActivated = False
 	nucleusGravityValue = 9.81
 	nucleusGravityDirection = (0, -1, 0)
 
@@ -304,7 +304,7 @@ class Overlappy:
 
 		### Gravity
 		layoutRow = cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = (14, 35, 40, 200))
-		self.nucleusGravityCheckbox = cmds.checkBox(parent = layoutRow, changeCommand = self.UpdateSettings, value = True)
+		self.nucleusGravityCheckbox = cmds.checkBox(parent = layoutRow, changeCommand = self.UpdateSettings, value = OverlappySettings.nucleusGravityActivated)
 		cmds.text(parent = layoutRow, label = "Gravity")
 		self.nucleusGravityFloatField = cmds.floatField(parent = layoutRow, changeCommand = self.UpdateSettings, value = OverlappySettings.nucleusGravityValue, precision = 2)
 		self.nucleusGravityDirectionFloatFieldGrp = cmds.floatFieldGrp(parent = layoutRow, changeCommand = self.UpdateSettings, numberOfFields = 3, columnWidth4 = [48, 40, 40, 40], label = "Direction", value = (OverlappySettings.nucleusGravityDirection[0], OverlappySettings.nucleusGravityDirection[1], OverlappySettings.nucleusGravityDirection[2], 0))
