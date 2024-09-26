@@ -69,7 +69,7 @@ class RiggingAnnotations:
 
 	### Curves
 	curveCreateFromSelectedObjects = "Create a curve from selected objects.\nEach curve point will be created in the pivot."
-	curveCreateFromTrajectory = "Create a curve from objects trajectories."
+	curveCreateFromTrajectory = "***DRAFT***\nCreate a curve from objects trajectories."
 
 class Rigging:
 	_version = "v1.3"
