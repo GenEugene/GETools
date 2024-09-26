@@ -70,7 +70,6 @@ class OverlappyAnnotations:
 	layerMoveTemp = "Move Temp layer sublayers to the Safe layer."
 	layerMoveSafe = "Move Safe layer sublayers to the Temp layer."
 
-
 	### Options
 	# checkboxHierarchy = "Bake simulation for all child hierarhy of selected objects"
 	# checkboxLayer = "Bake animation into override layers. \nIf turned off animation will be baked directly to selected objects"
@@ -78,14 +77,16 @@ class OverlappyAnnotations:
 	# checkboxClean = "Remove particle setup after baking end"
 
 	### Collisions
-	checkboxCollisions = "Use collisions"
+	# checkboxCollisions = "Use collisions"
 
 	### Nucleus
 	particleTimeScale = "Nucleus Time Scale"
 
-	### TODO Aim Offset
-	# offset = "Move particle from original object. Important to use offset for Rotation baking"
-	# offsetReverse = "Mirror particle offset value to opposite"
+	### Aim Offset
+	aimOffset = "Particle offset from original object.\nHighly important to use non zero values for \"Aim\" and \"Combo\" modes."
+	aimOffsetValue = "Offset value"
+	aimOffsetAxis = "Positive axis for offset"
+	aimOffsetReverse = "Reverse axis direction from positive to negative"
 
 	### Particle
 	particleRadius = "Particle sphere size. Just visual, no physics influence."
@@ -255,16 +256,15 @@ class Overlappy:
 		self.layoutLayers = cmds.frameLayout("layoutLayers", label = Settings.frames2Prefix + "LAYERS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutLayers, adjustableColumn = True)
 		
-		count = 1
+		count = 3
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Delete All Layers", command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteAll)
+		cmds.button(label = "Delete Temp Layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
+		cmds.button(label = "Delete Safe Layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
 
 		count = 2
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Delete Temp layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
 		cmds.button(label = "Move To Safe Layer", command = partial(self.LayerMoveToSafeOrTemp, True), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveTemp)
-		
-		cmds.button(label = "Delete Safe layer", command = partial(Layers.Delete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
 		cmds.button(label = "Move To Temp Layer", command = partial(self.LayerMoveToSafeOrTemp, False), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveSafe)
 	# def UILayoutCollisions(self, layoutMain): # TODO
 	# 	self.layoutCollisions = cmds.frameLayout("layoutCollisions", label = Settings.frames2Prefix + "COLLISIONS - WORK IN PROGRESS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -330,8 +330,8 @@ class Overlappy:
 		## count = 2
 		## cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		##
-		## cmds.button(label = "CREATE", command = PhysicsHair.CreateNHairOnSelected, backgroundColor = Colors.green10)
-		## cmds.button(label = "REMOVE", command = self._SetupDelete, backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
+		## cmds.button(label = "Create", command = PhysicsHair.CreateNHairOnSelected, backgroundColor = Colors.green10)
+		## cmds.button(label = "Remove", command = self._SetupDelete, backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
 		# pass
 	# def UILayoutChainDynamicProperties(self, layoutMain): # TODO
 		# self.layoutChainDynamicProperties = cmds.frameLayout("layoutChainDynamicProperties", label = "Dynamic Properties", labelIndent = 70, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -344,13 +344,13 @@ class Overlappy:
 		# cmds.menuItem(label = "Object", command = self.SelectSelectedObjects, image = Icons.cursor)
 		# cmds.menuItem(label = "Particle", command = self.SelectParticleObject, image = Icons.particle)
 		# cmds.menuItem(label = "Nucleus", command = self.SelectNucleus, image = Icons.nucleus)
-		# cmds.menuItem(label = "Target locator", command = self.SelectParticleTarget, image = Icons.locator)
+		# cmds.menuItem(label = "Target Locator", command = self.SelectParticleTarget, image = Icons.locator)
 		
 		self.UILayoutParticleSetup(self.layoutParticleMode)
 		self.UILayoutParticleAimOffset(self.layoutParticleMode)
 		self.UILayoutParticleDynamicProperties(self.layoutParticleMode)
 	def UILayoutParticleSetup(self, layoutMain):
-		self.layoutParticleButtons = cmds.frameLayout("layoutParticleButtons", label = "Setup and Bake", labelIndent = 85, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleButtons = cmds.frameLayout("layoutParticleButtons", label = "Setup And Bake", labelIndent = 87, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleButtons, adjustableColumn = True)
 		
 		count = 4
@@ -367,20 +367,20 @@ class Overlappy:
 		cmds.button(label = "Bake Combo", command = partial(self.BakeParticleVariants, 3), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeCombo)
 		cmds.button(label = "Bake Current", command = partial(self.BakeParticleVariants, 0), backgroundColor = Colors.orange50, annotation = OverlappyAnnotations.bakeCurrent)
 	def UILayoutParticleAimOffset(self, layoutMain): # TODO
-		self.layoutParticleOffset = cmds.frameLayout("layoutParticleOffset", label = "Aim Offset", labelIndent = 96, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleOffset = cmds.frameLayout("layoutParticleOffset", label = "Aim Offset", labelIndent = 98, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleOffset, adjustableColumn = True)
 		
 		# self.checkboxAutoOffset = UI.Checkbox(label = "Auto") # TODO
 
 		def CustomRadioButtonGroup(label="label", value=0):
-			layout = cmds.rowLayout(parent = layoutColumn, numberOfColumns = 6, columnWidth6 = (45, 50, 35, 35, 35, 60), columnAlign = [1, "center"], columnAttach = [(1, 'both', 0)])
-			text = cmds.text(label = label)
-			floatField = cmds.floatField(value = value, precision = 1, minValue = 0)
+			layout = cmds.rowLayout(parent = layoutColumn, numberOfColumns = 6, columnWidth6 = (40, 55, 35, 35, 35, 60), columnAlign = [1, "center"], columnAttach = [(1, "both", 0)])
+			text = cmds.text(label = label, annotation = OverlappyAnnotations.aimOffset)
+			floatField = cmds.floatField(value = value, precision = 1, minValue = 0, annotation = OverlappyAnnotations.aimOffsetValue)
 			cmds.radioCollection()
-			radioButton1 = cmds.radioButton(label = "X")
-			radioButton2 = cmds.radioButton(label = "Y")
-			radioButton3 = cmds.radioButton(label = "Z")
-			checkbox = UI.Checkbox(label = "Reverse")
+			radioButton1 = cmds.radioButton(label = "X", annotation = OverlappyAnnotations.aimOffsetAxis)
+			radioButton2 = cmds.radioButton(label = "Y", annotation = OverlappyAnnotations.aimOffsetAxis)
+			radioButton3 = cmds.radioButton(label = "Z", annotation = OverlappyAnnotations.aimOffsetAxis)
+			checkbox = UI.Checkbox(label = "Reverse", annotation = OverlappyAnnotations.aimOffsetReverse)
 			return layout, text, floatField, radioButton1, radioButton2, radioButton3, checkbox
 		
 		radioGroup1 = CustomRadioButtonGroup(label = "Aim", value = OverlappySettings.particleAimOffsetsValues[0])
@@ -888,10 +888,10 @@ class Overlappy:
 		name = "_rebake_" + Text.ConvertSymbols(self.selectedObjects)
 		objectDuplicate = cmds.duplicate(self.selectedObjects, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)[0]
 		cmds.select(clear = True)
-		for attribute in Enums.Attributes.translateLong:
-			cmds.setAttr(objectDuplicate + "." + attribute, lock = False)
-		for attribute in Enums.Attributes.rotateLong:
-			cmds.setAttr(objectDuplicate + "." + attribute, lock = False)
+		for attributeTranslate in Enums.Attributes.translateLong:
+			cmds.setAttr(objectDuplicate + "." + attributeTranslate, lock = False)
+		for attributeRotate in Enums.Attributes.rotateLong:
+			cmds.setAttr(objectDuplicate + "." + attributeRotate, lock = False)
 		Constraints.ConstrainSecondToFirstObject(self.bakingObject, objectDuplicate, maintainOffset = True, parent = True)
 		cmds.select(objectDuplicate, replace = True)
 
@@ -999,59 +999,52 @@ class Overlappy:
 		if (not safeLayer):
 			id = [1, 0]
 		
-		layer1 = OverlappySettings.nameLayers[id[0]]
-		layer2 = OverlappySettings.nameLayers[id[1]]
-
+		nameLayer1 = OverlappySettings.nameLayers[id[0]]
+		nameLayer2 = OverlappySettings.nameLayers[id[1]]
 
 		### Check source layer
-		if (not cmds.objExists(layer1)):
-			cmds.warning("Layer \"{0}\" doesn't exist".format(layer1))
+		if (not cmds.objExists(nameLayer1)):
+			cmds.warning("Layer \"{0}\" doesn't exist".format(nameLayer1))
 			return
 		
-
 		### Get selected layers
 		selectedLayers = []
 		for animLayer in cmds.ls(type = "animLayer"):
 			if cmds.animLayer(animLayer, query = True, selected = True):
 				selectedLayers.append(animLayer)
-		
-
+				
 		### Check selected count
-		children = cmds.animLayer(self.layers[id[0]], query = True, children = True)
+		childrenLayers = cmds.animLayer(self.layers[id[0]], query = True, children = True)
 		filteredLayers = []
-		
 		if (len(selectedLayers) == 0):
-			if (children == None):
-				cmds.warning("Layer \"{0}\" is empty".format(layer1))
+			if (childrenLayers == None):
+				cmds.warning("Layer \"{0}\" is empty".format(nameLayer1))
 				return
 			else:
-				for layer in children:
+				for layer in childrenLayers:
 					filteredLayers.append(layer)
 		else:
-			if (children == None):
-				cmds.warning("Layer \"{0}\" is empty".format(layer1))
+			if (childrenLayers == None):
+				cmds.warning("Layer \"{0}\" is empty".format(nameLayer1))
 				return
 			else:
-				for layer1 in children:
-					for layer2 in selectedLayers:
-						if (layer1 == layer2):
-							filteredLayers.append(layer1)
+				for childLayer in childrenLayers:
+					for selectedLayer in selectedLayers:
+						if (childLayer == selectedLayer):
+							filteredLayers.append(childLayer)
 			if (len(filteredLayers) == 0):
 				cmds.warning("Nothing to move")
 				return
 		
-
 		### Create safe layer
-		if (not cmds.objExists(layer2)):
-			self.layers[id[1]] = cmds.animLayer(layer2, override = True)
+		if (not cmds.objExists(nameLayer2)):
+			self.layers[id[1]] = cmds.animLayer(nameLayer2, override = True)
 		
-
 		### Move children or selected layers
 		for layer in filteredLayers:
 			cmds.animLayer(layer, edit = True, parent = self.layers[id[1]])
 		
-
 		### Delete TEMP layer if no children
-		if (len(filteredLayers) == len(children)):
-			Layers.Delete(layer1)
+		if (len(filteredLayers) == len(childrenLayers)):
+			Layers.Delete(nameLayer1)
 
