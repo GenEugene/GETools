@@ -130,7 +130,7 @@ class OverlappySettings: # TODO simplify and move to preset
 	### SLIDERS (field min/max, slider min/max)
 	rangeNucleusTimeScale = (0.001, float("inf"), 0.001, 1)
 	rangePRadius = (0, float("inf"), 0, 10)
-	rangeGSmooth = (0, float("inf"), 0, 10)
+	rangeGSmooth = (0, float("inf"), 0, 2)
 	rangeGWeight = (0, 1, 0, 1)
 	rangePConserve = (0, 1, 0, 1)
 	rangePDrag = (0, float("inf"), 0, 1)
@@ -350,7 +350,7 @@ class Overlappy:
 		self.UILayoutParticleAimOffset(self.layoutParticleMode)
 		self.UILayoutParticleDynamicProperties(self.layoutParticleMode)
 	def UILayoutParticleSetup(self, layoutMain):
-		self.layoutParticleButtons = cmds.frameLayout("layoutParticleButtons", label = "Setup and Bake", labelIndent = 77, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleButtons = cmds.frameLayout("layoutParticleButtons", label = "Setup and Bake", labelIndent = 85, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleButtons, adjustableColumn = True)
 		
 		count = 4
@@ -367,7 +367,7 @@ class Overlappy:
 		cmds.button(label = "Bake Combo", command = partial(self.BakeParticleVariants, 3), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeCombo)
 		cmds.button(label = "Bake Current", command = partial(self.BakeParticleVariants, 0), backgroundColor = Colors.orange50, annotation = OverlappyAnnotations.bakeCurrent)
 	def UILayoutParticleAimOffset(self, layoutMain): # TODO
-		self.layoutParticleOffset = cmds.frameLayout("layoutParticleOffset", label = "Aim Offset", labelIndent = 88, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleOffset = cmds.frameLayout("layoutParticleOffset", label = "Aim Offset", labelIndent = 96, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleOffset, adjustableColumn = True)
 		
 		# self.checkboxAutoOffset = UI.Checkbox(label = "Auto") # TODO
@@ -401,7 +401,7 @@ class Overlappy:
 		self.aimOffsetUpCheckbox = radioGroup2[6]
 		cmds.radioButton(self.aimOffsetUpRadioCollection[OverlappySettings.particleAimOffsetsAxes[1]], edit = True, select = True)
 	def UILayoutParticleDynamicProperties(self, layoutMain):
-		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 72, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 78, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
 		## cmds.popupMenu()
 		## cmds.menuItem(label = "Right-Click") # TODO add reset all function
@@ -886,13 +886,13 @@ class Overlappy:
 
 		### Start logic
 		name = "_rebake_" + Text.ConvertSymbols(self.selectedObjects)
-		objectDuplicate = cmds.duplicate(self.selectedObjects, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)
+		objectDuplicate = cmds.duplicate(self.selectedObjects, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)[0]
 		cmds.select(clear = True)
 		for attribute in Enums.Attributes.translateLong:
-			cmds.setAttr(objectDuplicate[0] + "." + attribute, lock = False)
+			cmds.setAttr(objectDuplicate + "." + attribute, lock = False)
 		for attribute in Enums.Attributes.rotateLong:
-			cmds.setAttr(objectDuplicate[0] + "." + attribute, lock = False)
-		cmds.parentConstraint(self.bakingObject, objectDuplicate, maintainOffset = True) # skipTranslate
+			cmds.setAttr(objectDuplicate + "." + attribute, lock = False)
+		Constraints.ConstrainSecondToFirstObject(self.bakingObject, objectDuplicate, maintainOffset = True, parent = True)
 		cmds.select(objectDuplicate, replace = True)
 
 		### Bake animation

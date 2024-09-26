@@ -26,6 +26,7 @@ v1.3.0 - In Development
 - [OVERLAPPY] added loop cycles in option menu
 - [OVERLAPPY] moved nucleus timeScale slider to separate panel
 - [OVERLAPPY] added nucleus gravity settings
+- improved "Constraints" module and add attributes filtering to skip locked attributes
 
 v1.2.6
 - added to Settings.py file default value for "checkboxEulerFilter".
