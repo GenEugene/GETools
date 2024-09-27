@@ -110,16 +110,16 @@ class CenterOfMass:
 		#
 		COMButtons1 = 4
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = COMButtons1, cellWidth = Settings.windowWidthMargin / COMButtons1, cellHeight = Settings.lineHeight)
-		cmds.button(label = "CREATE", command = self.COMCreate, backgroundColor = Colors.green50, annotation = CenterOfMassAnnotations.create)
-		cmds.button(label = "ACTIVATE", command = self.COMActivate, backgroundColor = Colors.yellow50, annotation = CenterOfMassAnnotations.activate)
-		cmds.button(label = "SELECT", command = self.COMSelect, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.select)
-		cmds.button(label = "CLEAN", command = self.COMClean, backgroundColor = Colors.red50, annotation = CenterOfMassAnnotations.clean)
+		cmds.button(label = "Create", command = self.COMCreate, backgroundColor = Colors.green50, annotation = CenterOfMassAnnotations.create)
+		cmds.button(label = "Activate", command = self.COMActivate, backgroundColor = Colors.yellow50, annotation = CenterOfMassAnnotations.activate)
+		cmds.button(label = "Select", command = self.COMSelect, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.select)
+		cmds.button(label = "Clean", command = self.COMClean, backgroundColor = Colors.red50, annotation = CenterOfMassAnnotations.clean)
 		#
 		COMButtons2 = 3
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = COMButtons2, cellWidth = Settings.windowWidthMargin / COMButtons2, cellHeight = Settings.lineHeight)
-		cmds.button(label = "PROJECTOR YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.projectorYZ)
-		cmds.button(label = "PROJECTOR XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
-		cmds.button(label = "PROJECTOR XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
+		cmds.button(label = "Projector YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.projectorYZ)
+		cmds.button(label = "Projector XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
+		cmds.button(label = "Projector XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
 	def UILayoutWeights(self, layoutMain):
 		self.layoutWeights = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "WEIGHTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutWeights, adjustableColumn = True)

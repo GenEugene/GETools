@@ -242,13 +242,19 @@ class Overlappy:
 		# self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions", value = OverlappySettings.optionCheckboxCollisions, valueDefault = OverlappySettings.optionCheckboxCollisions)
 
 		cmds.menuItem(dividerLabel = "Pre Loop Cycles", divider = True)
-		
+		cmds.radioCollection()
 		self.menuRadioButtonsLoop[0] = cmds.menuItem(label = "0", radioButton = True)
 		self.menuRadioButtonsLoop[1] = cmds.menuItem(label = "1", radioButton = True)
 		self.menuRadioButtonsLoop[2] = cmds.menuItem(label = "2", radioButton = True)
 		self.menuRadioButtonsLoop[3] = cmds.menuItem(label = "3", radioButton = True)
 		self.menuRadioButtonsLoop[4] = cmds.menuItem(label = "4", radioButton = True)
 		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = True)
+
+		cmds.menu(label = "Select", tearOff = True)
+		cmds.menuItem(label = "Nucleus", command = self.SelectNucleus, image = Icons.nucleus)
+		cmds.menuItem(label = "Particles", command = self.SelectParticles, image = Icons.particle)
+		# cmds.menuItem(label = "Object", command = self.SelectSelectedObjects, image = Icons.cursor)
+
 	def UILayoutLayers(self, layoutMain):
 		self.layoutLayers = cmds.frameLayout("layoutLayers", label = Settings.frames2Prefix + "LAYERS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutLayers, adjustableColumn = True)
@@ -337,12 +343,6 @@ class Overlappy:
 	### PARTICLE UI
 	def UILayoutParticle(self, layoutMain):
 		self.layoutParticleMode = cmds.frameLayout("layoutParticleMode", label = Settings.frames2Prefix + "PARTICLE SIMULATION", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		# cmds.menu(label = "Select", tearOff = True) # TODO use or remove later
-		# cmds.menuItem(label = "Object", command = self.SelectSelectedObjects, image = Icons.cursor)
-		# cmds.menuItem(label = "Particle", command = self.SelectParticleObject, image = Icons.particle)
-		# cmds.menuItem(label = "Nucleus", command = self.SelectNucleus, image = Icons.nucleus)
-		# cmds.menuItem(label = "Target Locator", command = self.SelectParticleTarget, image = Icons.locator)
-		
 		self.UILayoutParticleSetup(self.layoutParticleMode)
 		self.UILayoutParticleAimOffset(self.layoutParticleMode)
 		self.UILayoutParticleDynamicProperties(self.layoutParticleMode)
@@ -563,7 +563,7 @@ class Overlappy:
 		self.setupCreated = True
 
 		### Cache setup elements names
-		self.particleTarget = particleSetup[4]
+		self.particleBase = particleSetup[4]
 		self.particleLocator = particleSetup[6]
 
 		self.bakingObject = self.particleLocator
@@ -655,16 +655,18 @@ class Overlappy:
 
 
 	### SELECT
-	# def Select(self, name="", *args):
-		# if (name != ""):
-		# 	if (cmds.objExists(name)):
-		# 		cmds.select(name, replace = True)
-		# 	else:
-		# 		cmds.warning("\"{0}\" object doesn't exists".format(name))
-		# else:
-		# 	cmds.warning("Object name is not specified")
-	# def SelectSelectedObjects(self, *args): self.Select(self.selectedObjects)
-	# def SelectNucleus(self, *args): self.Select(self.nucleus1)
+	def SelectNucleus(self, *args):		
+		if (cmds.objExists(self.nucleus1)):
+			cmds.select(self.nucleus1, replace = True)
+		if (cmds.objExists(self.nucleus2)):
+			cmds.select(self.nucleus2, add = True)
+	def SelectParticles(self, *args):
+		if (cmds.objExists(self.particleBase)):
+			cmds.select(self.particleBase, replace = True)
+		if (cmds.objExists(self.particleTarget)):
+			cmds.select(self.particleTarget, add = True)
+		if (cmds.objExists(self.particleUp)):
+			cmds.select(self.particleUp, add = True)
 	
 
 	### SETTINGS
