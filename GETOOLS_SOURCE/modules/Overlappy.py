@@ -22,8 +22,6 @@
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import maya.cmds as cmds
-import maya.mel as mel
-# from math import pow, sqrt
 from functools import partial
 
 from .. import Settings
@@ -42,10 +40,6 @@ from ..values import Enums
 from ..values import Icons
 from ..experimental import Physics
 from ..experimental import PhysicsParticle
-
-
-# TODO make cycle infinity before loop bake
-# TODO fix nucleus double nodes (need to catch this bug)
 
 
 class OverlappyAnnotations:
@@ -249,7 +243,7 @@ class Overlappy:
 
 		cmds.menuItem(dividerLabel = "Pre Loop Cycles", divider = True)
 		
-		self.menuRadioButtonsLoop[0] = cmds.menuItem(label = "0", radioButton = True) # , command = lambda *args: print("Option 0 selected")
+		self.menuRadioButtonsLoop[0] = cmds.menuItem(label = "0", radioButton = True)
 		self.menuRadioButtonsLoop[1] = cmds.menuItem(label = "1", radioButton = True)
 		self.menuRadioButtonsLoop[2] = cmds.menuItem(label = "2", radioButton = True)
 		self.menuRadioButtonsLoop[3] = cmds.menuItem(label = "3", radioButton = True)
@@ -406,17 +400,13 @@ class Overlappy:
 	def UILayoutParticleDynamicProperties(self, layoutMain):
 		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 78, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
-		## cmds.popupMenu()
-		## cmds.menuItem(label = "Right-Click") # TODO add reset all function
-
-		commandDefault = self.UpdateParticleSettings
 
 		self.sliderParticleRadius = UI.Slider(
 			parent = layoutColumn,
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
-			command = commandDefault,
+			command = self.UpdateParticleSettings,
 			label = "Radius",
 			annotation = OverlappyAnnotations.particleRadius,
 			value = OverlappySettings.particleRadius,
@@ -431,7 +421,7 @@ class Overlappy:
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
-			command = commandDefault,
+			command = self.UpdateParticleSettings,
 			label = "G.Smooth",
 			annotation = OverlappyAnnotations.particleGoalSmooth,
 			value = OverlappySettings.particleGoalSmooth,
@@ -444,7 +434,7 @@ class Overlappy:
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
-			command = commandDefault,
+			command = self.UpdateParticleSettings,
 			label = "G.Weight",
 			annotation = OverlappyAnnotations.particleGoalWeight,
 			value = OverlappySettings.particleGoalWeight,
@@ -459,7 +449,7 @@ class Overlappy:
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
-			command = commandDefault,
+			command = self.UpdateParticleSettings,
 			label = "Conserve",
 			annotation = OverlappyAnnotations.particleConserve,
 			value = OverlappySettings.particleConserve,
@@ -472,7 +462,7 @@ class Overlappy:
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
-			command = commandDefault,
+			command = self.UpdateParticleSettings,
 			label = "Drag",
 			annotation = OverlappyAnnotations.particleDrag,
 			value = OverlappySettings.particleDrag,
@@ -485,7 +475,7 @@ class Overlappy:
 			widthWindow = Settings.windowWidthMargin,
 			widthMarker = Settings.sliderWidthMarker,
 			columnWidth3 = Settings.sliderWidth,
-			command = commandDefault,
+			command = self.UpdateParticleSettings,
 			label = "Damp",
 			annotation = OverlappyAnnotations.particleDamp,
 			value = OverlappySettings.particleDamp,
