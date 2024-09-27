@@ -111,14 +111,22 @@ class Rigging:
 		layoutUtils = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "UTILS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumnUtils = cmds.columnLayout(parent = layoutUtils, adjustableColumn = True)
 		#
-		countOffsets = 2
-		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Rotate Order - SHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderShow)
-		cmds.button(label = "Rotate Order - HIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderHide)
-		cmds.button(label = "Compensate - ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.scaleCompensateOn)
-		cmds.button(label = "Compensate - OFF", command = partial(Other.SegmentScaleCompensate, False), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.scaleCompensateOff)
-		cmds.button(label = "Joint - BONE", command = partial(Other.JointDrawStyle, 0), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.jointDrawStyleBone)
-		cmds.button(label = "Joint - HIDDEN", command = partial(Other.JointDrawStyle, 2), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.jointDrawStyleHidden)
+		rowLayoutSize = (130, 50, 50)
+		#
+		cmds.rowLayout(parent = layoutColumnUtils, numberOfColumns = 3, columnWidth3 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
+		cmds.text(label = "Rotate Order")
+		cmds.button(label = "SHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderShow)
+		cmds.button(label = "HIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderHide)
+		#
+		cmds.rowLayout(parent = layoutColumnUtils, numberOfColumns = 3, columnWidth3 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
+		cmds.text(label = "Scale Compensate")
+		cmds.button(label = "ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.scaleCompensateOn)
+		cmds.button(label = "OFF", command = partial(Other.SegmentScaleCompensate, False), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.scaleCompensateOff)
+		#
+		cmds.rowLayout(parent = layoutColumnUtils, numberOfColumns = 3, columnWidth3 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
+		cmds.text(label = "Joint Draw Style")
+		cmds.button(label = "BONE", command = partial(Other.JointDrawStyle, 0), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.jointDrawStyleBone)
+		cmds.button(label = "HIDDEN", command = partial(Other.JointDrawStyle, 2), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.jointDrawStyleHidden)
 		#
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
