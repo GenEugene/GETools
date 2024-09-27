@@ -228,7 +228,7 @@ class Overlappy:
 
 	### MAIN UI
 	def UILayoutMenuBar(self, layoutMain):
-		cmds.columnLayout("layoutMenuBar", parent = layoutMain, adjustableColumn = True, width = Settings.windowWidthMargin)
+		cmds.columnLayout(parent = layoutMain, adjustableColumn = True, width = Settings.windowWidthMargin)
 		cmds.menuBarLayout()
 
 		cmds.menu(label = "Edit")
@@ -255,7 +255,7 @@ class Overlappy:
 		cmds.menuItem(label = "Particles", command = self.SelectParticles, image = Icons.particle)
 
 	def UILayoutLayers(self, layoutMain):
-		self.layoutLayers = cmds.frameLayout("layoutLayers", label = Settings.frames2Prefix + "LAYERS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutLayers = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "LAYERS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutLayers, adjustableColumn = True)
 
 		sizesDelete = (120, 70, 70)
@@ -287,7 +287,7 @@ class Overlappy:
 	# 	for i in range(20): # test list items
 	# 		cmds.textScrollList(self.scrollListColliders, edit = True, append = "item {0}".format(i)) # append, selectItem, deselectAll, removeAll, doubleClickCommand
 	def UILayoutNucleus(self, layoutMain):
-		self.layoutNucleusProperties = cmds.frameLayout("layoutNucleusProperties", label = Settings.frames2Prefix + "NUCLEUS PROPERTIES", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutNucleusProperties = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "NUCLEUS PROPERTIES", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutNucleusProperties, adjustableColumn = True)
 
 		### Time Scale
@@ -341,12 +341,12 @@ class Overlappy:
 
 	### PARTICLE UI
 	def UILayoutParticle(self, layoutMain):
-		self.layoutParticleMode = cmds.frameLayout("layoutParticleMode", label = Settings.frames2Prefix + "PARTICLE SIMULATION", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleMode = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "PARTICLE SIMULATION", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		self.UILayoutParticleSetup(self.layoutParticleMode)
 		self.UILayoutParticleAimOffset(self.layoutParticleMode)
 		self.UILayoutParticleDynamicProperties(self.layoutParticleMode)
 	def UILayoutParticleSetup(self, layoutMain):
-		self.layoutParticleButtons = cmds.frameLayout("layoutParticleButtons", label = "Setup And Bake", labelIndent = 87, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleButtons = cmds.frameLayout(parent = layoutMain, label = "Setup And Bake", labelIndent = 87, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleButtons, adjustableColumn = True)
 		
 		count = 4
@@ -363,7 +363,7 @@ class Overlappy:
 		cmds.button(label = "Bake Combo", command = partial(self.BakeParticleVariants, 3), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeCombo)
 		cmds.button(label = "Bake Current", command = partial(self.BakeParticleVariants, 0), backgroundColor = Colors.orange50, annotation = OverlappyAnnotations.bakeCurrent)
 	def UILayoutParticleAimOffset(self, layoutMain):
-		self.layoutParticleOffset = cmds.frameLayout("layoutParticleOffset", label = "Aim Offset", labelIndent = 100, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleOffset = cmds.frameLayout(parent = layoutMain, label = "Aim Offset", labelIndent = 100, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleOffset, adjustableColumn = True)
 		
 		# self.checkboxAutoOffset = UI.Checkbox(label = "Auto") # TODO
@@ -397,7 +397,7 @@ class Overlappy:
 		self.aimOffsetUpCheckbox = radioGroup2[6]
 		cmds.radioButton(self.aimOffsetUpRadioCollection[OverlappySettings.particleAimOffsetsAxes[1]], edit = True, select = True)
 	def UILayoutParticleDynamicProperties(self, layoutMain):
-		self.layoutParticleDynamicProperties = cmds.frameLayout("layoutParticleDynamicProperties", label = "Dynamic Properties", labelIndent = 80, parent = layoutMain, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		self.layoutParticleDynamicProperties = cmds.frameLayout(parent = layoutMain, label = "Dynamic Properties", labelIndent = 80, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
 
 		self.sliderParticleRadius = UI.Slider(

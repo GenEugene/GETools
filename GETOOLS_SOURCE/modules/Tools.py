@@ -63,9 +63,11 @@ class ToolsAnnotations:
 	#
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
 	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
-	locatorsBakeAim = "Bake locators for Aim Space Switching"
-	locatorsBakeAimRotate = "{0}.\nBake locators for Aim Space Switching".format(_onlyForRotation)
-	locatorAimDistance = "Locator Aim distance from original object. Need to use non-zero value"
+	
+	# locatorAimSpace = "Locator Aim distance from original object. Need to use non-zero value"
+	locatorAimSpace = "Aim Space offset from original object.\nNeed to use non-zero value to get best result"
+	locatorAimSpaceBakeAll = "Create Aim Space locators for selected objects.\nOriginal object will be constrained back to locator."
+	locatorAimSpaceBakeRotate = "{0}\n{1}".format(_onlyForRotation, locatorAimSpaceBakeAll)
 
 	### Bake
 	bakeSamples = "Baking sample rate, keys will be baked with each N key.\nDefault value is 1.\nMinimal value is 0.001."
@@ -100,8 +102,10 @@ class ToolsAnnotations:
 	animationOffset = "Move animation on selected objects in time.\nThe animation will move relative to the index of the selected object.\nThe best way to desync animation.\nWorks with selection in the channel box."
 
 class ToolsSettings:
-	### SLIDERS (field min/max, slider min/max)
-	rangeLocatorAimOffset = (0, float("inf"), 0, 200)
+	### AIM SPACE
+	aimSpaceName = "Offset"
+	aimSpaceOffsetValue = 100
+	aimSpaceRadioButtonDefault = 0
 
 class Tools:
 	_version = "v1.1"
@@ -113,11 +117,18 @@ class Tools:
 	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow):
 	def __init__(self, generalInstance):
 		self.generalInstance = generalInstance
+
 		self.checkboxLocatorHideParent = None
 		self.checkboxLocatorSubLocator = None
 		self.floatLocatorSize = None
-		self.floatLocatorAimOffset = None
+		
+		### Locator Aim Space
+		self.aimSpaceFloatField = None
+		self.aimSpaceRadioButtons = [None, None, None]
+		self.aimSpaceCheckbox = None
+
 		self.fieldBakingSamples = None
+
 	def UICreate(self, layoutMain):
 		self.UILayoutLocators(layoutMain)
 		self.UILayoutBaking(layoutMain)
@@ -189,42 +200,25 @@ class Tools:
 		cmds.menuItem(label = "Skip Last Object Reverse Constraint", command = self.LocatorsRelativeReverseSkipLast)
 		cmds.menuItem(label = "Without Reverse Constraint", command = self.LocatorsRelative)
 		#
-		layoutAim = cmds.gridLayout(parent = layoutColumn, numberOfColumns = 1, cellWidth = Settings.windowWidthMargin, cellHeight = Settings.lineHeight)
-		countOffsets = 12
-		textRotation = "r"
-		cmds.gridLayout(parent = layoutAim, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		#
-		cmds.button(label = "-X", command = partial(self.LocatorsBakeAim, 1, False), backgroundColor = Colors.red10, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 1, True), backgroundColor = Colors.red10, annotation = ToolsAnnotations.locatorsBakeAimRotate)
-		#
-		cmds.button(label = "+X", command = partial(self.LocatorsBakeAim, 2, False), backgroundColor = Colors.red50, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 2, True), backgroundColor = Colors.red50, annotation = ToolsAnnotations.locatorsBakeAimRotate)
-		#
-		cmds.button(label = "-Y", command = partial(self.LocatorsBakeAim, 3, False), backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 3, True), backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorsBakeAimRotate)
-		#
-		cmds.button(label = "+Y", command = partial(self.LocatorsBakeAim, 4, False), backgroundColor = Colors.green50, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 4, True), backgroundColor = Colors.green50, annotation = ToolsAnnotations.locatorsBakeAimRotate)
-		#
-		cmds.button(label = "-Z", command = partial(self.LocatorsBakeAim, 5, False), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 5, True), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.locatorsBakeAimRotate)
-		#
-		cmds.button(label = "+Z", command = partial(self.LocatorsBakeAim, 6, False), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsBakeAim)
-		cmds.button(label = textRotation, command = partial(self.LocatorsBakeAim, 6, True), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.locatorsBakeAimRotate)
-		#
-		self.floatLocatorAimOffset = UI.Slider(
-			parent = layoutAim,
-			widthWindow = Settings.windowWidthMargin,
-			widthMarker = Settings.sliderWidthMarker,
-			columnWidth3 = Settings.sliderWidth,
-			# command = ,
-			label = "Distance",
-			annotation = ToolsAnnotations.locatorAimDistance,
-			value = 100,
-			minMax = ToolsSettings.rangeLocatorAimOffset,
-			precision = 3,
-			menuReset = True,
-		)
+		
+		### Aim Space
+		layoutAimSpace = cmds.frameLayout(parent = layoutColumn, label = "Aim Space", labelIndent = 100, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+
+		cmds.rowLayout(parent = layoutAimSpace, numberOfColumns = 6, columnWidth6 = (40, 55, 35, 35, 35, 60), columnAlign = [1, "center"], columnAttach = [(1, "both", 0)])
+		cmds.text(label = ToolsSettings.aimSpaceName)
+		self.aimSpaceFloatField = cmds.floatField(value = ToolsSettings.aimSpaceOffsetValue, precision = 3, minValue = 0, annotation = ToolsAnnotations.locatorAimSpace)
+		cmds.radioCollection()
+		self.aimSpaceRadioButtons[0] = cmds.radioButton(label = "X")
+		self.aimSpaceRadioButtons[1] = cmds.radioButton(label = "Y")
+		self.aimSpaceRadioButtons[2] = cmds.radioButton(label = "Z")
+		self.aimSpaceCheckbox = cmds.checkBox(label = "Reverse", value = False)
+		cmds.radioButton(self.aimSpaceRadioButtons[ToolsSettings.aimSpaceRadioButtonDefault], edit = True, select = True)
+		
+		cmds.rowLayout(parent = layoutAimSpace, numberOfColumns = 3, columnWidth3 = (50, 110, 110), columnAlign = [(1, "center"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
+		cmds.text(label = "Bake")
+		cmds.button(label = "Translate + Rotate", command = partial(self.LocatorsBakeAim, False), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorAimSpaceBakeAll)
+		cmds.button(label = "Only Rotate", command = partial(self.LocatorsBakeAim, True), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorAimSpaceBakeRotate)
+
 	def UILayoutBaking(self, layoutMain):
 		layoutBake = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = layoutBake, adjustableColumn = True)
@@ -352,18 +346,21 @@ class Tools:
 	def LocatorsRelativeReverse(self, *args):
 		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraintReverse = True, skipLastReverse = False, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	
-	def LocatorsBakeAim(self, axis, rotateOnly=False, *args):
+	def LocatorsBakeAim(self, rotateOnly=False, *args):
 		scale = self.floatLocatorSize.Get()
-		distance = self.floatLocatorAimOffset.Get()
+		distance = cmds.floatField(self.aimSpaceFloatField, query = True, value = True)
 		hideParent = self.checkboxLocatorHideParent.Get()
 		subLocators = self.checkboxLocatorSubLocator.Get()
+		reverse = cmds.checkBox(self.aimSpaceCheckbox, query = True, value = True)
 
-		if (axis == 1): axisVector = (-1, 0, 0)
-		elif (axis == 2): axisVector = (1, 0, 0)
-		elif (axis == 3): axisVector = (0, -1, 0)
-		elif (axis == 4): axisVector = (0, 1, 0)
-		elif (axis == 5): axisVector = (0, 0, -1)
-		elif (axis == 6): axisVector = (0, 0, 1)
+		### Compile value and return
+		valueAimTarget = 1 * (-1 if reverse else 1)
+		if (cmds.radioButton(self.aimSpaceRadioButtons[0], query = True, select = True)):
+			axisVector = [valueAimTarget, 0, 0]
+		if (cmds.radioButton(self.aimSpaceRadioButtons[1], query = True, select = True)):
+			axisVector = [0, valueAimTarget, 0]
+		if (cmds.radioButton(self.aimSpaceRadioButtons[2], query = True, select = True)):
+			axisVector = [0, 0, valueAimTarget]
 
 		Locators.CreateOnSelectedAim(scale = scale, hideParent = hideParent, subLocator = subLocators, rotateOnly = rotateOnly, aimVector = axisVector, distance = distance, reverse = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 
