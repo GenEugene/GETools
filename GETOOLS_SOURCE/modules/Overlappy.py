@@ -242,7 +242,7 @@ class Overlappy:
 		# self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions", value = OverlappySettings.optionCheckboxCollisions, valueDefault = OverlappySettings.optionCheckboxCollisions)
 
 		cmds.menuItem(dividerLabel = "Pre Loop Cycles", divider = True)
-		cmds.radioCollection()
+		cmds.radioMenuItemCollection()
 		self.menuRadioButtonsLoop[0] = cmds.menuItem(label = "0", radioButton = True)
 		self.menuRadioButtonsLoop[1] = cmds.menuItem(label = "1", radioButton = True)
 		self.menuRadioButtonsLoop[2] = cmds.menuItem(label = "2", radioButton = True)
@@ -253,7 +253,6 @@ class Overlappy:
 		cmds.menu(label = "Select", tearOff = True)
 		cmds.menuItem(label = "Nucleus", command = self.SelectNucleus, image = Icons.nucleus)
 		cmds.menuItem(label = "Particles", command = self.SelectParticles, image = Icons.particle)
-		# cmds.menuItem(label = "Object", command = self.SelectSelectedObjects, image = Icons.cursor)
 
 	def UILayoutLayers(self, layoutMain):
 		self.layoutLayers = cmds.frameLayout("layoutLayers", label = Settings.frames2Prefix + "LAYERS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
