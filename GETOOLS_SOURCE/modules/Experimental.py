@@ -36,8 +36,11 @@ from ..experimental import PhysicsParticle
 class Experimental:
 	_title = "EXPERIMENTAL"
 
-	def __init__(self):
-		pass
+	# from ..modules import GeneralWindow
+	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow):
+	# def __init__(self, generalInstance):
+	# def __init__(self):
+		# self.generalInstance = generalInstance
 	
 	def UICreate(self, layoutMain):
 		# cmds.popupMenu()
@@ -64,6 +67,11 @@ class Experimental:
 		# cmds.button(label = "**P Chain", command = PhysicsParticle.CreateAimChainOnSelected)
 		# cmds.button(label = "Hair", command = partial(PhysicsHair.CreateNHairOnSelected, None))
 
+		# countOffsets = 2
+		# cmds.gridLayout(parent = layoutMain, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		# commandGet = GeneralWindow.GetCheckboxEulerFilter()
+		# cmds.button(label = "Check General Window", command = commandGet)
+		# self.generalInstance.GetCheckboxEulerFilter()
 
 	### TEST LEAYER METHODS
 	def LayerCreate(*args):

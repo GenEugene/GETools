@@ -525,6 +525,11 @@ class GeneralWindow:
 			cmds.dockControl(Settings.dockName, label = GeneralWindow._title, content = Settings.windowName, area = areaSide, allowedArea = Settings.dockAllowedAreas) # , backgroundColor = Colors.lightBlue10
 		print("{0} docked to {1}".format(GeneralWindow._title, areaSide))
 
+	### OPTIONS # TODO find better way to pass parameters inside subclasses
+	# def GetCheckboxEulerFilter(self):
+	# 	cmds.warning("Get Checkbox Euler Filter")
+		# return self.menuCheckboxEulerFilter.Get()
+
 	### EXECUTION
 	def WindowCreate(self, *args):
 		self.CreateUI()
