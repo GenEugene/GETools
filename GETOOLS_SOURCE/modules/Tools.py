@@ -48,7 +48,7 @@ class ToolsAnnotations:
 	locatorScale200 = "{0} 2.0\n{1}".format(locatorScale, _rightClick)
 	locatorSizeGet = "Get approximated size of all selected locators"
 	locatorSizeSet = "Set size to all selected locators.\nRight click for specific scale values"
-	locatorSize = "Size of locator"
+	locatorSize = "Locator size on creation"
 	#
 	hideParent = "Deactivate visibility on parent locator. \nUsually better to use with \"Sub Locator\" checkbox activated"
 	subLocator = "Create an extra locator inside the main locator for additional local control"
@@ -127,7 +127,7 @@ class Tools:
 		self.aimSpaceRadioButtons = [None, None, None]
 		self.aimSpaceCheckbox = None
 
-		self.fieldBakingSamples = None
+		self.bakingSamplesValue = None
 
 	def UICreate(self, layoutMain):
 		self.UILayoutLocators(layoutMain)
@@ -176,10 +176,10 @@ class Tools:
 		cmds.menuItem(label = "1000", command = partial(Locators.SelectedLocatorsSizeSet, 1000))
 		cmds.menuItem(label = "5000", command = partial(Locators.SelectedLocatorsSizeSet, 5000))
 		#
-		countOffsets = 3
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = (85, 85, 40, 60), columnAlign = [(1, "center"), (2, "center"), (3, "right"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
 		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, annotation = ToolsAnnotations.hideParent)
 		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, annotation = ToolsAnnotations.subLocator)
+		cmds.text(label = "Size:", annotation = ToolsAnnotations.locatorSize)
 		self.floatLocatorSize = UI.FloatField(value = 10, precision = 3, annotation = ToolsAnnotations.locatorSize)
 		#
 		countOffsets = 6
@@ -201,8 +201,8 @@ class Tools:
 		cmds.menuItem(label = "Without Reverse Constraint", command = self.LocatorsRelative)
 		#
 		
-		### Aim Space
-		layoutAimSpace = cmds.frameLayout(parent = layoutColumn, label = "Aim Space", labelIndent = 100, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		### Aim Space Switching
+		layoutAimSpace = cmds.frameLayout(parent = layoutColumn, label = "Aim Space Switching", labelIndent = 75, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 
 		cmds.rowLayout(parent = layoutAimSpace, numberOfColumns = 6, columnWidth6 = (40, 55, 35, 35, 35, 60), columnAlign = [1, "center"], columnAttach = [(1, "both", 0)])
 		cmds.text(label = ToolsSettings.aimSpaceName)
@@ -223,15 +223,16 @@ class Tools:
 		layoutBake = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = layoutBake, adjustableColumn = True)
 		#
-		countOffsets = 6
-		cellWidth = Settings.windowWidthMargin / countOffsets
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = cellWidth, cellHeight = Settings.lineHeight)
+		rowLayout = cmds.rowLayout(parent = layoutColumn, numberOfColumns = 3, columnWidth3 = (90, 50, 120), height = Settings.lineHeight, columnAlign = [(1, "center")], columnAttach = [(1, "both", 0)])
+		cmds.text(parent = rowLayout, label = "Set Bake Step", annotation = ToolsAnnotations.locatorSize)
+		self.bakingSamplesValue = cmds.floatField(parent = rowLayout, value = 1, precision = 3, minValue = 0.001, annotation = ToolsAnnotations.bakeSamples)
+		cmds.gridLayout(parent = rowLayout, numberOfColumns = 6, cellWidth = 20, cellHeight = Settings.lineHeight)
+		cmds.button(label = "<", command = partial(self.BakeSamplesAdd, -1), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.bakeSamples)
+		cmds.button(label = ">", command = partial(self.BakeSamplesAdd, 1), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.bakeSamples)
 		cmds.button(label = "1", command = partial(self.BakeSamplesSet, 1), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.bakeSamples)
 		cmds.button(label = "2", command = partial(self.BakeSamplesSet, 2), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.bakeSamples)
 		cmds.button(label = "3", command = partial(self.BakeSamplesSet, 3), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.bakeSamples)
 		cmds.button(label = "4", command = partial(self.BakeSamplesSet, 4), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.bakeSamples)
-		UI.ButtonLeftRight(width = cellWidth, height = Settings.lineHeight, commandLeft = partial(self.BakeSamplesAdd, -1), commandRight = partial(self.BakeSamplesAdd, 1), backgroundColor = Colors.lightBlue50, annotation = ToolsAnnotations.bakeSamples)
-		self.fieldBakingSamples = UI.FloatField(value = 1, precision = 3, minValue = 0.001, annotation = ToolsAnnotations.bakeSamples)
 		#
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
@@ -369,10 +370,12 @@ class Tools:
 
 
 	### BAKING
+	def BakeSampleGet(self):
+		return cmds.floatField(self.bakingSamplesValue, query = True, value = True)
 	def BakeSamplesSet(self, value=1, *args):
-		self.fieldBakingSamples.Set(value)
+		cmds.floatField(self.bakingSamplesValue, edit = True, value = value)
 	def BakeSamplesAdd(self, direction=1, *args):
-		value = self.fieldBakingSamples.Get()
+		value = self.BakeSampleGet()
 
 		addition = 0
 		if (direction == 1):
@@ -386,35 +389,35 @@ class Tools:
 			else:
 				addition = -1
 
-		value = self.fieldBakingSamples.Get() + addition
+		value = value + addition
 
 		if (value <= 0.1):
 			value = 0.1
 			cmds.warning("Baking sample rate can't be zero or less. To use values below 0.1 type it manually.")
 		
-		self.fieldBakingSamples.Set(value)
+		self.BakeSamplesSet(value)
 	def BakeSelectedClassic(self, *args):
-		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, sampleBy = self.BakeSampleGet(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def BakeSelectedClassicCut(self, *args):
-		Baker.BakeSelected(classic = True, preserveOutsideKeys = False, sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+		Baker.BakeSelected(classic = True, preserveOutsideKeys = False, sampleBy = self.BakeSampleGet(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def BakeSelectedCustom(self, *args): # TODO , sampleBy = self.fieldBakingStep.Get()
 		Baker.BakeSelected(classic = False, preserveOutsideKeys = True, selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def BakeSelectedCustomCut(self, *args): # TODO , sampleBy = self.fieldBakingStep.Get()
 		Baker.BakeSelected(classic = False, preserveOutsideKeys = False, selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def BakeSelectedByLastObject(self, translate=True, rotate=True, *args):
 		if (translate and rotate):
-			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+			Baker.BakeSelectedByLastObject(sampleBy = self.BakeSampleGet(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (translate and not rotate):
-			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+			Baker.BakeSelectedByLastObject(sampleBy = self.BakeSampleGet(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (not translate and rotate):
-			Baker.BakeSelectedByLastObject(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+			Baker.BakeSelectedByLastObject(sampleBy = self.BakeSampleGet(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def BakeSelectedByWorld(self, translate=True, rotate=True, *args):
 		if (translate and rotate):
-			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+			Baker.BakeSelectedByWorld(sampleBy = self.BakeSampleGet(), selectedRange = True, channelBox = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (translate and not rotate):
-			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+			Baker.BakeSelectedByWorld(sampleBy = self.BakeSampleGet(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.translateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 		elif (not translate and rotate):
-			Baker.BakeSelectedByWorld(sampleBy = self.fieldBakingSamples.Get(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+			Baker.BakeSelectedByWorld(sampleBy = self.BakeSampleGet(), selectedRange = True, channelBox = False, attributes = Enums.Attributes.rotateLong, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 
 
 	### ANIMATION
