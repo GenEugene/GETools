@@ -376,7 +376,7 @@ class Overlappy:
 			radioButton1 = cmds.radioButton(label = "X", onCommand = self.UpdateParticleAimOffsetSettings, annotation = OverlappyAnnotations.aimOffsetAxis)
 			radioButton2 = cmds.radioButton(label = "Y", onCommand = self.UpdateParticleAimOffsetSettings, annotation = OverlappyAnnotations.aimOffsetAxis)
 			radioButton3 = cmds.radioButton(label = "Z", onCommand = self.UpdateParticleAimOffsetSettings, annotation = OverlappyAnnotations.aimOffsetAxis)
-			checkbox = UI.Checkbox(label = "Reverse", command = self.UpdateParticleAimOffsetSettings, annotation = OverlappyAnnotations.aimOffsetReverse)
+			checkbox = cmds.checkBox(label = "Reverse", value = False, changeCommand = self.UpdateParticleAimOffsetSettings, annotation = OverlappyAnnotations.aimOffsetReverse)
 			return layout, text, floatField, radioButton1, radioButton2, radioButton3, checkbox
 		
 		radioGroup1 = CustomRadioButtonGroup(label = "Aim", value = OverlappySettings.particleAimOffsetsValues[0])
@@ -490,13 +490,13 @@ class Overlappy:
 		valueAimAxisX = cmds.radioButton(self.aimOffsetRadioCollection[0], query = True, select = True)
 		valueAimAxisY = cmds.radioButton(self.aimOffsetRadioCollection[1], query = True, select = True)
 		valueAimAxisZ = cmds.radioButton(self.aimOffsetRadioCollection[2], query = True, select = True)
-		valueAimCheckbox = self.aimOffsetCheckbox.Get()
+		valueAimCheckbox = cmds.checkBox(self.aimOffsetCheckbox, query = True, value = True)
 		
 		valueAimUpFloat = cmds.floatField(self.aimOffsetUpFloatGroup[1], query = True, value = True)
 		valueAimUpAxisX = cmds.radioButton(self.aimOffsetUpRadioCollection[0], query = True, select = True)
 		valueAimUpAxisY = cmds.radioButton(self.aimOffsetUpRadioCollection[1], query = True, select = True)
 		valueAimUpAxisZ = cmds.radioButton(self.aimOffsetUpRadioCollection[2], query = True, select = True)
-		valueAimUpCheckbox = self.aimOffsetUpCheckbox.Get()
+		valueAimUpCheckbox = cmds.checkBox(self.aimOffsetUpCheckbox, query = True, value = True)
 
 		### Compile aim target value
 		self.particleAimOffsetTarget = [0, 0, 0]
@@ -737,12 +737,12 @@ class Overlappy:
 
 		### Aim offset target
 		cmds.floatField(self.aimOffsetFloatGroup[1], edit = True, value = OverlappySettings.particleAimOffsetsValues[0])
-		self.aimOffsetCheckbox.Reset()
+		cmds.checkBox(self.aimOffsetCheckbox, edit = True, value = False)
 		cmds.radioButton(self.aimOffsetRadioCollection[OverlappySettings.particleAimOffsetsAxes[0]], edit = True, select = True) # TODO move to settings
 
 		### Aim offset up
 		cmds.floatField(self.aimOffsetUpFloatGroup[1], edit = True, value = OverlappySettings.particleAimOffsetsValues[1])
-		self.aimOffsetUpCheckbox.Reset()
+		cmds.checkBox(self.aimOffsetUpCheckbox, edit = True, value = False)
 		cmds.radioButton(self.aimOffsetUpRadioCollection[OverlappySettings.particleAimOffsetsAxes[1]], edit = True, select = True) # TODO move to settings
 
 		### Particle dynamic properties

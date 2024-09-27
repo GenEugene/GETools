@@ -79,7 +79,7 @@ class Rigging:
 	def __init__(self):
 		self.checkboxConstraintReverse = None
 		self.checkboxConstraintMaintain = None
-		self.checkboxConstraintOffset = None
+		# self.checkboxConstraintOffset = None
 	def UICreate(self, layoutMain):
 		### CONSTRAINTS
 		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CONSTRAINTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -88,8 +88,8 @@ class Rigging:
 		countOffsets = 4
 		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.separator(style = "none")
-		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, annotation = RiggingAnnotations.constraintReverse)
-		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, annotation = RiggingAnnotations.constraintMaintain)
+		self.checkboxConstraintReverse = cmds.checkBox(label = "Reverse", value = False, annotation = RiggingAnnotations.constraintReverse)
+		self.checkboxConstraintMaintain = cmds.checkBox(label = "Maintain", value = False, annotation = RiggingAnnotations.constraintMaintain)
 		# self.checkboxConstraintOffset = UI.Checkbox(label = "**Offset", value = False, annotation = RiggingAnnotations.constraintOffset)
 		cmds.separator(style = "none")
 		#
@@ -158,14 +158,19 @@ class Rigging:
 
 
 	### CONSTRAINTS
+	def GetCheckboxConstraintReverse(self):
+		return cmds.checkBox(self.checkboxConstraintReverse, query = True, value = True)
+	def GetCheckboxConstraintMaintain(self):
+		return cmds.checkBox(self.checkboxConstraintMaintain, query = True, value = True)
+
 	def ConstrainParent(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = True, point = False, orient = False, scale = False, aim = False)
+		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = True, point = False, orient = False, scale = False, aim = False)
 	def ConstrainPoint(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = True, orient = False, scale = False, aim = False)
+		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = False, point = True, orient = False, scale = False, aim = False)
 	def ConstrainOrient(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = True, scale = False, aim = False)
+		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = False, point = False, orient = True, scale = False, aim = False)
 	def ConstrainScale(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = False, scale = True, aim = False)
+		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = False, point = False, orient = False, scale = True, aim = False)
 	def ConstrainAim(self, *args): # TODO
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = False, scale = False, aim = True)
+		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = False, point = False, orient = False, scale = False, aim = True)
 

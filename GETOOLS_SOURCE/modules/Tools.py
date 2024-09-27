@@ -177,10 +177,10 @@ class Tools:
 		cmds.menuItem(label = "5000", command = partial(Locators.SelectedLocatorsSizeSet, 5000))
 		#
 		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = (85, 85, 40, 60), columnAlign = [(1, "center"), (2, "center"), (3, "right"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
-		self.checkboxLocatorHideParent = UI.Checkbox(label = "Hide Parent", value = False, annotation = ToolsAnnotations.hideParent)
-		self.checkboxLocatorSubLocator = UI.Checkbox(label = "Sub Locator", value = False, annotation = ToolsAnnotations.subLocator)
+		self.checkboxLocatorHideParent = cmds.checkBox(label = "Hide Parent", value = False, annotation = ToolsAnnotations.hideParent)
+		self.checkboxLocatorSubLocator = cmds.checkBox(label = "Sub Locator", value = False, annotation = ToolsAnnotations.subLocator)
 		cmds.text(label = "Size:", annotation = ToolsAnnotations.locatorSize)
-		self.floatLocatorSize = UI.FloatField(value = 10, precision = 3, annotation = ToolsAnnotations.locatorSize)
+		self.floatLocatorSize = cmds.floatField(value = 10, precision = 3, annotation = ToolsAnnotations.locatorSize)
 		#
 		countOffsets = 6
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
@@ -215,7 +215,7 @@ class Tools:
 		cmds.radioButton(self.aimSpaceRadioButtons[ToolsSettings.aimSpaceRadioButtonDefault], edit = True, select = True)
 		
 		cmds.rowLayout(parent = layoutAimSpace, numberOfColumns = 3, columnWidth3 = (50, 110, 110), columnAlign = [(1, "center"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
-		cmds.text(label = "Bake")
+		cmds.text(label = "Create")
 		cmds.button(label = "Translate + Rotate", command = partial(self.LocatorsBakeAim, False), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorAimSpaceBakeAll)
 		cmds.button(label = "Only Rotate", command = partial(self.LocatorsBakeAim, True), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorAimSpaceBakeRotate)
 
@@ -297,6 +297,9 @@ class Tools:
 
 
 	### LOCATORS
+	def GetFloatLocatorSize(self):
+		return cmds.floatField(self.floatLocatorSize, query = True, value = True)
+
 	def GetLocatorSize(self, *args):
 		selectedList = Selector.MultipleObjects(1)
 		if (selectedList == None):
@@ -324,34 +327,39 @@ class Tools:
 		approximate[2] = approximate[2] / count
 
 		result = (approximate[0] + approximate[1] + approximate[2]) / 3
-		self.floatLocatorSize.Set(value = result)
+		cmds.floatField(self.floatLocatorSize, edit = True, value = result)
 	def SelectedLocatorsSizeSetValue(self, *args):
-		Locators.SelectedLocatorsSizeSet(value = self.floatLocatorSize.Get())
-		
+		Locators.SelectedLocatorsSizeSet(value = self.GetFloatLocatorSize())
+
+	def GetCheckboxLocatorHideParent(self):
+		return cmds.checkBox(self.checkboxLocatorHideParent, query = True, value = True)
+	def GetCheckboxLocatorSubLocator(self):
+		return cmds.checkBox(self.checkboxLocatorSubLocator, query = True, value = True)
+
 	def Locator(self, *args):
-		Locators.Create(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get())
+		Locators.Create(scale = self.GetFloatLocatorSize(), hideParent = self.GetCheckboxLocatorHideParent(), subLocator = self.GetCheckboxLocatorSubLocator())
 	def LocatorsMatch(self, *args):
-		Locators.CreateOnSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get())
+		Locators.CreateOnSelected(scale = self.GetFloatLocatorSize(), hideParent = self.GetCheckboxLocatorHideParent(), subLocator = self.GetCheckboxLocatorSubLocator())
 	def LocatorsParent(self, *args):
-		Locators.CreateOnSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraint = True)
+		Locators.CreateOnSelected(scale = self.GetFloatLocatorSize(), hideParent = self.GetCheckboxLocatorHideParent(), subLocator = self.GetCheckboxLocatorSubLocator(), constraint = True)
 	
 	def LocatorsBake(self, *args):
-		Locators.CreateOnSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraint = True, bake = True)
+		Locators.CreateOnSelected(scale = self.GetFloatLocatorSize(), hideParent = self.GetCheckboxLocatorHideParent(), subLocator = self.GetCheckboxLocatorSubLocator(), constraint = True, bake = True)
 	def LocatorsBakeReverse(self, translate=True, rotate=True, *args): # TODO , channelBox = False
-		Locators.CreateOnSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraint = True, bake = True, constrainReverse = True, constrainTranslate = translate, constrainRotate = rotate)
+		Locators.CreateOnSelected(scale = self.GetFloatLocatorSize(), hideParent = self.GetCheckboxLocatorHideParent(), subLocator = self.GetCheckboxLocatorSubLocator(), constraint = True, bake = True, constrainReverse = True, constrainTranslate = translate, constrainRotate = rotate)
 	
 	def LocatorsRelative(self, *args):
-		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.GetFloatLocatorSize(), hideParent = self.GetCheckboxLocatorHideParent(), subLocator = self.GetCheckboxLocatorSubLocator(), euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def LocatorsRelativeReverseSkipLast(self, *args):
-		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraintReverse = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.GetFloatLocatorSize(), hideParent = self.GetCheckboxLocatorHideParent(), subLocator = self.GetCheckboxLocatorSubLocator(), constraintReverse = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	def LocatorsRelativeReverse(self, *args):
-		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.floatLocatorSize.Get(), hideParent = self.checkboxLocatorHideParent.Get(), subLocator = self.checkboxLocatorSubLocator.Get(), constraintReverse = True, skipLastReverse = False, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+		Locators.CreateAndBakeAsChildrenFromLastSelected(scale = self.GetFloatLocatorSize(), hideParent = self.GetCheckboxLocatorHideParent(), subLocator = self.GetCheckboxLocatorSubLocator(), constraintReverse = True, skipLastReverse = False, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 	
 	def LocatorsBakeAim(self, rotateOnly=False, *args):
-		scale = self.floatLocatorSize.Get()
+		scale = self.GetFloatLocatorSize()
 		distance = cmds.floatField(self.aimSpaceFloatField, query = True, value = True)
-		hideParent = self.checkboxLocatorHideParent.Get()
-		subLocators = self.checkboxLocatorSubLocator.Get()
+		hideParent = self.GetCheckboxLocatorHideParent()
+		subLocators = self.GetCheckboxLocatorSubLocator()
 		reverse = cmds.checkBox(self.aimSpaceCheckbox, query = True, value = True)
 
 		### Compile value and return
