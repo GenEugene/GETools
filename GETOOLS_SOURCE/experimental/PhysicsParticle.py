@@ -57,7 +57,7 @@ _valueGoalWeight = 0.3
 _scaleLocatorsOne = 0.1
 
 
-def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, customParentObject=None, positionOffset=(0,0,0)): # TODO
+def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, customParentObject=None, positionOffset=(0,0,0)):
 	### Generate names
 	nameTargetObjectConverted = "_" + Text.ConvertSymbols(targetObject)
 	nameGroup = _defaultNameGroup + nameTargetObjectConverted
@@ -179,7 +179,7 @@ def CreateParticleSetup(targetObject, nucleusNode=None, parentGroup=None, custom
 	### Orient constrain for particle locator
 	cmds.orientConstraint(targetObject, locatorParticle, maintainOffset = True)
 
-	return targetObject, nameTargetObjectConverted, group, nucleusNode, particle, locatorGoal, locatorParticle
+	return targetObject, nameTargetObjectConverted, group, nucleusNode, particle, locatorGoal, locatorParticle, locatorGoalOffset
 def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	if (particleSetup == None):
 		cmds.warning("No Particle Setup specified. Cancel algorithm")
@@ -235,9 +235,6 @@ def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	locatorAimUp = cmds.duplicate(locatorAim, name = nameLocAimUp)[0]
 	cmds.parent(locatorAimUp, locatorAim)
 	cmds.select(clear = True)
-	cmds.setAttr(locatorAimUp + "." + "translateX", positionOffset[0])
-	cmds.setAttr(locatorAimUp + "." + "translateY", positionOffset[1])
-	cmds.setAttr(locatorAimUp + "." + "translateZ", positionOffset[2])
 	cmds.parent(locatorAimUp, locatorAimBase)
 	cmds.select(clear = True)
 	cmds.setAttr(locatorAimUp + ".visibility", 0)
@@ -246,7 +243,7 @@ def CreateAimSetup(particleSetup=None, positionOffset=(0,0,0)):
 	cmds.setAttr(locatorAimUp + "Shape.localScaleZ", _scaleLocatorsOne)
 
 	### Create aim up particle setup
-	particleUpSetup = CreateParticleSetup(targetObject = locatorAimUp, nucleusNode = nucleusNode)
+	particleUpSetup = CreateParticleSetup(targetObject = locatorAimUp, nucleusNode = nucleusNode, positionOffset = positionOffset)
 
 	### Get particle up setup variables
 	groupUp = particleUpSetup[2]
