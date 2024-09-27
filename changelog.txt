@@ -9,23 +9,25 @@ GETools changelog
 - TODO added non-cycle origin animation with loop mode
 **********************************************
 
-
-v1.3.0 - In Development
-- [UI] added new features to shelf buttons
-- [UI] moved motion trail buttons from "Experimental" to "Motion Trail" group
-- [UI] changed window width from 280 to 300
-- [UTILS] added button "Print Animatable Attributes"
-- [UTILS] added button "Parent Shapes"
-- [UTILS] added button "Select Hierarchy Transforms" (for selecting hierarchy by transforms only)
-- [UTILS] added button "Save Pose To Shelf"
-- [RIGGING] added button "Create Curve From Selected Objects"
-- [RIGGING] added button "Create Curve From Trajectory" as a draft tool
-- [RIGGING] improved "Constraints" module and add attributes filtering to skip locked attributes
-- [OVERLAPPY] reworked aim offset UI
-- [OVERLAPPY] separated rig creation buttons for point, aim and combo
-- [OVERLAPPY] added loop cycles in option menu
-- [OVERLAPPY] added nucleus gravity settings
-- [OVERLAPPY] moved nucleus timeScale slider to separate panel
+v1.3.0
+- [UI] added new features to shelf buttons.
+- [UI] moved motion trail buttons from "Experimental" to "Motion Trail" group.
+- [UI] changed window width from 280 to 300.
+- [UTILS] added button "Print Animatable Attributes".
+- [UTILS] added button "Parent Shapes".
+- [UTILS] added button "Select Hierarchy Transforms".
+- [UTILS] added button "Save Pose To Shelf".
+- [TOOLS] changed aim space UI.
+- [TOOLS] checged baking samples UI.
+- [RIGGING] changed UI structure.
+- [RIGGING] added button "Create Curve From Selected Objects".
+- [RIGGING] added button "Create Curve From Trajectory" as a draft tool.
+- [RIGGING] improved "Constraints" module and add attributes filtering.
+- [OVERLAPPY] reworked aim offset UI.
+- [OVERLAPPY] separated rig creation buttons for "Point", "Aim" and "Combo" modes.
+- [OVERLAPPY] moved timeScale slider to "Nucleus Properties" panel.
+- [OVERLAPPY] added nucleus gravity settings.
+- [OVERLAPPY] added loop cycles to option menu.
 
 v1.2.6
 - added to Settings.py file default value for "checkboxEulerFilter".
@@ -106,8 +108,8 @@ v0.0.12
 - improved various modules and overall quality.
 
 v0.0.11
-- [UI] moved Select Transform Hierarchy button to Utils menu and remove SELECT category in TOOLS module
-- [UI] changed window width, margins and spacing between ui elements
+- [UI] moved "Select Transform Hierarchy button" to "Utils" menu and remove SELECT category in TOOLS module
+- [UI] changed window width, margins and spacing between UI elements
 - [UI] added Color Palette window for colors analysis
 - [UI] added toggling for script window execution. Press the same button to open/close script (reset all parameters changes)
 - [TOOLS] added Locators baking to Aim space
