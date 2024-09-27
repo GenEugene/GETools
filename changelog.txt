@@ -21,12 +21,11 @@ v1.3.0 - In Development
 - [RIGGING] added button "Create Curve From Selected Objects"
 - [RIGGING] added button "Create Curve From Trajectory" as a draft tool
 - [RIGGING] improved "Constraints" module and add attributes filtering to skip locked attributes
-- [OVERLAPPY] reworked main script
-- [OVERLAPPY] separated rig creation buttons for point, aim and combo
 - [OVERLAPPY] reworked aim offset UI
+- [OVERLAPPY] separated rig creation buttons for point, aim and combo
 - [OVERLAPPY] added loop cycles in option menu
-- [OVERLAPPY] moved nucleus timeScale slider to separate panel
 - [OVERLAPPY] added nucleus gravity settings
+- [OVERLAPPY] moved nucleus timeScale slider to separate panel
 
 v1.2.6
 - added to Settings.py file default value for "checkboxEulerFilter".
