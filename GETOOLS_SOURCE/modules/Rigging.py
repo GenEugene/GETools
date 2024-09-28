@@ -28,6 +28,7 @@ from .. import Settings
 from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Constraints
+from ..utils import Curves
 from ..utils import Deformers
 from ..utils import Other
 from ..utils import Skinning
@@ -35,7 +36,7 @@ from ..utils import UI
 
 
 class RiggingAnnotations:
-	# Constraints
+	### Constraints
 	_textAllSelectedConstrainToLast = "All selected objects will be constrained to last selected object"
 	constraintReverse = "Reverse the direction of operation from last to first selected"
 	constraintMaintain = "Use maintain offset"
@@ -48,7 +49,7 @@ class RiggingAnnotations:
 	constraintDisconnectSelected = "Disconnect targets objects from last selected object. They will be deleted from constraint attributes."
 	constraintDelete = "Delete all constraints on selected objects"
 
-	# Utils
+	### Utils
 	_rotateOrder = "rotate order attribute in channel box for all selected objects"
 	rotateOrderShow = "Show {0}".format(_rotateOrder)
 	rotateOrderHide = "Hide {0}".format(_rotateOrder)
@@ -60,31 +61,35 @@ class RiggingAnnotations:
 	jointDrawStyleHidden = "Hidden {0}".format(_jointDrawStyle)
 	copySkinWeights = "Copy skin weights from last selected object to all other selected objects"
 
-	# Deformers
+	### Deformers
 	wrapsCreate = "Create a wrap deformer on selected objects.\nThe last object used as a source deformation object."
 	blendshapeCopyFromTarget = "Reconstruct blendshapes on selected objects from the last selected object.\nThe last object must have a blendshape node."
 	blendshapeExtract = "Extract blendshapes as duplicated meshes.\nPaint weights before extraction if needed."
 	blendshapeZeroWeights = "Zero all blendshape weights on selected objects"
 
+	### Curves
+	curveCreateFromSelectedObjects = "Create a curve from selected objects.\nEach curve point will be created in the pivot."
+	curveCreateFromTrajectory = "***DRAFT***\nCreate a curve from objects trajectories."
+
 class Rigging:
-	version = "v1.2"
-	name = "RIGGING"
-	title = name + " " + version
+	_version = "v1.3"
+	_name = "RIGGING"
+	_title = _name + " " + _version
 
 	def __init__(self):
 		self.checkboxConstraintReverse = None
 		self.checkboxConstraintMaintain = None
-		self.checkboxConstraintOffset = None
+		# self.checkboxConstraintOffset = None
 	def UICreate(self, layoutMain):
-		# CONSTRAINTS
+		### CONSTRAINTS
 		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CONSTRAINTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumnConstraints = cmds.columnLayout(parent = layoutConstraints, adjustableColumn = True)
 		#
 		countOffsets = 4
 		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.separator(style = "none")
-		self.checkboxConstraintReverse = UI.Checkbox(label = "Reverse", value = False, annotation = RiggingAnnotations.constraintReverse)
-		self.checkboxConstraintMaintain = UI.Checkbox(label = "Maintain", value = False, annotation = RiggingAnnotations.constraintMaintain)
+		self.checkboxConstraintReverse = cmds.checkBox(label = "Reverse", value = False, annotation = RiggingAnnotations.constraintReverse)
+		self.checkboxConstraintMaintain = cmds.checkBox(label = "Maintain", value = False, annotation = RiggingAnnotations.constraintMaintain)
 		# self.checkboxConstraintOffset = UI.Checkbox(label = "**Offset", value = False, annotation = RiggingAnnotations.constraintOffset)
 		cmds.separator(style = "none")
 		#
@@ -102,24 +107,32 @@ class Rigging:
 		cmds.button(label = "Delete Constraints", command = Constraints.DeleteConstraintsOnSelected, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDelete)
 
 
-		# UTILS
+		### UTILS
 		layoutUtils = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "UTILS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumnUtils = cmds.columnLayout(parent = layoutUtils, adjustableColumn = True)
 		#
-		countOffsets = 2
-		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Rotate Order - SHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderShow)
-		cmds.button(label = "Rotate Order - HIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderHide)
-		cmds.button(label = "Compensate - ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.scaleCompensateOn)
-		cmds.button(label = "Compensate - OFF", command = partial(Other.SegmentScaleCompensate, False), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.scaleCompensateOff)
-		cmds.button(label = "Joint - BONE", command = partial(Other.JointDrawStyle, 0), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.jointDrawStyleBone)
-		cmds.button(label = "Joint - HIDDEN", command = partial(Other.JointDrawStyle, 2), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.jointDrawStyleHidden)
+		rowLayoutSize = (130, 50, 50)
+		#
+		cmds.rowLayout(parent = layoutColumnUtils, numberOfColumns = 3, columnWidth3 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
+		cmds.text(label = "Rotate Order")
+		cmds.button(label = "SHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderShow)
+		cmds.button(label = "HIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderHide)
+		#
+		cmds.rowLayout(parent = layoutColumnUtils, numberOfColumns = 3, columnWidth3 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
+		cmds.text(label = "Scale Compensate")
+		cmds.button(label = "ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.scaleCompensateOn)
+		cmds.button(label = "OFF", command = partial(Other.SegmentScaleCompensate, False), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.scaleCompensateOff)
+		#
+		cmds.rowLayout(parent = layoutColumnUtils, numberOfColumns = 3, columnWidth3 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
+		cmds.text(label = "Joint Draw Style")
+		cmds.button(label = "BONE", command = partial(Other.JointDrawStyle, 0), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.jointDrawStyleBone)
+		cmds.button(label = "HIDDEN", command = partial(Other.JointDrawStyle, 2), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.jointDrawStyleHidden)
 		#
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Copy Skin Weights From Last Selected", command = Skinning.CopySkinWeightsFromLastMesh, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.copySkinWeights)
 		
-		# BLENDSHAPES
+		### BLENDSHAPES
 		layoutBlendshapes = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BLENDSHAPES", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumnBlendshapes = cmds.columnLayout(parent = layoutBlendshapes, adjustableColumn = True)
 		#
@@ -133,17 +146,31 @@ class Rigging:
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Zero Weights", command = Blendshapes.ZeroBlendshapeWeightsOnSelected, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.blendshapeZeroWeights)
+		
+		### CURVES
+		layoutCurves = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CURVES", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		layoutColumnCurves = cmds.columnLayout(parent = layoutCurves, adjustableColumn = True)
+		#
+		countOffsets = 2
+		cmds.gridLayout(parent = layoutColumnCurves, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		cmds.button(label = "From Selected Objects", command = Curves.CreateCurveFromSelectedObjects, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.curveCreateFromSelectedObjects)
+		cmds.button(label = "From Trajectory", command = Curves.CreateCurveFromTrajectory, backgroundColor = Colors.orange10, annotation = RiggingAnnotations.curveCreateFromTrajectory)
 
 
-	# CONSTRAINTS
+	### CONSTRAINTS
+	def GetCheckboxConstraintReverse(self):
+		return cmds.checkBox(self.checkboxConstraintReverse, query = True, value = True)
+	def GetCheckboxConstraintMaintain(self):
+		return cmds.checkBox(self.checkboxConstraintMaintain, query = True, value = True)
+
 	def ConstrainParent(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = True, point = False, orient = False, scale = False, aim = False)
+		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = True, point = False, orient = False, scale = False, aim = False)
 	def ConstrainPoint(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = True, orient = False, scale = False, aim = False)
+		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = False, point = True, orient = False, scale = False, aim = False)
 	def ConstrainOrient(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = True, scale = False, aim = False)
+		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = False, point = False, orient = True, scale = False, aim = False)
 	def ConstrainScale(self, *args):
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = False, scale = True, aim = False)
+		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = False, point = False, orient = False, scale = True, aim = False)
 	def ConstrainAim(self, *args): # TODO
-		Constraints.ConstrainSelectedToLastObject(reverse = self.checkboxConstraintReverse.Get(), maintainOffset = self.checkboxConstraintMaintain.Get(), parent = False, point = False, orient = False, scale = False, aim = True)
+		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = False, point = False, orient = False, scale = False, aim = True)
 

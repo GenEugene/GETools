@@ -29,10 +29,10 @@ from ..utils import Selector
 # from ..values import Enums
 
 
-nameWrap = "wrapTemp"
-nameBlendshapePrefix = "bs_"
-dropoff = 4
-smoothness = 0
+_nameWrap = "wrapTemp"
+_nameBlendshapePrefix = "bs_"
+_dropoff = 4
+_smoothness = 0
 
 
 def WrapsCreateOnList(elements):
@@ -53,14 +53,14 @@ def WrapsCreateOnList(elements):
 		targetShape = cmds.listRelatives(elements[i], shapes = True, noIntermediate = True)[0]
 
 		# Create wrap node
-		node = cmds.deformer(targetShape, name = nameWrap, type = "wrap")[0]
+		node = cmds.deformer(targetShape, name = _nameWrap, type = "wrap")[0]
 		wrapsList.append(node)
 
 		# Set wrap parameters
 		cmds.setAttr(node + ".falloffMode", 1)
 		cmds.setAttr(node + ".autoWeightThreshold", 1)
-		cmds.setAttr(node + ".dropoff[0]", dropoff)
-		cmds.setAttr(node + ".smoothness[0]", smoothness)
+		cmds.setAttr(node + ".dropoff[0]", _dropoff)
+		cmds.setAttr(node + ".smoothness[0]", _smoothness)
 		cmds.setAttr(node + ".inflType[0]", 2)
 
 		# Connect to other nodes
@@ -136,7 +136,7 @@ def BlendshapesReconstruction(*args): # TODO simplify function, split to smaller
 
 	# Create blendshape nodes, add targets and delete duplicates
 	for x in range(len(selectedList) - 1):
-		blendshapeTarget = cmds.blendShape(selectedList[x], name = nameBlendshapePrefix + selectedList[x])
+		blendshapeTarget = cmds.blendShape(selectedList[x], name = _nameBlendshapePrefix + selectedList[x])
 		for y in range(len(duplicatesList[x])):
 			cmds.blendShape(blendshapeTarget, edit = True, target = (selectedList[x], y, duplicatesList[x][y][0], 1.0))
 			cmds.delete(duplicatesList[x][y][0])

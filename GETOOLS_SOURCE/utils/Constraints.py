@@ -23,6 +23,7 @@
 
 import maya.cmds as cmds
 
+from ..utils import Attributes
 from ..utils import Selector
 from ..values import Enums
 
@@ -35,7 +36,7 @@ def ConstrainSelectedToLastObject(reverse=False, maintainOffset=True, parent=Tru
 
 def ConstrainListToLastElement(selected=None, reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
 	if (selected == None):
-		cmds.warning("### WARNING ### selected = None")
+		cmds.warning("FIXME: selected = None")
 		return
 	
 	for i in range(len(selected)):
@@ -52,30 +53,60 @@ def ConstrainListToLastElement(selected=None, reverse=False, maintainOffset=True
 		ConstrainSecondToFirstObject(selected[index1], selected[index2], maintainOffset, parent, point, orient, scale, aim, weight)
 
 def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
+	### Check attributes with fixed axis labels
+	def CheckAttributes(attributeName, attributesFiltered):
+		axisLabels = ["x", "y", "z"]
+		# Check which attributes are missing
+		check = [attr in attributesFiltered for attr in attributeName]
+		# If all attributes are present, return "none"
+		if all(check):
+			return "none"
+		# Return the axis labels for missing attributes
+		return [axisLabels[i] for i, valid in enumerate(check) if not valid]
+
+	### General function to process attributes
+	def ProcessAttributes(objectChild, attributeName):
+		# Construct attributes with object name
+		attributes = ["{0}.{1}".format(objectChild, attr) for attr in attributeName]
+		attributesFiltered = Attributes.FilterAttributesAnimatable(attributes=attributes)
+		# If no attributes are left after filtering, return "none"
+		if not attributesFiltered:
+			return ("x", "y", "z")
+		# Remove object name from attributes
+		attributesFiltered = [attr.replace(objectChild + ".", "") for attr in attributesFiltered]
+		# Check attributes and return the axes to skip
+		return CheckAttributes(attributeName, attributesFiltered)
+
+	### Use generalized logic for all attributes
+	skipTranslate = ProcessAttributes(objectChild, Enums.Attributes.translateLong)
+	skipRotate = ProcessAttributes(objectChild, Enums.Attributes.rotateLong)
+	skipScale = ProcessAttributes(objectChild, Enums.Attributes.scaleLong)
+
+	### Logic
 	if parent:
 		try:
-			cmds.parentConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight)
+			cmds.parentConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, skipTranslate = skipTranslate, skipRotate = skipRotate)
 		except:
-			print("||||| Can't create parentConstraint on {0}".format(objectChild))
+			cmds.warning("Can't create parentConstraint on {0}".format(objectChild))
 	else:
 		if point:
 			try:
-				cmds.pointConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight)
+				cmds.pointConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, skip = skipTranslate)
 			except:
-				print("||||| Can't create pointConstraint on {0}".format(objectChild))
+				cmds.warning("Can't create pointConstraint on {0}".format(objectChild))
 		
 		if orient:
 			try:
-				cmds.orientConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight)
+				cmds.orientConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, skip = skipRotate)
 			except:
-				print("||||| Can't create orientConstraint on {0}".format(objectChild))
+				cmds.warning("Can't create orientConstraint on {0}".format(objectChild))
 
 	if scale:
 		try:
 			# cmds.cutKey(objectChild, attribute = ("scaleX", "scaleY", "scaleZ"), clear = True, option = "keys")
-			cmds.scaleConstraint(objectParent, objectChild, maintainOffset = maintainOffset) # weight = weight
+			cmds.scaleConstraint(objectParent, objectChild, maintainOffset = maintainOffset, skip = skipScale) # weight = weight
 		except:
-			print("||||| Can't create scaleConstraint on {0}".format(objectChild))
+			cmds.warning("Can't create scaleConstraint on {0}".format(objectChild))
 	
 	if aim:
 		ConstrainAim(objectParent, objectChild, maintainOffset, weight) # TODO add customization logic
@@ -83,9 +114,9 @@ def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True,
 def ConstrainAim(objectParent, objectChild, maintainOffset=True, weight=1, aimVector=(0, 0, 1), upVector=(0, 1, 0), worldUpVector=(0, 1, 0), worldUpObject=None): # TODO complete aim logic
 	# "scene" "object" "objectrotation" "vector" "none"
 	if (worldUpObject == None):
-		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = "vector", worldUpVector = worldUpVector)
+		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, skip = "none", aimVector = aimVector, upVector = upVector, worldUpType = "vector", worldUpVector = worldUpVector)
 	else:
-		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = worldUpVector, worldUpObject = worldUpObject)
+		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, skip = "none", aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = worldUpVector, worldUpObject = worldUpObject)
 
 def DeleteConstraints(selected):
 	# First pass

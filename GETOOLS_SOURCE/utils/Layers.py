@@ -26,11 +26,11 @@ import maya.cmds as cmds
 from ..utils import Text
 
 
-LayerBase = "BaseAnimation"
-LayerPrefix = "_layer_"
+_layerBase = "BaseAnimation"
+_layerPrefix = "_layer_"
 
 
-def Create(layerName, parent=LayerBase, *args):
+def Create(layerName, parent=_layerBase, *args):
 	# if (cmds.objExists(layerName)):
 	# 	cmds.warning("Layer \"{0}\" already exists".format(layerName))
 	# 	return None
@@ -41,7 +41,7 @@ def Create(layerName, parent=LayerBase, *args):
 	print("Layer \"{0}\" created".format(layer))
 	return layer
 
-def CreateForSelected(selected, parent=LayerBase, prefix=LayerPrefix, *args):
+def CreateForSelected(selected, parent=_layerBase, prefix=_layerPrefix, *args):
 	layers = []
 	for item in selected:
 		layerName = prefix + Text.ConvertSymbols(item) + "_1"

@@ -27,36 +27,59 @@ from ..utils import Selector
 from ..values import Enums
 
 
-def Create(*args):
-	selectedList = Selector.MultipleObjects(1)
+_curveName = "newCurve"
+_curveDegree = 1
+
+
+def CreateCurveFromSelectedObjects(*args):
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(2)
 	if (selectedList == None):
-		return
-	
-	name = "MotionTrail_1"
+		return None
+
+	positions = []
+
+	for item in selectedList:
+		position = cmds.xform(item, query = True, translation = True, worldSpace = True)
+		positions.append(position)
+
+	curve = cmds.curve(name = _curveName, degree = _curveDegree, point = positions)
+	return curve
+
+def CreateCurveFromTrajectory(*args): # TODO rework
+	### Variables
 	step = 1
-	start = cmds.playbackOptions(query = True, minTime = True)
-	end = cmds.playbackOptions(query = True, maxTime = True)
-	cmds.snapshot(name = name, motionTrail = True, increment = step, startTime = start, endTime = end)
-	selected = cmds.ls(type = Enums.Types.motionTrail)
+	degree = 3
 	
-	for item in selected:
-		cmds.setAttr(item + Enums.MotionTrail.handle + "Shape." + Enums.MotionTrail.trailDrawMode, 1)
-		cmds.setAttr(item + Enums.MotionTrail.handle + "Shape." + Enums.MotionTrail.template, 1)
+	### Names
+	mtName = "newMotionTrail"
+	mtFinalName = mtName + Enums.MotionTrail.handle
+	curveName = "testCurve"
 
-def Select(*args):
-	selected = cmds.ls(type = Enums.Types.motionTrail)
-	if (len(selected) == 0):
-		return
-	
-	cmds.select(clear = True)
-	for item in selected:
-		cmds.select(item + Enums.MotionTrail.handle, add = True)
 
-def Delete(*args):
-	selected = cmds.ls(type = Enums.Types.motionTrail)
-	if (len(selected) == 0):
-		return
+	### Get time start/end
+	start = cmds.playbackOptions(query = 1, min = 1)
+	end = cmds.playbackOptions(query = 1, max = 1)
 	
-	for item in selected:
-		cmds.delete(item + Enums.MotionTrail.handle)
+	### Create motion trail
+	cmds.snapshot(name = mtName, motionTrail = 1, increment = step, startTime = start, endTime = end)
+
+	### Get points from motion trail
+	cmds.select(mtFinalName, replace = 1)
+	selected = cmds.ls(selection = 1, dagObjects = 1, exactType = Enums.MotionTrail.snapshotShape)
+	pts = cmds.getAttr(selected[0] + "." + Enums.MotionTrail.pts)
+	size = len(pts)
+	for i in range(size):
+		pts[i] = pts[i][0:3]
+		#print "{0}: {1}".format(i, pts[i])
+
+	### Create curve
+	newCurve = cmds.curve(name = curveName, degree = degree, point = pts)
+
+	### End
+	cmds.delete(mtFinalName)
+	cmds.select(clear = 1)
+
+	return newCurve
+
 

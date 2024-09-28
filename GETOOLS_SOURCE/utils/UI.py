@@ -24,11 +24,12 @@
 import maya.cmds as cmds
 
 from .. import Settings
-
 from ..utils import Colors
 
 
-class Window: # TODO
+# TODO need rework from scratch with base classes
+
+class Window: # TODO rework
 	def __init__(self, titleText="My Window Name", windowWidth=150, windowHeight=50, nameWindow="myWindowDefault"):
 		self.titleText = titleText
 		self.windowWidth = windowWidth
@@ -47,7 +48,7 @@ class Window: # TODO
 	def RunWindow(self):
 		cmds.showWindow(self.nameWindow)
 
-class FloatFieldButtons: # TODO test
+class FloatFieldButtons: # TODO rework
 	def __init__(self,
 			# parent = None,
 			value=10,
@@ -73,7 +74,7 @@ class FloatFieldButtons: # TODO test
 		cmds.setParent('..')
 		cmds.setParent('..')
 
-class ButtonLeftRight:
+class ButtonLeftRight: # TODO rework
 	def __init__(self,
 			# parent=None, # TODO
 			width=20,
@@ -90,7 +91,7 @@ class ButtonLeftRight:
 		cmds.button(label = ">", height = height, command = commandRight, annotation = annotation, backgroundColor = backgroundColor)
 		cmds.setParent('..')
 
-class FloatField:
+class FloatField: # TODO rework
 	def __init__(self,
 			value=10,
 			precision=3,
@@ -118,7 +119,7 @@ class FloatField:
 	def Reset(self, *args):
 		cmds.floatField(self.floatField, edit = True, value = self.valueDefault)
 
-class Checkbox:
+class Checkbox: # TODO rework
 	def __init__(self,
 			# parent=None, # TODO
 			label="label",
@@ -192,7 +193,7 @@ class Slider:
 			)
 		
 		windowName = Settings.windowName
-		self.slider = self.slider.replace(windowName + "|", "") # fix for docked window only. Don't know how to avoid issue
+		self.slider = self.slider.replace(windowName + "|", "") # HACK fix for docked window only. Don't know how to avoid issue
 		
 		if (menuReset):
 			cmds.popupMenu(parent = self.slider)
@@ -256,7 +257,7 @@ class Slider:
 	def ResetCached(self, *args):
 		self.valueCached = 0
 
-class MenuCheckbox:
+class MenuCheckbox: # TODO rework
 	def __init__(self,
 			# parent=None, # TODO
 			label="label",

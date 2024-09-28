@@ -26,6 +26,13 @@ import maya.cmds as cmds
 from ..utils import Selector
 
 
+def ParentShape(*args): # TODO improve logic
+	# Check selected objects
+	selected = Selector.MultipleObjects(minimalCount = 2, transformsOnly = False)
+	if (selected == None):
+		return
+	cmds.parent(relative = True, shape = True)
+
 def FirstToSecond(child, parent, maintainOffset=True):
 	cmds.parent(child, parent)
 	if (not maintainOffset):

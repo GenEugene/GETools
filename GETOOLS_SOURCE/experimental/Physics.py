@@ -22,22 +22,29 @@
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import maya.cmds as cmds
+# import maya.mel as mel
 
-from ..values import Enums
+# from ..utils import Selector
+# from ..utils import Text
 
 
-def HelpPopupActivate(*args): # turn on help popups to show descriptions when buttons hovered by mouse
-	cmds.help(popupMode = True)
+# nucleusTimeScale = 1
 
-def CachedPlaybackDeactivate(*args):
-	try:
-		evaluators = cmds.evaluator(query = True)
-		if (Enums.Types.cache in evaluators):
-			if (cmds.evaluator(query = True, name = Enums.Types.cache)):
-				cmds.evaluator(name = Enums.Types.cache, enable = False)
-				cmds.warning("Cached Playback turned off")
-		else:
-			cmds.warning("Cache evaluator not found in Maya API")
-	except Exception as exception:
-		cmds.warning("Error deactivating cached playback - {0}".format(exception))
+
+def CreateNucleus(name="myNucleus", parent=None, *args):
+	nucleus = cmds.createNode("nucleus", name = name)
+	
+	cmds.connectAttr("time1.outTime", nucleus + ".currentTime")
+
+	# Parent to specific object
+	if (parent != None):
+		cmds.parent(nucleus, parent)
+	
+	# self.sliderNTimeScale.startName = nucleus
+	# cmds.setAttr(nucleus + ".gravity", 0)
+	# cmds.setAttr(nucleus + ".timeScale", self.sliderNucleusTimeScale.Get())
+	# cmds.setAttr(nucleus + ".startFrame", self.time.values[2])
+	# cmds.setAttr(nucleus + ".visibility", 0)
+
+	return nucleus
 

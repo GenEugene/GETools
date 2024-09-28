@@ -34,7 +34,7 @@ from ..utils import Text
 
 
 class CenterOfMassAnnotations:
-	# Setup
+	### Setup
 	create = "Create center of mass object.\nIt's just a simple joint that temporary stored in memory."
 	activate = "Make selected center of mass object as active.\nUseful if you have more than one center of mass object or if you closed script or Maya.\
 	\nCenter of mass must be activated if you want to use other features from script."
@@ -45,7 +45,7 @@ class CenterOfMassAnnotations:
 	projectorXZ = _projector + " XZ plane"
 	projectorXY = _projector + " XY plane"
 
-	# Weights
+	### Weights
 	disconnectTargets = "Disconnect selected objects from Center Of Mass"
 	weightsCustom = "Custom weights"
 	_weightInfo = "Approximate weight as percentage. In sum all weights should give 100%."
@@ -60,7 +60,7 @@ class CenterOfMassAnnotations:
 	weightKnee = "{1}\n{0}".format(_weightInfo, _weightSymmetry)
 	weightFoot = "{1}\n{0}".format(_weightInfo, _weightSymmetry)
 
-	# Baking
+	### Baking
 	bakeToCOM = "Bake selected objects as locators relative to the center of mass object."
 	bakeToCOMLink = "{0}\nAfter bake constrain selected objects back to locators.".format(bakeToCOM)
 	bakeOriginal = "Bake animation back to original objects from locators."
@@ -84,9 +84,9 @@ class CenterOfMassSettings:
 	partFoot = ("foot", 1.9)
 
 class CenterOfMass:
-	version = "v1.3"
-	name = "CENTER OF MASS"
-	title = name + " " + version
+	_version = "v1.4"
+	_name = "CENTER OF MASS"
+	_title = _name + " " + _version
 
 	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
 	# from ..modules import GeneralWindow
@@ -110,23 +110,23 @@ class CenterOfMass:
 		#
 		COMButtons1 = 4
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = COMButtons1, cellWidth = Settings.windowWidthMargin / COMButtons1, cellHeight = Settings.lineHeight)
-		cmds.button(label = "CREATE", command = self.COMCreate, backgroundColor = Colors.green50, annotation = CenterOfMassAnnotations.create)
-		cmds.button(label = "ACTIVATE", command = self.COMActivate, backgroundColor = Colors.yellow50, annotation = CenterOfMassAnnotations.activate)
-		cmds.button(label = "SELECT", command = self.COMSelect, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.select)
-		cmds.button(label = "CLEAN", command = self.COMClean, backgroundColor = Colors.red50, annotation = CenterOfMassAnnotations.clean)
+		cmds.button(label = "Create", command = self.COMCreate, backgroundColor = Colors.green50, annotation = CenterOfMassAnnotations.create)
+		cmds.button(label = "Activate", command = self.COMActivate, backgroundColor = Colors.yellow50, annotation = CenterOfMassAnnotations.activate)
+		cmds.button(label = "Select", command = self.COMSelect, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.select)
+		cmds.button(label = "Clean", command = self.COMClean, backgroundColor = Colors.red50, annotation = CenterOfMassAnnotations.clean)
 		#
 		COMButtons2 = 3
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = COMButtons2, cellWidth = Settings.windowWidthMargin / COMButtons2, cellHeight = Settings.lineHeight)
-		cmds.button(label = "PROJECTOR YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.projectorYZ)
-		cmds.button(label = "PROJECTOR XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
-		cmds.button(label = "PROJECTOR XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
+		cmds.button(label = "Projector YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.projectorYZ)
+		cmds.button(label = "Projector XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
+		cmds.button(label = "Projector XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
 	def UILayoutWeights(self, layoutMain):
 		self.layoutWeights = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "WEIGHTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutWeights, adjustableColumn = True)
 
 		count = 1
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Disconnect from Center Of Mass", command = self.COMDisconnectTargets, backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.disconnectTargets)
+		cmds.button(label = "Disconnect From Center Of Mass", command = self.COMDisconnectTargets, backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.disconnectTargets)
 		
 		def PartButton(partInfo = ("", 0), minMaxValue = CenterOfMassSettings.weightMinMax, onlyValue = False, annotation = ""):
 			value = partInfo[1]
@@ -135,7 +135,7 @@ class CenterOfMass:
 			colorFinal = (colorValue, colorValue, colorValue)
 			cmds.button(label = text.format(partInfo[0], value), command = partial(self.COMConstrainToSelected, value), backgroundColor = colorFinal, annotation = annotation)
 
-		# WEIGHTS PALETTE
+		### WEIGHTS PALETTE
 		count = 10
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 		
@@ -152,7 +152,7 @@ class CenterOfMass:
 		CustomButton(9)
 		CustomButton(10)
 
-		# BODYPARTS
+		### BODYPARTS
 		count = 3
 		layoutBodyGrid = cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight * count)
 		
@@ -176,16 +176,16 @@ class CenterOfMass:
 		count = 3
 		cmds.gridLayout(numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 
-		cmds.button(label = "BAKE TO COM", command = self.BakeScenario2, backgroundColor = Colors.orange10, annotation = CenterOfMassAnnotations.bakeToCOM)
-		cmds.button(label = "BAKE + LINK", command = self.BakeScenario3, backgroundColor = Colors.orange50, annotation = CenterOfMassAnnotations.bakeToCOMLink)
-		cmds.button(label = "BAKE ORIGINAL", command = self.BakeCached, backgroundColor = Colors.orange100, annotation = CenterOfMassAnnotations.bakeOriginal)
+		cmds.button(label = "Bake To COM", command = self.BakeScenario2, backgroundColor = Colors.orange10, annotation = CenterOfMassAnnotations.bakeToCOM)
+		cmds.button(label = "Bake + Link", command = self.BakeScenario3, backgroundColor = Colors.orange50, annotation = CenterOfMassAnnotations.bakeToCOMLink)
+		cmds.button(label = "Bake Original", command = self.BakeCached, backgroundColor = Colors.orange100, annotation = CenterOfMassAnnotations.bakeOriginal)
 		
-		cmds.button(label = "LINK", command = partial(self.LinkCached, False), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.link)
-		cmds.button(label = "LINK OFFSET", command = partial(self.LinkCached, True), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.linkOffset)
-		cmds.button(label = "SELECT ROOT", command = self.SelectParent, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.selectRoot)
+		cmds.button(label = "Link", command = partial(self.LinkCached, False), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.link)
+		cmds.button(label = "Link Offset", command = partial(self.LinkCached, True), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.linkOffset)
+		cmds.button(label = "Select Root", command = self.SelectParent, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.selectRoot)
 
 
-	# Center of mass functions
+	### CENTER OF MASS
 	def COMObjectCheck(self, *args):
 		if (self.COMObject == None):
 			cmds.warning("Center of mass doesn't stored in the script memory. You need to create new COM object or select one in the scene and press \"Activate\" button")
@@ -275,7 +275,7 @@ class CenterOfMass:
 		cmds.select(selectedList[:-1], replace = True)
 
 
-	# Baking
+	### BAKING
 	def BakeScenario2(self, *args):
 		if (not self.COMObjectCheck()):
 			return

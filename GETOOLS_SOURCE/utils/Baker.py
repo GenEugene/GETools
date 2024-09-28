@@ -24,6 +24,7 @@
 import maya.cmds as cmds
 
 from ..utils import Animation
+from ..utils import Attributes
 from ..utils import Constraints
 from ..utils import Selector
 from ..utils import Timeline
@@ -48,7 +49,7 @@ def BakeSelected(classic=True, preserveOutsideKeys=True, sampleBy=1.0, selectedR
 		# Check channel box attributes
 		# TODO move logic pattern to separate function
 		bakeRegular = True
-		selectedAttributes = Selector.GetChannelBoxAttributes()
+		selectedAttributes = Attributes.GetAttributesSelectedFromChannelBox()
 		if (channelBox):
 			bakeRegular = selectedAttributes == None
 		if (bakeRegular):

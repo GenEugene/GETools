@@ -26,10 +26,6 @@ root = "/GETOOLS_SOURCE"
 get1 = (root + "/icons/GET1.png", root + "/icons/GET1_face.png")
 get2 = (root + "/icons/GET2.png", root + "/icons/GET2_face.png")
 
-tools = root + "/icons/Tools.png"
-centerOfMass = root + "/icons/CenterOfMass.png"
-overlappy = root + "/icons/Overlappy.png"
-
 # Maya's
 empty = "empty.png"
 arrowDown = "arrowDown.png"

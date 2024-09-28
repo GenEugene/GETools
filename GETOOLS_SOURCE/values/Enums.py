@@ -46,10 +46,9 @@ class Attributes:
 
 	scaleShort = ("sx", "sy", "sz")
 	scaleLong = ("scaleX", "scaleY", "scaleZ")
+	scaleLocal = ("localScaleX", "localScaleY", "localScaleZ") # used for locators
 
 	visibility = "visibility"
-
-	scaleLocal = ("localScaleX", "localScaleY", "localScaleZ") # used for locators
 
 	rotateOrder = "rotateOrder"
 	startFrame = "startFrame"
@@ -79,19 +78,19 @@ class MotionTrail:
 	pts = "pts"
 
 class Particle:
-	"Shape.radius"
-	"Shape.conserve"
-	"Shape.drag"
-	"Shape.damp"
-	"Shape.goalSmoothness"
-	"Shape.goalWeight[0]"
-	".timeScale"
+	"Shape.radius" # TODO
+	"Shape.conserve" # TODO
+	"Shape.drag" # TODO
+	"Shape.damp" # TODO
+	"Shape.goalSmoothness" # TODO
+	"Shape.goalWeight[0]" # TODO
+	".timeScale" # TODO
 
 class Other:
 	string = "string"
 	# PasteKey options
-	"replace"
-	"replaceCompletely"
+	"replace" # TODO
+	"replaceCompletely" # TODO
 
 	# NAMES
 	layerBase = "BaseAnimation"
@@ -100,9 +99,9 @@ class Other:
 	right = "right"
 
 	#
-	"Shape"
-	".overrideEnabled"
-	".overrideDisplayType"
+	"Shape" # TODO
+	".overrideEnabled" # TODO
+	".overrideDisplayType" # TODO
 
 
 class ModelEditor:

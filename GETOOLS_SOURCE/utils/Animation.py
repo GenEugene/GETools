@@ -24,6 +24,7 @@
 import maya.cmds as cmds
 import maya.mel as mel
 
+from ..utils import Attributes
 from ..utils import Selector
 from ..utils import Timeline
 
@@ -38,7 +39,7 @@ def DeleteKeys(channelBox=False, *args):
 		timeRange = [Timeline.GetSelectedTimeRange()[0], Timeline.GetSelectedTimeRange()[1] - 1]
 
 	# Check channel box attributes
-	selectedAttributes = Selector.GetChannelBoxAttributes()
+	selectedAttributes = Attributes.GetAttributesSelectedFromChannelBox()
 	# TODO move logic pattern to separate function
 	cutAll = True
 	if (channelBox):
@@ -62,7 +63,7 @@ def DeleteKeysNonkeyable(*args):
 			for j in range(len(attributes)):
 				cmds.cutKey(item + "." + attributes[j])
 				counter += 1
-	print ("\nNonkeyable attributes deleted: {0}".format(counter))
+	print("Nonkeyable attributes deleted: {0}".format(counter))
 def DeleteStaticCurves(*args):
 	# Check selected objects
 	Selector.MultipleObjects(1)
@@ -71,7 +72,7 @@ def DeleteStaticCurves(*args):
 def EulerFilterOnObject(obj):
 	cmds.filterCurve(obj)
 	cmds.selectKey(clear = True)
-	print("######## Euler Filtered {0}".format(obj))
+	print("Euler Filtered {0}".format(obj))
 def EulerFilterOnObjects(objects):
 	if (objects == None):
 		return None
@@ -127,7 +128,7 @@ def OffsetSelected(direction=1, step=1): # use if needed later # , channelBox = 
 		return
 	
 	time = step * direction
-	selectedAttributes = Selector.GetChannelBoxAttributes()
+	selectedAttributes = Attributes.GetAttributesSelectedFromChannelBox()
 
 	count = len(selectedList)
 	for i in range(count):

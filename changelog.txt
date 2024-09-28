@@ -1,86 +1,115 @@
 GETools changelog
 
+
+***v1.4.0*** - FUTURE PLAN
+- TODO [PHYSICS] added new physics with nHair logic
+- TODO [OVERLAPPY] added Chain mode with nHair
+- TODO [OVERLAPPY] added collisions UI
+- TODO [OVERLAPPY] added nRigid collision logic
+- TODO added non-cycle origin animation with loop mode
+**********************************************
+
+v1.3.0
+- [UI] added new features to shelf buttons.
+- [UI] moved motion trail buttons from "Experimental" to "Motion Trail" group.
+- [UI] changed window width from 280 to 300.
+- [UTILS] added button "Print Animatable Attributes".
+- [UTILS] added button "Parent Shapes".
+- [UTILS] added button "Select Hierarchy Transforms".
+- [UTILS] added button "Save Pose To Shelf".
+- [TOOLS] changed aim space UI.
+- [TOOLS] checged baking samples UI.
+- [RIGGING] changed UI structure.
+- [RIGGING] added button "Create Curve From Selected Objects".
+- [RIGGING] added button "Create Curve From Trajectory" as a draft tool.
+- [RIGGING] improved "Constraints" module and add attributes filtering.
+- [OVERLAPPY] reworked aim offset UI.
+- [OVERLAPPY] separated rig creation buttons for "Point", "Aim" and "Combo" modes.
+- [OVERLAPPY] moved timeScale slider to "Nucleus Properties" panel.
+- [OVERLAPPY] added nucleus gravity settings.
+- [OVERLAPPY] added loop cycles to option menu.
+
 v1.2.6
-- Added to Settings.py file default value for "checkboxEulerFilter"
+- added to Settings.py file default value for "checkboxEulerFilter".
 
 v1.2.5
-- [OVERLAPPY] Added confirm dialog for zero particle offset.
-- [UTILS] Added draft annotation creation logic.
-- [UI] Replaced button icon change approach, now simply use Help/Change Icon for toggling icons.
-- [UI] Added "Options" menu with euler filter checkbox.
-- [UI] Moved "To Shelf" menu to the new "Options" menu.
-- [UI] Changed the color of the black panel to a lighter color (0.00 => 0.13).
-- Added connection between base class instance and sub classes.
-- Improved euler filter method for using after animation baking.
+- [OVERLAPPY] added confirm dialog for zero particle offset.
+- [UTILS] added draft annotation creation logic.
+- [UI] replaced button icon change approach, now simply use Help/Change Icon for toggling icons.
+- [UI] added "Options" menu with euler filter checkbox.
+- [UI] moved "To Shelf" menu to the new "Options" menu.
+- [UI] changed the color of the black panel to a lighter color (0.00 => 0.13).
+- added connection between base class instance and sub classes.
+- improved euler filter method for using after animation baking.
 
 v1.1.0
-- [CRITICAL] Fixed compatibility with Maya 2025.
-- [RIGGING] Added "Extract Shapes" logic from blendshapes.
-- [UI] Added button icon change on highlight.
-- [UI] Added alternative secret meme icon (need to activate in Settings "useFaceIcon = True").
-- Improved cache evaluator detection.
-- Moved Settings script to the root folder.
-- General refactoring.
+- [CRITICAL] fixed compatibility with Maya 2025.
+- [RIGGING] added "Extract Shapes" logic from blendshapes.
+- [UI] added button icon change on highlight.
+- [UI] added alternative secret meme icon (need to activate in Settings "useFaceIcon = True").
+- improved cache evaluator detection.
+- moved Settings script to the root folder.
+- general refactoring.
 
 v1.0.5
-- Fixed motion trails to shelf button.
-- Decreased hardcode in Drag and Drop logic.
-- Reworked Button Install module.
-- [UI] Added tear-off to sub menus
-- [UTILS] Added toggle buttons for active viewport.
-- [UTILS] Added "Print Blendshapes Base Nodes".
-- [UTILS] Added "Print Blendshapes Names".
-- [RIGGING] Added wraps button.
-- [RIGGING] Added blendshapes reconstruct button.
-- [RIGGING] Added "Zero Blendshapes Weights" button.
+- fixed motion trails to shelf button.
+- decreased hardcode in Drag and Drop logic.
+- reworked Button Install module.
+- [UI] added tear-off to sub menus
+- [UTILS] added toggle buttons for active viewport.
+- [UTILS] added "Print Blendshapes Base Nodes".
+- [UTILS] added "Print Blendshapes Names".
+- [RIGGING] added wraps button.
+- [RIGGING] added blendshapes reconstruct button.
+- [RIGGING] added "Zero Blendshapes Weights" button.
 
 v1.0.4
-- [OVERLAPPY] Reworked Nucleus implementation with non-destructive way.
-- [UTILS] Added simple SelectHierarchy method.
-- Refactored code style.
+- [OVERLAPPY] reworked Nucleus implementation with non-destructive way.
+- [UTILS] added simple SelectHierarchy method.
+- refactored code style.
 
 v1.0.3
-- Absolute import replaced by relative import.
-- Added more icons on pop-up menus.
+- absolute import replaced by relative import.
+- added more icons on pop-up menus.
 
 v1.0.2
-- Fixed the "Set Infinity" function causing a warning message to appear in the console.
+- fixed the "Set Infinity" function causing a warning message to appear in the console.
 
 v1.0.1
-- [HOTFIX] Removed cross dependency for Maya 2020.
+- [HOTFIX] removed cross dependency for Maya 2020.
 
 v1.0.0
-- [UI] Changed main icon and added some small icons.
-- [UI] Added pop-up for shelf buttons installation.
-- [UI] Decreased buttons size and renamed some labels.
-- [TOOLS] Fixed bug in Locator detection logic.
-- [TOOLS] Added locators size controller.
-- [TOOLS] Added World baking tool.
-- [TOOLS] Added offset animation tool.
-- [TOOLS] Added rotation mode for Locator Aim Switch.
-- [TOOLS] Updated DeleteKeys functions.
-- [TOOLS] Updated "Bake By Last" button. New name "By Last" + 2 alternative buttons for Position and Rotation.
-- [TOOLS] Removed Tools/Animation/Key Range button. Replaced by "Delete Animation" button.
-- [OVERLAPPY] Added pos/rot layer prefixes.
-- [UTILS] Added color printing in Colors Palette.
-- Improved various modules and overall quality.
+- [UI] changed main icon and added some small icons.
+- [UI] added pop-up for shelf buttons installation.
+- [UI] decreased buttons size and renamed some labels.
+- [TOOLS] fixed bug in Locator detection logic.
+- [TOOLS] added locators size controller.
+- [TOOLS] added World baking tool.
+- [TOOLS] added offset animation tool.
+- [TOOLS] added rotation mode for Locator Aim Switch.
+- [TOOLS] updated DeleteKeys functions.
+- [TOOLS] updated "Bake By Last" button. New name "By Last" + 2 alternative buttons for Position and Rotation.
+- [TOOLS] removed Tools/Animation/Key Range button. Replaced by "Delete Animation" button.
+- [OVERLAPPY] added pos/rot layer prefixes.
+- [UTILS] added color printing in Colors Palette.
+- improved various modules and overall quality.
 
 v0.0.12
-- [UI] Decreased window size and renamed some labels.
-- [UI] Moved some rarely used buttons to right-click menus (cursor changes while hovering over buttons with pop-up lists).
-- [UTILS] Added Printing selected attributes from channel box to Utils.
-- [TOOLS] Added buttons for setting the bake sample rate value.
-- [TOOLS] Added baking for selected attributes in the channel box.
-- [TOOLS] Separated Locator Bake into "PIN," "Pin POS," and "Pin ROT."
-- [TOOLS] Changed Locators Relative to Relative; added a right-click menu for options.
-- [RIGGING] Added "Disconnect Targets from Constraint."
-- [RIGGING] Improved logic for "Delete Constraints."
-- [CENTER OF MASS] Added "Disconnect from Center of Mass" button.
-- Improved various modules and overall quality.
+- [UI] decreased window size and renamed some labels.
+- [UI] moved some rarely used buttons to right-click menus (cursor changes while hovering over buttons with pop-up lists).
+- [UTILS] added Printing selected attributes from channel box to Utils.
+- [TOOLS] added buttons for setting the bake sample rate value.
+- [TOOLS] added baking for selected attributes in the channel box.
+- [TOOLS] separated Locator Bake into "PIN," "Pin POS," and "Pin ROT."
+- [TOOLS] changed Locators Relative to Relative; added a right-click menu for options.
+- [RIGGING] added "Disconnect Targets from Constraint."
+- [RIGGING] improved logic for "Delete Constraints."
+- [CENTER OF MASS] added "Disconnect from Center of Mass" button.
+- improved various modules and overall quality.
 
 v0.0.11
-- [UI] moved Select Transform Hierarchy button to Utils menu and remove SELECT category in TOOLS module
-- [UI] changed window width, margins and spacing between ui elements
+- [UI] moved "Select Transform Hierarchy button" to "Utils" menu and remove SELECT category in TOOLS module
+- [UI] changed window width, margins and spacing between UI elements
 - [UI] added Color Palette window for colors analysis
 - [UI] added toggling for script window execution. Press the same button to open/close script (reset all parameters changes)
 - [TOOLS] added Locators baking to Aim space
@@ -104,7 +133,7 @@ v0.0.9 - reinstall required
 - updated drag and drop script
 - updated utils scripts structure
 - added test button for move commands to shelf
-- added Installer module
+- added "Installer" module
 - added Types library
 - added Layers module with base logic
 - added labelImage parameter to ShelfButton function

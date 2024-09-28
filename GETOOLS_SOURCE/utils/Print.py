@@ -23,21 +23,36 @@
 
 import maya.cmds as cmds
 
-from ..values import Enums
+from ..utils import Attributes
+from ..utils import Selector
 
 
-def HelpPopupActivate(*args): # turn on help popups to show descriptions when buttons hovered by mouse
-	cmds.help(popupMode = True)
+_textEnd = "-----"
 
-def CachedPlaybackDeactivate(*args):
-	try:
-		evaluators = cmds.evaluator(query = True)
-		if (Enums.Types.cache in evaluators):
-			if (cmds.evaluator(query = True, name = Enums.Types.cache)):
-				cmds.evaluator(name = Enums.Types.cache, enable = False)
-				cmds.warning("Cached Playback turned off")
-		else:
-			cmds.warning("Cache evaluator not found in Maya API")
-	except Exception as exception:
-		cmds.warning("Error deactivating cached playback - {0}".format(exception))
+
+def PrintSelected(*args):
+	selected = Selector.MultipleObjects(transformsOnly = False)
+	if (selected == None):
+		return
+	for item in selected:
+		print(item)
+	cmds.warning("{0} objects selected".format(len(selected)))
+
+def PrintAttributesAnimatableOnSelected(useShapes=False, *args):
+	attributes = Attributes.GetAttributesAnimatableOnSelected(useShapes = useShapes)
+	if (attributes == None):
+		cmds.warning("Keyable attributes not found")
+		return
+	for item in attributes:
+		print(item)
+	cmds.warning("{0} keyable attributes found".format(len(attributes)))
+
+def PrintAttributesSelectedFromChannelBox(*args):
+	attributes = Attributes.GetAttributesSelectedFromChannelBox()
+	if (attributes == None):
+		cmds.warning("Selected attributes not found")
+		return
+	for item in attributes:
+		print(item)
+	cmds.warning("{0} selected attributes found".format(len(attributes)))
 
