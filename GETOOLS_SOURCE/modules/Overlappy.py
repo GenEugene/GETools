@@ -132,7 +132,7 @@ class OverlappySettings: # TODO simplify and move to preset
 	rangePDamp = (0, float("inf"), 0, 1)
 
 class Overlappy:
-	_version = "v3.0"
+	_version = "v3.1"
 	_name = "OVERLAPPY"
 	_title = _name + " " + _version
 
@@ -351,9 +351,9 @@ class Overlappy:
 		
 		count = 4
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Point", command = self.ParticleSetupPoint, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupPoint)
-		cmds.button(label = "Aim", command = self.ParticleSetupAim, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupAim)
-		cmds.button(label = "Combo", command = self.ParticleSetupCombo, backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupCombo)
+		cmds.button(label = "Point", command = partial(self.ParticleSetupLogic, 1), backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupPoint)
+		cmds.button(label = "Aim", command = partial(self.ParticleSetupLogic, 2), backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupAim)
+		cmds.button(label = "Combo", command = partial(self.ParticleSetupLogic, 3), backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupCombo)
 		cmds.button(label = "Remove", command = partial(self.ParticleSetupDelete, False, True), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
 
 		count = 4
@@ -552,86 +552,49 @@ class Overlappy:
 		# cmds.connectAttr(self.colliderNodes[0] + ".startState", self.nucleus1 + ".inputPassiveStart[0]")
 		# cmds.connectAttr(self.nucleus1 + ".startFrame", self.colliderNodes[0] + ".startFrame")
 		return True
-	def ParticleSetupPoint(self, *args):
-		isInitDone = self.ParticleSetupInit()
-		if (not isInitDone):
-			return
-
-		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus1, parentGroup = OverlappySettings.nameGroup)
-		self.setupCreatedPoint = True
-		self.setupCreated = True
-
-		### Cache setup elements names
-		self.particleBase = particleSetup[4]
-		self.particleLocator = particleSetup[6]
-
-		self.bakingObject = self.particleLocator
-
-		### End
-		self.UpdateParticleSettings()
-		cmds.select(self.selectedObjects, replace = True)
-	def ParticleSetupAim(self, *args):
+	def ParticleSetupLogic(self, mode=0, *args): # modes: [1 - Point], [2 - Aim], [3 - Combo]
 		isInitDone = self.ParticleSetupInit()
 		if (not isInitDone):
 			return
 		
-		self.CompileParticleAimOffset()
-		
-		### Create aim setup
-		particleSetup = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus1, parentGroup = OverlappySettings.nameGroup, positionOffset = self.particleAimOffsetTarget)
-		particleAimSetup = PhysicsParticle.CreateAimSetup(particleSetup, positionOffset = self.particleAimOffsetUp)
-		self.setupCreatedAim = True
-		self.setupCreated = True
-
-		### Cache setup elements names
-		self.particleTarget = particleSetup[4]
-		self.particleUp = particleAimSetup[1][4]
-		self.particleLocator = particleSetup[6]
-		self.particleLocatorGoalOffset = particleSetup[7]
-		self.particleLocatorGoalOffsetStartPosition = cmds.xform(self.particleLocatorGoalOffset, query = True, translation = True, worldSpace = True)
-		self.particleLocatorGoalOffsetUp = particleAimSetup[1][7]
-		self.particleLocatorGoalOffsetUpStartPosition = cmds.xform(self.particleLocatorGoalOffsetUp, query = True, translation = True, worldSpace = True)
-		self.particleLocatorAim = particleAimSetup[0]
-
-		### Set baking object
-		self.bakingObject = self.particleLocatorAim
-
-		### End
-		self.UpdateParticleSettings()
-		cmds.select(self.selectedObjects, replace = True)
-	def ParticleSetupCombo(self, *args):
-		isInitDone = self.ParticleSetupInit()
-		if (not isInitDone):
-			return
-		
-		self.CompileParticleAimOffset()
-
 		### Create particle base setup
-		particleSetupBase = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus1, parentGroup = OverlappySettings.nameGroup)
+		if mode in [1, 3]: # Point or Combo
+			particleSetupBase = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus1, parentGroup = OverlappySettings.nameGroup)
+			self.particleBase = particleSetupBase[4]
+			self.particleLocator = particleSetupBase[6]
+			self.bakingObject = self.particleLocator
 		
-		### Create second nucleus node
-		self.nucleus2 = Physics.CreateNucleus(name = OverlappySettings.prefix + PhysicsParticle._defaultNameNucleus + "_02", parent = OverlappySettings.nameGroup)
-		cmds.select(clear = True)
+		if mode in [2, 3]: # Aim or Combo
+			self.CompileParticleAimOffset()
+			targetObject = self.selectedObjects
+			nucleusAim = self.nucleus1
+			if (mode == 3): # Combo
+				### Create second nucleus node
+				self.nucleus2 = Physics.CreateNucleus(name = OverlappySettings.prefix + PhysicsParticle._defaultNameNucleus + "_02", parent = OverlappySettings.nameGroup)
+				cmds.select(clear = True)
+				targetObject = particleSetupBase[6]
+				nucleusAim = self.nucleus2
+			
+			### Create particle aim setup
+			particleSetupOffset = PhysicsParticle.CreateParticleSetup(targetObject = targetObject, nucleusNode = nucleusAim, parentGroup = OverlappySettings.nameGroup, positionOffset = self.particleAimOffsetTarget)
+			particleAimSetup = PhysicsParticle.CreateAimSetup(particleSetupOffset, positionOffset = self.particleAimOffsetUp)
+			
+			### Cache setup elements names
+			self.particleTarget = particleSetupOffset[4]
+			self.particleUp = particleAimSetup[1][4]
+			self.particleLocator = particleSetupOffset[6]
+			self.particleLocatorGoalOffset = particleSetupOffset[7]
+			self.particleLocatorGoalOffsetStartPosition = cmds.xform(self.particleLocatorGoalOffset, query = True, translation = True, worldSpace = True)
+			self.particleLocatorGoalOffsetUp = particleAimSetup[1][7]
+			self.particleLocatorGoalOffsetUpStartPosition = cmds.xform(self.particleLocatorGoalOffsetUp, query = True, translation = True, worldSpace = True)
+			self.particleLocatorAim = particleAimSetup[0]
+			self.bakingObject = self.particleLocatorAim
 		
-		### Create particle aim setup
-		particleSetupOffset = PhysicsParticle.CreateParticleSetup(targetObject = particleSetupBase[6], nucleusNode = self.nucleus2, parentGroup = OverlappySettings.nameGroup, positionOffset = self.particleAimOffsetTarget)
-		particleAimSetup = PhysicsParticle.CreateAimSetup(particleSetupOffset, positionOffset = self.particleAimOffsetUp)
-		self.setupCreatedCombo = True
+		### Set flags
 		self.setupCreated = True
-
-		### Cache setup elements names
-		self.particleBase = particleSetupBase[4]
-		self.particleTarget = particleSetupOffset[4]
-		self.particleUp = particleAimSetup[1][4]
-		self.particleLocator = particleSetupOffset[6]
-		self.particleLocatorGoalOffset = particleSetupOffset[7]
-		self.particleLocatorGoalOffsetStartPosition = cmds.xform(self.particleLocatorGoalOffset, query = True, translation = True, worldSpace = True)
-		self.particleLocatorGoalOffsetUp = particleAimSetup[1][7]
-		self.particleLocatorGoalOffsetUpStartPosition = cmds.xform(self.particleLocatorGoalOffsetUp, query = True, translation = True, worldSpace = True)
-		self.particleLocatorAim = particleAimSetup[0]
-
-		### Set baking object
-		self.bakingObject = self.particleLocatorAim
+		self.setupCreatedPoint = mode == 1
+		self.setupCreatedAim = mode == 2
+		self.setupCreatedCombo = mode == 3
 
 		### End
 		self.UpdateParticleSettings()
@@ -717,7 +680,6 @@ class Overlappy:
 		SetParticleDynamicAttributes(name = self.particleBase)
 		SetParticleDynamicAttributes(name = self.particleTarget)
 		SetParticleDynamicAttributes(name = self.particleUp)
-	
 	def ResetAllSettings(self, *args):
 		### Options
 		self.menuCheckboxHierarchy.Reset()
@@ -903,12 +865,7 @@ class Overlappy:
 			### Bake
 			for i in range(len(selected)):
 				cmds.select(selected[i], replace = True)
-				if (variant == 1):
-					self.ParticleSetupPoint()
-				elif (variant == 2):
-					self.ParticleSetupAim()
-				elif (variant == 3):
-					self.ParticleSetupCombo()
+				self.ParticleSetupLogic(variant)
 				self.BakeParticleLogic()
 			### Select original objects
 			cmds.select(selected, replace = True)
