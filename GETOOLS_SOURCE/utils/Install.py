@@ -161,7 +161,7 @@ def ToShelf_LocatorsRelativeWithoutReverse(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsRelativeWithoutReverse), "RelativeWithoutReverse", "Rel-")
 
 def ToShelf_LocatorsAim(path, name, rotateOnly, aimVector, *args):
-	parameters = "(rotateOnly = {0}, aimVector = {1}, reverse = True)".format(rotateOnly, aimVector)
+	parameters = "(rotateOnly = {0}, vectorAim = {1}, reverse = True)".format(rotateOnly, aimVector)
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsAim) + parameters, "LocatorsAim{0}".format(name), "Aim {0}".format(name))
 
 # BAKING

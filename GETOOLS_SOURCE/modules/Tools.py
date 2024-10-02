@@ -108,7 +108,7 @@ class ToolsSettings:
 	aimSpaceRadioButtonDefault = 0
 
 class Tools:
-	_version = "v1.1"
+	_version = "v1.2"
 	_name = "TOOLS"
 	_title = _name + " " + _version
 
@@ -371,7 +371,7 @@ class Tools:
 		if (cmds.radioButton(self.aimSpaceRadioButtons[2], query = True, select = True)):
 			axisVector = [0, 0, valueAimTarget]
 
-		Locators.CreateOnSelectedAim(scale = scale, hideParent = hideParent, subLocator = subLocators, rotateOnly = rotateOnly, aimVector = axisVector, distance = distance, reverse = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+		Locators.CreateOnSelectedAim(scale = scale, hideParent = hideParent, subLocator = subLocators, rotateOnly = rotateOnly, vectorAim = axisVector, distance = distance, reverse = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
 
 		if (distance == 0):
 			cmds.warning("Aim distance is 0. Highly recommended to use non-zero value.")

@@ -10,6 +10,7 @@ GETools changelog
 **********************************************
 
 v1.3.1
+- [TOOLS] added Up locator to Aim Space Switcher.
 - [OVERLAPPY] simplify and merge rig setup logic into one method.
 
 v1.3.0
