@@ -1,6 +1,5 @@
 GETools changelog
 
-
 ***FUTURE PLAN***
 - TODO [PHYSICS] added new physics with nHair logic
 - TODO [OVERLAPPY] added Chain mode with nHair
@@ -22,7 +21,7 @@ v1.3.0
 - [UTILS] added button "Select Hierarchy Transforms".
 - [UTILS] added button "Save Pose To Shelf".
 - [TOOLS] changed aim space UI.
-- [TOOLS] checged baking samples UI.
+- [TOOLS] changed baking samples UI.
 - [RIGGING] changed UI structure.
 - [RIGGING] added button "Create Curve From Selected Objects".
 - [RIGGING] added button "Create Curve From Trajectory" as a draft tool.
