@@ -50,12 +50,17 @@ class Experimental:
 		### MENU
 		cmds.columnLayout("layoutMenuBar", parent = layoutMain, adjustableColumn = True, width = Settings.windowWidthScroll)
 		cmds.menuBarLayout()
+
 		cmds.menu(label = "Layers", tearOff = True)
 		cmds.menuItem(label = "Layer Create", command = self.LayerCreate)
 		cmds.menuItem(label = "Layer Create For Selected", command = self.LayerCreateForSelected)
 		cmds.menuItem(label = "Layer Delete", command = self.LayerDelete)
 		cmds.menuItem(label = "Layer Get Selected", command = self.LayerGetSelected)
 		cmds.menuItem(label = "Layer Move", command = self.LayerMove)
+
+		cmds.menu(label = "Presets", tearOff = True)
+		cmds.menuItem(label = "Save", command = self.PresetSave)
+		cmds.menuItem(label = "Read", command = self.PresetRead)
 		
 		### BUTTONS
 		countOffsets = 4
@@ -95,4 +100,12 @@ class Experimental:
 			cmds.warning("Need to select at least 2 layers")
 			return
 		Layers.MoveChildrenToParent(selected[:-1], selected[-1]) # FIXME main problem is layers have no selection order, they just listed from top to bottom
+
+
+	### PRESET
+	def PresetSave(*args):
+		print("Preset Save")
+	
+	def PresetRead(*args):
+		print("Preset Read")
 
