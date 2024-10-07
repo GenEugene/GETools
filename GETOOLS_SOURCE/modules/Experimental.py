@@ -21,6 +21,8 @@
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
+import os
+import ast # For safely converting strings to Python objects
 import maya.cmds as cmds
 # from functools import partial
 
@@ -59,8 +61,8 @@ class Experimental:
 		cmds.menuItem(label = "Layer Move", command = self.LayerMove)
 
 		cmds.menu(label = "Presets", tearOff = True)
-		cmds.menuItem(label = "Save", command = self.PresetSave)
-		cmds.menuItem(label = "Read", command = self.PresetRead)
+		cmds.menuItem(label = "Save", command = self.PresetSaveTEST)
+		cmds.menuItem(label = "Read", command = self.PresetReadTEST)
 		
 		### BUTTONS
 		countOffsets = 4
@@ -102,10 +104,56 @@ class Experimental:
 		Layers.MoveChildrenToParent(selected[:-1], selected[-1]) # FIXME main problem is layers have no selection order, they just listed from top to bottom
 
 
-	### PRESET
-	def PresetSave(*args):
-		print("Preset Save")
-	
-	def PresetRead(*args):
-		print("Preset Read")
+	### SAVE/LOAD TXT FILE
+	filepathTest = "C:/Users/egataulin/Documents/_EugeneFiles/GETools/GETOOLS_SOURCE/SETTINGS/test.txt"
+
+	def PresetSaveLogic(filepath, variables_dict, *args):
+		with open(filepath, 'w') as line:
+			for var_name, var_value in variables_dict.items():
+				line.write("{0} = {1}\n".format(var_name, var_value))
+	def PresetSaveTEST(*args): # HACK
+		# Store the variables in a dictionary
+		variables_dict = {
+			"var1": "string one",
+			"var2": 3.7,
+			"var3": (0, 1, 1.3),
+			"var4": "qweqwe"
+		}
+
+		Experimental.PresetSaveLogic(Experimental.filepathTest, variables_dict)
+		print("Preset Saved")
+
+	# Function to load variables from a text file
+	def PresetReadLogic(filepath, *args):
+		variables_dict = {}
+
+		# Check if file exists
+		if not os.path.exists(filepath):
+			print(f"File '{filepath}' not found!")
+			return variables_dict
+
+		# Open the file in read mode
+		with open(filepath, 'r') as f:
+			for line in f:
+				# Parse each line in the format "name = value"
+				if '=' in line:
+					var_name, var_value = line.strip().split(' = ', 1)
+					
+					try:
+						# Use ast.literal_eval to convert strings to proper Python objects (int, float, list, etc.)
+						var_value = ast.literal_eval(var_value)
+					except (ValueError, SyntaxError):
+						# If literal_eval fails, keep it as a string
+						pass
+					
+					# Store the variable in the dictionary
+					variables_dict[var_name] = var_value
+
+		# Set the variables in the global namespace
+		globals().update(variables_dict)
+		print(f"Variables loaded from {filepath}")
+		return variables_dict
+	def PresetReadTEST(*args): # HACK
+		result = Experimental.PresetReadLogic(Experimental.filepathTest)
+		print(result)
 
