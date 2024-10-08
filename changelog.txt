@@ -9,6 +9,7 @@ GETools changelog
 **********************************************
 
 v1.3.2
+- [OVERLAPPY] fixed error with bake to layers when current scene already contained layer from previous Overlappy use.
 - [OVERLAPPY] fixed incorrect reset settings on Point setup after Aim or Combo used.
 - [OVERLAPPY] added save and load settings buttons.
 - [OVERLAPPY] added presets.

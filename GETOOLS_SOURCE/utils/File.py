@@ -27,7 +27,7 @@ import maya.cmds as cmds
 
 
 _basicFileDialogFilter = "*.txt"
-_dialogStyle = 1
+_dialogStyle = 2
 
 
 def SaveLogic(filepath, variablesDict, title="", *args):

@@ -194,7 +194,7 @@ class Overlappy:
 		
 		### OBJECTS
 		self.selectedObjects = ""
-		self.layers = ["", ""]
+		self.layers = [OverlappySettings.nameLayers[0], OverlappySettings.nameLayers[1]]
 		self.nucleus1 = ""
 		self.nucleus2 = ""
 		self.bakingObject = ""
