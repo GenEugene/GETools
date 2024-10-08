@@ -31,7 +31,7 @@ _basicFileDialogFilter = "*.txt"
 _dialogStyle = 1
 
 
-def SaveLogic(filepath, variables_dict, *args):
+def SaveLogic(filepath, variablesDict, title="", *args):
 	# Extract the directory from the provided file path
 	directory = os.path.dirname(filepath)
 	
@@ -40,13 +40,15 @@ def SaveLogic(filepath, variables_dict, *args):
 		os.makedirs(directory) # Create the directory, including any intermediate directories
 	
 	with open(filepath, 'w') as line:
-		for var_name, var_value in variables_dict.items():
+		if (title != ""):
+			line.write("{0}\n\n".format(title))
+		for var_name, var_value in variablesDict.items():
 			line.write("{0} = {1}\n".format(var_name, var_value))
-def SaveDialog(startingDirectory, variablesDict, *args):
+def SaveDialog(startingDirectory, variablesDict, title="", *args):
 	fileDialog = cmds.fileDialog2(fileMode = 0, startingDirectory = startingDirectory, fileFilter = _basicFileDialogFilter, dialogStyle = _dialogStyle)
 	if (fileDialog == None):
 		return
-	SaveLogic(fileDialog[0], variablesDict)
+	SaveLogic(fileDialog[0], variablesDict, title = title)
 	print("File Saved {0}".format(fileDialog))
 
 def ReadLogic(filepath, *args):
@@ -84,4 +86,5 @@ def ReadDialog(startingDirectory, *args):
 		return
 	result = ReadLogic(fileDialog[0])
 	print("File Read {0}".format(result))
+	return result
 
