@@ -21,6 +21,7 @@
 # Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
+import os
 import maya.cmds as cmds
 from functools import partial
 
@@ -30,6 +31,7 @@ from ..utils import Attributes
 from ..utils import Baker
 from ..utils import Colors
 from ..utils import Constraints
+from ..utils import File
 from ..utils import Layers
 from ..utils import MayaSettings
 from ..utils import Selector
@@ -132,15 +134,17 @@ class OverlappySettings: # TODO simplify and move to preset
 	rangePDamp = (0, float("inf"), 0, 1)
 
 class Overlappy:
-	_version = "v3.1"
+	_version = "v3.2"
 	_name = "OVERLAPPY"
 	_title = _name + " " + _version
 
 	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
 	# from ..modules import GeneralWindow
 	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow):
-	def __init__(self, generalInstance):
+	def __init__(self, generalInstance, directory):
 		self.generalInstance = generalInstance
+		self.directory = directory
+		self.directorySettings = self.directory + Settings.settingsPath # TODO temporary solution, need to unify this logic for other modules and simply reuse
 
 		### VALUES
 		self.setupCreated = False
@@ -231,8 +235,11 @@ class Overlappy:
 		cmds.columnLayout(parent = layoutMain, adjustableColumn = True, width = Settings.windowWidthMargin)
 		cmds.menuBarLayout()
 
-		cmds.menu(label = "Edit")
+		cmds.menu(label = "Edit", tearOff = True)
 		cmds.menuItem(label = "Reset Settings", command = self.ResetAllSettings, image = Icons.rotateClockwise)
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Save Settings", command = self.SaveSettings)
+		cmds.menuItem(label = "Load Settings", command = self.LoadSettings)
 		
 		cmds.menu(label = "Options", tearOff = True)
 		self.menuCheckboxHierarchy = UI.MenuCheckbox(label = "Use Hierarchy", value = OverlappySettings.optionCheckboxHierarchy, valueDefault = OverlappySettings.optionCheckboxHierarchy)
@@ -718,6 +725,28 @@ class Overlappy:
 		### Update all settings
 		self.UpdateParticleAllSettings()
 	
+	def SaveSettings(self, *args): # TODO setup variables dictionary
+		variables_dict = {
+			"var1": "string one",
+			"var2": 3.7,
+			"var3": (0, 1, 1.3),
+			"var4": "qweqwe",
+			"var4": "hellloooo"
+		}
+
+		# Check if the directory exists; if not, create it # TODO MERGE LOGIC
+		if not os.path.exists(self.directorySettings):
+			os.makedirs(self.directorySettings) # Create the directory, including any intermediate directories
+
+		File.SaveDialog(startingDirectory = self.directorySettings, variablesDict = variables_dict)
+	
+	def LoadSettings(self, *args): # TODO variables from dictionary
+		# Check if the directory exists; if not, create it # TODO MERGE LOGIC
+		if not os.path.exists(self.directorySettings):
+			os.makedirs(self.directorySettings) # Create the directory, including any intermediate directories
+		
+		File.ReadDialog(startingDirectory = self.directorySettings)
+
 
 	### GET VALUES
 	def GetLoopCyclesIndex(self):

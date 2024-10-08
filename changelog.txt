@@ -8,6 +8,9 @@ GETools changelog
 - TODO added non-cycle origin animation with loop mode
 **********************************************
 
+v1.3.2
+- [OVERLAPPY] added save and load settings buttons.
+
 v1.3.1
 - [TOOLS] added Up locator to Aim Space Switcher.
 - [OVERLAPPY] simplify and merge rig setup logic into one method.
