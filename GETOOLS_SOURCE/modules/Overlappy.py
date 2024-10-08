@@ -22,6 +22,7 @@
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import os
+import datetime
 import maya.cmds as cmds
 from functools import partial
 
@@ -809,13 +810,18 @@ class Overlappy:
 		if not os.path.exists(self.directoryPresets):
 			os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
 
-		File.SaveDialog(startingDirectory = self.directoryPresets, variablesDict = variables_dict, title = "{0} | {1} | settings".format(self.generalInstance._title, Overlappy._title))
+		currentDate = datetime.datetime.now().strftime("%Y-%m-%d") # hours, minutes, seconds %H:%M:%S
+		titleText = "{0} | {1} | {2}".format(self.generalInstance._title, Overlappy._title, currentDate)
+		File.SaveDialog(startingDirectory = self.directoryPresets, variablesDict = variables_dict, title = titleText)
 	def LoadSettings(self, *args): # TODO variables from dictionary
 		### Check if the directory exists; if not, create it # TODO MERGE LOGIC
 		if not os.path.exists(self.directoryPresets):
 			os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
 		
 		readDialogResult = File.ReadDialog(startingDirectory = self.directoryPresets)
+		if (readDialogResult == None):
+			return
+
 		dictionary = readDialogResult[0]
 		# filePath = readDialogResult[1]
 
@@ -873,6 +879,8 @@ class Overlappy:
 		self.sliderParticleConserve.Set(dictionary[OverlappyVariables.particleConserve])
 		self.sliderParticleDrag.Set(dictionary[OverlappyVariables.particleDrag])
 		self.sliderParticleDamp.Set(dictionary[OverlappyVariables.particleDamp])
+
+		self.UpdateParticleAllSettings()
 
 
 	### GET VALUES

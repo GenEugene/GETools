@@ -1,0 +1,31 @@
+GETools v1.3.2 | OVERLAPPY v3.2 | 2024-10-08
+
+flagHierarchy = False
+flagLayer = True
+flagLoop = False
+flagDeleteSetup = True
+menuRadioButtonLoopCycles0 = False
+menuRadioButtonLoopCycles1 = False
+menuRadioButtonLoopCycles2 = True
+menuRadioButtonLoopCycles3 = False
+menuRadioButtonLoopCycles4 = False
+nucleusTimeScale = 0.3
+nucleusGravityActivated = False
+nucleusGravityValue = 9.81
+nucleusGravityDirection = [0.0, -1.0, 0.0]
+particleAimOffsetFloat = 10.0
+particleAimOffsetRadioCollection1 = True
+particleAimOffsetRadioCollection2 = False
+particleAimOffsetRadioCollection3 = False
+particleAimOffsetReverse = False
+particleAimOffsetUpFloat = 10.0
+particleAimOffsetUpRadioCollection1 = False
+particleAimOffsetUpRadioCollection2 = True
+particleAimOffsetUpRadioCollection3 = False
+particleAimOffsetUpReverse = False
+particleRadius = 1.0
+particleGoalSmooth = 1.5
+particleGoalWeight = 0.5
+particleConserve = 1.0
+particleDrag = 0.01
+particleDamp = 0.0
