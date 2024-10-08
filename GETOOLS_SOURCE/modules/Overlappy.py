@@ -680,6 +680,9 @@ class Overlappy:
 		self.UpdateParticleAimOffsetSettings()
 		self.UpdateParticleSettings()
 	def UpdateParticleAimOffsetSettings(self, *args):
+		if (self.setupCreatedPoint):
+			return
+
 		def SetParticleAimOffset(nameLocator, nameParticle, goalStartPosition, offset=(0, 0, 0)):
 			if (cmds.objExists(nameLocator)):
 				cmds.setAttr(nameLocator + ".translateX", offset[0])
