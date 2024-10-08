@@ -24,7 +24,6 @@
 import os
 import ast # For safely converting strings to Python objects
 import maya.cmds as cmds
-# from .. import Settings
 
 
 _basicFileDialogFilter = "*.txt"
@@ -32,10 +31,10 @@ _dialogStyle = 1
 
 
 def SaveLogic(filepath, variablesDict, title="", *args):
-	# Extract the directory from the provided file path
+	### Extract the directory from the provided file path
 	directory = os.path.dirname(filepath)
 	
-	# Check if the directory exists; if not, create it # TODO MERGE LOGIC
+	### Check if the directory exists; if not, create it # TODO MERGE LOGIC
 	if not os.path.exists(directory):
 		os.makedirs(directory) # Create the directory, including any intermediate directories
 	
@@ -54,37 +53,37 @@ def SaveDialog(startingDirectory, variablesDict, title="", *args):
 def ReadLogic(filepath, *args):
 	variables_dict = {}
 
-	# Check if file exists
+	### Check if file exists
 	if not os.path.exists(filepath):
 		print("File \"{0}\" not found!".format(filepath))
 		return variables_dict
 
-	# Open the file in read mode
+	### Open the file in read mode
 	with open(filepath, 'r') as f:
 		for line in f:
-			# Parse each line in the format "name = value"
+			### Parse each line in the format "name = value"
 			if " = " in line:
 				var_name, var_value = line.strip().split(" = ", 1)
 				
 				try:
-					# Use ast.literal_eval to convert strings to proper Python objects (int, float, list, etc.)
+					### Use ast.literal_eval to convert strings to proper Python objects (int, float, list, etc.)
 					var_value = ast.literal_eval(var_value)
 				except (ValueError, SyntaxError):
-					# If literal_eval fails, keep it as a string
+					### If literal_eval fails, keep it as a string
 					pass
 				
 				# Store the variable in the dictionary
 				variables_dict[var_name] = var_value
 
-	# Set the variables in the global namespace
+	### Set the variables in the global namespace
 	globals().update(variables_dict)
 	print("Variables loaded from {0}".format(filepath))
-	return variables_dict
+	return variables_dict, filepath
 def ReadDialog(startingDirectory, *args):
 	fileDialog = cmds.fileDialog2(fileMode = 1, startingDirectory = startingDirectory, fileFilter = _basicFileDialogFilter, dialogStyle = _dialogStyle)
 	if (fileDialog == None):
 		return
-	result = ReadLogic(fileDialog[0])
-	print("File Read {0}".format(result))
-	return result
+	readResult = ReadLogic(fileDialog[0])
+	print("File Read {0}".format(readResult))
+	return readResult
 

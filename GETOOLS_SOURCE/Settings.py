@@ -42,7 +42,7 @@ windowWidthMargin = windowWidthScroll - margin * 2
 frames1Color = Colors.blackWhite13
 frames2Color = Colors.blackWhite20
 frames2Prefix = "//  "
-settingsPath = "/GETOOLS_SOURCE/SETTINGS/"
+presetsPath = "/GETOOLS_SOURCE/PRESETS/"
 
 # Default values
 checkboxEulerFilter = False # automatic euler filter checkbox

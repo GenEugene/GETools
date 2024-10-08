@@ -92,7 +92,7 @@ class OverlappyAnnotations:
 	particleDrag = "Specifies the amount of drag applied to the current nParticle object.\nDrag is the component of aerodynamic force parallel to the relative wind which causes resistance.\nDrag is 0.05 by default."
 	particleDamp = "Specifies the amount the motion of the current nParticles are damped.\nDamping progressively diminishes the movement and oscillation of nParticles by dissipating energy."
 
-class OverlappySettings: # TODO simplify and move to preset
+class OverlappySettings:
 	### NAMING
 	prefix = "ovlp"
 	nameGroup = prefix + "Group"
@@ -177,11 +177,11 @@ class Overlappy:
 
 	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
 	# from ..modules import GeneralWindow
-	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow):
+	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow, directory):
 	def __init__(self, generalInstance, directory):
 		self.generalInstance = generalInstance
 		self.directory = directory
-		self.directorySettings = self.directory + Settings.settingsPath # TODO temporary solution, need to unify this logic for other modules and simply reuse
+		self.directoryPresets = self.directory + Settings.presetsPath # TODO temporary solution, need to unify this logic for other modules and simply reuse
 
 		### VALUES
 		self.setupCreated = False
@@ -261,10 +261,10 @@ class Overlappy:
 	def UICreate(self, layoutMain):
 		self.UILayoutMenuBar(layoutMain)
 		self.UILayoutLayers(layoutMain)
-		## self.UILayoutCollisions(layoutMain) # TODO
-		## self.UILayoutChainMode(layoutMain) # TODO
 		self.UILayoutNucleus(layoutMain)
+		## self.UILayoutChainMode(layoutMain) # TODO
 		self.UILayoutParticle(layoutMain)
+		## self.UILayoutCollisions(layoutMain) # TODO
 
 
 	### MAIN UI
@@ -802,55 +802,74 @@ class Overlappy:
 			OverlappyVariables.particleDamp: self.sliderParticleDamp.Get(),
 		}
 
-		# Check if the directory exists; if not, create it # TODO MERGE LOGIC
-		if not os.path.exists(self.directorySettings):
-			os.makedirs(self.directorySettings) # Create the directory, including any intermediate directories
+		### Check if the directory exists; if not, create it # TODO MERGE LOGIC
+		if not os.path.exists(self.directoryPresets):
+			os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
 
-		File.SaveDialog(startingDirectory = self.directorySettings, variablesDict = variables_dict, title = "{0} preset".format(Overlappy._title))
+		File.SaveDialog(startingDirectory = self.directoryPresets, variablesDict = variables_dict, title = "{0} | {1} | settings".format(self.generalInstance._title, Overlappy._title))
 	def LoadSettings(self, *args): # TODO variables from dictionary
-		# Check if the directory exists; if not, create it # TODO MERGE LOGIC
-		if not os.path.exists(self.directorySettings):
-			os.makedirs(self.directorySettings) # Create the directory, including any intermediate directories
+		### Check if the directory exists; if not, create it # TODO MERGE LOGIC
+		if not os.path.exists(self.directoryPresets):
+			os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
 		
-		variablesDict = File.ReadDialog(startingDirectory = self.directorySettings)
+		readDialogResult = File.ReadDialog(startingDirectory = self.directoryPresets)
+		dictionary = readDialogResult[0]
+		# filePath = readDialogResult[1]
 
-		# Применение загруженных настроек к реальным переменным через методы
-		self.menuCheckboxHierarchy.Set(variablesDict[OverlappyVariables.flagHierarchy])
-		self.menuCheckboxLayer.Set(variablesDict[OverlappyVariables.flagLayer])
-		self.menuCheckboxLoop.Set(variablesDict[OverlappyVariables.flagLoop])
-		self.menuCheckboxDeleteSetup.Set(variablesDict[OverlappyVariables.flagDeleteSetup])
+		### Read preset version and check
+		# with open(filePath, 'r') as file:
+		# 	first_line = file.readline().strip() # Read first line
+		# parts = first_line.split(" | ")
+		# if len(parts) >= 2:
+		# 	getools_version = parts[0]
+		# 	overlappy_version = parts[1]
+		# else:
+		# 	cmds.warning("No version info in loaded file")
+		# isGetoolsVersionCorrect = getools_version == self.generalInstance._title
+		# isOverlappyVersionCorrect = overlappy_version == Overlappy._title
+		# if (not isGetoolsVersionCorrect or not isOverlappyVersionCorrect):
+		# 	messageResult = ""
+		# 	if (not isGetoolsVersionCorrect):
+		# 		messageResult += "Getools version is not matched. Current version {0}, Preset version {1}\n".format(getools_version, self.generalInstance._title)
+		# 	if (not isOverlappyVersionCorrect):
+		# 		messageResult += "Overlappy version is not matched. Current version {0}, Preset version {1}".format(overlappy_version, Overlappy._title)
+		# 	cmds.warning(messageResult)
+		
+		### Apply loaded values
+		self.menuCheckboxHierarchy.Set(dictionary[OverlappyVariables.flagHierarchy])
+		self.menuCheckboxLayer.Set(dictionary[OverlappyVariables.flagLayer])
+		self.menuCheckboxLoop.Set(dictionary[OverlappyVariables.flagLoop])
+		self.menuCheckboxDeleteSetup.Set(dictionary[OverlappyVariables.flagDeleteSetup])
 
-		cmds.menuItem(self.menuRadioButtonsLoop[0], edit = True, radioButton = variablesDict[OverlappyVariables.menuRadioButtonLoopCycles0])
-		cmds.menuItem(self.menuRadioButtonsLoop[1], edit = True, radioButton = variablesDict[OverlappyVariables.menuRadioButtonLoopCycles1])
-		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = variablesDict[OverlappyVariables.menuRadioButtonLoopCycles2])
-		cmds.menuItem(self.menuRadioButtonsLoop[3], edit = True, radioButton = variablesDict[OverlappyVariables.menuRadioButtonLoopCycles3])
-		cmds.menuItem(self.menuRadioButtonsLoop[4], edit = True, radioButton = variablesDict[OverlappyVariables.menuRadioButtonLoopCycles4])
+		cmds.menuItem(self.menuRadioButtonsLoop[0], edit = True, radioButton = dictionary[OverlappyVariables.menuRadioButtonLoopCycles0])
+		cmds.menuItem(self.menuRadioButtonsLoop[1], edit = True, radioButton = dictionary[OverlappyVariables.menuRadioButtonLoopCycles1])
+		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = dictionary[OverlappyVariables.menuRadioButtonLoopCycles2])
+		cmds.menuItem(self.menuRadioButtonsLoop[3], edit = True, radioButton = dictionary[OverlappyVariables.menuRadioButtonLoopCycles3])
+		cmds.menuItem(self.menuRadioButtonsLoop[4], edit = True, radioButton = dictionary[OverlappyVariables.menuRadioButtonLoopCycles4])
 
-		self.nucleusTimeScaleSlider.Set(variablesDict[OverlappyVariables.nucleusTimeScale])
-		cmds.checkBox(self.nucleusGravityCheckbox, edit = True, value = variablesDict[OverlappyVariables.nucleusGravityActivated])
-		cmds.floatField(self.nucleusGravityFloatField, edit = True, value = variablesDict[OverlappyVariables.nucleusGravityValue])
-		cmds.floatFieldGrp(self.nucleusGravityDirectionFloatFieldGrp, edit = True, value = variablesDict[OverlappyVariables.nucleusGravityDirection] + [0])
+		self.nucleusTimeScaleSlider.Set(dictionary[OverlappyVariables.nucleusTimeScale])
+		cmds.checkBox(self.nucleusGravityCheckbox, edit = True, value = dictionary[OverlappyVariables.nucleusGravityActivated])
+		cmds.floatField(self.nucleusGravityFloatField, edit = True, value = dictionary[OverlappyVariables.nucleusGravityValue])
+		cmds.floatFieldGrp(self.nucleusGravityDirectionFloatFieldGrp, edit = True, value = dictionary[OverlappyVariables.nucleusGravityDirection] + [0])
 
-		cmds.floatField(self.aimOffsetFloatGroup[1], edit = True, value = variablesDict[OverlappyVariables.particleAimOffsetFloat])
-		cmds.radioButton(self.aimOffsetRadioCollection[0], edit = True, select = variablesDict[OverlappyVariables.particleAimOffsetRadioCollection1])
-		cmds.radioButton(self.aimOffsetRadioCollection[1], edit = True, select = variablesDict[OverlappyVariables.particleAimOffsetRadioCollection2])
-		cmds.radioButton(self.aimOffsetRadioCollection[2], edit = True, select = variablesDict[OverlappyVariables.particleAimOffsetRadioCollection3])
-		cmds.checkBox(self.aimOffsetCheckbox, edit = True, value = variablesDict[OverlappyVariables.particleAimOffsetReverse])
+		cmds.floatField(self.aimOffsetFloatGroup[1], edit = True, value = dictionary[OverlappyVariables.particleAimOffsetFloat])
+		cmds.radioButton(self.aimOffsetRadioCollection[0], edit = True, select = dictionary[OverlappyVariables.particleAimOffsetRadioCollection1])
+		cmds.radioButton(self.aimOffsetRadioCollection[1], edit = True, select = dictionary[OverlappyVariables.particleAimOffsetRadioCollection2])
+		cmds.radioButton(self.aimOffsetRadioCollection[2], edit = True, select = dictionary[OverlappyVariables.particleAimOffsetRadioCollection3])
+		cmds.checkBox(self.aimOffsetCheckbox, edit = True, value = dictionary[OverlappyVariables.particleAimOffsetReverse])
 
-		cmds.floatField(self.aimOffsetUpFloatGroup[1], edit = True, value = variablesDict[OverlappyVariables.particleAimOffsetUpFloat])
-		cmds.radioButton(self.aimOffsetUpRadioCollection[0], edit = True, select = variablesDict[OverlappyVariables.particleAimOffsetUpRadioCollection1])
-		cmds.radioButton(self.aimOffsetUpRadioCollection[1], edit = True, select = variablesDict[OverlappyVariables.particleAimOffsetUpRadioCollection2])
-		cmds.radioButton(self.aimOffsetUpRadioCollection[2], edit = True, select = variablesDict[OverlappyVariables.particleAimOffsetUpRadioCollection3])
-		cmds.checkBox(self.aimOffsetUpCheckbox, edit = True, value = variablesDict[OverlappyVariables.particleAimOffsetUpReverse])
+		cmds.floatField(self.aimOffsetUpFloatGroup[1], edit = True, value = dictionary[OverlappyVariables.particleAimOffsetUpFloat])
+		cmds.radioButton(self.aimOffsetUpRadioCollection[0], edit = True, select = dictionary[OverlappyVariables.particleAimOffsetUpRadioCollection1])
+		cmds.radioButton(self.aimOffsetUpRadioCollection[1], edit = True, select = dictionary[OverlappyVariables.particleAimOffsetUpRadioCollection2])
+		cmds.radioButton(self.aimOffsetUpRadioCollection[2], edit = True, select = dictionary[OverlappyVariables.particleAimOffsetUpRadioCollection3])
+		cmds.checkBox(self.aimOffsetUpCheckbox, edit = True, value = dictionary[OverlappyVariables.particleAimOffsetUpReverse])
 
-		self.sliderParticleRadius.Set(variablesDict[OverlappyVariables.particleRadius])
-		self.sliderParticleGoalSmooth.Set(variablesDict[OverlappyVariables.particleGoalSmooth])
-		self.sliderParticleGoalWeight.Set(variablesDict[OverlappyVariables.particleGoalWeight])
-		self.sliderParticleConserve.Set(variablesDict[OverlappyVariables.particleConserve])
-		self.sliderParticleDrag.Set(variablesDict[OverlappyVariables.particleDrag])
-		self.sliderParticleDamp.Set(variablesDict[OverlappyVariables.particleDamp])
-
-		print("Settings loaded successfully.")
+		self.sliderParticleRadius.Set(dictionary[OverlappyVariables.particleRadius])
+		self.sliderParticleGoalSmooth.Set(dictionary[OverlappyVariables.particleGoalSmooth])
+		self.sliderParticleGoalWeight.Set(dictionary[OverlappyVariables.particleGoalWeight])
+		self.sliderParticleConserve.Set(dictionary[OverlappyVariables.particleConserve])
+		self.sliderParticleDrag.Set(dictionary[OverlappyVariables.particleDrag])
+		self.sliderParticleDamp.Set(dictionary[OverlappyVariables.particleDamp])
 
 
 	### GET VALUES
