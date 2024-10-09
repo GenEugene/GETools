@@ -24,7 +24,7 @@
 from .utils import Colors
 
 
-# Interface
+### Interface
 buttonLabel = "GETools"
 windowName = "windowGETools"
 dockName = "dockGETools"
@@ -42,8 +42,14 @@ windowWidthMargin = windowWidthScroll - margin * 2
 frames1Color = Colors.blackWhite13
 frames2Color = Colors.blackWhite20
 frames2Prefix = "//  "
-presetsPath = "/GETOOLS_SOURCE/PRESETS/"
 
-# Default values
+### Directories
+pathSettings = "/GETOOLS_SOURCE/Settings.py"
+pathPresets = "/GETOOLS_SOURCE/PRESETS/"
+
+### Default values
 checkboxEulerFilter = False # automatic euler filter checkbox
+
+### Overlappy
+defaultPreset = "" # TODO
 
