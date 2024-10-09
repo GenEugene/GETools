@@ -22,6 +22,7 @@
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import os
+# import ast # For safely converting strings to Python objects
 import datetime
 import maya.cmds as cmds
 from functools import partial
@@ -179,7 +180,7 @@ class Overlappy:
 
 	def __init__(self, options: Options.PluginVariables):
 		self.optionsPlugin = options
-		self.directoryPresets = self.optionsPlugin.directory + Settings.presetsPath # TODO temporary solution, need to unify this logic for other modules and simply reuse
+		self.directoryPresets = self.optionsPlugin.directory + Settings.pathPresets # TODO temporary solution, need to unify this logic for other modules and simply reuse
 
 		### VALUES
 		self.setupCreated = False
@@ -273,8 +274,9 @@ class Overlappy:
 
 		cmds.menu(label = "Edit", tearOff = True)
 		cmds.menuItem(label = "Reset Settings", command = self.ResetAllSettings, image = Icons.rotateClockwise)
+		cmds.menuItem(label = "Set Default Settings", command = self.SetSettingsDefault)
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Save Settings", command = self.SaveSettings)
+		cmds.menuItem(label = "Save Settings", command = self.SaveSettings, image = Icons.fileSave)
 		cmds.menuItem(label = "Load Settings", command = self.LoadSettings)
 		
 		cmds.menu(label = "Options", tearOff = True)
@@ -764,6 +766,23 @@ class Overlappy:
 		### Update all settings
 		self.UpdateParticleAllSettings()
 	
+	def SetSettingsDefault(self, *args): # TODO
+		### Check if the directory exists; if not, create it # TODO MERGE LOGIC
+		# if not os.path.exists(self.directoryPresets):
+		# 	os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
+		
+		# fileDialog = cmds.fileDialog2(fileMode = 1, caption = "Set Default Preset", okCaption = "Set", startingDirectory = self.directoryPresets, fileFilter = File._basicFileDialogFilter, dialogStyle = File._dialogStyle)
+		# if (fileDialog == None):
+		# 	return
+		
+		pathSettings = self.directory + Settings.pathSettings
+		opened = open(pathSettings, 'r')
+		for line in opened:
+			lineParts = line.strip().split(" = ", 1)
+			if (len(lineParts) > 1 and lineParts[0] == "defaultPreset"):
+				print(lineParts[1])
+
+
 	def SaveSettings(self, *args):
 		variables_dict = {
 			# "directory": self.options.directory, # TODO move to general preset save
@@ -811,7 +830,7 @@ class Overlappy:
 		currentDate = datetime.datetime.now().strftime("%Y-%m-%d") # hours, minutes, seconds %H:%M:%S
 		titleText = "{0} | {1} | {2}".format(self.optionsPlugin.titleGeneral, Overlappy._title, currentDate)
 		File.SaveDialog(startingDirectory = self.directoryPresets, variablesDict = variables_dict, title = titleText)
-	def LoadSettings(self, *args): # TODO variables from dictionary
+	def LoadSettings(self, *args):
 		### Check if the directory exists; if not, create it # TODO MERGE LOGIC
 		if not os.path.exists(self.directoryPresets):
 			os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
