@@ -22,7 +22,7 @@
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import maya.cmds as cmds
-# from functools import partial
+from functools import partial
 
 from .. import Settings
 from ..utils import File
@@ -30,7 +30,7 @@ from ..utils import Layers
 from ..utils import Selector
 # from ..utils import Blendshapes
 # from ..experimental import Physics
-# from ..experimental import PhysicsHair
+from ..experimental import PhysicsHair
 from ..experimental import PhysicsParticle
 
 
@@ -69,7 +69,7 @@ class Experimental:
 		cmds.button(label = "P Aim", command = PhysicsParticle.CreateAimOnSelected)
 		cmds.button(label = "P Combo", command = PhysicsParticle.CreateComboOnSelected)
 		# cmds.button(label = "**P Chain", command = PhysicsParticle.CreateAimChainOnSelected)
-		# cmds.button(label = "Hair", command = partial(PhysicsHair.CreateNHairOnSelected, None))
+		cmds.button(label = "N Hair", command = partial(PhysicsHair.CreateNHairOnSelected, None))
 
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutMain, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
