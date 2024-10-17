@@ -920,13 +920,15 @@ class Overlappy:
 		if (attributesFiltered == None):
 			self.ParticleSetupDelete(clearCache = True)
 			return False
+		attributesFilteredForKey = Attributes.FilterAttributesWithoutAnimation(attributesFiltered)
 		
 		### Cut object name from attributes
 		for i in range(len(attributesFiltered)):
 			attributesFiltered[i] = attributesFiltered[i].replace(self.selectedObjects + ".", "")
+		for i in range(len(attributesFilteredForKey)):
+			attributesFilteredForKey[i] = attributesFilteredForKey[i].replace(self.selectedObjects + ".", "")
 
 		### Set keys for target object attributes
-		attributesFilteredForKey = Attributes.FilterAttributesWithoutAnimation(attributes)
 		if (attributesFilteredForKey != None):
 			cmds.setKeyframe(self.selectedObjects, attribute = attributesFilteredForKey)
 		
