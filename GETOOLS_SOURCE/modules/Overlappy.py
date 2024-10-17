@@ -925,11 +925,11 @@ class Overlappy:
 		### Cut object name from attributes
 		for i in range(len(attributesFiltered)):
 			attributesFiltered[i] = attributesFiltered[i].replace(self.selectedObjects + ".", "")
-		for i in range(len(attributesFilteredForKey)):
-			attributesFilteredForKey[i] = attributesFilteredForKey[i].replace(self.selectedObjects + ".", "")
-
-		### Set keys for target object attributes
+		
+		### Cut object name from attributes and Set keys for target object attributes
 		if (attributesFilteredForKey != None):
+			for i in range(len(attributesFilteredForKey)):
+				attributesFilteredForKey[i] = attributesFilteredForKey[i].replace(self.selectedObjects + ".", "")
 			cmds.setKeyframe(self.selectedObjects, attribute = attributesFilteredForKey)
 		
 		### Set time range
