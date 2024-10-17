@@ -172,7 +172,7 @@ class OverlappyVariables: # using for sava and load settings
 	particleDamp = "particleDamp"
 
 class Overlappy:
-	_version = "v3.2"
+	_version = "v3.3"
 	_name = "OVERLAPPY"
 	_title = _name + " " + _version
 
@@ -920,13 +920,17 @@ class Overlappy:
 		if (attributesFiltered == None):
 			self.ParticleSetupDelete(clearCache = True)
 			return False
+		attributesFilteredForKey = Attributes.FilterAttributesWithoutAnimation(attributesFiltered)
 		
 		### Cut object name from attributes
 		for i in range(len(attributesFiltered)):
 			attributesFiltered[i] = attributesFiltered[i].replace(self.selectedObjects + ".", "")
-
-		### Set keys for target object attributes
-		cmds.setKeyframe(self.selectedObjects, attribute = attributesFiltered)
+		
+		### Cut object name from attributes and Set keys for target object attributes
+		if (attributesFilteredForKey != None):
+			for i in range(len(attributesFilteredForKey)):
+				attributesFilteredForKey[i] = attributesFilteredForKey[i].replace(self.selectedObjects + ".", "")
+			cmds.setKeyframe(self.selectedObjects, attribute = attributesFilteredForKey)
 		
 		### Set time range
 		self.time.Scan()
