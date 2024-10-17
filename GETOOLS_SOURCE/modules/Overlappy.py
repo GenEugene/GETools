@@ -300,9 +300,11 @@ class Overlappy:
 		self.menuRadioButtonsLoop[3] = cmds.menuItem(label = "3", radioButton = True)
 		self.menuRadioButtonsLoop[4] = cmds.menuItem(label = "4", radioButton = True)
 
-		cmds.menu(label = "Select", tearOff = True)
-		cmds.menuItem(label = "Nucleus", command = self.SelectNucleus, image = Icons.nucleus)
-		cmds.menuItem(label = "Particles", command = self.SelectParticles, image = Icons.particle)
+		cmds.menu(label = "Utils", tearOff = True)
+		cmds.menuItem(label = "Select Nucleus", command = self.SelectNucleus, image = Icons.nucleus)
+		cmds.menuItem(label = "Select Particles", command = self.SelectParticles, image = Icons.particle)
+		# cmds.menuItem(divider = True)
+		# cmds.menuItem(label = "Refresh Setup Time Range", command = self.RefreshParticlePosition) # TODO
 
 	def UILayoutLayers(self, layoutMain):
 		self.layoutLayers = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "LAYERS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -680,6 +682,17 @@ class Overlappy:
 	
 
 	### SETTINGS
+	def RefreshParticlePosition(self, *args): # TODO rework particle offset logic and add refresh method
+		# if (cmds.objExists(self.particleBase)):
+		# 	cmds.xform(self.particleBase, translation = (1, 2, 3), worldSpace = True)
+		
+		# if (cmds.objExists(self.particleTarget)):
+		# 	cmds.xform(self.particleTarget, translation = (1, 2, 3), worldSpace = True)
+		
+		# if (cmds.objExists(self.particleUp)):
+		# 	cmds.xform(self.particleUp, translation = (1, 2, 3), worldSpace = True)
+		pass
+
 	def UpdateParticleAllSettings(self, *args):
 		self.UpdateParticleAimOffsetSettings()
 		self.UpdateParticleSettings()
@@ -1004,6 +1017,7 @@ class Overlappy:
 			startTime = self.time.values[2] - self.time.values[3] * self.GetLoopCyclesIndex()
 			self.time.SetMin(startTime)
 			self.time.SetCurrent(startTime)
+			# self.RefreshParticlePosition() # TODO
 		cmds.setAttr(self.nucleus1 + ".startFrame", startTime)
 		if (cmds.objExists(self.nucleus2)):
 			cmds.setAttr(self.nucleus2 + ".startFrame", startTime)
@@ -1038,7 +1052,7 @@ class Overlappy:
 			cmds.pasteKey(self.selectedObjects, option = "replaceCompletely", attribute = attributesFiltered)
 		cmds.delete(objectDuplicate)
 
-		### Set time range
+		### Set nucleus time range
 		if (self.menuCheckboxLoop.Get()):
 			startTime = self.time.values[2]
 			cmds.setAttr(self.nucleus1 + ".startFrame", startTime)
