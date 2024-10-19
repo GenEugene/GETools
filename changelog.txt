@@ -8,6 +8,10 @@ GETools changelog
 - TODO added non-cycle origin animation with loop mode
 **********************************************
 
+v1.3.3
+- [OVERLAPPY] fixed new keys generation if original object already has animation curve on attribute.
+- [TOOLS] reworked Animation Offset buttons with more convenient way to set values.
+
 v1.3.2
 - [OVERLAPPY] fixed error with bake to layers when current scene already contained layer from previous Overlappy use.
 - [OVERLAPPY] fixed incorrect reset settings on Point setup after Aim or Combo used.

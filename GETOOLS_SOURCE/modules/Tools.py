@@ -99,7 +99,10 @@ class ToolsAnnotations:
 	timelineFocusIn = "Focus inner timeline range"
 	timelineSetRange = "Set timeline inner range on selected range by mouse"
 
-	animationOffset = "Move animation on selected objects in time.\nThe animation will move relative to the index of the selected object.\nThe best way to desync animation.\nWorks with selection in the channel box."
+	animationOffsetSetValue = "Set predefined step value"
+	animationOffsetIncrementValue = "Increment step value by 1"
+	animationOffsetValue = "Step value for animation offset"
+	animationOffset = "Move animation curves on selected objects.\nAnimation will move relative to the index of the selected object.\nThe best way to desync animation.\nWorks with selection in the channel box."
 
 class ToolsSettings:
 	### AIM SPACE
@@ -108,7 +111,7 @@ class ToolsSettings:
 	aimSpaceRadioButtonDefault = 0
 
 class Tools:
-	_version = "v1.2"
+	_version = "v1.3"
 	_name = "TOOLS"
 	_title = _name + " " + _version
 
@@ -121,6 +124,9 @@ class Tools:
 		self.checkboxLocatorHideParent = None
 		self.checkboxLocatorSubLocator = None
 		self.floatLocatorSize = None
+
+		### Animation Offset
+		self.animOffsetFloatField = None
 		
 		### Locator Aim Space
 		self.aimSpaceFloatField = None
@@ -227,8 +233,8 @@ class Tools:
 		cmds.text(parent = rowLayout, label = "Set Bake Step", annotation = ToolsAnnotations.locatorSize)
 		self.bakingSamplesValue = cmds.floatField(parent = rowLayout, value = 1, precision = 3, minValue = 0.001, annotation = ToolsAnnotations.bakeSamples)
 		cmds.gridLayout(parent = rowLayout, numberOfColumns = 6, cellWidth = 20, cellHeight = Settings.lineHeight)
-		cmds.button(label = "<", command = partial(self.BakeSamplesAdd, -1), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.bakeSamples)
-		cmds.button(label = ">", command = partial(self.BakeSamplesAdd, 1), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.bakeSamples)
+		cmds.button(label = "-", command = partial(self.BakeSamplesAdd, -1), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.bakeSamples)
+		cmds.button(label = "+", command = partial(self.BakeSamplesAdd, 1), backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.bakeSamples)
 		cmds.button(label = "1", command = partial(self.BakeSamplesSet, 1), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.bakeSamples)
 		cmds.button(label = "2", command = partial(self.BakeSamplesSet, 2), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.bakeSamples)
 		cmds.button(label = "3", command = partial(self.BakeSamplesSet, 3), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.bakeSamples)
@@ -273,14 +279,26 @@ class Tools:
 		cmds.button(label = "Offset", command = partial(Animation.SetInfinity, 4, None), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.animationCurveInfinity)
 		cmds.button(label = "Oscillate", command = partial(Animation.SetInfinity, 5, None), backgroundColor = Colors.blue100, annotation = ToolsAnnotations.animationCurveInfinity)
 		#
-		countOffsets = 6
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		cmds.button(label = "<<<=", command = partial(self.AnimationOffset, -1, 3), backgroundColor = Colors.purple100, annotation = ToolsAnnotations.animationOffset)
-		cmds.button(label = "<<=", command = partial(self.AnimationOffset, -1, 2), backgroundColor = Colors.purple50, annotation = ToolsAnnotations.animationOffset)
-		cmds.button(label = "<=", command = partial(self.AnimationOffset, -1, 1), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.animationOffset)
-		cmds.button(label = "=>", command = partial(self.AnimationOffset, 1, 1), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.animationOffset)
-		cmds.button(label = "=>>", command = partial(self.AnimationOffset, 1, 2), backgroundColor = Colors.purple50, annotation = ToolsAnnotations.animationOffset)
-		cmds.button(label = "=>>>", command = partial(self.AnimationOffset, 1, 3), backgroundColor = Colors.purple100, annotation = ToolsAnnotations.animationOffset)
+
+		### Animation Offset
+		layoutAnimationOffset = cmds.frameLayout(parent = layoutColumn, label = "Animation Offset", labelIndent = 78, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		rowLayout = cmds.rowLayout(parent = layoutAnimationOffset, numberOfColumns = 4, columnWidth4 = (120, 40, 35, 70), columnAlign = [(1, "center"), (2, "center"), (3, "right"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
+		# 1
+		cmds.gridLayout(parent = rowLayout, numberOfColumns = 6, cellWidth = 20, cellHeight = Settings.lineHeight)
+		cmds.button(label = "0.1", command = partial(self.AnimationOffsetSetValue, 0.1), backgroundColor = Colors.blackWhite90, annotation = ToolsAnnotations.animationOffsetSetValue)
+		cmds.button(label = "0.5", command = partial(self.AnimationOffsetSetValue, 0.5), backgroundColor = Colors.blackWhite90, annotation = ToolsAnnotations.animationOffsetSetValue)
+		cmds.button(label = "1", command = partial(self.AnimationOffsetSetValue, 1), backgroundColor = Colors.blackWhite90, annotation = ToolsAnnotations.animationOffsetSetValue)
+		cmds.button(label = "4", command = partial(self.AnimationOffsetSetValue, 4), backgroundColor = Colors.blackWhite90, annotation = ToolsAnnotations.animationOffsetSetValue)
+		cmds.button(label = "-", command = self.AnimationOffsetAddValueNegative, backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.animationOffsetIncrementValue)
+		cmds.button(label = "+", command = self.AnimationOffsetAddValuePositive, backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.animationOffsetIncrementValue)
+		# 2
+		self.animOffsetFloatField = cmds.floatField(parent = rowLayout, value = 1, precision = 3, minValue = 0, annotation = ToolsAnnotations.animationOffsetValue)
+		# 3
+		cmds.text(parent = rowLayout, label = "Move", annotation = ToolsAnnotations.animationOffset)
+		# 4
+		cmds.gridLayout(parent = rowLayout, numberOfColumns = 2, cellWidth = 35, cellHeight = Settings.lineHeight)
+		cmds.button(label = "Left", command = self.AnimationOffsetMoveLeft, backgroundColor = Colors.red50, annotation = ToolsAnnotations.animationOffset)
+		cmds.button(label = "Right", command = self.AnimationOffsetMoveRight, backgroundColor = Colors.green50, annotation = ToolsAnnotations.animationOffset)
 	def UILayoutTimeline(self, layoutMain):
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "TIMELINE", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = layoutRigging, adjustableColumn = True)
@@ -382,7 +400,7 @@ class Tools:
 		return cmds.floatField(self.bakingSamplesValue, query = True, value = True)
 	def BakeSamplesSet(self, value=1, *args):
 		cmds.floatField(self.bakingSamplesValue, edit = True, value = value)
-	def BakeSamplesAdd(self, direction=1, *args):
+	def BakeSamplesAdd(self, direction=1, *args): # TODO use FloatValueAdd() instead
 		value = self.BakeSampleGet()
 
 		addition = 0
@@ -429,6 +447,43 @@ class Tools:
 
 
 	### ANIMATION
+	def FloatValueAdd(self, value, direction=1, *args):
+		addition = 0
+		if (direction == 1):
+			if (value < 1):
+				addition = 0.1
+			else:
+				addition = 1
+		else:
+			if (value <= 1):
+				addition = -0.1
+			else:
+				addition = -1
+
+		result = value + addition
+
+		if (result <= 0.1):
+			result = 0.1
+			cmds.warning("Value can't be zero or less. To use values below 0.1 type it manually.")
+		
+		return result
+	def AnimationOffsetSetValue(self, value, *args):
+		cmds.floatField(self.animOffsetFloatField, edit = True, value = value)
+	def AnimationOffsetAddValue(self, direction):
+		value = cmds.floatField(self.animOffsetFloatField, query = True, value = True)
+		valueNew = self.FloatValueAdd(value, direction)
+		self.AnimationOffsetSetValue(valueNew)
+	def AnimationOffsetAddValueNegative(self, *args):
+		self.AnimationOffsetAddValue(direction = -1)
+	def AnimationOffsetAddValuePositive(self, *args):
+		self.AnimationOffsetAddValue(direction = 1)
+	def AnimationOffsetMove(self, direction=1):
+		value = cmds.floatField(self.animOffsetFloatField, query = True, value = True)
+		self.AnimationOffset(direction, value)
+	def AnimationOffsetMoveLeft(self, *args):
+		self.AnimationOffsetMove(direction = -1)
+	def AnimationOffsetMoveRight(self, *args):
+		self.AnimationOffsetMove(direction = 1)
 	def AnimationOffset(self, direction=1, step=1, *args):
 		Animation.OffsetSelected(direction, step)
 
