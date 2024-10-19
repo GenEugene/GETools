@@ -24,8 +24,7 @@ Discover tools for creating locators, space switching, simulating secondary anim
 ***
 # How to use
 - `Read more in WIKI` - https://github.com/GenEugene/GETools/wiki
-- `Ask me` - use one of the link above
-- *Video tutorial in progress ...*
+- `Videos Playlist` - https://www.youtube.com/playlist?list=PLhwndaM4LAxhbl95yz9WVie1iYflTFy6S
 - Hover your mouse over any UI element to read a description of the tools, if necessary
 
 ***
