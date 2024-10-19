@@ -100,7 +100,8 @@ class ToolsAnnotations:
 	timelineSetRange = "Set timeline inner range on selected range by mouse"
 
 	animationOffsetSetValue = "Set predefined step value"
-	animationOffsetValue = "Step for animation offset"
+	animationOffsetIncrementValue = "Increment step value by 1"
+	animationOffsetValue = "Step value for animation offset"
 	animationOffset = "Move animation curves on selected objects.\nAnimation will move relative to the index of the selected object.\nThe best way to desync animation.\nWorks with selection in the channel box."
 
 class ToolsSettings:
@@ -288,8 +289,8 @@ class Tools:
 		cmds.button(label = "0.5", command = partial(self.AnimationOffsetSetValue, 0.5), backgroundColor = Colors.blackWhite90, annotation = ToolsAnnotations.animationOffsetSetValue)
 		cmds.button(label = "1", command = partial(self.AnimationOffsetSetValue, 1), backgroundColor = Colors.blackWhite90, annotation = ToolsAnnotations.animationOffsetSetValue)
 		cmds.button(label = "4", command = partial(self.AnimationOffsetSetValue, 4), backgroundColor = Colors.blackWhite90, annotation = ToolsAnnotations.animationOffsetSetValue)
-		cmds.button(label = "-", command = self.AnimationOffsetAddValueNegative, backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.animationOffsetSetValue)
-		cmds.button(label = "+", command = self.AnimationOffsetAddValuePositive, backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.animationOffsetSetValue)
+		cmds.button(label = "-", command = self.AnimationOffsetAddValueNegative, backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.animationOffsetIncrementValue)
+		cmds.button(label = "+", command = self.AnimationOffsetAddValuePositive, backgroundColor = Colors.blackWhite70, annotation = ToolsAnnotations.animationOffsetIncrementValue)
 		# 2
 		self.animOffsetFloatField = cmds.floatField(parent = rowLayout, value = 1, precision = 3, minValue = 0, annotation = ToolsAnnotations.animationOffsetValue)
 		# 3
@@ -466,28 +467,23 @@ class Tools:
 			cmds.warning("Value can't be zero or less. To use values below 0.1 type it manually.")
 		
 		return result
-	
 	def AnimationOffsetSetValue(self, value, *args):
 		cmds.floatField(self.animOffsetFloatField, edit = True, value = value)
-	
-	def AnimationOffsetAddValueNegative(self, *args): # TODO simplify
+	def AnimationOffsetAddValue(self, direction):
 		value = cmds.floatField(self.animOffsetFloatField, query = True, value = True)
-		valueNew = self.FloatValueAdd(value, -1)
+		valueNew = self.FloatValueAdd(value, direction)
 		self.AnimationOffsetSetValue(valueNew)
-	
-	def AnimationOffsetAddValuePositive(self, *args): # TODO simplify
+	def AnimationOffsetAddValueNegative(self, *args):
+		self.AnimationOffsetAddValue(direction = -1)
+	def AnimationOffsetAddValuePositive(self, *args):
+		self.AnimationOffsetAddValue(direction = 1)
+	def AnimationOffsetMove(self, direction=1):
 		value = cmds.floatField(self.animOffsetFloatField, query = True, value = True)
-		valueNew = self.FloatValueAdd(value, 1)
-		self.AnimationOffsetSetValue(valueNew)
-	
-	def AnimationOffsetMoveLeft(self, *args): # TODO simplify
-		value = cmds.floatField(self.animOffsetFloatField, query = True, value = True)
-		self.AnimationOffset(-1, value)
-	
-	def AnimationOffsetMoveRight(self, *args): # TODO simplify
-		value = cmds.floatField(self.animOffsetFloatField, query = True, value = True)
-		self.AnimationOffset(1, value)
-	
+		self.AnimationOffset(direction, value)
+	def AnimationOffsetMoveLeft(self, *args):
+		self.AnimationOffsetMove(direction = -1)
+	def AnimationOffsetMoveRight(self, *args):
+		self.AnimationOffsetMove(direction = 1)
 	def AnimationOffset(self, direction=1, step=1, *args):
 		Animation.OffsetSelected(direction, step)
 
