@@ -43,7 +43,7 @@ Discover tools for creating locators, space switching, simulating secondary anim
 
 ***
 # Known issues:
+- Overlappy in loop mode bake incorrectly when rootmotion used
 - If Maya uses interface scaling, some UI elements can be stretched or aligned incorrectly
 - UI Buttons are not aligned perfectly
 - Overlappy module depends on framerate. Physics will behave different on 20/30/60/+ framerates.
-

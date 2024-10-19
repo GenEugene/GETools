@@ -71,6 +71,19 @@ def FilterAttributesAnimatable(attributes, skipLockedKeys=True, skipNonKeyableKe
 
 	return attributesFiltered
 
+def FilterAttributesWithoutAnimation(attributes):
+	attributesWithoutAnimation = []
+
+	for attribute in attributes:
+		connection = cmds.listConnections(attribute, source = True, destination = False, type = "animCurve")
+		if (connection == None):
+			attributesWithoutAnimation.append(attribute)
+	
+	if (len(attributesWithoutAnimation) == 0):
+		return None
+	
+	return attributesWithoutAnimation
+
 def GetAttributesAnimatableOnSelected(useShapes=False):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minimalCount = 1, transformsOnly = False)
