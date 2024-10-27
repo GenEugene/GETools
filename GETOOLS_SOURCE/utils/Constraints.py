@@ -30,26 +30,21 @@ from ..values import Enums
 
 def ConstrainSelectedToLastObject(reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
 	selected = Selector.MultipleObjects(2)
-	if (selected == None):
+	if selected is None:
 		return
 	ConstrainListToLastElement(selected, reverse, maintainOffset, parent, point, orient, scale, aim, weight)
 
 def ConstrainListToLastElement(selected=None, reverse=False, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
-	if (selected == None):
+	if selected is None:
 		cmds.warning("FIXME: selected = None")
 		return
-	
-	for i in range(len(selected)):
-		if (i == len(selected) - 1):
-			break
-		
-		if (reverse):
-			index1 = i
-			index2 = -1
-		else:
-			index1 = -1
-			index2 = i
-		
+
+	if reverse:
+		selected.reverse()
+
+	index1 = -1
+	for i in range(len(selected) - 1): # skip last element
+		index2 = i
 		ConstrainSecondToFirstObject(selected[index1], selected[index2], maintainOffset, parent, point, orient, scale, aim, weight)
 
 def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True, parent=True, point=False, orient=False, scale=False, aim=False, weight=1):
@@ -113,7 +108,7 @@ def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True,
 
 def ConstrainAim(objectParent, objectChild, maintainOffset=True, weight=1, aimVector=(0, 0, 1), upVector=(0, 1, 0), worldUpVector=(0, 1, 0), worldUpObject=None): # TODO complete aim logic
 	# "scene" "object" "objectrotation" "vector" "none"
-	if (worldUpObject == None):
+	if worldUpObject is None:
 		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, skip = "none", aimVector = aimVector, upVector = upVector, worldUpType = "vector", worldUpVector = worldUpVector)
 	else:
 		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, skip = "none", aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = worldUpVector, worldUpObject = worldUpObject)
@@ -122,7 +117,7 @@ def DeleteConstraints(selected):
 	# First pass
 	connections = Selector.GetConnectionsOfType(selected, type = Enums.Types.constraint, source = True, destination = False)
 	for item in connections:
-		if (item == None):
+		if item is None:
 			continue
 		for connection in item:
 			if (not cmds.objExists(connection)):
@@ -134,19 +129,19 @@ def DeleteConstraints(selected):
 	# Second pass with checking child objects (if constraint exists but not connected)
 	children = Selector.GetChildrenOfType(selected, type = Enums.Types.constraint)
 	for i in range(len(selected)):
-		if (children[i] != None):
+		if children[i] is not None:
 			for child in children[i]:
 				cmds.delete(child)
 def DeleteConstraintsOnSelected(*args):
 	selectedList = Selector.MultipleObjects(1)
-	if (selectedList == None):
+	if selectedList is None:
 		return
 	DeleteConstraints(selectedList)
 
 def DisconnectTargetsFromConstraint(selected):
 	connections = Selector.GetConnectionsOfType(selected, type = Enums.Types.constraint, source = True, destination = False)
 	
-	if (connections[-1] == None):
+	if connections[-1] is None:
 		cmds.warning("No constraints detected inside the last selected object")
 		return
 	
@@ -187,7 +182,7 @@ def DisconnectTargetsFromConstraint(selected):
 	pass
 def DisconnectTargetsFromConstraintOnSelected(*args):
 	selectedList = Selector.MultipleObjects(2)
-	if (selectedList == None):
+	if selectedList is None:
 		return
 	DisconnectTargetsFromConstraint(selectedList)
 
