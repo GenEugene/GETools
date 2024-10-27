@@ -48,7 +48,7 @@ from ..values import Icons
 
 
 class GeneralWindow:
-	_version = "v1.3.5"
+	_version = "v1.3.6"
 	_name = "GETools"
 	_title = _name + " " + _version
 
@@ -166,7 +166,7 @@ class GeneralWindow:
 		def LinkGithub(self): cmds.showHelp("https://github.com/GenEugene/GETools", absolute = True)
 		def LinkGumroad(self): cmds.showHelp("https://gumroad.com/l/iCNa", absolute = True)
 		def LinkGithubWiki(self): cmds.showHelp("https://github.com/GenEugene/GETools/wiki", absolute = True)
-		def LinkYoutubeTutorial(self): cmds.showHelp("", absolute = True) # TODO add new youtube link with tutorial
+		def LinkYoutubeTutorial(self): cmds.showHelp("https://youtube.com/playlist?list=PLhwndaM4LAxhbl95yz9WVie1iYflTFy6S&si=UOoK-mdk4Rm5bVyp", absolute = True)
 		def LinkLinkedin(self): cmds.showHelp("https://www.linkedin.com/in/geneugene", absolute = True)
 		def LinkYoutube(self): cmds.showHelp("https://youtube.com/@EugeneGataulin", absolute = True)
 		def LinkDiscord(self): cmds.showHelp("https://discord.gg/heMxJhTqCz", absolute = True)
@@ -180,7 +180,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Gumroad", command = LinkGumroad)
 		cmds.menuItem(dividerLabel = "HOW TO USE", divider = True)
 		cmds.menuItem(label = "Documentation", command = LinkGithubWiki, image = Icons.help)
-		cmds.menuItem(label = "Tutorial Video", enable = False, command = LinkYoutubeTutorial, image = Icons.playblast)
+		cmds.menuItem(label = "Tutorial Video", command = LinkYoutubeTutorial, image = Icons.playblast)
 		cmds.menuItem(dividerLabel = "Contacts", divider = True)
 		cmds.menuItem(label = "Linkedin", command = LinkLinkedin)
 		cmds.menuItem(label = "YouTube", command = LinkYoutube)
