@@ -27,7 +27,7 @@ from ..utils import Selector
 from ..values import Enums
 
 
-def FilterAttributesAnimatable(attributes, skipLockedKeys=True, skipNonKeyableKeys=True, skipHiddenKeys=True, skipMutedKeys=False):
+def FilterAttributesAnimatable(attributes, skipLockedKeys=True, skipNonKeyableKeys=True, skipHiddenKeys=True, skipMutedKeys=False, skipConstrainedKeys=True):
 	if (attributes == None):
 		cmds.warning("No attributes provided")
 		return None
@@ -61,7 +61,7 @@ def FilterAttributesAnimatable(attributes, skipLockedKeys=True, skipNonKeyableKe
 		if (skipLockedKeys and locked or
 	  		skipNonKeyableKeys and not keyable or
 			skipHiddenKeys and not settable or
-			constrained):
+			skipConstrainedKeys and constrained):
 			continue
 		attributesFiltered.append(attribute)
 

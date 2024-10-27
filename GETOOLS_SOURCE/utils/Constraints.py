@@ -63,7 +63,7 @@ def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True,
 	def ProcessAttributes(objectChild, attributeName):
 		# Construct attributes with object name
 		attributes = ["{0}.{1}".format(objectChild, attr) for attr in attributeName]
-		attributesFiltered = Attributes.FilterAttributesAnimatable(attributes=attributes)
+		attributesFiltered = Attributes.FilterAttributesAnimatable(attributes=attributes, skipConstrainedKeys = False)
 		# If no attributes are left after filtering, return "none"
 		if not attributesFiltered:
 			return ("x", "y", "z")

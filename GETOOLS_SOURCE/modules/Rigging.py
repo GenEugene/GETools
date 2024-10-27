@@ -72,7 +72,7 @@ class RiggingAnnotations:
 	curveCreateFromTrajectory = "***DRAFT***\nCreate a curve from objects trajectories."
 
 class Rigging:
-	_version = "v1.4"
+	_version = "v1.5"
 	_name = "RIGGING"
 	_title = _name + " " + _version
 
