@@ -3,8 +3,11 @@ import maya.cmds as cmds
 
 ### Variables to change before using script ###
 locatorsSize = 130
-nameWeightAttribute = "weight"
-nameMultiplyDivide = "myMultiplyDivide"
+nameAttributeWeight = "distribution"
+nameAttributeGlobal = "global"
+nameMultiplyDivide = "gtMultiplyDivide"
+nameFloatMath = "gtFloatMath"
+
 
 def CreateRig():
 	# Get names of selected objects as list
@@ -59,22 +62,38 @@ def CreateRig():
 		return
 	
 	# Create weight attribute on last locator
-	cmds.addAttr(locators[-1], longName = nameWeightAttribute, attributeType = "double", defaultValue = 0.5)
-	cmds.setAttr(locators[-1] + "." + nameWeightAttribute, edit = True, keyable = True)
+	cmds.addAttr(locators[-1], longName = nameAttributeWeight, attributeType = "double", defaultValue = count - 1)
+	cmds.setAttr(locators[-1] + "." + nameAttributeWeight, edit = True, keyable = True)
 	
 	# Create MultiplyDivide node
 	nodeMultiplyDivide = cmds.createNode("multiplyDivide", name = nameMultiplyDivide)
+	cmds.setAttr(nodeMultiplyDivide + ".operation", 2)
 	
 	# Connect rotation and weight to MultiplyDivide node
 	cmds.connectAttr(locators[-1] + ".rotate", nodeMultiplyDivide + ".input1")
-	cmds.connectAttr(locators[-1] + "." + nameWeightAttribute, nodeMultiplyDivide + ".input2X")
-	cmds.connectAttr(locators[-1] + "." + nameWeightAttribute, nodeMultiplyDivide + ".input2Y")
-	cmds.connectAttr(locators[-1] + "." + nameWeightAttribute, nodeMultiplyDivide + ".input2Z")
+	cmds.connectAttr(locators[-1] + "." + nameAttributeWeight, nodeMultiplyDivide + ".input2X")
+	cmds.connectAttr(locators[-1] + "." + nameAttributeWeight, nodeMultiplyDivide + ".input2Y")
+	cmds.connectAttr(locators[-1] + "." + nameAttributeWeight, nodeMultiplyDivide + ".input2Z")
 	
 	# Connect rotation distribution to other locators' groups
 	for i in range(1, count - 1):
 		cmds.connectAttr(nodeMultiplyDivide + ".output", groups[i] + ".rotate")
+	
+	# Create global behaviour for last locator
+	cmds.addAttr(locators[-1], longName = nameAttributeGlobal, attributeType = "double", defaultValue = 1, minValue = 0, maxValue = 1)
+	cmds.setAttr(locators[-1] + "." + nameAttributeGlobal, edit = True, keyable = True)
+	
+	orientConstraint = cmds.orientConstraint(mainGroup, groups[-1], maintainOffset = True)[0]
+	cmds.orientConstraint(locators[-2], groups[-1], maintainOffset = True)
 
+	nodeFloatMath = cmds.createNode("floatMath", name = nameFloatMath)
+	cmds.setAttr(nodeFloatMath + ".operation", 1)
+
+	cmds.connectAttr(locators[-1] + "." + nameAttributeGlobal, nodeFloatMath + ".floatB")
+
+	cmds.connectAttr(locators[-1] + "." + nameAttributeGlobal, orientConstraint + "." + mainGroup + "W0")
+	cmds.connectAttr(nodeFloatMath + ".outFloat", orientConstraint + "." + locators[-2] + "W1")
+	
 ### Run function ###
 CreateRig()
 
