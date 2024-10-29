@@ -1,20 +1,29 @@
 import maya.cmds as cmds
 
 
-### Variables to change before using script ###
+### Change variables if needed ###
 locatorsSize = 130
+
+### Objects names
+nameGroupMain = "SimpleChain"
+nameGroupFixedPrefix = "grpFixed_"
+nameGroupDistributedPrefix = "grpDistr_"
+nameLocatorPrefix = "loc_"
+
+### Attributes names
 nameAttributeWeight = "distribution"
 nameAttributeGlobal = "global"
+
+### Nodes names
 nameMultiplyDivide = "gtMultiplyDivide"
-nameFloatMath = "gtFloatMath"
 
 
 def CreateRig():
-	### Get names of selected objects as list
-	selected = cmds.ls(selection = True) # , absoluteName = True
+	### Create a list of names from selected objects
+	selected = cmds.ls(selection = True)
 	
 	### Create main group as a container for all new objects
-	mainGroup = cmds.group(name = "grpLocators", empty = True)
+	mainGroup = cmds.group(name = nameGroupMain, empty = True)
 	
 	### Init empty lists for groups and locators
 	groupsDistributed = []
@@ -26,14 +35,14 @@ def CreateRig():
 	### Loop through each selected object, create groups, locators and parent them
 	for i in range(count):
 		### Create fixed group
-		groupFixed = cmds.group(name = "grpFixed_" + selected[i], empty = True)
+		groupFixed = cmds.group(name = nameGroupFixedPrefix + selected[i], empty = True)
 
 		### Create distribution group
-		groupDistributed = cmds.group(name = "grpDistr_" + selected[i], empty = True)
+		groupDistributed = cmds.group(name = nameGroupDistributedPrefix + selected[i], empty = True)
 		groupsDistributed.append(groupDistributed)
 		
-		### Create locator
-		locator = cmds.spaceLocator(name = "loc_" + selected[i])[0]
+		### Create locator # TODO use nurbs circle [circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 1e-05 -s 8 -ch 1; objectMoveCommand;]
+		locator = cmds.spaceLocator(name = nameLocatorPrefix + selected[i])[0]
 		locators.append(locator)
 		cmds.setAttr(locator + "Shape.localScaleX", locatorsSize)
 		cmds.setAttr(locator + "Shape.localScaleY", locatorsSize)
@@ -86,25 +95,21 @@ def CreateRig():
 	for i in range(1, count - 1):
 		cmds.connectAttr(nodeMultiplyDivide + ".output", groupsDistributed[i] + ".rotate")
 	
-	# FIXME
-	# ### Add global attribute for last locator
-	# cmds.addAttr(locators[-1], longName = nameAttributeGlobal, attributeType = "double", defaultValue = 1, minValue = 0, maxValue = 1)
-	# cmds.setAttr(locators[-1] + "." + nameAttributeGlobal, edit = True, keyable = True)
+	### Add global attribute for last locator
+	cmds.addAttr(locators[-1], longName = nameAttributeGlobal, attributeType = "double", defaultValue = 1, minValue = 0, maxValue = 1)
+	cmds.setAttr(locators[-1] + "." + nameAttributeGlobal, edit = True, keyable = True)
 
-	# ### Create Orient Constraints for last locator
-	# orientConstraint = cmds.orientConstraint(mainGroup, groupsDistributed[-1], maintainOffset = True)[0]
-	# cmds.orientConstraint(locators[-2], groupsDistributed[-1], maintainOffset = True)
+	### Create Orient Constraint for last locator
+	cmds.orientConstraint(mainGroup, groupsDistributed[-1], maintainOffset = True)[0]
 
-	# ### Add Float Math node
-	# nodeFloatMath = cmds.createNode("floatMath", name = nameFloatMath)
-	# cmds.setAttr(nodeFloatMath + ".operation", 1)
+	### Show blend orient attribute by setting keys on constrained rotation attributes # I frankly don't know how to do it better
+	cmds.setKeyframe(groupsDistributed[-1] + ".rx")
+	cmds.setKeyframe(groupsDistributed[-1] + ".ry")
+	cmds.setKeyframe(groupsDistributed[-1] + ".rz")
 
-	# ### Connect Global attribute
-	# cmds.connectAttr(locators[-1] + "." + nameAttributeGlobal, nodeFloatMath + ".floatB")
-	# cmds.connectAttr(locators[-1] + "." + nameAttributeGlobal, orientConstraint + "." + mainGroup + "W0")
-	# cmds.connectAttr(nodeFloatMath + ".outFloat", orientConstraint + "." + locators[-2] + "W1")
-	# FIXME
-	
+	### Connect Global attribute to blend orient attribute
+	cmds.connectAttr(locators[-1] + "." + nameAttributeGlobal, groupsDistributed[-1] + ".blendOrient1")
+
 	### Select last locator
 	cmds.select(locators[-1], replace = True)
 	
