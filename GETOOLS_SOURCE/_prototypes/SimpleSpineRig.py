@@ -1,3 +1,7 @@
+### TODO unique naming fix
+### TODO support different rotate orientation
+### TODO preserve animation
+
 import maya.cmds as cmds
 
 
