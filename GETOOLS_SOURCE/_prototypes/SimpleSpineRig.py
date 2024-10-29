@@ -74,10 +74,12 @@ def CreateRig():
 	cmds.connectAttr(locators[-1] + "." + nameAttributeWeight, nodeMultiplyDivide + ".input2X")
 	cmds.connectAttr(locators[-1] + "." + nameAttributeWeight, nodeMultiplyDivide + ".input2Y")
 	cmds.connectAttr(locators[-1] + "." + nameAttributeWeight, nodeMultiplyDivide + ".input2Z")
-	
-	# Connect rotation distribution to other locators' groups
+
+	# Connect rotation distribution to other locators' groups # FIXME
 	for i in range(1, count - 1):
 		cmds.connectAttr(nodeMultiplyDivide + ".output", groups[i] + ".rotate")
+	
+	return
 	
 	# Create global behaviour for last locator
 	cmds.addAttr(locators[-1], longName = nameAttributeGlobal, attributeType = "double", defaultValue = 1, minValue = 0, maxValue = 1)
