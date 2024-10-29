@@ -1,6 +1,8 @@
 ### TODO unique naming fix
 ### TODO support different rotate orientation
 ### TODO preserve animation
+### TODO nurbs circle as control instead of locator (optional)
+
 
 import maya.cmds as cmds
 
@@ -63,10 +65,8 @@ def CreateRig():
 		cmds.parent(groupDistributed, groupFixed)
 		
 		### Match group position and rotation
-		position = cmds.xform(selected[i], query = True, worldSpace = True, rotatePivot = True)
-		rotation = cmds.xform(selected[i], query = True, worldSpace = True, rotation = True)
-		cmds.xform(groupFixed, translation = position, rotation = rotation, worldSpace = True)
-		
+		cmds.matchTransform(groupFixed, selected[i], position = True, rotation = True, scale = False)
+
 		### Parent constraint original object to locator
 		cmds.parentConstraint(locator, selected[i], maintainOffset = True)
 
