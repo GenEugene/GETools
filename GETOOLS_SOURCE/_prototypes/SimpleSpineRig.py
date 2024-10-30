@@ -11,7 +11,7 @@ import maya.cmds as cmds
 locatorsSize = 130
 
 ### Objects names
-nameGroupMain = "SimpleChain"
+nameGroupMain = "grpChain_"
 nameGroupFixedPrefix = "grpFixed_"
 nameGroupDistributedPrefix = "grpDistr_"
 nameLocatorPrefix = "loc_"
@@ -29,7 +29,7 @@ def CreateRig():
 	selected = cmds.ls(selection = True)
 	
 	### Create main group as a container for all new objects
-	mainGroup = cmds.group(name = nameGroupMain, empty = True)
+	mainGroup = cmds.group(name = nameGroupMain + selected[-1], empty = True)
 	
 	### Init empty lists for groups and locators
 	groupsDistributed = []
