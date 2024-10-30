@@ -6,6 +6,7 @@ GETools changelog
 - TODO [OVERLAPPY] added collisions UI
 - TODO [OVERLAPPY] added nRigid collision logic
 - TODO added non-cycle origin animation with loop mode
+- TODO Rotate Order rebake
 **********************************************
 
 v1.3.8
