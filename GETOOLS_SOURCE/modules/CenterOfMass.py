@@ -61,8 +61,7 @@ class CenterOfMassAnnotations:
 	weightFoot = "{1}\n{0}".format(_weightInfo, _weightSymmetry)
 
 	### Baking
-	bakeToCOM = "Bake selected objects as locators relative to the center of mass object."
-	bakeToCOMLink = "{0}\nAfter bake constrain selected objects back to locators.".format(bakeToCOM)
+	bakeToCOMLink = "Bake selected objects as locators relative to the center of mass object.\nAfter bake constrain selected objects back to locators."
 	bakeOriginal = "Bake animation back to original objects from locators."
 	link = "Constrain cached objects to baked locators."
 	linkOffset = "{0}\nUse maintain offset to keep transform difference".format(link)
@@ -84,7 +83,7 @@ class CenterOfMassSettings:
 	partFoot = ("foot", 1.9)
 
 class CenterOfMass:
-	_version = "v1.4"
+	_version = "v1.5"
 	_name = "CENTER OF MASS"
 	_title = _name + " " + _version
 
@@ -115,11 +114,13 @@ class CenterOfMass:
 		cmds.button(label = "Select", command = self.COMSelect, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.select)
 		cmds.button(label = "Clean", command = self.COMClean, backgroundColor = Colors.red50, annotation = CenterOfMassAnnotations.clean)
 		#
-		COMButtons2 = 3
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = COMButtons2, cellWidth = Settings.windowWidthMargin / COMButtons2, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Projector YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.projectorYZ)
-		cmds.button(label = "Projector XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
-		cmds.button(label = "Projector XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
+		rowLayoutSize = (110, 40, 40, 40)
+		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
+		cmds.text(label = "Project to plane")
+		cmds.button(label = "YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.projectorYZ)
+		cmds.button(label = "XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
+		cmds.button(label = "XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
+	
 	def UILayoutWeights(self, layoutMain):
 		self.layoutWeights = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "WEIGHTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutWeights, adjustableColumn = True)
@@ -177,13 +178,11 @@ class CenterOfMass:
 		count = 3
 		cmds.gridLayout(numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 
-		cmds.button(label = "Bake To COM", command = self.BakeScenario2, backgroundColor = Colors.orange10, annotation = CenterOfMassAnnotations.bakeToCOM)
-		cmds.button(label = "Bake + Link", command = self.BakeScenario3, backgroundColor = Colors.orange50, annotation = CenterOfMassAnnotations.bakeToCOMLink)
-		cmds.button(label = "Bake Original", command = self.BakeCached, backgroundColor = Colors.orange100, annotation = CenterOfMassAnnotations.bakeOriginal)
-		
-		cmds.button(label = "Link", command = partial(self.LinkCached, False), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.link)
-		cmds.button(label = "Link Offset", command = partial(self.LinkCached, True), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.linkOffset)
-		cmds.button(label = "Select Root", command = self.SelectParent, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.selectRoot)
+		cmds.button(label = "Bake To COM", command = self.BakeScenario3, backgroundColor = Colors.orange10, annotation = CenterOfMassAnnotations.bakeToCOMLink)
+		cmds.popupMenu()
+		cmds.menuItem(label = "Without Constraint", command = self.BakeScenario2)
+		cmds.button(label = "Bake Back", command = self.BakeCached, backgroundColor = Colors.orange50, annotation = CenterOfMassAnnotations.bakeOriginal)
+		cmds.button(label = "Select Root", command = self.SelectParent, backgroundColor = Colors.lightBlue10, annotation = CenterOfMassAnnotations.selectRoot)
 
 
 	### CENTER OF MASS
