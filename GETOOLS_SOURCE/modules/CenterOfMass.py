@@ -141,6 +141,7 @@ class CenterOfMass:
 		
 		def CustomButton(value):
 			PartButton(("", value), onlyValue = True, annotation = CenterOfMassAnnotations.weightsCustom)
+		
 		CustomButton(1)
 		CustomButton(2)
 		CustomButton(3)
@@ -187,7 +188,7 @@ class CenterOfMass:
 
 	### CENTER OF MASS
 	def COMObjectCheck(self, *args):
-		if (self.COMObject == None):
+		if self.COMObject is None:
 			cmds.warning("Center of mass doesn't stored in the script memory. You need to create new COM object or select one in the scene and press \"Activate\" button")
 			return False
 		else:
@@ -212,19 +213,19 @@ class CenterOfMass:
 	def COMActivate(self, *args):
 		# Check selected objects
 		selectedList = Selector.MultipleObjects(1)
-		if (selectedList == None):
+		if selectedList is None:
 			return
 		self.COMObject = selectedList[0]
 	def COMSelect(self, *args):
 		if (self.COMObjectCheck()):
 			cmds.select(self.COMObject)
 	def COMClean(self, *args):
-		if (self.COMObjectCheck()):
+		if self.COMObjectCheck():
 			cmds.delete(self.COMObject)
 			self.COMObject = None
 			cmds.warning("Last active center of mass object was deleted")
 	def COMFloorProjection(self, skipAxis="y", *args):
-		if (not self.COMObjectCheck()):
+		if not self.COMObjectCheck():
 			return
 
 		name = "COM" + "Projection" + "xyz".replace(skipAxis, "").upper()
@@ -251,23 +252,26 @@ class CenterOfMass:
 
 		cmds.select(clear = True)
 	def COMConstrainToSelected(self, weight, *args):
-		if (not self.COMObjectCheck()):
+		if not self.COMObjectCheck():
 			return
 		
 		# Check selected objects
-		selectedList = Selector.MultipleObjects(1)
-		if (selectedList == None):
+		selectedList = Selector.MultipleObjects(minimalCount = 1)
+		if selectedList is None:
 			return
 		
-		selectedList.append(self.COMObject)
-		Constraints.ConstrainListToLastElement(selected = selectedList, reverse = True, maintainOffset = False, parent = False, point = True, weight = weight)
+		finalList = []
+		finalList.append(self.COMObject)
+		finalList.append(selectedList)
+
+		Constraints.ConstrainListToLastElement(selected = finalList, maintainOffset = False, parent = False, point = True, weight = weight)
 	def COMDisconnectTargets(self, *args):
-		if (self.COMObject == None or not cmds.objExists(self.COMObject)):
+		if (self.COMObject is None or not cmds.objExists(self.COMObject)):
 			cmds.warning("Center Of Mass object is not connected to script. Please select Center Of Mass object and press Activate button before")
 			return
 
 		selectedList = Selector.MultipleObjects(1)
-		if (selectedList == None):
+		if selectedList is None:
 			return
 		
 		selectedList.append(self.COMObject)
@@ -292,14 +296,14 @@ class CenterOfMass:
 		return self.CachedSelectedObjects
 	def BakeScenario3(self, *args):
 		objects = self.BakeScenario2()
-		if (objects == None):
+		if objects is None:
 			return None
 		
 		self.LinkCached(maintainOffset = False)
 		
 		return objects
 	def BakeCached(self, *args):
-		if (self.CachedSelectedObjects == None):
+		if self.CachedSelectedObjects is None:
 			cmds.warning("No cached objects yet, operation cancelled")
 			return
 		
@@ -308,7 +312,7 @@ class CenterOfMass:
 		cmds.delete(self.CachedSelectedObjects[1][-1])
 	
 	def LinkCached(self, maintainOffset=False, *args):
-		if (self.CachedSelectedObjects == None):
+		if self.CachedSelectedObjects is None:
 			cmds.warning("No cached objects yet, operation cancelled")
 			return
 
@@ -317,7 +321,7 @@ class CenterOfMass:
 				return
 			Constraints.ConstrainSecondToFirstObject(self.CachedSelectedObjects[1][i], self.CachedSelectedObjects[0][i], maintainOffset = maintainOffset)
 	def SelectParent(self, *args):
-		if (self.CachedSelectedObjects == None):
+		if self.CachedSelectedObjects is None:
 			cmds.warning("No cached objects yet, operation cancelled")
 			return
 		try:
