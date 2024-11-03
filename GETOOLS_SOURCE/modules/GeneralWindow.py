@@ -48,7 +48,7 @@ from ..values import Icons
 
 
 class GeneralWindow:
-	_version = "v1.3.6"
+	_version = "v1.3.7"
 	_name = "GETools"
 	_title = _name + " " + _version
 
@@ -88,7 +88,7 @@ class GeneralWindow:
 		cmds.menuItem(label = "Reload Scene (force)", command = Scene.Reload, image = Icons.reset)
 		cmds.menuItem(label = "Exit Maya (force)", command = Scene.ExitMaya, image = Icons.off)
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Restart GETools", command = partial(self.RUN_DOCKED, "", True), image = Icons.reset)
+		cmds.menuItem(label = "Restart GETools", command = partial(self.RUN_DOCKED, self.directory, True), image = Icons.reset)
 		cmds.menuItem(label = "Close GETools", command = self.DockDelete, image = Icons.off)
 		
 		# cmds.menu(label = "Edit", tearOff = True)
