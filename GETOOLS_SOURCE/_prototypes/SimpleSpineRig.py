@@ -1,6 +1,6 @@
-### TODO unique naming fix
-### TODO support different rotate orientation
 ### TODO preserve animation
+### TODO support different rotate orientation
+### TODO unique naming fix
 ### TODO nurbs circle as control instead of locator (optional)
 
 
@@ -34,6 +34,7 @@ def CreateRig():
 	### Init empty lists for groups and locators
 	groupsDistributed = []
 	locators = []
+	constraintsForBake = []
 	
 	### Count of selected objects
 	count = len(selected)
@@ -67,9 +68,20 @@ def CreateRig():
 		### Match group position and rotation
 		cmds.matchTransform(groupFixed, selected[i], position = True, rotation = True, scale = False)
 
-		### Parent constraint original object to locator
-		cmds.parentConstraint(locator, selected[i], maintainOffset = True)
+		### Parent constraint locator to original object
+		constraint = cmds.parentConstraint(selected[i], locator, maintainOffset = True)
+		constraintsForBake.append(constraint[0])
 
+	### Bake animation to locators and delete constraints
+	timeMin = cmds.playbackOptions(query = True, min = True)
+	timeMax = cmds.playbackOptions(query = True, max = True)
+	cmds.bakeResults(locators, time = (timeMin, timeMax), simulation = True, minimizeRotation = True)
+	cmds.delete(constraintsForBake)
+
+	### Parent constraint original objects to locators
+	for i in range(count):
+		cmds.parentConstraint(locators[i], selected[i], maintainOffset = True)
+	
 	### Show last locator Rotate Order and connect it to Distribution groups
 	cmds.setAttr(locators[-1] + ".rotateOrder", channelBox = True)
 	for i in range(count):
@@ -100,7 +112,7 @@ def CreateRig():
 		cmds.connectAttr(nodeMultiplyDivide + ".output", groupsDistributed[i] + ".rotate")
 	
 	### Add global attribute for last locator
-	cmds.addAttr(locators[-1], longName = nameAttributeGlobal, attributeType = "double", defaultValue = 1, minValue = 0, maxValue = 1)
+	cmds.addAttr(locators[-1], longName = nameAttributeGlobal, attributeType = "double", defaultValue = 0, minValue = 0, maxValue = 1)
 	cmds.setAttr(locators[-1] + "." + nameAttributeGlobal, edit = True, keyable = True)
 
 	### Create Orient Constraint for last locator
