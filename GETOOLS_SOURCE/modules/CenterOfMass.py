@@ -61,8 +61,7 @@ class CenterOfMassAnnotations:
 	weightFoot = "{1}\n{0}".format(_weightInfo, _weightSymmetry)
 
 	### Baking
-	bakeToCOM = "Bake selected objects as locators relative to the center of mass object."
-	bakeToCOMLink = "{0}\nAfter bake constrain selected objects back to locators.".format(bakeToCOM)
+	bakeToCOMLink = "Bake selected objects as locators relative to the center of mass object.\nAfter bake constrain selected objects back to locators."
 	bakeOriginal = "Bake animation back to original objects from locators."
 	link = "Constrain cached objects to baked locators."
 	linkOffset = "{0}\nUse maintain offset to keep transform difference".format(link)
@@ -84,7 +83,7 @@ class CenterOfMassSettings:
 	partFoot = ("foot", 1.9)
 
 class CenterOfMass:
-	_version = "v1.4"
+	_version = "v1.5"
 	_name = "CENTER OF MASS"
 	_title = _name + " " + _version
 
@@ -115,11 +114,13 @@ class CenterOfMass:
 		cmds.button(label = "Select", command = self.COMSelect, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.select)
 		cmds.button(label = "Clean", command = self.COMClean, backgroundColor = Colors.red50, annotation = CenterOfMassAnnotations.clean)
 		#
-		COMButtons2 = 3
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = COMButtons2, cellWidth = Settings.windowWidthMargin / COMButtons2, cellHeight = Settings.lineHeight)
-		cmds.button(label = "Projector YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.projectorYZ)
-		cmds.button(label = "Projector XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
-		cmds.button(label = "Projector XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
+		rowLayoutSize = (110, 40, 40, 40)
+		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
+		cmds.text(label = "Project to plane")
+		cmds.button(label = "YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.projectorYZ)
+		cmds.button(label = "XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
+		cmds.button(label = "XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
+	
 	def UILayoutWeights(self, layoutMain):
 		self.layoutWeights = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "WEIGHTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutWeights, adjustableColumn = True)
@@ -141,6 +142,7 @@ class CenterOfMass:
 		
 		def CustomButton(value):
 			PartButton(("", value), onlyValue = True, annotation = CenterOfMassAnnotations.weightsCustom)
+		
 		CustomButton(1)
 		CustomButton(2)
 		CustomButton(3)
@@ -176,18 +178,16 @@ class CenterOfMass:
 		count = 3
 		cmds.gridLayout(numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
 
-		cmds.button(label = "Bake To COM", command = self.BakeScenario2, backgroundColor = Colors.orange10, annotation = CenterOfMassAnnotations.bakeToCOM)
-		cmds.button(label = "Bake + Link", command = self.BakeScenario3, backgroundColor = Colors.orange50, annotation = CenterOfMassAnnotations.bakeToCOMLink)
-		cmds.button(label = "Bake Original", command = self.BakeCached, backgroundColor = Colors.orange100, annotation = CenterOfMassAnnotations.bakeOriginal)
-		
-		cmds.button(label = "Link", command = partial(self.LinkCached, False), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.link)
-		cmds.button(label = "Link Offset", command = partial(self.LinkCached, True), backgroundColor = Colors.yellow10, annotation = CenterOfMassAnnotations.linkOffset)
-		cmds.button(label = "Select Root", command = self.SelectParent, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.selectRoot)
+		cmds.button(label = "Bake To COM", command = self.BakeScenario3, backgroundColor = Colors.orange10, annotation = CenterOfMassAnnotations.bakeToCOMLink)
+		cmds.popupMenu()
+		cmds.menuItem(label = "Without Constraint", command = self.BakeScenario2)
+		cmds.button(label = "Bake Back", command = self.BakeCached, backgroundColor = Colors.orange50, annotation = CenterOfMassAnnotations.bakeOriginal)
+		cmds.button(label = "Select Root", command = self.SelectParent, backgroundColor = Colors.lightBlue10, annotation = CenterOfMassAnnotations.selectRoot)
 
 
 	### CENTER OF MASS
 	def COMObjectCheck(self, *args):
-		if (self.COMObject == None):
+		if self.COMObject is None:
 			cmds.warning("Center of mass doesn't stored in the script memory. You need to create new COM object or select one in the scene and press \"Activate\" button")
 			return False
 		else:
@@ -212,19 +212,19 @@ class CenterOfMass:
 	def COMActivate(self, *args):
 		# Check selected objects
 		selectedList = Selector.MultipleObjects(1)
-		if (selectedList == None):
+		if selectedList is None:
 			return
 		self.COMObject = selectedList[0]
 	def COMSelect(self, *args):
 		if (self.COMObjectCheck()):
 			cmds.select(self.COMObject)
 	def COMClean(self, *args):
-		if (self.COMObjectCheck()):
+		if self.COMObjectCheck():
 			cmds.delete(self.COMObject)
 			self.COMObject = None
 			cmds.warning("Last active center of mass object was deleted")
 	def COMFloorProjection(self, skipAxis="y", *args):
-		if (not self.COMObjectCheck()):
+		if not self.COMObjectCheck():
 			return
 
 		name = "COM" + "Projection" + "xyz".replace(skipAxis, "").upper()
@@ -251,23 +251,26 @@ class CenterOfMass:
 
 		cmds.select(clear = True)
 	def COMConstrainToSelected(self, weight, *args):
-		if (not self.COMObjectCheck()):
+		if not self.COMObjectCheck():
 			return
 		
 		# Check selected objects
-		selectedList = Selector.MultipleObjects(1)
-		if (selectedList == None):
+		selectedList = Selector.MultipleObjects(minimalCount = 1)
+		if selectedList is None:
 			return
 		
-		selectedList.append(self.COMObject)
-		Constraints.ConstrainListToLastElement(selected = selectedList, reverse = True, maintainOffset = False, parent = False, point = True, weight = weight)
+		finalList = []
+		finalList.append(self.COMObject)
+		finalList.append(selectedList)
+
+		Constraints.ConstrainListToLastElement(selected = finalList, maintainOffset = False, parent = False, point = True, weight = weight)
 	def COMDisconnectTargets(self, *args):
-		if (self.COMObject == None or not cmds.objExists(self.COMObject)):
+		if (self.COMObject is None or not cmds.objExists(self.COMObject)):
 			cmds.warning("Center Of Mass object is not connected to script. Please select Center Of Mass object and press Activate button before")
 			return
 
 		selectedList = Selector.MultipleObjects(1)
-		if (selectedList == None):
+		if selectedList is None:
 			return
 		
 		selectedList.append(self.COMObject)
@@ -292,14 +295,14 @@ class CenterOfMass:
 		return self.CachedSelectedObjects
 	def BakeScenario3(self, *args):
 		objects = self.BakeScenario2()
-		if (objects == None):
+		if objects is None:
 			return None
 		
 		self.LinkCached(maintainOffset = False)
 		
 		return objects
 	def BakeCached(self, *args):
-		if (self.CachedSelectedObjects == None):
+		if self.CachedSelectedObjects is None:
 			cmds.warning("No cached objects yet, operation cancelled")
 			return
 		
@@ -308,7 +311,7 @@ class CenterOfMass:
 		cmds.delete(self.CachedSelectedObjects[1][-1])
 	
 	def LinkCached(self, maintainOffset=False, *args):
-		if (self.CachedSelectedObjects == None):
+		if self.CachedSelectedObjects is None:
 			cmds.warning("No cached objects yet, operation cancelled")
 			return
 
@@ -317,7 +320,7 @@ class CenterOfMass:
 				return
 			Constraints.ConstrainSecondToFirstObject(self.CachedSelectedObjects[1][i], self.CachedSelectedObjects[0][i], maintainOffset = maintainOffset)
 	def SelectParent(self, *args):
-		if (self.CachedSelectedObjects == None):
+		if self.CachedSelectedObjects is None:
 			cmds.warning("No cached objects yet, operation cancelled")
 			return
 		try:
