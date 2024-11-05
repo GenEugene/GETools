@@ -105,7 +105,7 @@ def Create(name=_nameBase, scale=_scale, hideParent=False, subLocator=False):
 		return locatorCurrent, subLocator
 	else:
 		return locatorCurrent
-def CreateOnSelected(name=_nameBase, scale=_scale, minSelectedCount=_minSelectedCount, hideParent=False, subLocator=False, constraint=False, bake=False, parentToLastSelected=False, constrainReverse=False, constrainTranslate=True, constrainRotate=True, euler=False):
+def CreateOnSelected(name=_nameBase, scale=_scale, minSelectedCount=_minSelectedCount, hideParent=False, subLocator=False, constraint=False, bake=False, parentToLastSelected=False, constrainReverse=False, constrainTranslate=True, constrainRotate=True, constrainScale=True, euler=False): # TODO change scale to False after tests if needed
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minSelectedCount)
 	if (selectedList == None):
@@ -153,7 +153,7 @@ def CreateOnSelected(name=_nameBase, scale=_scale, minSelectedCount=_minSelected
 				firstObject = sublocatorsList[i]
 			else:
 				firstObject = locatorsList[i]
-			Constraints.ConstrainSecondToFirstObject(firstObject, selectedList[i], maintainOffset = False, parent = constrainTranslate and constrainRotate, point = constrainTranslate, orient = constrainRotate)
+			Constraints.ConstrainSecondToFirstObject(firstObject, selectedList[i], maintainOffset = False, parent = constrainTranslate and constrainRotate, point = constrainTranslate, orient = constrainRotate, scale = constrainScale)
 
 	# Select objects and return
 	if subLocator:
