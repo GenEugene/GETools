@@ -32,6 +32,7 @@ def CreateRig():
 	mainGroup = cmds.group(name = nameGroupMain + selected[-1], empty = True)
 	
 	### Init empty lists for groups and locators
+	groupsFixed = []
 	groupsDistributed = []
 	locators = []
 	constraintsForBake = []
@@ -43,6 +44,7 @@ def CreateRig():
 	for i in range(count):
 		### Create fixed group
 		groupFixed = cmds.group(name = nameGroupFixedPrefix + selected[i], empty = True)
+		groupsFixed.append(groupFixed)
 
 		### Create distribution group
 		groupDistributed = cmds.group(name = nameGroupDistributedPrefix + selected[i], empty = True)
@@ -68,14 +70,14 @@ def CreateRig():
 		### Match group position and rotation
 		cmds.matchTransform(groupFixed, selected[i], position = True, rotation = True, scale = False)
 
-		### Parent constraint locator to original object
-		constraint = cmds.parentConstraint(selected[i], locator, maintainOffset = True)
+		### Parent constraint groupFixed to original object
+		constraint = cmds.parentConstraint(selected[i], groupFixed, maintainOffset = True)
 		constraintsForBake.append(constraint[0])
 
 	### Bake animation to locators and delete constraints
 	timeMin = cmds.playbackOptions(query = True, min = True)
 	timeMax = cmds.playbackOptions(query = True, max = True)
-	cmds.bakeResults(locators, time = (timeMin, timeMax), simulation = True, minimizeRotation = True)
+	cmds.bakeResults(groupsFixed, time = (timeMin, timeMax), simulation = True, minimizeRotation = True)
 	cmds.delete(constraintsForBake)
 
 	### Parent constraint original objects to locators
