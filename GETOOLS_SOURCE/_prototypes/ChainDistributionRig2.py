@@ -13,6 +13,10 @@ nameLocatorPrefix = "loc_"
 
 
 def CreateRig():
+	timeMin = cmds.playbackOptions(query = True, min = True)
+	timeMax = cmds.playbackOptions(query = True, max = True)
+	cmds.currentTime(timeMin, edit = True, update = True)
+
 	### Create a list of names from selected objects
 	selected = cmds.ls(selection = True)
 	
@@ -46,19 +50,17 @@ def CreateRig():
 		constraintsForBake.append(constraint[0])
 
 	### Bake animation to locators and delete constraints
-	timeMin = cmds.playbackOptions(query = True, min = True)
-	timeMax = cmds.playbackOptions(query = True, max = True)
 	cmds.bakeResults(locators, time = (timeMin, timeMax), simulation = True, minimizeRotation = True)
 	cmds.delete(constraintsForBake)
 
 	### Constrain
 	for i in range(count):
-		cmds.orientConstraint(locators[i], selected[i], maintainOffset = False)
 		cmds.pointConstraint(selected[i], locators[i], maintainOffset = False)
+		cmds.orientConstraint(locators[i], selected[i], maintainOffset = False)
 
 		if (i > 0 and i < count - 1):
-			cmds.orientConstraint(locators[i - 1], locators[i], maintainOffset = False)
-			cmds.orientConstraint(locators[i + 1], locators[i], maintainOffset = False)
+			cmds.orientConstraint(locators[i - 1], locators[i], maintainOffset = True)
+			cmds.orientConstraint(locators[i + 1], locators[i], maintainOffset = True)
 
 	### Select last locator
 	cmds.select(locators[-1], replace = True)
