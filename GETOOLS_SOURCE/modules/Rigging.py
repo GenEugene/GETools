@@ -28,6 +28,7 @@ from .. import Settings
 from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Constraints
+from ..utils import Create
 from ..utils import Curves
 from ..utils import Deformers
 from ..utils import Other
@@ -72,7 +73,7 @@ class RiggingAnnotations:
 	curveCreateFromTrajectory = "***DRAFT***\nCreate a curve from objects trajectories."
 
 class Rigging:
-	_version = "v1.5"
+	_version = "v1.6"
 	_name = "RIGGING"
 	_title = _name + " " + _version
 
@@ -80,6 +81,11 @@ class Rigging:
 		self.checkboxConstraintReverse = None
 		self.checkboxConstraintMaintain = None
 		# self.checkboxConstraintOffset = None
+
+		self.intFieldPolygonWithLocatorsPoints = None
+		self.floatFieldPolygonWithLocatorsRadius = None
+		self.floatFieldPolygonWithLocatorsAngle = None
+
 	def UICreate(self, layoutMain):
 		### CONSTRAINTS
 		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CONSTRAINTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -155,8 +161,28 @@ class Rigging:
 		cmds.gridLayout(parent = layoutColumnCurves, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "From Selected Objects", command = Curves.CreateCurveFromSelectedObjects, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.curveCreateFromSelectedObjects)
 		cmds.button(label = "From Trajectory", command = Curves.CreateCurveFromTrajectory, backgroundColor = Colors.orange10, annotation = RiggingAnnotations.curveCreateFromTrajectory)
+		
+		### POLYGON WITH LOCATORS
+		self.UILayoutPolygonWithLocators(layoutMain)
 
-
+	def UILayoutPolygonWithLocators(self, layoutMain):
+		layoutMesh = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "Polygon With Locators", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		cellWidth1 = 75
+		cellWidth2 = 75
+		cellWidth3 = 75
+		cellWidth4 = 40
+		rowLayout = cmds.rowLayout(parent = layoutMesh, numberOfColumns = 4, columnWidth4 = (cellWidth1, cellWidth2, cellWidth3, cellWidth4), columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
+		cmds.gridLayout(parent = rowLayout, numberOfColumns = 2, cellWidth = cellWidth1 / 2, cellHeight = Settings.lineHeight)
+		cmds.text(label = "Points")
+		self.intFieldPolygonWithLocatorsPoints = cmds.intField(value = 3, minValue = 3)
+		cmds.gridLayout(parent = rowLayout, numberOfColumns = 2, cellWidth = cellWidth2 / 2, cellHeight = Settings.lineHeight)
+		cmds.text(label = "Radius")
+		self.floatFieldPolygonWithLocatorsRadius = cmds.floatField(value = 10, minValue = 0, precision = 1)
+		cmds.gridLayout(parent = rowLayout, numberOfColumns = 2, cellWidth = cellWidth3 / 2, cellHeight = Settings.lineHeight)
+		cmds.text(label = "Angle")
+		self.floatFieldPolygonWithLocatorsAngle = cmds.floatField(value = 0, precision = 1)
+		cmds.button(parent = rowLayout, label = "Create", command = self.CreatePolygonWithLocators, backgroundColor = Colors.green10)
+		
 	### CONSTRAINTS
 	def GetCheckboxConstraintReverse(self):
 		return cmds.checkBox(self.checkboxConstraintReverse, query = True, value = True)
@@ -173,4 +199,11 @@ class Rigging:
 		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = False, point = False, orient = False, scale = True, aim = False)
 	def ConstrainAim(self, *args): # TODO
 		Constraints.ConstrainSelectedToLastObject(reverse = self.GetCheckboxConstraintReverse(), maintainOffset = self.GetCheckboxConstraintMaintain(), parent = False, point = False, orient = False, scale = False, aim = True)
+
+	### MESH
+	def CreatePolygonWithLocators(self, *args):
+		points = cmds.intField(self.intFieldPolygonWithLocatorsPoints, query = True, value = True)
+		radius = cmds.floatField(self.floatFieldPolygonWithLocatorsRadius, query = True, value = True)
+		angle = cmds.floatField(self.floatFieldPolygonWithLocatorsAngle, query = True, value = True)
+		Create.CreatePolygonWithLocators(countPoints = points, radius = radius, rotation = angle)
 
