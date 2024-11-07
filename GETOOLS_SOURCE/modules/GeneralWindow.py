@@ -48,7 +48,7 @@ from ..values import Icons
 
 
 class GeneralWindow:
-	_version = "v1.3.8"
+	_version = "v1.3.9"
 	_name = "GETools"
 	_title = _name + " " + _version
 
@@ -119,7 +119,7 @@ class GeneralWindow:
 		cmds.menuItem(dividerLabel = "Prints", divider = True)
 		cmds.menuItem(label = "Print Selected Objects To Console", command = Print.PrintSelected, image = Icons.text)
 		cmds.menuItem(label = "Print Animatable Attributes", command = partial(Print.PrintAttributesAnimatableOnSelected, False), image = Icons.text)
-		cmds.menuItem(label = "Print Animatable Attributes With Shapes", command = partial(Print.PrintAttributesAnimatableOnSelected, True), image = Icons.text)
+		# cmds.menuItem(label = "Print Animatable Attributes With Shapes", command = partial(Print.PrintAttributesAnimatableOnSelected, True), image = Icons.text) # FIXME
 		cmds.menuItem(label = "Print Channel Box Selected Attributes", command = Print.PrintAttributesSelectedFromChannelBox, image = Icons.text)
 		cmds.menuItem(dividerLabel = "Blendshapes", divider = True)
 		cmds.menuItem(label = "Print Blendshapes Base Nodes", command = Blendshapes.GetBlendshapeNodesFromSelected, image = Icons.text)

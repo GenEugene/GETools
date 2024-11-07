@@ -9,6 +9,9 @@ GETools changelog
 - TODO Rotate Order rebake
 **********************************************
 
+v1.3.9
+- [UTILS] hide "Print Animatable Attributes With Shapes" button because of redundancy
+
 v1.3.8
 - [CENTER OF MASS] fixed constraining to multiple selected objects
 - [CENTER OF MASS] simplified UI buttons, removed redundant and merge similar
