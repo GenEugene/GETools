@@ -7,10 +7,12 @@ GETools changelog
 - TODO [OVERLAPPY] added nRigid collision logic
 - TODO added non-cycle origin animation with loop mode
 - TODO Rotate Order rebake
+- TODO Chain Distribution Rig
 **********************************************
 
 v1.3.9
-- [UTILS] hide "Print Animatable Attributes With Shapes" button because of redundancy
+- [UTILS] removed "Print Animatable Attributes With Shapes" button because of redundancy
+- [UI] changed some button names
 
 v1.3.8
 - [CENTER OF MASS] fixed constraining to multiple selected objects
