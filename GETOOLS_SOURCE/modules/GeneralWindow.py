@@ -48,7 +48,7 @@ from ..values import Icons
 
 
 class GeneralWindow:
-	_version = "v1.3.8"
+	_version = "v1.4.0"
 	_name = "GETools"
 	_title = _name + " " + _version
 
@@ -119,7 +119,7 @@ class GeneralWindow:
 		cmds.menuItem(dividerLabel = "Prints", divider = True)
 		cmds.menuItem(label = "Print Selected Objects To Console", command = Print.PrintSelected, image = Icons.text)
 		cmds.menuItem(label = "Print Animatable Attributes", command = partial(Print.PrintAttributesAnimatableOnSelected, False), image = Icons.text)
-		cmds.menuItem(label = "Print Animatable Attributes With Shapes", command = partial(Print.PrintAttributesAnimatableOnSelected, True), image = Icons.text)
+		# cmds.menuItem(label = "Print Animatable Attributes With Shapes", command = partial(Print.PrintAttributesAnimatableOnSelected, True), image = Icons.text) # FIXME
 		cmds.menuItem(label = "Print Channel Box Selected Attributes", command = Print.PrintAttributesSelectedFromChannelBox, image = Icons.text)
 		cmds.menuItem(dividerLabel = "Blendshapes", divider = True)
 		cmds.menuItem(label = "Print Blendshapes Base Nodes", command = Blendshapes.GetBlendshapeNodesFromSelected, image = Icons.text)
@@ -166,25 +166,25 @@ class GeneralWindow:
 		def LinkGithub(self): cmds.showHelp("https://github.com/GenEugene/GETools", absolute = True)
 		def LinkGumroad(self): cmds.showHelp("https://gumroad.com/l/iCNa", absolute = True)
 		def LinkGithubWiki(self): cmds.showHelp("https://github.com/GenEugene/GETools/wiki", absolute = True)
-		def LinkYoutubeTutorial(self): cmds.showHelp("https://youtube.com/playlist?list=PLhwndaM4LAxhbl95yz9WVie1iYflTFy6S&si=UOoK-mdk4Rm5bVyp", absolute = True)
+		def LinkYoutubeVideos(self): cmds.showHelp("https://youtube.com/playlist?list=PLhwndaM4LAxhbl95yz9WVie1iYflTFy6S&si=UOoK-mdk4Rm5bVyp", absolute = True)
 		def LinkLinkedin(self): cmds.showHelp("https://www.linkedin.com/in/geneugene", absolute = True)
 		def LinkYoutube(self): cmds.showHelp("https://youtube.com/@EugeneGataulin", absolute = True)
 		def LinkDiscord(self): cmds.showHelp("https://discord.gg/heMxJhTqCz", absolute = True)
 		def LinkShareIdeas(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/ideas", absolute = True)
 		def LinkReport(self): cmds.showHelp("https://github.com/GenEugene/GETools/discussions/categories/report-a-problem", absolute = True)
 		
-		cmds.menuItem(label = "About GETools", enable = False, image = self.directory + Icons.get1[0]) # TODO add window with information
+		# cmds.menuItem(label = "About GETools", enable = False, image = self.directory + Icons.get1[0]) # TODO add window with information
 		cmds.menuItem(label = "Version History", command = LinkVersionHistory)
 		cmds.menuItem(dividerLabel = "Links", divider = True)
 		cmds.menuItem(label = "GitHub", command = LinkGithub, image = Icons.home)
 		cmds.menuItem(label = "Gumroad", command = LinkGumroad)
 		cmds.menuItem(dividerLabel = "HOW TO USE", divider = True)
 		cmds.menuItem(label = "Documentation", command = LinkGithubWiki, image = Icons.help)
-		cmds.menuItem(label = "Tutorial Video", command = LinkYoutubeTutorial, image = Icons.playblast)
+		cmds.menuItem(label = "Videos Playlist", command = LinkYoutubeVideos, image = Icons.playblast)
 		cmds.menuItem(dividerLabel = "Contacts", divider = True)
+		cmds.menuItem(label = "Discord", command = LinkDiscord)
 		cmds.menuItem(label = "Linkedin", command = LinkLinkedin)
 		cmds.menuItem(label = "YouTube", command = LinkYoutube)
-		cmds.menuItem(label = "Discord", command = LinkDiscord)
 		cmds.menuItem(dividerLabel = "Support", divider = True)
 		cmds.menuItem(label = "Share Your Ideas", command = LinkShareIdeas, image = Icons.light)
 		cmds.menuItem(label = "Report a Problem", command = LinkReport, image = Icons.warning)

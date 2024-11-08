@@ -84,7 +84,7 @@ def FilterAttributesWithoutAnimation(attributes):
 	
 	return attributesWithoutAnimation
 
-def GetAttributesAnimatableOnSelected(useShapes=False):
+def GetAttributesAnimatableOnSelected(useShapes=False): # TODO fix shapes detection, check on curves, cameras, meshes
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minimalCount = 1, transformsOnly = False)
 	if (selectedList == None):
