@@ -25,6 +25,7 @@ import maya.cmds as cmds
 from functools import partial
 
 from .. import Settings
+from ..modules import Options
 from ..utils import Baker
 from ..utils import Colors
 from ..utils import Constraints
@@ -87,11 +88,8 @@ class CenterOfMass:
 	_name = "CENTER OF MASS"
 	_title = _name + " " + _version
 
-	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
-	# from ..modules import GeneralWindow
-	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow):
-	def __init__(self, generalInstance):
-		self.generalInstance = generalInstance
+	def __init__(self, options: Options.PluginVariables):
+		self.optionsPlugin = options
 
 		self.COMObject = None
 		self.CachedSelectedObjects = None
@@ -99,6 +97,7 @@ class CenterOfMass:
 		self.layoutSetup = None
 		self.layoutWeights = None
 		self.layoutBaking = None
+	
 	def UICreate(self, layoutMain):
 		self.UILayoutSetup(layoutMain)
 		self.UILayoutWeights(layoutMain)
@@ -291,7 +290,7 @@ class CenterOfMass:
 			cmds.select(clear = True)
 			return
 
-		self.CachedSelectedObjects = Locators.CreateAndBakeAsChildrenFromLastSelected(euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+		self.CachedSelectedObjects = Locators.CreateAndBakeAsChildrenFromLastSelected(euler = self.optionsPlugin.menuCheckboxEulerFilter.Get())
 		return self.CachedSelectedObjects
 	def BakeScenario3(self, *args):
 		objects = self.BakeScenario2()
@@ -307,7 +306,7 @@ class CenterOfMass:
 			return
 		
 		cmds.select(self.CachedSelectedObjects[0][0:-1])
-		Baker.BakeSelected(euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+		Baker.BakeSelected(euler = self.optionsPlugin.menuCheckboxEulerFilter.Get())
 		cmds.delete(self.CachedSelectedObjects[1][-1])
 	
 	def LinkCached(self, maintainOffset=False, *args):

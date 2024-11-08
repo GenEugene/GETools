@@ -25,6 +25,7 @@ import maya.cmds as cmds
 # from functools import partial
 
 from .. import Settings
+from ..modules import Options
 from ..utils import File
 from ..utils import Layers
 from ..utils import Selector
@@ -37,11 +38,8 @@ from ..experimental import PhysicsParticle
 class Experimental:
 	_title = "EXPERIMENTAL"
 
-	# from ..modules import GeneralWindow
-	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow):
-	# def __init__(self, generalInstance):
-	# def __init__(self):
-		# self.generalInstance = generalInstance
+	def __init__(self, options: Options.PluginVariables):
+		self.optionsPlugin = options
 	
 	def UICreate(self, layoutMain):
 		# cmds.popupMenu()
@@ -69,11 +67,11 @@ class Experimental:
 		# cmds.button(label = "**P Chain", command = PhysicsParticle.CreateAimChainOnSelected)
 		# cmds.button(label = "Hair", command = partial(PhysicsHair.CreateNHairOnSelected, None))
 
-		# countOffsets = 2
-		# cmds.gridLayout(parent = layoutMain, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		# commandGet = GeneralWindow.GetCheckboxEulerFilter()
-		# cmds.button(label = "Check General Window", command = commandGet)
-		# self.generalInstance.GetCheckboxEulerFilter()
+		countOffsets = 2
+		cmds.gridLayout(parent = layoutMain, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		def GetCheckboxEulerFilter(*args):
+			self.optionsPlugin.PrintAllOptions()
+		cmds.button(label = "Print General Options", command = GetCheckboxEulerFilter)
 
 	### TEST LEAYER METHODS
 	def LayerCreate(*args):
