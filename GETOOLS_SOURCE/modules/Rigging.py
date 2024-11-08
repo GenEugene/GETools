@@ -33,7 +33,6 @@ from ..utils import Curves
 from ..utils import Deformers
 from ..utils import Other
 from ..utils import Skinning
-from ..utils import UI
 
 
 class RiggingAnnotations:
@@ -87,7 +86,31 @@ class Rigging:
 		self.floatFieldPolygonWithLocatorsAngle = None
 
 	def UICreate(self, layoutMain):
-		### CONSTRAINTS
+		### POLYGON WITH LOCATORS
+		self.UILayoutPolygonWithLocators(layoutMain)
+		self.UILayoutConstraints(layoutMain)
+		self.UILayoutUtils(layoutMain)
+		self.UILayoutBlendshapes(layoutMain)
+		self.UILayoutCurves(layoutMain)
+
+	def UILayoutPolygonWithLocators(self, layoutMain):
+		layoutMesh = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "POLYGON WITH LOCATORS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		cellWidth1 = 75
+		cellWidth2 = 75
+		cellWidth3 = 75
+		cellWidth4 = 40
+		rowLayout = cmds.rowLayout(parent = layoutMesh, numberOfColumns = 4, columnWidth4 = (cellWidth1, cellWidth2, cellWidth3, cellWidth4), columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
+		cmds.gridLayout(parent = rowLayout, numberOfColumns = 2, cellWidth = cellWidth1 / 2, cellHeight = Settings.lineHeight)
+		cmds.text(label = "Points")
+		self.intFieldPolygonWithLocatorsPoints = cmds.intField(value = 3, minValue = 3)
+		cmds.gridLayout(parent = rowLayout, numberOfColumns = 2, cellWidth = cellWidth2 / 2, cellHeight = Settings.lineHeight)
+		cmds.text(label = "Radius")
+		self.floatFieldPolygonWithLocatorsRadius = cmds.floatField(value = 10, minValue = 0, precision = 1)
+		cmds.gridLayout(parent = rowLayout, numberOfColumns = 2, cellWidth = cellWidth3 / 2, cellHeight = Settings.lineHeight)
+		cmds.text(label = "Angle")
+		self.floatFieldPolygonWithLocatorsAngle = cmds.floatField(value = 0, precision = 1)
+		cmds.button(parent = rowLayout, label = "Create", command = self.CreatePolygonWithLocators, backgroundColor = Colors.green10)
+	def UILayoutConstraints(self, layoutMain):
 		layoutConstraints = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CONSTRAINTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumnConstraints = cmds.columnLayout(parent = layoutConstraints, adjustableColumn = True)
 		#
@@ -111,9 +134,7 @@ class Rigging:
 		cmds.gridLayout(parent = layoutColumnConstraints, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Disconnect", command = Constraints.DisconnectTargetsFromConstraintOnSelected, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDisconnectSelected)
 		cmds.button(label = "Delete Constraints", command = Constraints.DeleteConstraintsOnSelected, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDelete)
-
-
-		### UTILS
+	def UILayoutUtils(self, layoutMain):
 		layoutUtils = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "UTILS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumnUtils = cmds.columnLayout(parent = layoutUtils, adjustableColumn = True)
 		#
@@ -137,8 +158,7 @@ class Rigging:
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumnUtils, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Copy Skin Weights From Last Selected", command = Skinning.CopySkinWeightsFromLastMesh, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.copySkinWeights)
-		
-		### BLENDSHAPES
+	def UILayoutBlendshapes(self, layoutMain):
 		layoutBlendshapes = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BLENDSHAPES", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumnBlendshapes = cmds.columnLayout(parent = layoutBlendshapes, adjustableColumn = True)
 		#
@@ -152,8 +172,7 @@ class Rigging:
 		countOffsets = 1
 		cmds.gridLayout(parent = layoutColumnBlendshapes, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Zero Weights", command = Blendshapes.ZeroBlendshapeWeightsOnSelected, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.blendshapeZeroWeights)
-		
-		### CURVES
+	def UILayoutCurves(self, layoutMain):
 		layoutCurves = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CURVES", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumnCurves = cmds.columnLayout(parent = layoutCurves, adjustableColumn = True)
 		#
@@ -161,28 +180,7 @@ class Rigging:
 		cmds.gridLayout(parent = layoutColumnCurves, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "From Selected Objects", command = Curves.CreateCurveFromSelectedObjects, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.curveCreateFromSelectedObjects)
 		cmds.button(label = "From Trajectory", command = Curves.CreateCurveFromTrajectory, backgroundColor = Colors.orange10, annotation = RiggingAnnotations.curveCreateFromTrajectory)
-		
-		### POLYGON WITH LOCATORS
-		self.UILayoutPolygonWithLocators(layoutMain)
 
-	def UILayoutPolygonWithLocators(self, layoutMain):
-		layoutMesh = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "Polygon With Locators", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		cellWidth1 = 75
-		cellWidth2 = 75
-		cellWidth3 = 75
-		cellWidth4 = 40
-		rowLayout = cmds.rowLayout(parent = layoutMesh, numberOfColumns = 4, columnWidth4 = (cellWidth1, cellWidth2, cellWidth3, cellWidth4), columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
-		cmds.gridLayout(parent = rowLayout, numberOfColumns = 2, cellWidth = cellWidth1 / 2, cellHeight = Settings.lineHeight)
-		cmds.text(label = "Points")
-		self.intFieldPolygonWithLocatorsPoints = cmds.intField(value = 3, minValue = 3)
-		cmds.gridLayout(parent = rowLayout, numberOfColumns = 2, cellWidth = cellWidth2 / 2, cellHeight = Settings.lineHeight)
-		cmds.text(label = "Radius")
-		self.floatFieldPolygonWithLocatorsRadius = cmds.floatField(value = 10, minValue = 0, precision = 1)
-		cmds.gridLayout(parent = rowLayout, numberOfColumns = 2, cellWidth = cellWidth3 / 2, cellHeight = Settings.lineHeight)
-		cmds.text(label = "Angle")
-		self.floatFieldPolygonWithLocatorsAngle = cmds.floatField(value = 0, precision = 1)
-		cmds.button(parent = rowLayout, label = "Create", command = self.CreatePolygonWithLocators, backgroundColor = Colors.green10)
-		
 	### CONSTRAINTS
 	def GetCheckboxConstraintReverse(self):
 		return cmds.checkBox(self.checkboxConstraintReverse, query = True, value = True)

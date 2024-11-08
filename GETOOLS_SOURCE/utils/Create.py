@@ -28,7 +28,7 @@ from ..utils import Text
 
 
 nameGroup = "grpPolygon"
-namePolygon = "CustomPolygon"
+namePolygon = "customPolygon"
 nameLocator = "locator_"
 nameCluster = "cluster_"
 
@@ -40,6 +40,15 @@ def CreatePolygonWithLocators(countPoints=3, radius=10, rotation=0):
 	
 	### Create main group as a container for all new objects
 	mainGroup = cmds.group(name = Text.SetUniqueFromText(nameGroup), empty = True)
+	cmds.setAttr(mainGroup + ".tx", lock = True)
+	cmds.setAttr(mainGroup + ".ty", lock = True)
+	cmds.setAttr(mainGroup + ".tz", lock = True)
+	cmds.setAttr(mainGroup + ".rx", lock = True)
+	cmds.setAttr(mainGroup + ".ry", lock = True)
+	cmds.setAttr(mainGroup + ".rz", lock = True)
+	cmds.setAttr(mainGroup + ".sx", lock = True)
+	cmds.setAttr(mainGroup + ".sy", lock = True)
+	cmds.setAttr(mainGroup + ".sz", lock = True)
 
 	### Calculate vertex positions based on the number of points and radius
 	angleStep = 360 / countPoints
