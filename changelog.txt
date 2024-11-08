@@ -1,6 +1,6 @@
 GETools changelog
 
-v1.3.9
+v1.4.0
 - [TOOLS] added "Polygon With Locators" button to create custom polygons with locators for each vertex
 - [TOOLS] extracted Rigging UI code blocks to separate functions
 - [UTILS] removed "Print Animatable Attributes With Shapes" button because of redundancy
