@@ -1,16 +1,8 @@
 GETools changelog
 
-***FUTURE PLAN***
-- TODO [PHYSICS] added new physics with nHair logic
-- TODO [OVERLAPPY] added Chain mode with nHair
-- TODO [OVERLAPPY] added collisions UI
-- TODO [OVERLAPPY] added nRigid collision logic
-- TODO added non-cycle origin animation with loop mode
-- TODO Rotate Order rebake
-- TODO Chain Distribution Rig
-**********************************************
-
 v1.3.9
+- [TOOLS] added "Polygon With Locators" button to create custom polygons with locators for each vertex
+- [TOOLS] extracted Rigging UI code blocks to separate functions
 - [UTILS] removed "Print Animatable Attributes With Shapes" button because of redundancy
 - [UI] changed some button names
 

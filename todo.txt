@@ -1,0 +1,27 @@
+GETools TODO List
+
+[TOOLS]
+- chain distribution rig
+- pin scale
+- rotate Order rebake
+- relative Camera
+
+[RIGGING]
+- finish Create curve from trajectory button
+
+[OVERLAPPY]
+- fix particle offset on loop mode
+- fix nucleus double nodes
+- fix loop mode with rootmotion
+- non-cycle origin animation with loop mode
+- scale baking
+- chain mode with nHair
+- nRigid collision logic
+- collisions UI
+
+[PHYSICS]
+- physics with nHair logic
+
+[CENTER OF MASS]
+- improve projection approach
+
