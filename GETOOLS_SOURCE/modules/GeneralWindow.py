@@ -25,12 +25,12 @@ import maya.cmds as cmds
 from functools import partial
 
 from .. import Settings
+from ..modules import Options
+from ..modules import Tools
+from ..modules import Rigging
+from ..modules import Overlappy
 from ..modules import CenterOfMass
 from ..modules import Experimental
-from ..modules import Options
-from ..modules import Overlappy
-from ..modules import Rigging
-from ..modules import Tools
 from ..utils import Annotation
 from ..utils import Blendshapes
 from ..utils import Colors
