@@ -1,7 +1,8 @@
 GETools changelog
 
 v1.4.1
-- fixed global variables referencing between all GETools modules
+- fixed global variables referencing between all GETools modules (Maya 2020 and older can't use these features)
+- added separate Github branch for Maya version 2020
 
 v1.4.0
 - [TOOLS] added "Polygon With Locators" button to create custom polygons with locators for each vertex
