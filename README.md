@@ -1,5 +1,6 @@
 # GETools
 Free animation tools for `Autodesk Maya 2020, 2022, 2023, 2024, 2025.`
+Version 2020 has it's own branch `Maya-2020` because of some limitations of old Python api.
 
 Discover tools for creating locators, space switching, simulating secondary animation, setting up the center of mass, and more.
 
