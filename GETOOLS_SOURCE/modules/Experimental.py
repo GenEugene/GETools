@@ -25,7 +25,7 @@ import maya.cmds as cmds
 # from functools import partial
 
 from .. import Settings
-from ..modules import Options
+# from ..modules import Options
 from ..utils import File
 from ..utils import Layers
 from ..utils import Selector
@@ -38,7 +38,7 @@ from ..experimental import PhysicsParticle
 class Experimental:
 	_title = "EXPERIMENTAL"
 
-	def __init__(self, options: Options.PluginVariables):
+	def __init__(self, options):
 		self.optionsPlugin = options
 	
 	def UICreate(self, layoutMain):

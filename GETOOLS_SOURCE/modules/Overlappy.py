@@ -27,7 +27,7 @@ import maya.cmds as cmds
 from functools import partial
 
 from .. import Settings
-from ..modules import Options
+# from ..modules import Options
 from ..utils import Animation
 from ..utils import Attributes
 from ..utils import Baker
@@ -182,7 +182,7 @@ class Overlappy:
 	_name = "OVERLAPPY"
 	_title = _name + " " + _version
 
-	def __init__(self, options: Options.PluginVariables):
+	def __init__(self, options):
 		self.optionsPlugin = options
 		self.directoryPresets = self.optionsPlugin.directory + Settings.pathPresets # TODO temporary solution, need to unify this logic for other modules and simply reuse
 

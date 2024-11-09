@@ -25,7 +25,7 @@ import maya.cmds as cmds
 from functools import partial
 
 from .. import Settings
-from ..modules import Options
+# from ..modules import Options
 from ..utils import Baker
 from ..utils import Colors
 from ..utils import Constraints
@@ -88,7 +88,7 @@ class CenterOfMass:
 	_name = "CENTER OF MASS"
 	_title = _name + " " + _version
 
-	def __init__(self, options: Options.PluginVariables):
+	def __init__(self, options):
 		self.optionsPlugin = options
 
 		self.COMObject = None
