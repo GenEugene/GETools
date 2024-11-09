@@ -25,6 +25,7 @@ import maya.cmds as cmds
 from functools import partial
 
 from .. import Settings
+from ..modules import Options
 from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Constraints
@@ -76,7 +77,9 @@ class Rigging:
 	_name = "RIGGING"
 	_title = _name + " " + _version
 
-	def __init__(self):
+	def __init__(self, options: Options.PluginVariables):
+		self.optionsPlugin = options
+		
 		self.checkboxConstraintReverse = None
 		self.checkboxConstraintMaintain = None
 		# self.checkboxConstraintOffset = None
@@ -84,9 +87,8 @@ class Rigging:
 		self.intFieldPolygonWithLocatorsPoints = None
 		self.floatFieldPolygonWithLocatorsRadius = None
 		self.floatFieldPolygonWithLocatorsAngle = None
-
+	
 	def UICreate(self, layoutMain):
-		### POLYGON WITH LOCATORS
 		self.UILayoutPolygonWithLocators(layoutMain)
 		self.UILayoutConstraints(layoutMain)
 		self.UILayoutUtils(layoutMain)

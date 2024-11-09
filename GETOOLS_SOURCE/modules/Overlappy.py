@@ -27,6 +27,7 @@ import maya.cmds as cmds
 from functools import partial
 
 from .. import Settings
+from ..modules import Options
 from ..utils import Animation
 from ..utils import Attributes
 from ..utils import Baker
@@ -176,13 +177,9 @@ class Overlappy:
 	_name = "OVERLAPPY"
 	_title = _name + " " + _version
 
-	# HACK use only for code editor # TODO try to find better way to get access to other classes with cross import
-	# from ..modules import GeneralWindow
-	# def __init__(self, generalInstance: GeneralWindow.GeneralWindow, directory):
-	def __init__(self, generalInstance, directory):
-		self.generalInstance = generalInstance
-		self.directory = directory
-		self.directoryPresets = self.directory + Settings.presetsPath # TODO temporary solution, need to unify this logic for other modules and simply reuse
+	def __init__(self, options: Options.PluginVariables):
+		self.optionsPlugin = options
+		self.directoryPresets = self.optionsPlugin.directory + Settings.presetsPath # TODO temporary solution, need to unify this logic for other modules and simply reuse
 
 		### VALUES
 		self.setupCreated = False
@@ -259,6 +256,7 @@ class Overlappy:
 
 		### UI SCROLL LISTS
 		self.scrollListColliders = None
+	
 	def UICreate(self, layoutMain):
 		self.UILayoutMenuBar(layoutMain)
 		self.UILayoutLayers(layoutMain)
@@ -768,7 +766,7 @@ class Overlappy:
 	
 	def SaveSettings(self, *args):
 		variables_dict = {
-			# "directory": self.directory, # TODO move to general preset save
+			# "directory": self.options.directory, # TODO move to general preset save
 			OverlappyVariables.flagHierarchy: self.menuCheckboxHierarchy.Get(),
 			OverlappyVariables.flagLayer: self.menuCheckboxLayer.Get(),
 			OverlappyVariables.flagLoop: self.menuCheckboxLoop.Get(),
@@ -811,7 +809,7 @@ class Overlappy:
 			os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
 
 		currentDate = datetime.datetime.now().strftime("%Y-%m-%d") # hours, minutes, seconds %H:%M:%S
-		titleText = "{0} | {1} | {2}".format(self.generalInstance._title, Overlappy._title, currentDate)
+		titleText = "{0} | {1} | {2}".format(self.optionsPlugin.titleGeneral, Overlappy._title, currentDate)
 		File.SaveDialog(startingDirectory = self.directoryPresets, variablesDict = variables_dict, title = titleText)
 	def LoadSettings(self, *args): # TODO variables from dictionary
 		### Check if the directory exists; if not, create it # TODO MERGE LOGIC
@@ -834,12 +832,12 @@ class Overlappy:
 		# 	overlappy_version = parts[1]
 		# else:
 		# 	cmds.warning("No version info in loaded file")
-		# isGetoolsVersionCorrect = getools_version == self.generalInstance._title
+		# isGetoolsVersionCorrect = getools_version == self.options.titleGeneral
 		# isOverlappyVersionCorrect = overlappy_version == Overlappy._title
 		# if (not isGetoolsVersionCorrect or not isOverlappyVersionCorrect):
 		# 	messageResult = ""
 		# 	if (not isGetoolsVersionCorrect):
-		# 		messageResult += "Getools version is not matched. Current version {0}, Preset version {1}\n".format(getools_version, self.generalInstance._title)
+		# 		messageResult += "Getools version is not matched. Current version {0}, Preset version {1}\n".format(getools_version, self.options.titleGeneral)
 		# 	if (not isOverlappyVersionCorrect):
 		# 		messageResult += "Overlappy version is not matched. Current version {0}, Preset version {1}".format(overlappy_version, Overlappy._title)
 		# 	cmds.warning(messageResult)
@@ -956,7 +954,7 @@ class Overlappy:
 		cmds.select(objectDuplicate, replace = True)
 
 		### Bake animation
-		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, euler = self.generalInstance.menuCheckboxEulerFilter.Get())
+		Baker.BakeSelected(classic = True, preserveOutsideKeys = True, euler = self.optionsPlugin.menuCheckboxEulerFilter.Get())
 		Constraints.DeleteConstraints(objectDuplicate)
 
 		### Copy keys, create layers and paste keys
