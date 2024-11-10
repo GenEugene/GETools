@@ -269,9 +269,7 @@ class Overlappy:
 		## self.UILayoutChainMode(layoutMain) # TODO
 		self.UILayoutParticle(layoutMain)
 		## self.UILayoutCollisions(layoutMain) # TODO
-
-		self.LoadPresetOnStart()
-
+		self.InitPresetOnStart()
 
 	### MAIN UI
 	def UILayoutMenuBar(self, layoutMain):
@@ -735,7 +733,7 @@ class Overlappy:
 		SetParticleDynamicAttributes(name = self.particleUp)
 	
 	### PRESET
-	def LoadPresetOnStart(self, *args):
+	def InitPresetOnStart(self, *args):
 		filepath = self.directoryPresets + Settings.overlappyDefaultPreset
 		data = File.ReadLogic(filepath)
 		if data is None:
@@ -747,26 +745,27 @@ class Overlappy:
 		dictionary = self.GetBuiltinPresetDictionary()
 		self.ApplyPresetDictionary(dictionary)
 		print("Preset loaded from Built-in data")
-
 	def SavePresetDefault(self, *args):
-		data = self.SavePresetPrepare()
+		data = self.SavePresetGetDictionaryAndTitle()
 		filepath = self.directoryPresets + Settings.overlappyDefaultPreset
 		variablesDictionary = data[0]
 		title = data[1]
 		File.SaveLogic(filepath, variablesDictionary, title)
+		self.RefreshSlidersDefault()
 		print("Default Preset saved to \"{0}\"".format(filepath))
 	def LoadPresetDefault(self, *args):
 		filepath = self.directoryPresets + Settings.overlappyDefaultPreset
 		data = File.ReadLogic(filepath)
 		if data is None:
-			cmds.warning("Default Preset doesn't exist")
+			cmds.warning("Default Preset doesn't exist: \"{0}\"".format(filepath))
 			return
 		dictionary = data[0]
 		self.ApplyPresetDictionary(dictionary)
+		self.RefreshSlidersDefault()
 		print("Default Preset loaded from \"{0}\"".format(filepath))
 
 	def SavePresetWindow(self, *args):
-		data = self.SavePresetPrepare()
+		data = self.SavePresetGetDictionaryAndTitle()
 		dictionary = data[0]
 		titleText = data[1]
 		File.SaveDialog(startingDirectory = self.directoryPresets, variablesDict = dictionary, title = titleText)
@@ -780,10 +779,9 @@ class Overlappy:
 			return
 
 		dictionary = readDialogResult[0]
-
 		self.ApplyPresetDictionary(dictionary)
 
-	def SavePresetPrepare(self): # TODO MERGE PATH CHECK LOGIC
+	def SavePresetGetDictionaryAndTitle(self): # TODO MERGE PATH CHECK LOGIC
 		dictionary = self.GetCurrentPresetDictionary()
 
 		### Check if the directory exists; if not, create it
@@ -939,6 +937,14 @@ class Overlappy:
 		self.sliderParticleDamp.Set(dictionary[OverlappyVariables.particleDamp])
 
 		self.UpdateParticleAllSettings()
+	def RefreshSlidersDefault(self):
+		self.nucleusTimeScaleSlider.RefreshDefaultValue()
+		self.sliderParticleRadius.RefreshDefaultValue()
+		self.sliderParticleGoalSmooth.RefreshDefaultValue()
+		self.sliderParticleGoalWeight.RefreshDefaultValue()
+		self.sliderParticleConserve.RefreshDefaultValue()
+		self.sliderParticleDrag.RefreshDefaultValue()
+		self.sliderParticleDamp.RefreshDefaultValue()
 
 
 	### GET VALUES

@@ -210,11 +210,7 @@ class Slider:
 			cmds.floatSliderGrp(self.slider, edit = True, value = _value)
 			# self.command()
 		
-		# Marker update
-		if (_value != self.valueDefault):
-			cmds.button(self.marker, edit = True, backgroundColor = self.markerColorChanged)
-		else:
-			cmds.button(self.marker, edit = True, backgroundColor = self.markerColorDefault)
+		self.MarkerUpdate()
 		
 		if (self.command != "pass"):
 			self.command()
@@ -224,6 +220,17 @@ class Slider:
 		cmds.floatSliderGrp(self.slider, edit = True, value = self.valueDefault)
 		if (self.command != "pass"):
 			self.command()
+	
+	def RefreshDefaultValue(self, *args):
+		self.valueDefault = self.Get()
+		self.MarkerUpdate()
+	
+	def MarkerUpdate(self):
+		if (self.Get() != self.valueDefault):
+			cmds.button(self.marker, edit = True, backgroundColor = self.markerColorChanged)
+		else:
+			cmds.button(self.marker, edit = True, backgroundColor = self.markerColorDefault)
+		
 	
 	# def Scan(self, *args): # TODO rework or remove
 	# 	_firstName = _OVERLAPPY.selected
