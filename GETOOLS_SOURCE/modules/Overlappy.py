@@ -744,7 +744,7 @@ class Overlappy:
 	def LoadPresetBuiltin(self, *args):
 		dictionary = self.GetBuiltinPresetDictionary()
 		self.ApplyPresetDictionary(dictionary)
-		print("Preset loaded from Built-in data")
+		print("Overlappy Preset loaded from Built-in data")
 	def SavePresetDefault(self, *args):
 		data = self.SavePresetGetDictionaryAndTitle()
 		filepath = self.directoryPresets + Settings.overlappyDefaultPreset
@@ -752,17 +752,17 @@ class Overlappy:
 		title = data[1]
 		File.SaveLogic(filepath, variablesDictionary, title)
 		self.RefreshSlidersDefault()
-		print("Default Preset saved to \"{0}\"".format(filepath))
+		print("Overlappy Default Preset saved to \"{0}\"".format(filepath))
 	def LoadPresetDefault(self, *args):
 		filepath = self.directoryPresets + Settings.overlappyDefaultPreset
 		data = File.ReadLogic(filepath)
 		if data is None:
-			cmds.warning("Default Preset doesn't exist: \"{0}\"".format(filepath))
+			cmds.warning("Overlappy Default Preset doesn't exist: \"{0}\"".format(filepath))
 			return
 		dictionary = data[0]
 		self.ApplyPresetDictionary(dictionary)
 		self.RefreshSlidersDefault()
-		print("Default Preset loaded from \"{0}\"".format(filepath))
+		print("Overlappy Default Preset loaded from \"{0}\"".format(filepath))
 
 	def SavePresetWindow(self, *args):
 		data = self.SavePresetGetDictionaryAndTitle()
