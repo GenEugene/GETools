@@ -44,12 +44,11 @@ frames2Color = Colors.blackWhite20
 frames2Prefix = "//  "
 
 ### Directories
-pathSettings = "/GETOOLS_SOURCE/Settings.py"
 pathPresets = "/GETOOLS_SOURCE/PRESETS/"
 
 ### Default values
 checkboxEulerFilter = False # automatic euler filter checkbox
 
 ### Overlappy
-defaultPreset = "" # TODO
+overlappyDefaultPreset = "overlappyDefault.txt"
 

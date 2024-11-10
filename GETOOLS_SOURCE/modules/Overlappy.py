@@ -22,7 +22,6 @@
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 import os
-# import ast # For safely converting strings to Python objects
 import datetime
 import maya.cmds as cmds
 from functools import partial
@@ -108,16 +107,21 @@ class OverlappySettings:
 	optionCheckboxLoop = False
 	optionCheckboxDeleteSetup = True
 	optionCheckboxCollisions = True
+	optionRadioButtonsLoop = [False, False, True, False, False]
 
 	### SETTINGS NUCLEUS
 	nucleusTimeScale = 1
 	nucleusGravityActivated = False
 	nucleusGravityValue = 9.81
-	nucleusGravityDirection = (0, -1, 0)
+	nucleusGravityDirection = [0, -1, 0]
 
 	### PARTICLE AIM OFFSET
-	particleAimOffsetsAxes = (0, 1) # Aim X, Up Y
-	particleAimOffsetsValues = (10, 10) # Aim, Up
+	particleAimOffsetValue = 10
+	particleAimOffsetUpValue = 10
+	particleAimOffsetRadioButtons = [True, False, False] # X
+	particleAimOffsetUpRadioButtons = [False, True, False] # Y
+	particleAimOffsetReverse = False
+	particleAimOffsetUpReverse = False
 
 	### SETTINGS DYNAMIC PROPERTIES
 	particleRadius = 1
@@ -266,6 +270,8 @@ class Overlappy:
 		self.UILayoutParticle(layoutMain)
 		## self.UILayoutCollisions(layoutMain) # TODO
 
+		self.LoadPresetOnStart()
+
 
 	### MAIN UI
 	def UILayoutMenuBar(self, layoutMain):
@@ -273,18 +279,20 @@ class Overlappy:
 		cmds.menuBarLayout()
 
 		cmds.menu(label = "Edit", tearOff = True)
-		cmds.menuItem(label = "Reset Settings", command = self.ResetAllSettings, image = Icons.rotateClockwise)
-		cmds.menuItem(label = "Set Default Settings", command = self.SetSettingsDefault)
+		cmds.menuItem(label = "Save Preset", command = self.SavePresetWindow, image = Icons.save)
+		cmds.menuItem(label = "Save Default Preset", command = self.SavePresetDefault, image = Icons.save)
 		cmds.menuItem(divider = True)
-		cmds.menuItem(label = "Save Settings", command = self.SaveSettings, image = Icons.fileSave)
-		cmds.menuItem(label = "Load Settings", command = self.LoadSettings)
+		cmds.menuItem(label = "Load Preset", command = self.LoadPresetWindow, image = Icons.load)
+		cmds.menuItem(label = "Load Default Preset", command = self.LoadPresetDefault, image = Icons.load)
+		cmds.menuItem(divider = True)
+		cmds.menuItem(label = "Load Built-in Preset", command = self.LoadPresetBuiltin, image = Icons.rotateClockwise)
 		
 		cmds.menu(label = "Options", tearOff = True)
-		self.menuCheckboxHierarchy = UI.MenuCheckbox(label = "Use Hierarchy", value = OverlappySettings.optionCheckboxHierarchy, valueDefault = OverlappySettings.optionCheckboxHierarchy)
-		self.menuCheckboxLayer = UI.MenuCheckbox(label = "Bake To Override Layer", value = OverlappySettings.optionCheckboxLayer, valueDefault = OverlappySettings.optionCheckboxLayer)
-		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop", value = OverlappySettings.optionCheckboxLoop, valueDefault = OverlappySettings.optionCheckboxLoop)
-		self.menuCheckboxDeleteSetup = UI.MenuCheckbox(label = "Delete Setup After Bake", value = OverlappySettings.optionCheckboxDeleteSetup, valueDefault = OverlappySettings.optionCheckboxDeleteSetup)
-		# self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions", value = OverlappySettings.optionCheckboxCollisions, valueDefault = OverlappySettings.optionCheckboxCollisions)
+		self.menuCheckboxHierarchy = UI.MenuCheckbox(label = "Use Hierarchy")
+		self.menuCheckboxLayer = UI.MenuCheckbox(label = "Bake To Override Layer")
+		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop")
+		self.menuCheckboxDeleteSetup = UI.MenuCheckbox(label = "Delete Setup After Bake")
+		# self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions")
 
 		cmds.menuItem(dividerLabel = "Pre Loop Cycles", divider = True)
 		cmds.radioMenuItemCollection()
@@ -293,7 +301,6 @@ class Overlappy:
 		self.menuRadioButtonsLoop[2] = cmds.menuItem(label = "2", radioButton = True)
 		self.menuRadioButtonsLoop[3] = cmds.menuItem(label = "3", radioButton = True)
 		self.menuRadioButtonsLoop[4] = cmds.menuItem(label = "4", radioButton = True)
-		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = True)
 
 		cmds.menu(label = "Select", tearOff = True)
 		cmds.menuItem(label = "Nucleus", command = self.SelectNucleus, image = Icons.nucleus)
@@ -424,23 +431,21 @@ class Overlappy:
 			checkbox = cmds.checkBox(label = "Reverse", value = False, changeCommand = self.UpdateParticleAimOffsetSettings, annotation = OverlappyAnnotations.aimOffsetReverse)
 			return layout, text, floatField, radioButton1, radioButton2, radioButton3, checkbox
 		
-		radioGroup1 = CustomRadioButtonGroup(label = "Aim", value = OverlappySettings.particleAimOffsetsValues[0])
+		radioGroup1 = CustomRadioButtonGroup(label = "Aim", value = OverlappySettings.particleAimOffsetValue)
 		self.aimOffsetFloatGroup[0] = radioGroup1[1]
 		self.aimOffsetFloatGroup[1] = radioGroup1[2]
 		self.aimOffsetRadioCollection[0] = radioGroup1[3]
 		self.aimOffsetRadioCollection[1] = radioGroup1[4]
 		self.aimOffsetRadioCollection[2] = radioGroup1[5]
 		self.aimOffsetCheckbox = radioGroup1[6]
-		cmds.radioButton(self.aimOffsetRadioCollection[OverlappySettings.particleAimOffsetsAxes[0]], edit = True, select = True)
 
-		radioGroup2 = CustomRadioButtonGroup(label = "Up", value = OverlappySettings.particleAimOffsetsValues[1])
+		radioGroup2 = CustomRadioButtonGroup(label = "Up", value = OverlappySettings.particleAimOffsetUpValue)
 		self.aimOffsetUpFloatGroup[0] = radioGroup2[1]
 		self.aimOffsetUpFloatGroup[1] = radioGroup2[2]
 		self.aimOffsetUpRadioCollection[0] = radioGroup2[3]
 		self.aimOffsetUpRadioCollection[1] = radioGroup2[4]
 		self.aimOffsetUpRadioCollection[2] = radioGroup2[5]
 		self.aimOffsetUpCheckbox = radioGroup2[6]
-		cmds.radioButton(self.aimOffsetUpRadioCollection[OverlappySettings.particleAimOffsetsAxes[1]], edit = True, select = True)
 	def UILayoutParticleDynamicProperties(self, layoutMain):
 		self.layoutParticleDynamicProperties = cmds.frameLayout(parent = layoutMain, label = "Dynamic Properties", labelIndent = 80, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleDynamicProperties, adjustableColumn = True)
@@ -565,7 +570,7 @@ class Overlappy:
 	def ParticleSetupInit(self, *args):
 		### Get selected objects
 		self.selectedObjects = Selector.MultipleObjects(minimalCount = 1)
-		if (self.selectedObjects == None):
+		if self.selectedObjects is None:
 			return False
 		
 		### Remove previous setup if exists
@@ -728,63 +733,110 @@ class Overlappy:
 		SetParticleDynamicAttributes(name = self.particleBase)
 		SetParticleDynamicAttributes(name = self.particleTarget)
 		SetParticleDynamicAttributes(name = self.particleUp)
-	def ResetAllSettings(self, *args):
-		### Options
-		self.menuCheckboxHierarchy.Reset()
-		self.menuCheckboxLayer.Reset()
-		self.menuCheckboxLoop.Reset()
-		self.menuCheckboxDeleteSetup.Reset()
-		# self.menuCheckboxCollisions.Reset()
-
-		### Loop cycles
-		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = True) # TODO move to settings
-
-		### Nucleus
-		self.nucleusTimeScaleSlider.Reset()
-		cmds.checkBox(self.nucleusGravityCheckbox, edit = True, value = OverlappySettings.nucleusGravityActivated)
-		cmds.floatField(self.nucleusGravityFloatField, edit = True, value = OverlappySettings.nucleusGravityValue)
-		cmds.floatFieldGrp(self.nucleusGravityDirectionFloatFieldGrp, edit = True, value = (OverlappySettings.nucleusGravityDirection[0], OverlappySettings.nucleusGravityDirection[1], OverlappySettings.nucleusGravityDirection[2], 0))
-
-		### Aim offset target
-		cmds.floatField(self.aimOffsetFloatGroup[1], edit = True, value = OverlappySettings.particleAimOffsetsValues[0])
-		cmds.checkBox(self.aimOffsetCheckbox, edit = True, value = False)
-		cmds.radioButton(self.aimOffsetRadioCollection[OverlappySettings.particleAimOffsetsAxes[0]], edit = True, select = True) # TODO move to settings
-
-		### Aim offset up
-		cmds.floatField(self.aimOffsetUpFloatGroup[1], edit = True, value = OverlappySettings.particleAimOffsetsValues[1])
-		cmds.checkBox(self.aimOffsetUpCheckbox, edit = True, value = False)
-		cmds.radioButton(self.aimOffsetUpRadioCollection[OverlappySettings.particleAimOffsetsAxes[1]], edit = True, select = True) # TODO move to settings
-
-		### Particle dynamic properties
-		self.sliderParticleRadius.Reset()
-		self.sliderParticleGoalSmooth.Reset()
-		self.sliderParticleGoalWeight.Reset()
-		self.sliderParticleConserve.Reset()
-		self.sliderParticleDrag.Reset()
-		self.sliderParticleDamp.Reset()
-
-		### Update all settings
-		self.UpdateParticleAllSettings()
 	
-	def SetSettingsDefault(self, *args): # TODO
-		### Check if the directory exists; if not, create it # TODO MERGE LOGIC
-		# if not os.path.exists(self.directoryPresets):
-		# 	os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
-		
-		# fileDialog = cmds.fileDialog2(fileMode = 1, caption = "Set Default Preset", okCaption = "Set", startingDirectory = self.directoryPresets, fileFilter = File._basicFileDialogFilter, dialogStyle = File._dialogStyle)
-		# if (fileDialog == None):
-		# 	return
-		
-		pathSettings = self.directory + Settings.pathSettings
-		opened = open(pathSettings, 'r')
-		for line in opened:
-			lineParts = line.strip().split(" = ", 1)
-			if (len(lineParts) > 1 and lineParts[0] == "defaultPreset"):
-				print(lineParts[1])
+	### PRESET
+	def LoadPresetOnStart(self, *args):
+		filepath = self.directoryPresets + Settings.overlappyDefaultPreset
+		data = File.ReadLogic(filepath)
+		if data is None:
+			self.LoadPresetBuiltin()
+		else:
+			self.LoadPresetDefault()
 
+	def LoadPresetBuiltin(self, *args):
+		dictionary = self.GetBuiltinPresetDictionary()
+		self.ApplyPresetDictionary(dictionary)
+		print("Preset loaded from Built-in data")
 
-	def SaveSettings(self, *args):
-		variables_dict = {
+	def SavePresetDefault(self, *args):
+		data = self.SavePresetPrepare()
+		filepath = self.directoryPresets + Settings.overlappyDefaultPreset
+		variablesDictionary = data[0]
+		title = data[1]
+		File.SaveLogic(filepath, variablesDictionary, title)
+		print("Default Preset saved to \"{0}\"".format(filepath))
+	def LoadPresetDefault(self, *args):
+		filepath = self.directoryPresets + Settings.overlappyDefaultPreset
+		data = File.ReadLogic(filepath)
+		if data is None:
+			cmds.warning("Default Preset doesn't exist")
+			return
+		dictionary = data[0]
+		self.ApplyPresetDictionary(dictionary)
+		print("Default Preset loaded from \"{0}\"".format(filepath))
+
+	def SavePresetWindow(self, *args):
+		data = self.SavePresetPrepare()
+		dictionary = data[0]
+		titleText = data[1]
+		File.SaveDialog(startingDirectory = self.directoryPresets, variablesDict = dictionary, title = titleText)
+	def LoadPresetWindow(self, *args): # TODO MERGE PATH CHECK LOGIC
+		### Check if the directory exists; if not, create it
+		if not os.path.exists(self.directoryPresets):
+			os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
+		
+		readDialogResult = File.ReadDialog(startingDirectory = self.directoryPresets)
+		if readDialogResult is None:
+			return
+
+		dictionary = readDialogResult[0]
+
+		self.ApplyPresetDictionary(dictionary)
+
+	def SavePresetPrepare(self): # TODO MERGE PATH CHECK LOGIC
+		dictionary = self.GetCurrentPresetDictionary()
+
+		### Check if the directory exists; if not, create it
+		if not os.path.exists(self.directoryPresets):
+			os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
+
+		currentDate = datetime.datetime.now().strftime("%Y-%m-%d") # hours, minutes, seconds %H:%M:%S
+		titleText = "{0} | {1} | {2}".format(self.optionsPlugin.titleGeneral, Overlappy._title, currentDate)
+
+		return dictionary, titleText
+
+	def GetBuiltinPresetDictionary(self): # TODO how to simplify and merge dictionary creation logic?
+		dictionary = {
+			# "directory": self.options.directory, # TODO move to general preset save
+			OverlappyVariables.flagHierarchy: OverlappySettings.optionCheckboxHierarchy,
+			OverlappyVariables.flagLayer: OverlappySettings.optionCheckboxLayer,
+			OverlappyVariables.flagLoop: OverlappySettings.optionCheckboxLoop,
+			OverlappyVariables.flagDeleteSetup: OverlappySettings.optionCheckboxDeleteSetup,
+			# OverlappyVariableNames.flagCollisions: OverlappySettings.optionCheckboxCollisions, # TODO add later
+
+			OverlappyVariables.menuRadioButtonLoopCycles0: OverlappySettings.optionRadioButtonsLoop[0],
+			OverlappyVariables.menuRadioButtonLoopCycles1: OverlappySettings.optionRadioButtonsLoop[1],
+			OverlappyVariables.menuRadioButtonLoopCycles2: OverlappySettings.optionRadioButtonsLoop[2],
+			OverlappyVariables.menuRadioButtonLoopCycles3: OverlappySettings.optionRadioButtonsLoop[3],
+			OverlappyVariables.menuRadioButtonLoopCycles4: OverlappySettings.optionRadioButtonsLoop[4],
+
+			OverlappyVariables.nucleusTimeScale: OverlappySettings.nucleusTimeScale,
+			OverlappyVariables.nucleusGravityActivated: OverlappySettings.nucleusGravityActivated,
+			OverlappyVariables.nucleusGravityValue: OverlappySettings.nucleusGravityValue,
+			OverlappyVariables.nucleusGravityDirection: OverlappySettings.nucleusGravityDirection,
+
+			OverlappyVariables.particleAimOffsetFloat: OverlappySettings.particleAimOffsetValue,
+			OverlappyVariables.particleAimOffsetRadioCollection1: OverlappySettings.particleAimOffsetRadioButtons[0],
+			OverlappyVariables.particleAimOffsetRadioCollection2: OverlappySettings.particleAimOffsetRadioButtons[1],
+			OverlappyVariables.particleAimOffsetRadioCollection3: OverlappySettings.particleAimOffsetRadioButtons[2],
+			OverlappyVariables.particleAimOffsetReverse: OverlappySettings.particleAimOffsetReverse,
+
+			OverlappyVariables.particleAimOffsetUpFloat: OverlappySettings.particleAimOffsetUpValue,
+			OverlappyVariables.particleAimOffsetUpRadioCollection1: OverlappySettings.particleAimOffsetUpRadioButtons[0],
+			OverlappyVariables.particleAimOffsetUpRadioCollection2: OverlappySettings.particleAimOffsetUpRadioButtons[1],
+			OverlappyVariables.particleAimOffsetUpRadioCollection3: OverlappySettings.particleAimOffsetUpRadioButtons[2],
+			OverlappyVariables.particleAimOffsetUpReverse: OverlappySettings.particleAimOffsetUpReverse,
+
+			OverlappyVariables.particleRadius: OverlappySettings.particleRadius,
+			OverlappyVariables.particleGoalSmooth: OverlappySettings.particleGoalSmooth,
+			OverlappyVariables.particleGoalWeight: OverlappySettings.particleGoalWeight,
+			OverlappyVariables.particleConserve: OverlappySettings.particleConserve,
+			OverlappyVariables.particleDrag: OverlappySettings.particleDrag,
+			OverlappyVariables.particleDamp: OverlappySettings.particleDamp,
+		}
+		return dictionary
+	def GetCurrentPresetDictionary(self):
+		dictionary = {
 			# "directory": self.options.directory, # TODO move to general preset save
 			OverlappyVariables.flagHierarchy: self.menuCheckboxHierarchy.Get(),
 			OverlappyVariables.flagLayer: self.menuCheckboxLayer.Get(),
@@ -822,24 +874,13 @@ class Overlappy:
 			OverlappyVariables.particleDrag: self.sliderParticleDrag.Get(),
 			OverlappyVariables.particleDamp: self.sliderParticleDamp.Get(),
 		}
-
-		### Check if the directory exists; if not, create it # TODO MERGE LOGIC
-		if not os.path.exists(self.directoryPresets):
-			os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
-
-		currentDate = datetime.datetime.now().strftime("%Y-%m-%d") # hours, minutes, seconds %H:%M:%S
-		titleText = "{0} | {1} | {2}".format(self.optionsPlugin.titleGeneral, Overlappy._title, currentDate)
-		File.SaveDialog(startingDirectory = self.directoryPresets, variablesDict = variables_dict, title = titleText)
-	def LoadSettings(self, *args):
-		### Check if the directory exists; if not, create it # TODO MERGE LOGIC
-		if not os.path.exists(self.directoryPresets):
-			os.makedirs(self.directoryPresets) # Create the directory, including any intermediate directories
-		
-		readDialogResult = File.ReadDialog(startingDirectory = self.directoryPresets)
-		if (readDialogResult == None):
+		return dictionary
+	
+	def ApplyPresetDictionary(self, dictionary):
+		if dictionary is None:
+			cmds.warning("Preset dictionary is None")
 			return
 
-		dictionary = readDialogResult[0]
 		# filePath = readDialogResult[1]
 
 		### Read preset version and check
@@ -872,11 +913,11 @@ class Overlappy:
 		cmds.menuItem(self.menuRadioButtonsLoop[2], edit = True, radioButton = dictionary[OverlappyVariables.menuRadioButtonLoopCycles2])
 		cmds.menuItem(self.menuRadioButtonsLoop[3], edit = True, radioButton = dictionary[OverlappyVariables.menuRadioButtonLoopCycles3])
 		cmds.menuItem(self.menuRadioButtonsLoop[4], edit = True, radioButton = dictionary[OverlappyVariables.menuRadioButtonLoopCycles4])
-
+		
 		self.nucleusTimeScaleSlider.Set(dictionary[OverlappyVariables.nucleusTimeScale])
 		cmds.checkBox(self.nucleusGravityCheckbox, edit = True, value = dictionary[OverlappyVariables.nucleusGravityActivated])
 		cmds.floatField(self.nucleusGravityFloatField, edit = True, value = dictionary[OverlappyVariables.nucleusGravityValue])
-		cmds.floatFieldGrp(self.nucleusGravityDirectionFloatFieldGrp, edit = True, value = dictionary[OverlappyVariables.nucleusGravityDirection] + [0])
+		cmds.floatFieldGrp(self.nucleusGravityDirectionFloatFieldGrp, edit = True, value = dictionary[OverlappyVariables.nucleusGravityDirection] + [0]) # HACK used because floatFieldGrp weird behavior, it requires [0, 0, 0, 0] format
 
 		cmds.floatField(self.aimOffsetFloatGroup[1], edit = True, value = dictionary[OverlappyVariables.particleAimOffsetFloat])
 		cmds.radioButton(self.aimOffsetRadioCollection[0], edit = True, select = dictionary[OverlappyVariables.particleAimOffsetRadioCollection1])
@@ -934,7 +975,7 @@ class Overlappy:
 		
 		### Filter attributes
 		attributesFiltered = Attributes.FilterAttributesAnimatable(attributes = attributes, skipMutedKeys = True)
-		if (attributesFiltered == None):
+		if attributesFiltered is None:
 			self.ParticleSetupDelete(clearCache = True)
 			return False
 		attributesFilteredForKey = Attributes.FilterAttributesWithoutAnimation(attributesFiltered)
@@ -1008,7 +1049,7 @@ class Overlappy:
 		return True
 	def BakeParticleVariants(self, variant, *args):
 		selected = Selector.MultipleObjects(minimalCount = 1)
-		if (selected == None):
+		if selected is None:
 			if (not self.setupCreated):
 				cmds.warning("Can't bake animation. Nothing selected and particle setup is not created")
 				return
@@ -1039,7 +1080,7 @@ class Overlappy:
 		MayaSettings.CachedPlaybackDeactivate()
 
 		### Run baking process
-		if (variant == 0 or selected == None):
+		if (variant == 0 or selected is None):
 			wasBakedSuccessfully = self.BakeParticleLogic()
 			if (wasBakedSuccessfully):
 				cmds.select(self.selectedObjects, replace = True)
@@ -1089,14 +1130,14 @@ class Overlappy:
 		childrenLayers = cmds.animLayer(self.layers[id[0]], query = True, children = True)
 		filteredLayers = []
 		if (len(selectedLayers) == 0):
-			if (childrenLayers == None):
+			if childrenLayers is None:
 				cmds.warning("Layer \"{0}\" is empty".format(nameLayer1))
 				return
 			else:
 				for layer in childrenLayers:
 					filteredLayers.append(layer)
 		else:
-			if (childrenLayers == None):
+			if childrenLayers is None:
 				cmds.warning("Layer \"{0}\" is empty".format(nameLayer1))
 				return
 			else:
