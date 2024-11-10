@@ -1,5 +1,9 @@
 GETools changelog
 
+v1.4.2
+- [OVERLAPPY] added default preset auto loading. If not exists, use Built-in preset
+- [OVERLAPPY] removed "Reset Settings" button
+
 v1.4.1
 - fixed global variables referencing between all GETools modules (Maya 2020 and older can't use these features)
 - added separate Github branch for Maya version 2020

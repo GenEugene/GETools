@@ -30,33 +30,33 @@ _basicFileDialogFilter = "*.txt"
 _dialogStyle = 2
 
 
-def SaveLogic(filepath, variablesDict, title="", *args):
+def SaveLogic(filepath, variablesDictionary, title="", *args): # TODO MERGE PATH CHECK LOGIC
 	### Extract the directory from the provided file path
 	directory = os.path.dirname(filepath)
 	
-	### Check if the directory exists; if not, create it # TODO MERGE LOGIC
+	### Check if the directory exists; if not, create it
 	if not os.path.exists(directory):
 		os.makedirs(directory) # Create the directory, including any intermediate directories
 	
 	with open(filepath, 'w') as line:
 		if (title != ""):
 			line.write("{0}\n\n".format(title))
-		for var_name, var_value in variablesDict.items():
+		for var_name, var_value in variablesDictionary.items():
 			line.write("{0} = {1}\n".format(var_name, var_value))
 def SaveDialog(startingDirectory, variablesDict, title="", *args):
 	fileDialog = cmds.fileDialog2(fileMode = 0, startingDirectory = startingDirectory, fileFilter = _basicFileDialogFilter, dialogStyle = _dialogStyle)
-	if (fileDialog == None):
+	if fileDialog is None:
 		return
 	SaveLogic(fileDialog[0], variablesDict, title = title)
 	print("File Saved {0}".format(fileDialog))
 
 def ReadLogic(filepath, *args):
-	variables_dict = {}
+	variablesDictionary = {}
 
 	### Check if file exists
 	if not os.path.exists(filepath):
 		print("File \"{0}\" not found!".format(filepath))
-		return variables_dict
+		return None
 
 	### Open the file in read mode
 	with open(filepath, 'r') as f:
@@ -73,15 +73,15 @@ def ReadLogic(filepath, *args):
 					pass
 				
 				# Store the variable in the dictionary
-				variables_dict[var_name] = var_value
+				variablesDictionary[var_name] = var_value
 
 	### Set the variables in the global namespace
-	globals().update(variables_dict)
+	globals().update(variablesDictionary)
 	print("Variables loaded from {0}".format(filepath))
-	return variables_dict, filepath
+	return variablesDictionary, filepath
 def ReadDialog(startingDirectory, *args):
 	fileDialog = cmds.fileDialog2(fileMode = 1, startingDirectory = startingDirectory, fileFilter = _basicFileDialogFilter, dialogStyle = _dialogStyle)
-	if (fileDialog == None):
+	if fileDialog is None:
 		return
 	readResult = ReadLogic(fileDialog[0])
 	print("File Read {0}".format(readResult))
