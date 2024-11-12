@@ -1,5 +1,8 @@
 GETools changelog
 
+v1.4.3
+- [OVERLAPPY] fixed loop mode with rootmotion
+
 v1.4.2
 - [OVERLAPPY] added default preset auto loading. If not exists, use Built-in preset
 - [OVERLAPPY] removed "Reset Settings" button

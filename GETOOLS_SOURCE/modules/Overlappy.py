@@ -178,7 +178,7 @@ class OverlappyVariables: # using for sava and load settings
 	particleDamp = "particleDamp"
 
 class Overlappy:
-	_version = "v3.4"
+	_version = "v3.5"
 	_name = "OVERLAPPY"
 	_title = _name + " " + _version
 
