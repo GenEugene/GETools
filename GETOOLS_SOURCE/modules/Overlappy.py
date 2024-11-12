@@ -1079,9 +1079,6 @@ class Overlappy:
 			if (not self.setupCreated):
 				cmds.warning("Can't bake animation. Nothing selected and particle setup is not created")
 				return
-		
-		### Cache initial position for the first selected object
-		self.selectedObjectsStartPosition = cmds.xform(self.selectedObjects[0], query = True, translation = True, worldSpace = True)
 
 		### Check zero particle offset
 		self.CompileParticleAimOffset()
@@ -1108,6 +1105,11 @@ class Overlappy:
 						return
 
 		MayaSettings.CachedPlaybackDeactivate()
+		
+		### Cache initial position for the first selected object
+		self.time.Scan()
+		self.time.Reset()
+		self.selectedObjectsStartPosition = cmds.xform(self.selectedObjects[0], query = True, translation = True, worldSpace = True)
 
 		### Run baking process
 		if (variant == 0 or self.selectedObjects is None):
