@@ -23,6 +23,8 @@
 
 import maya.cmds as cmds
 
+from ..utils import Selector
+
 
 _controlSize = 100
 _nameGroupMain = "grpChain_"
@@ -30,6 +32,11 @@ _nameLocatorPrefix = "loc_"
 
 
 def CreateRigVariant1(controlSize=_controlSize, *args):
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(minimalCount = 1)
+	if (selectedList == None):
+		return
+
 	timeMin = cmds.playbackOptions(query = True, min = True)
 	timeMax = cmds.playbackOptions(query = True, max = True)
 	cmds.currentTime(timeMin, edit = True, update = True)
@@ -83,6 +90,11 @@ def CreateRigVariant1(controlSize=_controlSize, *args):
 	cmds.select(locators[-1], replace = True)
 
 def CreateRigVariant2(controlSize=_controlSize, *args):
+	# Check selected objects
+	selectedList = Selector.MultipleObjects(minimalCount = 1)
+	if (selectedList == None):
+		return
+
 	### Objects names
 	nameGroupFixedPrefix = "grpFixed_"
 	nameGroupDistributedPrefix = "grpDistr_"
