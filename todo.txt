@@ -10,9 +10,7 @@ GETools TODO List
 - finish Create curve from trajectory button
 
 [OVERLAPPY]
-- fix particle offset on loop mode
 - fix nucleus double nodes
-- fix loop mode with rootmotion
 - non-cycle origin animation with loop mode
 - scale baking
 - chain mode with nHair
