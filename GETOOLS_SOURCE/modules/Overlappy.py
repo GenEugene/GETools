@@ -178,7 +178,7 @@ class OverlappyVariables: # using for sava and load settings
 	particleDamp = "particleDamp"
 
 class Overlappy:
-	_version = "v3.4"
+	_version = "v3.5"
 	_name = "OVERLAPPY"
 	_title = _name + " " + _version
 
@@ -195,7 +195,10 @@ class Overlappy:
 		self.time = Timeline.TimeRangeHandler()
 		
 		### OBJECTS
-		self.selectedObjects = ""
+		self.selectedObjects = None
+		self.selectedObjectsFiltered = ""
+		self.selectedObjectsStartPosition = [0, 0, 0]
+
 		self.layers = [OverlappySettings.nameLayers[0], OverlappySettings.nameLayers[1]]
 		self.nucleus1 = ""
 		self.nucleus2 = ""
@@ -213,9 +216,9 @@ class Overlappy:
 		self.particleLocatorGoalOffset = ""
 		self.particleLocatorGoalOffsetUp = ""
 		self.particleLocatorAim = ""
-		self.particleLocatorGoalOffsetStartPosition = (0, 0, 0)
-		self.particleLocatorGoalOffsetUpStartPosition = (0, 0, 0)
-		
+		self.particleLocatorGoalOffsetStartPosition = [0, 0, 0]
+		self.particleLocatorGoalOffsetUpStartPosition = [0, 0, 0]
+
 		### UI LAYOUTS
 		self.layoutLayers = None
 		# self.layoutCollisions = None # TODO
@@ -300,9 +303,9 @@ class Overlappy:
 		self.menuRadioButtonsLoop[3] = cmds.menuItem(label = "3", radioButton = True)
 		self.menuRadioButtonsLoop[4] = cmds.menuItem(label = "4", radioButton = True)
 
-		cmds.menu(label = "Select", tearOff = True)
-		cmds.menuItem(label = "Nucleus", command = self.SelectNucleus, image = Icons.nucleus)
-		cmds.menuItem(label = "Particles", command = self.SelectParticles, image = Icons.particle)
+		cmds.menu(label = "Utils", tearOff = True)
+		cmds.menuItem(label = "Select Nucleus", command = self.SelectNucleus, image = Icons.nucleus)
+		cmds.menuItem(label = "Select Particles", command = self.SelectParticles, image = Icons.particle)
 
 	def UILayoutLayers(self, layoutMain):
 		self.layoutLayers = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "LAYERS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -567,8 +570,8 @@ class Overlappy:
 			self.particleAimOffsetUp = [0, 0, valueAimUp]
 	def ParticleSetupInit(self, *args):
 		### Get selected objects
-		self.selectedObjects = Selector.MultipleObjects(minimalCount = 1)
-		if self.selectedObjects is None:
+		self.selectedObjectsFiltered = Selector.MultipleObjects(minimalCount = 1)
+		if self.selectedObjectsFiltered is None:
 			return False
 		
 		### Remove previous setup if exists
@@ -579,7 +582,7 @@ class Overlappy:
 		self.time.SetCurrent(self.time.values[2])
 		
 		### Get first selected object
-		self.selectedObjects = self.selectedObjects[0] # HACK is it ok to limit only by first element?
+		self.selectedObjectsFiltered = self.selectedObjectsFiltered[0] # HACK is it ok to limit only by first element?
 
 		### Create group
 		cmds.select(clear = True)
@@ -607,14 +610,14 @@ class Overlappy:
 		
 		### Create particle base setup
 		if mode in [1, 3]: # Point or Combo
-			particleSetupBase = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjects, nucleusNode = self.nucleus1, parentGroup = OverlappySettings.nameGroup)
+			particleSetupBase = PhysicsParticle.CreateParticleSetup(targetObject = self.selectedObjectsFiltered, nucleusNode = self.nucleus1, parentGroup = OverlappySettings.nameGroup)
 			self.particleBase = particleSetupBase[4]
 			self.particleLocator = particleSetupBase[6]
 			self.bakingObject = self.particleLocator
-		
+			
 		if mode in [2, 3]: # Aim or Combo
 			self.CompileParticleAimOffset()
-			targetObject = self.selectedObjects
+			targetObject = self.selectedObjectsFiltered
 			nucleusAim = self.nucleus1
 			if (mode == 3): # Combo
 				### Create second nucleus node
@@ -631,10 +634,13 @@ class Overlappy:
 			self.particleTarget = particleSetupOffset[4]
 			self.particleUp = particleAimSetup[1][4]
 			self.particleLocator = particleSetupOffset[6]
+			### Cache target position
 			self.particleLocatorGoalOffset = particleSetupOffset[7]
 			self.particleLocatorGoalOffsetStartPosition = cmds.xform(self.particleLocatorGoalOffset, query = True, translation = True, worldSpace = True)
+			### Cache up position
 			self.particleLocatorGoalOffsetUp = particleAimSetup[1][7]
 			self.particleLocatorGoalOffsetUpStartPosition = cmds.xform(self.particleLocatorGoalOffsetUp, query = True, translation = True, worldSpace = True)
+			### Cache other
 			self.particleLocatorAim = particleAimSetup[0]
 			self.bakingObject = self.particleLocatorAim
 		
@@ -646,7 +652,7 @@ class Overlappy:
 
 		### End
 		self.UpdateParticleSettings()
-		cmds.select(self.selectedObjects, replace = True)
+		cmds.select(self.selectedObjectsFiltered, replace = True)
 	def ParticleSetupDelete(self, deselect=False, clearCache=True, *args):
 		### Deselect objects
 		if (deselect):
@@ -680,6 +686,19 @@ class Overlappy:
 	
 
 	### SETTINGS
+	def RefreshParticlePosition(self, *args): # TODO rework particle offset logic and add refresh method
+		currentPosition = cmds.xform(self.selectedObjects[0], query = True, translation = True, worldSpace = True)
+		offset = [currentPosition[0] - self.selectedObjectsStartPosition[0], currentPosition[1] - self.selectedObjectsStartPosition[1], currentPosition[2] - self.selectedObjectsStartPosition[2]]
+
+		if (cmds.objExists(self.particleBase)):
+			cmds.xform(self.particleBase, translation = offset, worldSpace = True)
+		
+		if (cmds.objExists(self.particleTarget)):
+			cmds.xform(self.particleTarget, translation = offset, worldSpace = True)
+		
+		if (cmds.objExists(self.particleUp)):
+			cmds.xform(self.particleUp, translation = offset, worldSpace = True)
+
 	def UpdateParticleAllSettings(self, *args):
 		self.UpdateParticleAimOffsetSettings()
 		self.UpdateParticleSettings()
@@ -977,7 +996,7 @@ class Overlappy:
 		### Construct attributes with object name
 		attributes = []
 		for i in range(len(attributesType)):
-			attributes.append("{0}.{1}".format(self.selectedObjects, attributesType[i]))
+			attributes.append("{0}.{1}".format(self.selectedObjectsFiltered, attributesType[i]))
 		
 		### Filter attributes
 		attributesFiltered = Attributes.FilterAttributesAnimatable(attributes = attributes, skipMutedKeys = True)
@@ -988,29 +1007,30 @@ class Overlappy:
 		
 		### Cut object name from attributes
 		for i in range(len(attributesFiltered)):
-			attributesFiltered[i] = attributesFiltered[i].replace(self.selectedObjects + ".", "")
+			attributesFiltered[i] = attributesFiltered[i].replace(self.selectedObjectsFiltered + ".", "")
 		
 		### Cut object name from attributes and Set keys for target object attributes
-		if (attributesFilteredForKey != None):
+		if attributesFilteredForKey is not None:
 			for i in range(len(attributesFilteredForKey)):
-				attributesFilteredForKey[i] = attributesFilteredForKey[i].replace(self.selectedObjects + ".", "")
-			cmds.setKeyframe(self.selectedObjects, attribute = attributesFilteredForKey)
+				attributesFilteredForKey[i] = attributesFilteredForKey[i].replace(self.selectedObjectsFiltered + ".", "")
+			cmds.setKeyframe(self.selectedObjectsFiltered, attribute = attributesFilteredForKey)
 		
 		### Set time range
 		self.time.Scan()
 		startTime = self.time.values[2]
 		self.time.SetCurrent(startTime)
-		if (self.menuCheckboxLoop.Get()):
+		if self.menuCheckboxLoop.Get():
 			startTime = self.time.values[2] - self.time.values[3] * self.GetLoopCyclesIndex()
 			self.time.SetMin(startTime)
 			self.time.SetCurrent(startTime)
+			self.RefreshParticlePosition()
 		cmds.setAttr(self.nucleus1 + ".startFrame", startTime)
-		if (cmds.objExists(self.nucleus2)):
+		if cmds.objExists(self.nucleus2):
 			cmds.setAttr(self.nucleus2 + ".startFrame", startTime)
 
 		### Start logic
-		name = "_rebake_" + Text.ConvertSymbols(self.selectedObjects)
-		objectDuplicate = cmds.duplicate(self.selectedObjects, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)[0]
+		name = "_rebake_" + Text.ConvertSymbols(self.selectedObjectsFiltered)
+		objectDuplicate = cmds.duplicate(self.selectedObjectsFiltered, name = name, parentOnly = True, transformsOnly = True, smartTransform = True, returnRootsOnly = True)[0]
 		cmds.select(clear = True)
 		for attributeTranslate in Enums.Attributes.translateLong:
 			cmds.setAttr(objectDuplicate + "." + attributeTranslate, lock = False)
@@ -1027,39 +1047,39 @@ class Overlappy:
 		cmds.copyKey(objectDuplicate, time = (self.time.values[2], self.time.values[3]), attribute = attributesFiltered)
 		useLayers = self.menuCheckboxLayer.Get()
 		if (useLayers):
-			name = OverlappySettings.nameLayers[2] + self.selectedObjects
+			name = OverlappySettings.nameLayers[2] + self.selectedObjectsFiltered
 			animLayer = self.LayerCreate(name)
 			attrsLayer = []
 			for attributeFiltered in attributesFiltered:
-				attrsLayer.append("{0}.{1}".format(self.selectedObjects, attributeFiltered))
+				attrsLayer.append("{0}.{1}".format(self.selectedObjectsFiltered, attributeFiltered))
 			cmds.animLayer(animLayer, edit = True, attribute = attrsLayer)
-			cmds.pasteKey(self.selectedObjects, option = "replace", attribute = attributesFiltered, animLayer = animLayer)
+			cmds.pasteKey(self.selectedObjectsFiltered, option = "replace", attribute = attributesFiltered, animLayer = animLayer)
 		else:
-			cmds.pasteKey(self.selectedObjects, option = "replaceCompletely", attribute = attributesFiltered)
+			cmds.pasteKey(self.selectedObjectsFiltered, option = "replaceCompletely", attribute = attributesFiltered)
 		cmds.delete(objectDuplicate)
 
-		### Set time range
+		### Set nucleus time range
 		if (self.menuCheckboxLoop.Get()):
 			startTime = self.time.values[2]
 			cmds.setAttr(self.nucleus1 + ".startFrame", startTime)
 			if (cmds.objExists(self.nucleus2)):
 				cmds.setAttr(self.nucleus2 + ".startFrame", startTime)
 			self.time.Reset()
-			Animation.SetInfinityCycle(self.selectedObjects)
+			Animation.SetInfinityCycle(self.selectedObjectsFiltered)
 		else:
-			Animation.SetInfinityConstant(self.selectedObjects)
+			Animation.SetInfinityConstant(self.selectedObjectsFiltered)
 		
 		### Delete setup
 		if (self.menuCheckboxDeleteSetup.Get()):
 			self.ParticleSetupDelete(clearCache = True)
 		return True
 	def BakeParticleVariants(self, variant, *args):
-		selected = Selector.MultipleObjects(minimalCount = 1)
-		if selected is None:
+		self.selectedObjects = Selector.MultipleObjects(minimalCount = 1)
+		if self.selectedObjects is None:
 			if (not self.setupCreated):
 				cmds.warning("Can't bake animation. Nothing selected and particle setup is not created")
 				return
-		
+
 		### Check zero particle offset
 		self.CompileParticleAimOffset()
 		sumOffsetTarget = self.particleAimOffsetTarget[0] + self.particleAimOffsetTarget[1] + self.particleAimOffsetTarget[2]
@@ -1081,26 +1101,34 @@ class Overlappy:
 						)
 					if (dialogResult == "Cancel"):
 						cmds.warning("Overlappy Rotation Baking cancelled")
+						self.selectedObjects = None
 						return
 
 		MayaSettings.CachedPlaybackDeactivate()
+		
+		### Cache initial position for the first selected object
+		self.time.Scan()
+		self.time.Reset()
+		self.selectedObjectsStartPosition = cmds.xform(self.selectedObjects[0], query = True, translation = True, worldSpace = True)
 
 		### Run baking process
-		if (variant == 0 or selected is None):
+		if (variant == 0 or self.selectedObjects is None):
 			wasBakedSuccessfully = self.BakeParticleLogic()
 			if (wasBakedSuccessfully):
-				cmds.select(self.selectedObjects, replace = True)
+				cmds.select(self.selectedObjectsFiltered, replace = True)
 		else:
 			### Check hierarchy and get objects
 			if (self.menuCheckboxHierarchy.Get()):
-				selected = Selector.SelectHierarchyTransforms()
+				self.selectedObjects = Selector.SelectHierarchyTransforms()
 			### Bake
-			for i in range(len(selected)):
-				cmds.select(selected[i], replace = True)
+			for i in range(len(self.selectedObjects)):
+				cmds.select(self.selectedObjects[i], replace = True)
 				self.ParticleSetupLogic(variant)
 				self.BakeParticleLogic()
 			### Select original objects
-			cmds.select(selected, replace = True)
+			cmds.select(self.selectedObjects, replace = True)
+		self.RefreshParticlePosition()
+		self.selectedObjects = None
 
 
 	### LAYERS
