@@ -27,16 +27,15 @@ import math
 from ..utils import Text
 
 
-nameGroup = "grpPolygon"
-namePolygon = "customPolygon"
-nameLocator = "locator_"
-nameCluster = "cluster_"
-
-
 def CreatePolygonWithLocators(countPoints=3, radius=10, rotation=0):
 	if countPoints < 3:
 		cmds.warning("Number of points must be 3 or more to create a polygon")
 		return None
+	
+	nameGroup = "grpPolygon"
+	namePolygon = "customPolygon"
+	nameLocator = "locator_"
+	nameCluster = "cluster_"
 	
 	### Create main group as a container for all new objects
 	mainGroup = cmds.group(name = Text.SetUniqueFromText(nameGroup), empty = True)
@@ -90,5 +89,34 @@ def CreatePolygonWithLocators(countPoints=3, radius=10, rotation=0):
 	### Select polygon
 	cmds.select(poly, replace = True)
 
-	return poly, locators, handles
+	return mainGroup, poly, locators, handles
+
+def CreateLocatorProjectedToMesh(mesh, createInsideOutsideLogic=False, *args):
+	### Names
+	nameLocatorOriginal = "locOriginal"
+	nameLocatorProjected = "locProjected"
+
+	### Get shape of mesh
+	meshShape = cmds.listRelatives(mesh, shapes = True, fullPath = False)[0]
+
+	### Create locators
+	locatorOriginal = cmds.spaceLocator(name = nameLocatorOriginal)[0]
+	locatorProjected = cmds.spaceLocator(name = nameLocatorProjected)[0]
+
+	### Create closestPointOnMesh node
+	closestPointOnMeshNode = cmds.createNode("closestPointOnMesh")
+
+	### Connect locators to closestPointOnMesh node
+	cmds.connectAttr(meshShape + ".worldMesh[0]", closestPointOnMeshNode + ".inMesh")
+	cmds.connectAttr(meshShape + ".worldMatrix[0]", closestPointOnMeshNode + ".inputMatrix")
+	cmds.connectAttr(locatorOriginal + ".translate", closestPointOnMeshNode + ".inPosition")
+	cmds.connectAttr(closestPointOnMeshNode + ".position", locatorProjected + ".translate")
+
+	if createInsideOutsideLogic:
+		### Create inside/outside logic
+		# floatConstantNode = cmds.createNode("floatConstant")
+		# floatMathNode = cmds.createNode("floatMath")
+		# floatLogicNode = cmds.createNode("floatLogic")
+		# colorConditionNode = cmds.createNode("colorCondition")
+		print("TODO: Create Inside Outside Logic")
 
