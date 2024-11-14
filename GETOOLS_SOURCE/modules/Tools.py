@@ -212,7 +212,9 @@ class Tools:
 		cmds.popupMenu()
 		cmds.menuItem(label = "Skip Last Object Reverse Constraint", command = self.LocatorsRelativeReverseSkipLast)
 		cmds.menuItem(label = "Without Reverse Constraint", command = self.LocatorsRelative)
-		cmds.button(label = "Chain Distribution", command = self.CreateChainDistributionRig, backgroundColor = Colors.purple10, annotation = ToolsAnnotations.chainDistribution)
+		cmds.button(label = "Chain Distribution", command = partial(self.CreateChainDistributionRig, 1), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.chainDistribution)
+		cmds.popupMenu()
+		cmds.menuItem(label = "Alternative Mode", command = partial(self.CreateChainDistributionRig, 2))
 
 		### AIM SPACE SWITCHING
 		layoutAimSpace = cmds.frameLayout(parent = layoutColumn, label = "Aim Space Switching", labelIndent = 75, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
@@ -401,8 +403,11 @@ class Tools:
 			cmds.warning("Aim distance is 0. Highly recommended to use non-zero value.")
 
 	### CHAIN DISTRIBUTION RIG
-	def CreateChainDistributionRig(self, *args):
-		ChainDistributionRig.CreateRigVariant1(controlSize = self.GetFloatLocatorSize())
+	def CreateChainDistributionRig(self, mode=1, *args):
+		if mode is 1:
+			ChainDistributionRig.CreateRigVariant1(controlSize = self.GetFloatLocatorSize())
+		if mode is 2:
+			ChainDistributionRig.CreateRigVariant2(controlSize = self.GetFloatLocatorSize())
 
 
 	### BAKING

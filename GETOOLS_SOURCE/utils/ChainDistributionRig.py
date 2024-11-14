@@ -105,7 +105,6 @@ def CreateRigVariant2(controlSize=_controlSize, *args):
 	### Nodes names
 	nameMultiplyDivide = "gtMultiplyDivide"
 
-
 	### Create a list of names from selected objects
 	selected = cmds.ls(selection = True)
 	
