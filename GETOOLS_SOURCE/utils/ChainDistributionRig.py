@@ -24,6 +24,7 @@
 import maya.cmds as cmds
 
 from ..utils import Selector
+from ..utils import Text
 
 
 _controlSize = 100
@@ -45,7 +46,7 @@ def CreateRigVariant1(controlSize=_controlSize, *args):
 	selected = cmds.ls(selection = True)
 	
 	### Create main group as a container for all new objects
-	mainGroup = cmds.group(name = _nameGroupMain + selected[-1], empty = True)
+	mainGroup = cmds.group(name = Text.SetUniqueFromText(_nameGroupMain + selected[-1]), empty = True)
 	
 	### Init empty lists for groups and locators
 	locators = []
@@ -57,7 +58,7 @@ def CreateRigVariant1(controlSize=_controlSize, *args):
 	### Loop through each selected object, create groups, locators and parent them
 	for i in range(count):
 		### Create locator # TODO nurbs circle as control instead of locator (optional)
-		locator = cmds.spaceLocator(name = _nameLocatorPrefix + selected[i])[0]
+		locator = cmds.spaceLocator(name = Text.SetUniqueFromText(_nameLocatorPrefix + selected[i]))[0]
 		locators.append(locator)
 		cmds.setAttr(locator + "Shape.localScaleX", controlSize)
 		cmds.setAttr(locator + "Shape.localScaleY", controlSize)
