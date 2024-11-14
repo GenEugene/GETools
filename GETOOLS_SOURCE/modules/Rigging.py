@@ -25,7 +25,6 @@ import maya.cmds as cmds
 from functools import partial
 
 from .. import Settings
-from ..modules import Options
 from ..utils import Blendshapes
 from ..utils import Colors
 from ..utils import Constraints
@@ -77,8 +76,13 @@ class Rigging:
 	_name = "RIGGING"
 	_title = _name + " " + _version
 
-	def __init__(self, options: Options.PluginVariables):
+	def __init__(self, options):
 		self.optionsPlugin = options
+		### Check Maya version to avoid cycle import, Maya 2020 and older can't use cycle import
+		if cmds.about(version = True) in ["2022", "2023", "2024", "2025"]:
+			from ..modules import Options
+			if isinstance(options, Options.PluginVariables):
+				self.optionsPlugin = options
 		
 		self.checkboxConstraintReverse = None
 		self.checkboxConstraintMaintain = None

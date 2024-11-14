@@ -1,37 +1,41 @@
 GETools changelog
 
+v1.4.4
+- added Maya version check to avoid compatibility issues with Maya 2020 and older.
+- removed requirement to use separate GETools version for Maya 2020.
+
 v1.4.3
-- [OVERLAPPY] fixed loop mode with rootmotion
+- [OVERLAPPY] fixed loop mode with rootmotion.
 
 v1.4.2
-- [OVERLAPPY] added default preset auto loading. If not exists, use Built-in preset
-- [OVERLAPPY] removed "Reset Settings" button
+- [OVERLAPPY] added default preset auto loading. If not exists, use Built-in preset.
+- [OVERLAPPY] removed "Reset Settings" button.
 
 v1.4.1
-- fixed global variables referencing between all GETools modules (Maya 2020 and older can't use these features)
-- added separate Github branch for Maya version 2020
+- fixed global variables referencing between all GETools modules (Maya 2020 and older can't use these features).
+- added separate Github branch for Maya version 2020.
 
 v1.4.0
-- [TOOLS] added "Polygon With Locators" button to create custom polygons with locators for each vertex
-- [TOOLS] extracted Rigging UI code blocks to separate functions
-- [UTILS] removed "Print Animatable Attributes With Shapes" button because of redundancy
-- [UI] changed some button names
+- [TOOLS] added "Polygon With Locators" button to create custom polygons with locators for each vertex.
+- [TOOLS] extracted Rigging UI code blocks to separate functions.
+- [UTILS] removed "Print Animatable Attributes With Shapes" button because of redundancy.
+- [UI] changed some button names.
 
 v1.3.8
-- [CENTER OF MASS] fixed constraining to multiple selected objects
-- [CENTER OF MASS] simplified UI buttons, removed redundant and merge similar
+- [CENTER OF MASS] fixed constraining to multiple selected objects.
+- [CENTER OF MASS] simplified UI buttons, removed redundant and merge similar.
 
 v1.3.7
-- [OVERLAPPY] fixed "Load/Save Settings" missing path to folder after Getools was restarted through "Restart GETools" button
+- [OVERLAPPY] fixed "Load/Save Settings" missing path to folder after Getools was restarted through "Restart GETools" button.
 
 v1.3.6
-- added link for Tutorial Video button
+- added link for Tutorial Video button.
 
 v1.3.5
-- [RIGGING] fixed bug with constraining same object multiple times to create more than 1 parent
+- [RIGGING] fixed bug with constraining same object multiple times to create more than 1 parent.
 
 v1.3.4
-- [RIGGING] fixed bug with constraint reverse checkbox
+- [RIGGING] fixed bug with constraint reverse checkbox.
 
 v1.3.3
 - [OVERLAPPY] fixed new keys generation if original object already has animation curve on attribute.
