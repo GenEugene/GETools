@@ -110,7 +110,7 @@ def CreateRigVariant2(controlSize=_controlSize, *args):
 	selected = cmds.ls(selection = True)
 	
 	### Create main group as a container for all new objects
-	mainGroup = cmds.group(name = _nameGroupMain + selected[-1], empty = True)
+	mainGroup = cmds.group(name = Text.SetUniqueFromText(_nameGroupMain + selected[-1]), empty = True)
 	
 	### Init empty lists for groups and locators
 	groupsFixed = []
@@ -124,15 +124,15 @@ def CreateRigVariant2(controlSize=_controlSize, *args):
 	### Loop through each selected object, create groups, locators and parent them
 	for i in range(count):
 		### Create fixed group
-		groupFixed = cmds.group(name = nameGroupFixedPrefix + selected[i], empty = True)
+		groupFixed = cmds.group(name = Text.SetUniqueFromText(nameGroupFixedPrefix + selected[i]), empty = True)
 		groupsFixed.append(groupFixed)
 
 		### Create distribution group
-		groupDistributed = cmds.group(name = nameGroupDistributedPrefix + selected[i], empty = True)
+		groupDistributed = cmds.group(name = Text.SetUniqueFromText(nameGroupDistributedPrefix + selected[i]), empty = True)
 		groupsDistributed.append(groupDistributed)
 		
 		### Create locator # TODO use nurbs circle [circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 1e-05 -s 8 -ch 1; objectMoveCommand;]
-		locator = cmds.spaceLocator(name = _nameLocatorPrefix + selected[i])[0]
+		locator = cmds.spaceLocator(name = Text.SetUniqueFromText(_nameLocatorPrefix + selected[i]))[0]
 		locators.append(locator)
 		cmds.setAttr(locator + "Shape.localScaleX", controlSize)
 		cmds.setAttr(locator + "Shape.localScaleY", controlSize)
@@ -181,7 +181,7 @@ def CreateRigVariant2(controlSize=_controlSize, *args):
 	cmds.setAttr(locators[-1] + "." + nameAttributeWeight, edit = True, keyable = True)
 	
 	### Create MultiplyDivide node
-	nodeMultiplyDivide = cmds.createNode("multiplyDivide", name = nameMultiplyDivide)
+	nodeMultiplyDivide = cmds.createNode("multiplyDivide", name = Text.SetUniqueFromText(nameMultiplyDivide))
 	cmds.setAttr(nodeMultiplyDivide + ".operation", 2)
 	
 	### Connect rotation and weight to MultiplyDivide node
