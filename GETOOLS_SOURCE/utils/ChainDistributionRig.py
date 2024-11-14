@@ -83,7 +83,7 @@ def CreateRigVariant1(controlSize=_controlSize, *args):
 		cmds.orientConstraint(locators[i], selected[i], maintainOffset = False)
 
 		if (i > 0 and i < count - 1):
-			cmds.orientConstraint(locators[i - 1], locators[i], maintainOffset = True)
+			cmds.orientConstraint(locators[0], locators[i], maintainOffset = True)
 			cmds.orientConstraint(locators[i + 1], locators[i], maintainOffset = True)
 
 	### Select last locator
