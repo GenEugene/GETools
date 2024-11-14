@@ -64,7 +64,7 @@ class ToolsAnnotations:
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
 	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
 	#
-	chainDistribution = "Create chain with distributed rotation. Use last locator to animate.\nPerfectly works with 3 selected objects.\nYou can use it for 4 and more selected objects, but be ready for unpredicted behavior."
+	chainDistribution = "Create a chain with distributed rotation. Use the last locator to animate.\nWorks better with 3 selected objects.\nIf you select 4+ objects, the original animation will not be fully preserved.\n\nRight-click to use the alternate mode to preserve 100% of the original animation with any number of selected objects.\nIt is not as convenient to use as the default mode."
 	
 	# locatorAimSpace = "Locator Aim distance from original object. Need to use non-zero value"
 	locatorAimSpace = "Aim Space offset from original object.\nNeed to use non-zero value to get best result"
@@ -207,7 +207,7 @@ class Tools:
 		cmds.button(label = "P-ROT", command = partial(self.LocatorsBakeReverse, False, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverseRot)
 
 		### LOCATORS ROW 2
-		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 2, columnWidth2 = (110, 160), columnAlign = [(1, "center"), (2, "center")], columnAttach = [(1, "both", 0), (2, "both", 0)])
+		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 2, columnWidth2 = (113, 160), columnAlign = [(1, "center"), (2, "center")], columnAttach = [(1, "both", 0), (2, "both", 0)])
 		cmds.button(label = "Relative", command = self.LocatorsRelativeReverse, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorsRelativeReverse)
 		cmds.popupMenu()
 		cmds.menuItem(label = "Skip Last Object Reverse Constraint", command = self.LocatorsRelativeReverseSkipLast)
