@@ -92,16 +92,17 @@ def CreatePolygonWithLocators(countPoints=3, radius=10, rotation=0):
 	return mainGroup, poly, locators, handles
 
 def CreateLocatorProjectedToMesh(mesh, createInsideOutsideLogic=False, *args):
-	### Names
-	nameLocatorOriginal = "locOriginal"
-	nameLocatorProjected = "locProjected"
+	### Variables
+	_nameLocatorOriginal = "locOriginal"
+	_nameLocatorProjected = "locProjected"
+	_borderOffset = 0.01
 
 	### Get shape of mesh
 	meshShape = cmds.listRelatives(mesh, shapes = True, fullPath = False)[0]
 
 	### Create locators
-	locatorOriginal = cmds.spaceLocator(name = nameLocatorOriginal)[0]
-	locatorProjected = cmds.spaceLocator(name = nameLocatorProjected)[0]
+	locatorOriginal = cmds.spaceLocator(name = _nameLocatorOriginal)[0]
+	locatorProjected = cmds.spaceLocator(name = _nameLocatorProjected)[0]
 
 	### Create closestPointOnMesh node
 	closestPointOnMeshNode = cmds.createNode("closestPointOnMesh")
@@ -114,9 +115,84 @@ def CreateLocatorProjectedToMesh(mesh, createInsideOutsideLogic=False, *args):
 
 	if createInsideOutsideLogic:
 		### Create inside/outside logic
-		# floatConstantNode = cmds.createNode("floatConstant")
-		# floatMathNode = cmds.createNode("floatMath")
-		# floatLogicNode = cmds.createNode("floatLogic")
-		# colorConditionNode = cmds.createNode("colorCondition")
-		print("TODO: Create Inside Outside Logic")
+		floatConstantNode = cmds.createNode("floatConstant")
+		cmds.setAttr(floatConstantNode + ".inFloat", _borderOffset)
+
+		### Create nodes for X branch
+		floatMathNodeX1 = cmds.createNode("floatMath")
+		floatLogicNodeX1 = cmds.createNode("floatLogic")
+		floatMathNodeX2 = cmds.createNode("floatMath")
+		floatLogicNodeX2 = cmds.createNode("floatLogic")
+		floatLogicNodeX = cmds.createNode("floatLogic")
+
+		cmds.setAttr(floatMathNodeX1 + ".operation", 0)
+		cmds.setAttr(floatLogicNodeX1 + ".operation", 3)
+		cmds.setAttr(floatMathNodeX2 + ".operation", 1)
+		cmds.setAttr(floatLogicNodeX2 + ".operation", 2)
+		cmds.setAttr(floatLogicNodeX + ".operation", 0)
+
+		cmds.connectAttr(closestPointOnMeshNode + ".inPositionX", floatMathNodeX1 + ".floatA")
+		cmds.connectAttr(floatConstantNode + ".outFloat", floatMathNodeX1 + ".floatB")
+		cmds.connectAttr(floatMathNodeX1 + ".outFloat", floatLogicNodeX1 + ".floatA")
+		cmds.connectAttr(closestPointOnMeshNode + ".positionX", floatLogicNodeX1 + ".floatB")
+
+		cmds.connectAttr(closestPointOnMeshNode + ".inPositionX", floatMathNodeX2 + ".floatA")
+		cmds.connectAttr(floatConstantNode + ".outFloat", floatMathNodeX2 + ".floatB")
+		cmds.connectAttr(floatMathNodeX2 + ".outFloat", floatLogicNodeX2 + ".floatA")
+		cmds.connectAttr(closestPointOnMeshNode + ".positionX", floatLogicNodeX2 + ".floatB")
+
+		cmds.connectAttr(floatLogicNodeX1 + ".outBool", floatLogicNodeX + ".floatA")
+		cmds.connectAttr(floatLogicNodeX2 + ".outBool", floatLogicNodeX + ".floatB")
+
+		### Create nodes for Z branch
+		floatMathNodeZ1 = cmds.createNode("floatMath")
+		floatLogicNodeZ1 = cmds.createNode("floatLogic")
+		floatMathNodeZ2 = cmds.createNode("floatMath")
+		floatLogicNodeZ2 = cmds.createNode("floatLogic")
+		floatLogicNodeZ = cmds.createNode("floatLogic")
+
+		cmds.setAttr(floatMathNodeZ1 + ".operation", 0)
+		cmds.setAttr(floatLogicNodeZ1 + ".operation", 3)
+		cmds.setAttr(floatMathNodeZ2 + ".operation", 1)
+		cmds.setAttr(floatLogicNodeZ2 + ".operation", 2)
+		cmds.setAttr(floatLogicNodeZ + ".operation", 0)
+
+		cmds.connectAttr(closestPointOnMeshNode + ".inPositionZ", floatMathNodeZ1 + ".floatA")
+		cmds.connectAttr(floatConstantNode + ".outFloat", floatMathNodeZ1 + ".floatB")
+		cmds.connectAttr(floatMathNodeZ1 + ".outFloat", floatLogicNodeZ1 + ".floatA")
+		cmds.connectAttr(closestPointOnMeshNode + ".positionZ", floatLogicNodeZ1 + ".floatB")
+
+		cmds.connectAttr(closestPointOnMeshNode + ".inPositionZ", floatMathNodeZ2 + ".floatA")
+		cmds.connectAttr(floatConstantNode + ".outFloat", floatMathNodeZ2 + ".floatB")
+		cmds.connectAttr(floatMathNodeZ2 + ".outFloat", floatLogicNodeZ2 + ".floatA")
+		cmds.connectAttr(closestPointOnMeshNode + ".positionZ", floatLogicNodeZ2 + ".floatB")
+
+		cmds.connectAttr(floatLogicNodeZ1 + ".outBool", floatLogicNodeZ + ".floatA")
+		cmds.connectAttr(floatLogicNodeZ2 + ".outBool", floatLogicNodeZ + ".floatB")
+
+
+		### Create nodes for combined X and Z
+		floatMathNodeCombined = cmds.createNode("floatMath")
+		floatLogicCombinedNode = cmds.createNode("floatLogic")
+		colorConditionNode = cmds.createNode("colorCondition")
+
+		cmds.connectAttr(floatLogicNodeX + ".outBool", floatMathNodeCombined + ".floatA")
+		cmds.connectAttr(floatLogicNodeZ + ".outBool", floatMathNodeCombined + ".floatB")
+
+		cmds.setAttr(floatLogicCombinedNode + ".operation", 3)
+
+		cmds.connectAttr(floatMathNodeCombined + ".outFloat", floatLogicCombinedNode + ".floatA")
+		cmds.connectAttr(floatLogicCombinedNode + ".outBool", colorConditionNode + ".condition")
+
+		cmds.setAttr(colorConditionNode + ".colorA", 0, 1, 0, type = "double3")
+		cmds.setAttr(colorConditionNode + ".colorB", 1, 0, 0, type = "double3")
+		cmds.setAttr(mesh + ".useOutlinerColor", True)
+		cmds.connectAttr(colorConditionNode + ".outColor", mesh + ".outlinerColor")
+
+		# Create Lambert and shading group
+		material = cmds.shadingNode("lambert", asShader = True, name = "lambertMaterialProjection")
+		shadingGroup = cmds.sets(renderable = True, noSurfaceShader = True, empty = True, name = material + "SG")
+		cmds.connectAttr(material + ".outColor", shadingGroup + ".surfaceShader", force = True)
+		cmds.sets(mesh, edit = True, forceElement = shadingGroup)
+		cmds.connectAttr(colorConditionNode + ".outColor", material + ".color")
 
