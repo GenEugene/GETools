@@ -115,7 +115,7 @@ class ToolsSettings:
 	aimSpaceRadioButtonDefault = 0
 
 class Tools:
-	_version = "v1.3"
+	_version = "v1.4"
 	_name = "TOOLS"
 	_title = _name + " " + _version
 

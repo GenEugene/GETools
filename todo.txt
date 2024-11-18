@@ -1,7 +1,6 @@
 GETools TODO List
 
 [TOOLS]
-- chain distribution rig
 - pin scale
 - rotate Order rebake
 - relative Camera
