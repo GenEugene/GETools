@@ -38,6 +38,7 @@ def CreateRigVariant1(controlSize=_controlSize, *args):
 	if (selectedList == None):
 		return
 
+	timeCurrent = cmds.currentTime(query = True)
 	timeMin = cmds.playbackOptions(query = True, min = True)
 	timeMax = cmds.playbackOptions(query = True, max = True)
 	cmds.currentTime(timeMin, edit = True, update = True)
@@ -89,6 +90,7 @@ def CreateRigVariant1(controlSize=_controlSize, *args):
 
 	### Select last locator
 	cmds.select(locators[-1], replace = True)
+	cmds.currentTime(timeCurrent, edit = True, update = True)
 
 def CreateRigVariant2(controlSize=_controlSize, *args):
 	# Check selected objects
