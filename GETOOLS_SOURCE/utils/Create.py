@@ -95,14 +95,15 @@ def CreateLocatorProjectedToMesh(mesh, createInsideOutsideLogic=False, *args):
 	### Variables
 	_nameLocatorOriginal = "locOriginal"
 	_nameLocatorProjected = "locProjected"
+	_nameLambertMaterialProjection = "matGEToolsProjection"
 	_borderOffset = 0.01
 
 	### Get shape of mesh
 	meshShape = cmds.listRelatives(mesh, shapes = True, fullPath = False)[0]
 
 	### Create locators
-	locatorOriginal = cmds.spaceLocator(name = _nameLocatorOriginal)[0]
-	locatorProjected = cmds.spaceLocator(name = _nameLocatorProjected)[0]
+	locatorOriginal = cmds.spaceLocator(name = Text.SetUniqueFromText(_nameLocatorOriginal))[0]
+	locatorProjected = cmds.spaceLocator(name = Text.SetUniqueFromText(_nameLocatorProjected))[0]
 
 	### Create closestPointOnMesh node
 	closestPointOnMeshNode = cmds.createNode("closestPointOnMesh")
@@ -190,8 +191,8 @@ def CreateLocatorProjectedToMesh(mesh, createInsideOutsideLogic=False, *args):
 		cmds.connectAttr(colorConditionNode + ".outColor", mesh + ".outlinerColor")
 
 		# Create Lambert and shading group
-		material = cmds.shadingNode("lambert", asShader = True, name = "lambertMaterialProjection")
-		shadingGroup = cmds.sets(renderable = True, noSurfaceShader = True, empty = True, name = material + "SG")
+		material = cmds.shadingNode("lambert", asShader = True, name = Text.SetUniqueFromText(_nameLambertMaterialProjection))
+		shadingGroup = cmds.sets(renderable = True, noSurfaceShader = True, empty = True, name = Text.SetUniqueFromText(material + "SG"))
 		cmds.connectAttr(material + ".outColor", shadingGroup + ".surfaceShader", force = True)
 		cmds.sets(mesh, edit = True, forceElement = shadingGroup)
 		cmds.connectAttr(colorConditionNode + ".outColor", material + ".color")
