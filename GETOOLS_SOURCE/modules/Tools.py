@@ -405,9 +405,9 @@ class Tools:
 	### CHAIN DISTRIBUTION RIG
 	def CreateChainDistributionRig(self, mode=1, *args):
 		if mode is 1:
-			ChainDistributionRig.CreateRigVariant1(controlSize = self.GetFloatLocatorSize())
+			ChainDistributionRig.CreateRigVariant1(locatorSize = self.GetFloatLocatorSize())
 		if mode is 2:
-			ChainDistributionRig.CreateRigVariant2(controlSize = self.GetFloatLocatorSize())
+			ChainDistributionRig.CreateRigVariant2(locatorSize = self.GetFloatLocatorSize())
 
 
 	### BAKING

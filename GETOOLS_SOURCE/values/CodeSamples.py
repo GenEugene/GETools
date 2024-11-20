@@ -227,6 +227,14 @@ def LocatorsRelativeWithoutReverse():
 	import GETOOLS_SOURCE.utils.Locators as Locators
 	Locators.CreateAndBakeAsChildrenFromLastSelected()
 
+def LocatorsChainDistribution1():
+	import GETOOLS_SOURCE.utils.ChainDistributionRig as ChainDistributionRig
+	ChainDistributionRig.CreateRigVariant1(locatorSize = 10)
+
+def LocatorsChainDistribution2():
+	import GETOOLS_SOURCE.utils.ChainDistributionRig as ChainDistributionRig
+	ChainDistributionRig.CreateRigVariant2(locatorSize = 10)
+
 def LocatorsAim(): # brackets added when method used
 	import GETOOLS_SOURCE.utils.Locators as Locators
 	Locators.CreateOnSelectedAim

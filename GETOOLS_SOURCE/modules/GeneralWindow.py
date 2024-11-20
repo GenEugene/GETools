@@ -277,6 +277,11 @@ class GeneralWindow:
 		cmds.menuItem(label = "Without Reverse Constraint", command = partial(Install.ToShelf_LocatorsRelativeWithoutReverse, self.optionsPlugin.directory))
 		cmds.setParent('..', menu = True)
 		#
+		cmds.menuItem(subMenu = True, label = "Chain Distribution", tearOff = True, image = Icons.pinInvert)
+		cmds.menuItem(label = "Default Mode", command = partial(Install.ToShelf_LocatorsChainDistribution1, self.optionsPlugin.directory))
+		cmds.menuItem(label = "Alternative Mode", command = partial(Install.ToShelf_LocatorsChainDistribution2, self.optionsPlugin.directory))
+		cmds.setParent('..', menu = True)
+		#
 		cmds.menuItem(subMenu = True, label = "Aim", tearOff = True, image = Icons.pin)
 		minus = "-"
 		plus = "+"

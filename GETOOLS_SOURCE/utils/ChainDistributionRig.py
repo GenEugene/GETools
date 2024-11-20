@@ -27,12 +27,12 @@ from ..utils import Selector
 from ..utils import Text
 
 
-_controlSize = 100
+_locatorSize = 100
 _nameGroupMain = "grpChain_"
 _nameLocatorPrefix = "loc_"
 
 
-def CreateRigVariant1(controlSize=_controlSize, *args):
+def CreateRigVariant1(locatorSize=_locatorSize, *args):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minimalCount = 1)
 	if (selectedList == None):
@@ -61,9 +61,9 @@ def CreateRigVariant1(controlSize=_controlSize, *args):
 		### Create locator # TODO nurbs circle as control instead of locator (optional)
 		locator = cmds.spaceLocator(name = Text.SetUniqueFromText(_nameLocatorPrefix + selected[i]))[0]
 		locators.append(locator)
-		cmds.setAttr(locator + "Shape.localScaleX", controlSize)
-		cmds.setAttr(locator + "Shape.localScaleY", controlSize)
-		cmds.setAttr(locator + "Shape.localScaleZ", controlSize)
+		cmds.setAttr(locator + "Shape.localScaleX", locatorSize)
+		cmds.setAttr(locator + "Shape.localScaleY", locatorSize)
+		cmds.setAttr(locator + "Shape.localScaleZ", locatorSize)
 		
 		### Parent locator to group
 		cmds.parent(locator, mainGroup)
@@ -92,7 +92,7 @@ def CreateRigVariant1(controlSize=_controlSize, *args):
 	cmds.select(locators[-1], replace = True)
 	cmds.currentTime(timeCurrent, edit = True, update = True)
 
-def CreateRigVariant2(controlSize=_controlSize, *args):
+def CreateRigVariant2(locatorSize=_locatorSize, *args):
 	# Check selected objects
 	selectedList = Selector.MultipleObjects(minimalCount = 1)
 	if (selectedList == None):
@@ -135,9 +135,9 @@ def CreateRigVariant2(controlSize=_controlSize, *args):
 		### Create locator # TODO use nurbs circle [circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 1e-05 -s 8 -ch 1; objectMoveCommand;]
 		locator = cmds.spaceLocator(name = Text.SetUniqueFromText(_nameLocatorPrefix + selected[i]))[0]
 		locators.append(locator)
-		cmds.setAttr(locator + "Shape.localScaleX", controlSize)
-		cmds.setAttr(locator + "Shape.localScaleY", controlSize)
-		cmds.setAttr(locator + "Shape.localScaleZ", controlSize)
+		cmds.setAttr(locator + "Shape.localScaleX", locatorSize)
+		cmds.setAttr(locator + "Shape.localScaleY", locatorSize)
+		cmds.setAttr(locator + "Shape.localScaleZ", locatorSize)
 		
 		### Parent locator to group
 		cmds.parent(locator, groupDistributed)
