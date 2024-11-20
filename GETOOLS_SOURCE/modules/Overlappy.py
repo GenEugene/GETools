@@ -708,7 +708,7 @@ class Overlappy:
 		self.UpdateParticleAimOffsetSettings()
 		self.UpdateParticleSettings()
 	def UpdateParticleAimOffsetSettings(self, *args):
-		if (self.setupCreatedPoint):
+		if (not self.setupCreated or self.setupCreatedPoint):
 			return
 
 		def SetParticleAimOffset(nameLocator, nameParticle, goalStartPosition, offset=(0, 0, 0)):
@@ -726,6 +726,7 @@ class Overlappy:
 		self.CompileParticleAimOffset()
 		
 		self.time.SetCurrent(self.time.values[2])
+
 		SetParticleAimOffset(nameLocator = self.particleLocatorGoalOffset, nameParticle = self.particleTarget, goalStartPosition = self.particleLocatorGoalOffsetStartPosition, offset = self.particleAimOffsetTarget)
 		SetParticleAimOffset(nameLocator = self.particleLocatorGoalOffsetUp, nameParticle = self.particleUp, goalStartPosition = self.particleLocatorGoalOffsetUpStartPosition, offset = self.particleAimOffsetUp)
 	def UpdateParticleSettings(self, *args):

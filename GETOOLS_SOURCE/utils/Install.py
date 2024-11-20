@@ -129,13 +129,13 @@ def ToShelf_ToggleTextures(path, *args): MoveToShelf(path, ReadFunctionAsString(
 
 # LOCATORS
 def ToShelf_LocatorsSizeScale50(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsSizeScale) + "(0.5)", "LocatorsSizeScale50", "L50%")
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsSizeScale) + "(value = 0.5)", "LocatorsSizeScale50", "L50%")
 def ToShelf_LocatorsSizeScale90(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsSizeScale) + "(0.9)", "LocatorsSizeScale90", "L90%")
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsSizeScale) + "(value = 0.9)", "LocatorsSizeScale90", "L90%")
 def ToShelf_LocatorsSizeScale110(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsSizeScale) + "(1.1)", "LocatorsSizeScale110", "L110%")
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsSizeScale) + "(value = 1.1)", "LocatorsSizeScale110", "L110%")
 def ToShelf_LocatorsSizeScale200(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsSizeScale) + "(2.0)", "LocatorsSizeScale200", "L200%")
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsSizeScale) + "(value = 2.0)", "LocatorsSizeScale200", "L200%")
 
 def ToShelf_LocatorCreate(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorCreate), "LocatorCreate", "Loc")
@@ -159,6 +159,11 @@ def ToShelf_LocatorsRelativeSkipLast(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsRelativeSkipLast), "RelativeSkipLast", "Rel-1")
 def ToShelf_LocatorsRelativeWithoutReverse(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsRelativeWithoutReverse), "RelativeWithoutReverse", "Rel-")
+
+def ToShelf_LocatorsChainDistribution1(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsChainDistribution1), "LocatorsChainDistribution1", "CDistr1")
+def ToShelf_LocatorsChainDistribution2(path, *args):
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.LocatorsChainDistribution2), "LocatorsChainDistribution2", "CDistr2")
 
 def ToShelf_LocatorsAim(path, name, rotateOnly, aimVector, *args):
 	parameters = "(rotateOnly = {0}, vectorAim = {1}, reverse = True)".format(rotateOnly, aimVector)
@@ -203,7 +208,7 @@ def ToShelf_BakeByWorld(path, translate, rotate, *args):
 
 # ANIMATION
 def ToShelf_AnimOffsetSelected(path, direction, time, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.AnimOffsetSelected) + "({0}, {1})".format(direction, time), "AnimOffset_{0}_{1}".format(direction, time), "AO{0}_{1}".format(direction, time))
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.AnimOffsetSelected) + "(direction = {0}, step = {1})".format(direction, time), "AnimOffset_{0}_{1}".format(direction, time), "AO{0}_{1}".format(direction, time))
 
 def ToShelf_DeleteKeys(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.DeleteKeys), "DeleteKeys", "DKeys")
@@ -215,23 +220,23 @@ def ToShelf_DeleteStatic(path, *args):
 def ToShelf_EulerFilterOnSelected(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.EulerFilterOnSelected), "EulerFilter", "Euler")
 def ToShelf_SetInfinity(path, mode, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetInfinity) + "({0})".format(mode), "SetInfinity{0}".format(mode), "Inf{0}".format(mode))
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetInfinity) + "(mode = {0})".format(mode), "SetInfinity{0}".format(mode), "Inf{0}".format(mode))
 
 # TIMELINE
 def ToShelf_SetTimelineMinOut(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(3)", "SetTimelineMinOut", "<<")
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(mode = 3)", "SetTimelineMinOut", "<<")
 def ToShelf_SetTimelineMinIn(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(1)", "SetTimelineMinIn", "<-")
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(mode = 1)", "SetTimelineMinIn", "<-")
 def ToShelf_SetTimelineMaxIn(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(2)", "SetTimelineMaxIn", "->")
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(mode = 2)", "SetTimelineMaxIn", "->")
 def ToShelf_SetTimelineMaxOut(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(4)", "SetTimelineMaxOut", ">>")
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(mode = 4)", "SetTimelineMaxOut", ">>")
 def ToShelf_SetTimelineFocusOut(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(5)", "SetTimelineFocusOut", "<->")
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(mode = 5)", "SetTimelineFocusOut", "<->")
 def ToShelf_SetTimelineFocusIn(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(6)", "SetTimelineFocusIn", ">-<")
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(mode = 6)", "SetTimelineFocusIn", ">-<")
 def ToShelf_SetTimelineSet(path, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(7)", "SetTimelineSet", "|<->|")
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SetTimeline) + "(mode = 7)", "SetTimelineSet", "|<->|")
 
 # RIGGING
 def ToShelf_Constraint(path, maintainOffset, parent, point, orient, scale, *args):
@@ -258,11 +263,11 @@ def ToShelf_DisconnectTargets(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.DisconnectTargets), "DisconnectTargets", "Disconnect")
 
 def ToShelf_RotateOrder(path, mode, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.RotateOrder) + "({0})".format(mode), "RotateOrder{0}".format(mode), "RO{0}".format(mode))
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.RotateOrder) + "(on = {0})".format(mode), "RotateOrder{0}".format(mode), "RO{0}".format(mode))
 def ToShelf_SegmentScaleCompensate(path, mode, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SegmentScaleCompensate) + "({0})".format(mode), "SegmentScaleCompensate{0}".format(mode), "SSC{0}".format(mode))
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.SegmentScaleCompensate) + "(value = {0})".format(mode), "SegmentScaleCompensate{0}".format(mode), "SSC{0}".format(mode))
 def ToShelf_JointDrawStyle(path, mode, *args):
-	MoveToShelf(path, ReadFunctionAsString(CodeSamples.JointDrawStyle) + "({0})".format(mode), "JointDrawStyle{0}".format(mode), "J{0}".format(mode))
+	MoveToShelf(path, ReadFunctionAsString(CodeSamples.JointDrawStyle) + "(mode = {0})".format(mode), "JointDrawStyle{0}".format(mode), "J{0}".format(mode))
 
 def ToShelf_CopySkin(path, *args):
 	MoveToShelf(path, ReadFunctionAsString(CodeSamples.CopySkin), "CopySkin", "CopySkin")

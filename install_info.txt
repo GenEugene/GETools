@@ -4,4 +4,8 @@ For example: "C:/Users/Username/Documents/maya/scripts/GETools"
 2. Drag and Drop the "DRAG_AND_DROP_INSTALL.py" file into Maya viewport.
 GETools will be added to the current shelf as new button.
 
-3. It's done!
+3. Enjoy!
+
+
+
+p.s. Let me know if you see any issues, it's really help to fix bugs and develop GETools faster. Thank you.

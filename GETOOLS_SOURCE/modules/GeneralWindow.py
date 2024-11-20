@@ -49,7 +49,7 @@ from ..values import Icons
 
 
 class GeneralWindow:
-	_version = "v1.4.4"
+	_version = "v1.5.0"
 	_name = "GETools"
 	_title = _name + " " + _version
 
@@ -275,6 +275,11 @@ class GeneralWindow:
 		cmds.menuItem(label = "Relative", command = partial(Install.ToShelf_LocatorsRelative, self.optionsPlugin.directory))
 		cmds.menuItem(label = "Skip Last Object Reverse Constraint", command = partial(Install.ToShelf_LocatorsRelativeSkipLast, self.optionsPlugin.directory))
 		cmds.menuItem(label = "Without Reverse Constraint", command = partial(Install.ToShelf_LocatorsRelativeWithoutReverse, self.optionsPlugin.directory))
+		cmds.setParent('..', menu = True)
+		#
+		cmds.menuItem(subMenu = True, label = "Chain Distribution", tearOff = True, image = Icons.pinInvert)
+		cmds.menuItem(label = "Default Mode", command = partial(Install.ToShelf_LocatorsChainDistribution1, self.optionsPlugin.directory))
+		cmds.menuItem(label = "Alternative Mode", command = partial(Install.ToShelf_LocatorsChainDistribution2, self.optionsPlugin.directory))
 		cmds.setParent('..', menu = True)
 		#
 		cmds.menuItem(subMenu = True, label = "Aim", tearOff = True, image = Icons.pin)

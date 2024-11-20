@@ -1,5 +1,11 @@
 GETools changelog
 
+v1.5.0
+- [TOOLS] added "Chain Distribution" button to create distributed rotatio rig over selected objects. Use last locator to control animation.
+- [OVERLAPPY] removed set timeline to minimum frame on plugin start.
+- added full parameters names to installed buttons.
+- updated install instruction Readme file.
+
 v1.4.4
 - added Maya version check to avoid compatibility issues with Maya 2020 and older.
 - removed requirement to use separate GETools version for Maya 2020.

@@ -27,6 +27,7 @@ from functools import partial
 from .. import Settings
 from ..utils import Animation
 from ..utils import Baker
+from ..utils import ChainDistributionRig
 from ..utils import Colors
 from ..utils import Locators
 from ..utils import Selector
@@ -62,6 +63,8 @@ class ToolsAnnotations:
 	#
 	locatorsRelative = "{bake}\nThe last locator becomes the parent of other locators".format(bake = locatorsBake)
 	locatorsRelativeReverse = "{relative}\n{reverse}\nRight click allows you to bake the same operation but with constrained last object.".format(relative = locatorsRelative, reverse = _reverseConstraint)
+	#
+	chainDistribution = "Create a chain with distributed rotation. Use the last locator to animate.\nWorks better with 3 selected objects.\nIf you select 4+ objects, the original animation will not be fully preserved.\n\nRight-click to use the alternate mode to preserve 100% of the original animation with any number of selected objects.\nIt is not as convenient to use as the default mode."
 	
 	# locatorAimSpace = "Locator Aim distance from original object. Need to use non-zero value"
 	locatorAimSpace = "Aim Space offset from original object.\nNeed to use non-zero value to get best result"
@@ -104,13 +107,15 @@ class ToolsAnnotations:
 	animationOffset = "Move animation curves on selected objects.\nAnimation will move relative to the index of the selected object.\nThe best way to desync animation.\nWorks with selection in the channel box."
 
 class ToolsSettings:
-	### AIM SPACE
+	locatorSize = 10
+
+	### Aim Space
 	aimSpaceName = "Offset"
 	aimSpaceOffsetValue = 100
 	aimSpaceRadioButtonDefault = 0
 
 class Tools:
-	_version = "v1.3"
+	_version = "v1.4"
 	_name = "TOOLS"
 	_title = _name + " " + _version
 
@@ -125,14 +130,12 @@ class Tools:
 		self.checkboxLocatorHideParent = None
 		self.checkboxLocatorSubLocator = None
 		self.floatLocatorSize = None
-
-		### Animation Offset
-		self.animOffsetFloatField = None
-		
 		### Locator Aim Space
 		self.aimSpaceFloatField = None
 		self.aimSpaceRadioButtons = [None, None, None]
 		self.aimSpaceCheckbox = None
+		### Animation Offset
+		self.animOffsetFloatField = None
 
 		self.bakingSamplesValue = None
 
@@ -144,7 +147,8 @@ class Tools:
 	def UILayoutLocators(self, layoutMain):
 		layoutLocators = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "LOCATORS // SPACE SWITCHING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = layoutLocators, adjustableColumn = True)
-		#
+		
+		### LOCATORS SIZE
 		countOffsets = 6
 		cellWidth = Settings.windowWidthMargin / countOffsets
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = cellWidth, cellHeight = Settings.lineHeight)
@@ -182,13 +186,15 @@ class Tools:
 		cmds.menuItem(divider = True)
 		cmds.menuItem(label = "1000", command = partial(Locators.SelectedLocatorsSizeSet, 1000))
 		cmds.menuItem(label = "5000", command = partial(Locators.SelectedLocatorsSizeSet, 5000))
-		#
+		
+		### OPTIONS
 		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = (85, 85, 40, 60), columnAlign = [(1, "center"), (2, "center"), (3, "right"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
 		self.checkboxLocatorHideParent = cmds.checkBox(label = "Hide Parent", value = False, annotation = ToolsAnnotations.hideParent)
 		self.checkboxLocatorSubLocator = cmds.checkBox(label = "Sub Locator", value = False, annotation = ToolsAnnotations.subLocator)
 		cmds.text(label = "Size:", annotation = ToolsAnnotations.locatorSize)
-		self.floatLocatorSize = cmds.floatField(value = 10, precision = 3, annotation = ToolsAnnotations.locatorSize)
-		#
+		self.floatLocatorSize = cmds.floatField(value = ToolsSettings.locatorSize, precision = 3, annotation = ToolsAnnotations.locatorSize)
+		
+		### LOCATORS ROW 1
 		countOffsets = 6
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Locator", command = self.Locator, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locator)
@@ -199,18 +205,20 @@ class Tools:
 		cmds.menuItem(label = "Without Reverse Constraint", command = self.LocatorsBake)
 		cmds.button(label = "P-POS", command = partial(self.LocatorsBakeReverse, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReversePos)
 		cmds.button(label = "P-ROT", command = partial(self.LocatorsBakeReverse, False, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverseRot)
-		#
-		countOffsets = 1
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+
+		### LOCATORS ROW 2
+		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 2, columnWidth2 = (113, 160), columnAlign = [(1, "center"), (2, "center")], columnAttach = [(1, "both", 0), (2, "both", 0)])
 		cmds.button(label = "Relative", command = self.LocatorsRelativeReverse, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorsRelativeReverse)
 		cmds.popupMenu()
 		cmds.menuItem(label = "Skip Last Object Reverse Constraint", command = self.LocatorsRelativeReverseSkipLast)
 		cmds.menuItem(label = "Without Reverse Constraint", command = self.LocatorsRelative)
-		#
-		
-		### Aim Space Switching
-		layoutAimSpace = cmds.frameLayout(parent = layoutColumn, label = "Aim Space Switching", labelIndent = 75, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		cmds.button(label = "Chain Distribution", command = partial(self.CreateChainDistributionRig, 1), backgroundColor = Colors.purple10, annotation = ToolsAnnotations.chainDistribution)
+		cmds.popupMenu()
+		cmds.menuItem(label = "Alternative Mode", command = partial(self.CreateChainDistributionRig, 2))
 
+		### AIM SPACE SWITCHING
+		layoutAimSpace = cmds.frameLayout(parent = layoutColumn, label = "Aim Space Switching", labelIndent = 75, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		#
 		cmds.rowLayout(parent = layoutAimSpace, numberOfColumns = 6, columnWidth6 = (40, 55, 35, 35, 35, 60), columnAlign = [1, "center"], columnAttach = [(1, "both", 0)])
 		cmds.text(label = ToolsSettings.aimSpaceName)
 		self.aimSpaceFloatField = cmds.floatField(value = ToolsSettings.aimSpaceOffsetValue, precision = 3, minValue = 0, annotation = ToolsAnnotations.locatorAimSpace)
@@ -220,7 +228,7 @@ class Tools:
 		self.aimSpaceRadioButtons[2] = cmds.radioButton(label = "Z")
 		self.aimSpaceCheckbox = cmds.checkBox(label = "Reverse", value = False)
 		cmds.radioButton(self.aimSpaceRadioButtons[ToolsSettings.aimSpaceRadioButtonDefault], edit = True, select = True)
-		
+		#
 		cmds.rowLayout(parent = layoutAimSpace, numberOfColumns = 3, columnWidth3 = (50, 110, 110), columnAlign = [(1, "center"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
 		cmds.text(label = "Create")
 		cmds.button(label = "Translate + Rotate", command = partial(self.LocatorsBakeAim, False), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorAimSpaceBakeAll)
@@ -313,6 +321,7 @@ class Tools:
 		cmds.button(label = ">-<", command = partial(Timeline.SetTime, 6), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.timelineFocusIn)
 		cmds.button(label = "|<->|", command = partial(Timeline.SetTime, 7), backgroundColor = Colors.orange50, annotation = ToolsAnnotations.timelineSetRange)
 
+
 	### LOCATORS
 	def GetFloatLocatorSize(self):
 		return cmds.floatField(self.floatLocatorSize, query = True, value = True)
@@ -392,6 +401,13 @@ class Tools:
 
 		if (distance == 0):
 			cmds.warning("Aim distance is 0. Highly recommended to use non-zero value.")
+
+	### CHAIN DISTRIBUTION RIG
+	def CreateChainDistributionRig(self, mode=1, *args):
+		if mode is 1:
+			ChainDistributionRig.CreateRigVariant1(locatorSize = self.GetFloatLocatorSize())
+		if mode is 2:
+			ChainDistributionRig.CreateRigVariant2(locatorSize = self.GetFloatLocatorSize())
 
 
 	### BAKING

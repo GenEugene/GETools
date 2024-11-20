@@ -31,8 +31,10 @@ Discover tools for creating locators, space switching, simulating secondary anim
 # How to install
 ### First install:
 1. Extract files from ZIP archive
-2. Remove version numbers from folder name (use simple **"GETools"** name)
-3. Drag and drop GETools\TOOLS\DRAG_AND_DROP_INSTALL.py into Maya viewport
+2. Create folder `"GETools"` somewhere you prefer to keep scripts for Maya. `For example: "C:/Users/Username/Documents/maya/scripts/GETools"`
+3. Copy/Paste all files from GETools folder **(usually it's 6+ files)**
+4. Drag and drop `DRAG_AND_DROP_INSTALL.py` into Maya's viewport
+5. Your folder should look like in this screenshot **(the most important folder is "GETOOLS_SOURCE")**
 ![image](https://github.com/user-attachments/assets/3bfd0765-0cee-420b-9717-4a19d4784592)
 
 ### Update to new version:
