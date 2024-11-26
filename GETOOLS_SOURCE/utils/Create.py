@@ -91,7 +91,7 @@ def CreatePolygonWithLocators(countPoints=3, radius=10, rotation=0):
 
 	return mainGroup, poly, locators, handles
 
-def CreateLocatorProjectedToMesh(mesh, createInsideOutsideLogic=False, *args):
+def CreateLocatorProjectedToMesh(mesh, createInsideOutsideLogic=False, createHeightLogic=False, *args):
 	### Variables
 	_nameLocatorOriginal = "locOriginal"
 	_nameLocatorProjected = "locProjected"
@@ -196,4 +196,9 @@ def CreateLocatorProjectedToMesh(mesh, createInsideOutsideLogic=False, *args):
 		cmds.connectAttr(material + ".outColor", shadingGroup + ".surfaceShader", force = True)
 		cmds.sets(mesh, edit = True, forceElement = shadingGroup)
 		cmds.connectAttr(colorConditionNode + ".outColor", material + ".color")
+	
+	if createHeightLogic:
+		# nodeDistanceDimension = cmds.createNode("distanceDimShape")
+		# cmds.distanceDimension(startPoint = (0, 2, 2), endPoint = (1, 5, 6))
+		print("TODO: createHeightLogic")
 
