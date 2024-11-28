@@ -1,5 +1,8 @@
 GETools changelog
 
+v1.5.1
+- [TOOLS] changed panel name "Animation Offset" to "Desync"
+
 v1.5.0
 - [TOOLS] added "Chain Distribution" button to create distributed rotatio rig over selected objects. Use last locator to control animation.
 - [OVERLAPPY] removed set timeline to minimum frame on plugin start.
