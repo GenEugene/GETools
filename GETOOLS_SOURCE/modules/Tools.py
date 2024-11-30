@@ -110,7 +110,6 @@ class ToolsSettings:
 	locatorSize = 10
 
 	### Aim Space
-	aimSpaceName = "Offset"
 	aimSpaceOffsetValue = 100
 	aimSpaceRadioButtonDefault = 0
 
@@ -189,7 +188,7 @@ class Tools:
 		cmds.setParent("..")
 
 		### OPTIONS
-		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = (100, 100, 34, 60), columnAlign = [(1, "center"), (2, "center"), (3, "right"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
+		cmds.rowLayout(parent = layoutColumn, adjustableColumn = 4, numberOfColumns = 4, columnWidth4 = (80, 80, 35, 40), columnAlign = [(1, "center"), (2, "center"), (3, "right"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
 		self.checkboxLocatorHideParent = cmds.checkBox(label = "Hide Parent", value = False, annotation = ToolsAnnotations.hideParent)
 		self.checkboxLocatorSubLocator = cmds.checkBox(label = "Sub Locator", value = False, annotation = ToolsAnnotations.subLocator)
 		cmds.text(label = "Size:", annotation = ToolsAnnotations.locatorSize)
@@ -199,8 +198,6 @@ class Tools:
 		### LOCATORS ROW 1
 		countCells2 = 6
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells2, cellWidth = Settings.windowWidth / countCells2, cellHeight = Settings.lineHeight)
-		# cmds.flowLayout(parent = layoutColumn, columnSpacing = 4, height = Settings.lineHeight)
-		
 		cmds.button(label = "Locator", command = self.Locator, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locator)
 		cmds.button(label = "Match", command = self.LocatorsMatch, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorMatch)
 		cmds.button(label = "Parent", command = self.LocatorsParent, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorParent)
@@ -211,9 +208,8 @@ class Tools:
 		cmds.button(label = "P-ROT", command = partial(self.LocatorsBakeReverse, False, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverseRot)
 		cmds.setParent("..")
 
-
 		### LOCATORS ROW 2
-		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 2, columnWidth2 = (128, 170), columnAlign = [(1, "center"), (2, "center")], columnAttach = [(1, "both", 0), (2, "both", 0)])
+		cmds.rowLayout(parent = layoutColumn, adjustableColumn = 1, numberOfColumns = 2, columnWidth2 = (50, 150), columnAlign = [(1, "center"), (2, "center")], columnAttach = [(1, "both", 0), (2, "both", 0)])
 		cmds.button(label = "Relative", command = self.LocatorsRelativeReverse, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorsRelativeReverse)
 		cmds.popupMenu()
 		cmds.menuItem(label = "Skip Last Object Reverse Constraint", command = self.LocatorsRelativeReverseSkipLast)
@@ -226,8 +222,8 @@ class Tools:
 		### AIM SPACE SWITCHING
 		layoutAimSpace = cmds.frameLayout(parent = layoutColumn, label = "Aim Space Switching", labelIndent = 75, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		#
-		cmds.rowLayout(parent = layoutAimSpace, numberOfColumns = 6, columnWidth6 = (45, 60, 40, 40, 40, 65), columnAlign = [1, "center"], columnAttach = [(1, "both", 0)])
-		cmds.text(label = ToolsSettings.aimSpaceName)
+		cmds.rowLayout(parent = layoutAimSpace, adjustableColumn = 2, numberOfColumns = 6, columnWidth6 = (40, 40, 28, 28, 28, 60), columnAlign = [1, "center"], columnAttach = [(1, "both", 0)])
+		cmds.text(label = "Offset")
 		self.aimSpaceFloatField = cmds.floatField(value = ToolsSettings.aimSpaceOffsetValue, precision = 3, minValue = 0, annotation = ToolsAnnotations.locatorAimSpace)
 		cmds.radioCollection()
 		self.aimSpaceRadioButtons[0] = cmds.radioButton(label = "X")
@@ -237,7 +233,7 @@ class Tools:
 		cmds.radioButton(self.aimSpaceRadioButtons[ToolsSettings.aimSpaceRadioButtonDefault], edit = True, select = True)
 		cmds.setParent("..")
 		#
-		cmds.rowLayout(parent = layoutAimSpace, numberOfColumns = 3, columnWidth3 = (60, 118, 118), columnAlign = [(1, "center"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
+		cmds.rowLayout(parent = layoutAimSpace, adjustableColumn = 1, numberOfColumns = 3, columnWidth3 = (30, 105, 105), columnAlign = [(1, "center"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
 		cmds.text(label = "Create")
 		cmds.button(label = "Translate + Rotate", command = partial(self.LocatorsBakeAim, False), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorAimSpaceBakeAll)
 		cmds.button(label = "Only Rotate", command = partial(self.LocatorsBakeAim, True), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorAimSpaceBakeRotate)
@@ -246,7 +242,7 @@ class Tools:
 		layoutBake = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = layoutBake, adjustableColumn = True, rowSpacing = 2)
 
-		rowLayout = cmds.rowLayout(parent = layoutColumn, numberOfColumns = 3, columnWidth3 = (90, 86, 120), height = Settings.lineHeight, columnAlign = [(1, "center"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
+		rowLayout = cmds.rowLayout(parent = layoutColumn, adjustableColumn = 2, numberOfColumns = 3, columnWidth3 = (80, 40, 120), height = Settings.lineHeight, columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
 		cmds.text(parent = rowLayout, label = "Set Bake Step", annotation = ToolsAnnotations.locatorSize)
 		self.bakingSamplesValue = cmds.floatField(parent = rowLayout, value = 1, precision = 3, minValue = 0.001, annotation = ToolsAnnotations.bakeSamples)
 		cmds.gridLayout(parent = rowLayout, numberOfColumns = 6, cellWidth = 20, cellHeight = Settings.lineHeight)
@@ -278,18 +274,18 @@ class Tools:
 		layoutRigging = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "ANIMATION", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = layoutRigging, adjustableColumn = True, rowSpacing = 2)
 		
-		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = (104, 50, 80, 60), columnAlign = [(1, "center"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
-		cmds.text(label = "Delete Animation")
+		cmds.rowLayout(parent = layoutColumn, adjustableColumn = 1, numberOfColumns = 4, columnWidth4 = (60, 35, 75, 50), columnAlign = [(1, "center"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
+		cmds.text(label = "Delete Keys")
 		cmds.button(label = "All", command = partial(Animation.DeleteKeys, True), backgroundColor = Colors.red100, annotation = ToolsAnnotations.deleteAnimation)
 		cmds.button(label = "Nonkeyable", command = Animation.DeleteKeysNonkeyable, backgroundColor = Colors.red50, annotation = ToolsAnnotations.deleteNonkeyableKeys)
 		cmds.button(label = "Static", command = Animation.DeleteStaticCurves, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteStaticCurves)
 		#
-		countOffsets = 1
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidth / countOffsets, cellHeight = Settings.lineHeight)
+		countCellsEuler = 1 # TODO remove grid logic
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCellsEuler, cellWidth = Settings.windowWidth / countCellsEuler, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Euler Filter", command = Animation.EulerFilterOnSelected, backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.filterCurve)
 		#
-		countOffsets = 5
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidth / countOffsets, cellHeight = Settings.lineHeight)
+		countCellsInfinity = 5
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCellsInfinity, cellWidth = Settings.windowWidth / countCellsInfinity, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Constant", command = partial(Animation.SetInfinity, 1, None), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.animationCurveInfinity)
 		cmds.button(label = "Linear", command = partial(Animation.SetInfinity, 2, None), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.animationCurveInfinity)
 		cmds.button(label = "Cycle", command = partial(Animation.SetInfinity, 3, None), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.animationCurveInfinity)
@@ -299,7 +295,7 @@ class Tools:
 
 		### Desync
 		layoutAnimationOffset = cmds.frameLayout(parent = layoutColumn, label = "Desync", labelIndent = 110, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		rowLayout = cmds.rowLayout(parent = layoutAnimationOffset, numberOfColumns = 4, columnWidth4 = (120, 69, 35, 70), columnAlign = [(1, "center"), (2, "center"), (3, "right"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
+		rowLayout = cmds.rowLayout(parent = layoutAnimationOffset, adjustableColumn = 2, numberOfColumns = 4, columnWidth4 = (120, 30, 30, 70), columnAlign = [(1, "center"), (2, "center"), (3, "right"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
 		# 1
 		cmds.gridLayout(parent = rowLayout, numberOfColumns = 6, cellWidth = 20, cellHeight = Settings.lineHeight)
 		cmds.button(label = "0.1", command = partial(self.AnimationOffsetSetValue, 0.1), backgroundColor = Colors.blackWhite90, annotation = ToolsAnnotations.desyncSetValue)
