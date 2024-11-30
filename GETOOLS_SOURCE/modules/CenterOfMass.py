@@ -111,7 +111,7 @@ class CenterOfMass:
 		layoutColumn = cmds.columnLayout(parent = self.layoutSetup, adjustableColumn = True)
 		#
 		COMButtons1 = 4
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = COMButtons1, cellWidth = Settings.windowWidthMargin / COMButtons1, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = COMButtons1, cellWidth = Settings.windowWidth / COMButtons1, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Create", command = self.COMCreate, backgroundColor = Colors.green50, annotation = CenterOfMassAnnotations.create)
 		cmds.button(label = "Activate", command = self.COMActivate, backgroundColor = Colors.yellow50, annotation = CenterOfMassAnnotations.activate)
 		cmds.button(label = "Select", command = self.COMSelect, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.select)
@@ -129,7 +129,7 @@ class CenterOfMass:
 		layoutColumn = cmds.columnLayout(parent = self.layoutWeights, adjustableColumn = True)
 
 		count = 1
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidth / count, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Disconnect From Center Of Mass", command = self.COMDisconnectTargets, backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.disconnectTargets)
 		
 		def PartButton(partInfo = ("", 0), minMaxValue = CenterOfMassSettings.weightMinMax, onlyValue = False, annotation = ""):
@@ -141,7 +141,7 @@ class CenterOfMass:
 
 		### WEIGHTS PALETTE
 		count = 10
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidth / count, cellHeight = Settings.lineHeight)
 		
 		def CustomButton(value):
 			PartButton(("", value), onlyValue = True, annotation = CenterOfMassAnnotations.weightsCustom)
@@ -159,7 +159,7 @@ class CenterOfMass:
 
 		### BODYPARTS
 		count = 3
-		layoutBodyGrid = cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight * count)
+		layoutBodyGrid = cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidth / count, cellHeight = Settings.lineHeight * count)
 		
 		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True)
 		PartButton(CenterOfMassSettings.partHead, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightHead)
@@ -179,7 +179,7 @@ class CenterOfMass:
 		self.layoutBaking = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 
 		count = 3
-		cmds.gridLayout(numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(numberOfColumns = count, cellWidth = Settings.windowWidth / count, cellHeight = Settings.lineHeight)
 
 		cmds.button(label = "Bake To COM", command = self.BakeScenario3, backgroundColor = Colors.orange10, annotation = CenterOfMassAnnotations.bakeToCOMLink)
 		cmds.popupMenu()

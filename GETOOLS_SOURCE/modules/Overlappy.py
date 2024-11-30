@@ -131,6 +131,8 @@ class OverlappySettings:
 	particleDamp = 0
 		
 	### SLIDERS (field min/max, slider min/max)
+	sliderWidth = (60, 54, 10)
+	sliderWidthMarker = 14
 	rangeNucleusTimeScale = (0.001, float("inf"), 0.001, 1)
 	rangePRadius = (0, float("inf"), 0, 10)
 	rangeGSmooth = (0, float("inf"), 0, 2)
@@ -281,7 +283,7 @@ class Overlappy:
 
 	### MAIN UI
 	def UILayoutMenuBar(self, layoutMain):
-		cmds.columnLayout(parent = layoutMain, adjustableColumn = True, width = Settings.windowWidthMargin)
+		cmds.columnLayout(parent = layoutMain, adjustableColumn = True, width = Settings.windowWidth)
 		cmds.menuBarLayout()
 
 		cmds.menu(label = "Edit", tearOff = True)
@@ -316,22 +318,20 @@ class Overlappy:
 		self.layoutLayers = cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "LAYERS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(parent = self.layoutLayers, adjustableColumn = True)
 
-		sizesDelete = (120, 70, 70)
-		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 3, columnWidth3 = sizesDelete) # recomputeSize = True
-		cmds.button(label = "Delete All Layers", width = sizesDelete[0], command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteAll)
-		cmds.button(label = "Delete Temp", width = sizesDelete[1], command = partial(Layers.Delete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
-		cmds.button(label = "Delete Safe", width = sizesDelete[2], command = partial(Layers.Delete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
+		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 3, columnWidth3 = (120, 75, 75), columnAlign = [(1, "center"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)]) # recomputeSize = True
+		cmds.button(label = "Delete All Layers", command = partial(Layers.Delete, "BaseAnimation"), backgroundColor = Colors.red50, annotation = OverlappyAnnotations.layerDeleteAll)
+		cmds.button(label = "Delete Temp", command = partial(Layers.Delete, OverlappySettings.nameLayers[0]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteTemp)
+		cmds.button(label = "Delete Safe", command = partial(Layers.Delete, OverlappySettings.nameLayers[1]), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.layerDeleteSafe)
 
-		sizesMove = (120, 120)
-		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 2, columnWidth2 = sizesMove)
-		cmds.button(label = "Move To Safe Layer", width = sizesMove[0], command = partial(self.LayerMoveToSafeOrTemp, True), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveTemp)
-		cmds.button(label = "Move To Temp Layer", width = sizesMove[1], command = partial(self.LayerMoveToSafeOrTemp, False), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveSafe)
+		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 2, columnWidth2 = (135, 135), columnAlign = [(1, "center"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
+		cmds.button(label = "Move To Safe Layer", command = partial(self.LayerMoveToSafeOrTemp, True), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveTemp)
+		cmds.button(label = "Move To Temp Layer", command = partial(self.LayerMoveToSafeOrTemp, False), backgroundColor = Colors.blue10, annotation = OverlappyAnnotations.layerMoveSafe)
 	# def UILayoutCollisions(self, layoutMain): # TODO
 	# 	self.layoutCollisions = cmds.frameLayout("layoutCollisions", label = Settings.frames2Prefix + "COLLISIONS - WORK IN PROGRESS", parent = layoutMain, collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 	# 	layoutColumn = cmds.columnLayout(parent = self.layoutCollisions, adjustableColumn = True)
 		
 	# 	count = 4
-	# 	cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+	# 	cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidth / count, cellHeight = Settings.lineHeight)
 	# 	cmds.button(label = "Add", backgroundColor = Colors.green10)
 	# 	cmds.button(label = "Remove", backgroundColor = Colors.red10)
 	# 	cmds.button(label = "Refresh", backgroundColor = Colors.yellow10)
@@ -351,9 +351,9 @@ class Overlappy:
 		### Time Scale
 		self.nucleusTimeScaleSlider = UI.Slider(
 			parent = layoutColumn,
-			widthWindow = Settings.windowWidthMargin,
-			widthMarker = Settings.sliderWidthMarker,
-			columnWidth3 = Settings.sliderWidth,
+			widthWindow = Settings.windowWidth,
+			widthMarker = OverlappySettings.sliderWidthMarker,
+			columnWidth3 = OverlappySettings.sliderWidth,
 			command = self.UpdateParticleSettings,
 			label = "Time Scale",
 			annotation = OverlappyAnnotations.particleTimeScale,
@@ -388,7 +388,7 @@ class Overlappy:
 		# layoutColumn = cmds.columnLayout(parent = self.layoutChainButtons, adjustableColumn = True)
 
 		## count = 2
-		## cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+		## cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidth / count, cellHeight = Settings.lineHeight)
 		##
 		## cmds.button(label = "Create", command = PhysicsHair.CreateNHairOnSelected, backgroundColor = Colors.green10)
 		## cmds.button(label = "Remove", command = self._SetupDelete, backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
@@ -408,14 +408,14 @@ class Overlappy:
 		layoutColumn = cmds.columnLayout(parent = self.layoutParticleButtons, adjustableColumn = True)
 		
 		count = 4
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidth / count, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Point", command = partial(self.ParticleSetupLogic, 1), backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupPoint)
 		cmds.button(label = "Aim", command = partial(self.ParticleSetupLogic, 2), backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupAim)
 		cmds.button(label = "Combo", command = partial(self.ParticleSetupLogic, 3), backgroundColor = Colors.green10, annotation = OverlappyAnnotations.setupCombo)
 		cmds.button(label = "Remove", command = partial(self.ParticleSetupDelete, False, True), backgroundColor = Colors.red10, annotation = OverlappyAnnotations.setupDelete)
 
 		count = 4
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidthMargin / count, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = count, cellWidth = Settings.windowWidth / count, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Bake Point", command = partial(self.BakeParticleVariants, 1), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeTranslation)
 		cmds.button(label = "Bake Aim", command = partial(self.BakeParticleVariants, 2), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeRotation)
 		cmds.button(label = "Bake Combo", command = partial(self.BakeParticleVariants, 3), backgroundColor = Colors.orange10, annotation = OverlappyAnnotations.bakeCombo)
@@ -458,9 +458,9 @@ class Overlappy:
 
 		self.sliderParticleRadius = UI.Slider(
 			parent = layoutColumn,
-			widthWindow = Settings.windowWidthMargin,
-			widthMarker = Settings.sliderWidthMarker,
-			columnWidth3 = Settings.sliderWidth,
+			widthWindow = Settings.windowWidth,
+			widthMarker = OverlappySettings.sliderWidthMarker,
+			columnWidth3 = OverlappySettings.sliderWidth,
 			command = self.UpdateParticleSettings,
 			label = "Radius",
 			annotation = OverlappyAnnotations.particleRadius,
@@ -473,9 +473,9 @@ class Overlappy:
 		
 		self.sliderParticleGoalSmooth = UI.Slider(
 			parent = layoutColumn,
-			widthWindow = Settings.windowWidthMargin,
-			widthMarker = Settings.sliderWidthMarker,
-			columnWidth3 = Settings.sliderWidth,
+			widthWindow = Settings.windowWidth,
+			widthMarker = OverlappySettings.sliderWidthMarker,
+			columnWidth3 = OverlappySettings.sliderWidth,
 			command = self.UpdateParticleSettings,
 			label = "G.Smooth",
 			annotation = OverlappyAnnotations.particleGoalSmooth,
@@ -486,9 +486,9 @@ class Overlappy:
 		
 		self.sliderParticleGoalWeight = UI.Slider(
 			parent = layoutColumn,
-			widthWindow = Settings.windowWidthMargin,
-			widthMarker = Settings.sliderWidthMarker,
-			columnWidth3 = Settings.sliderWidth,
+			widthWindow = Settings.windowWidth,
+			widthMarker = OverlappySettings.sliderWidthMarker,
+			columnWidth3 = OverlappySettings.sliderWidth,
 			command = self.UpdateParticleSettings,
 			label = "G.Weight",
 			annotation = OverlappyAnnotations.particleGoalWeight,
@@ -501,9 +501,9 @@ class Overlappy:
 
 		self.sliderParticleConserve = UI.Slider(
 			parent = layoutColumn,
-			widthWindow = Settings.windowWidthMargin,
-			widthMarker = Settings.sliderWidthMarker,
-			columnWidth3 = Settings.sliderWidth,
+			widthWindow = Settings.windowWidth,
+			widthMarker = OverlappySettings.sliderWidthMarker,
+			columnWidth3 = OverlappySettings.sliderWidth,
 			command = self.UpdateParticleSettings,
 			label = "Conserve",
 			annotation = OverlappyAnnotations.particleConserve,
@@ -514,9 +514,9 @@ class Overlappy:
 		
 		self.sliderParticleDrag = UI.Slider(
 			parent = layoutColumn,
-			widthWindow = Settings.windowWidthMargin,
-			widthMarker = Settings.sliderWidthMarker,
-			columnWidth3 = Settings.sliderWidth,
+			widthWindow = Settings.windowWidth,
+			widthMarker = OverlappySettings.sliderWidthMarker,
+			columnWidth3 = OverlappySettings.sliderWidth,
 			command = self.UpdateParticleSettings,
 			label = "Drag",
 			annotation = OverlappyAnnotations.particleDrag,
@@ -527,9 +527,9 @@ class Overlappy:
 		
 		self.sliderParticleDamp = UI.Slider(
 			parent = layoutColumn,
-			widthWindow = Settings.windowWidthMargin,
-			widthMarker = Settings.sliderWidthMarker,
-			columnWidth3 = Settings.sliderWidth,
+			widthWindow = Settings.windowWidth,
+			widthMarker = OverlappySettings.sliderWidthMarker,
+			columnWidth3 = OverlappySettings.sliderWidth,
 			command = self.UpdateParticleSettings,
 			label = "Damp",
 			annotation = OverlappyAnnotations.particleDamp,

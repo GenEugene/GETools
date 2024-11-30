@@ -51,7 +51,7 @@ class Experimental:
 		# cmds.menuItem(dividerLabel = "label", divider = True)
 
 		### MENU
-		cmds.columnLayout("layoutMenuBar", parent = layoutMain, adjustableColumn = True, width = Settings.windowWidthScroll)
+		cmds.columnLayout("layoutMenuBar", parent = layoutMain, adjustableColumn = True, width = Settings.windowWidth)
 		cmds.menuBarLayout()
 
 		cmds.menu(label = "Layers", tearOff = True)
@@ -63,7 +63,7 @@ class Experimental:
 
 		### BUTTONS
 		countOffsets = 4
-		cmds.gridLayout(parent = layoutMain, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutMain, numberOfColumns = countOffsets, cellWidth = Settings.windowWidth / countOffsets, cellHeight = Settings.lineHeight)
 		# cmds.button(label = "**Nucleus", command = partial(Physics.CreateNucleus, "testNucleus", None))
 		cmds.button(label = "Particle", command = PhysicsParticle.CreateOnSelected)
 		cmds.button(label = "P Aim", command = PhysicsParticle.CreateAimOnSelected)
@@ -72,7 +72,7 @@ class Experimental:
 		# cmds.button(label = "Hair", command = partial(PhysicsHair.CreateNHairOnSelected, None))
 
 		countOffsets = 2
-		cmds.gridLayout(parent = layoutMain, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutMain, numberOfColumns = countOffsets, cellWidth = Settings.windowWidth / countOffsets, cellHeight = Settings.lineHeight)
 		def GetCheckboxEulerFilter(*args):
 			self.optionsPlugin.PrintAllOptions()
 		cmds.button(label = "Print General Options", command = GetCheckboxEulerFilter)
