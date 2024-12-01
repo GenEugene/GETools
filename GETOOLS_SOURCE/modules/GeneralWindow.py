@@ -448,7 +448,7 @@ class GeneralWindow:
 		nameMT = "MOTION TRAIL"
 		titleMT = nameMT + " " + versionMT
 				
-		self.frameMotionTrail = cmds.frameLayout("layoutMotionTrail", parent = parentLayout, label = "5. " + titleMT, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = 0, marginHeight = 0)
+		self.frameMotionTrail = cmds.frameLayout("layoutMotionTrail", parent = parentLayout, label = "5. " + titleMT, collapsable = True, backgroundColor = Settings.frames1Color, marginWidth = 0, marginHeight = 0, width = Settings.windowWidth)
 		
 		countOffsets = 3
 		cmds.gridLayout(parent = self.frameMotionTrail, numberOfColumns = countOffsets, cellWidth = Settings.windowWidth / countOffsets, cellHeight = Settings.lineHeight)
