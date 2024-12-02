@@ -2,6 +2,8 @@ GETools changelog
 
 v1.5.1
 - [TOOLS] changed panel name "Animation Offset" to "Desync"
+- [UI] reworked margins, more convenient space between groups
+- [UI] reworked buttons alignment to be more straight
 
 v1.5.0
 - [TOOLS] added "Chain Distribution" button to create distributed rotatio rig over selected objects. Use last locator to control animation.
