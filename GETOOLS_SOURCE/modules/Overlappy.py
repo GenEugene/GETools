@@ -179,7 +179,7 @@ class OverlappyVariables: # using for sava and load settings
 	particleDamp = "particleDamp"
 
 class Overlappy:
-	_version = "v3.5"
+	_version = "v3.6"
 	_name = "OVERLAPPY"
 	_title = _name + " " + _version
 
@@ -298,11 +298,11 @@ class Overlappy:
 		cmds.menu(label = "Options", tearOff = True)
 		self.menuCheckboxHierarchy = UI.MenuCheckbox(label = "Use Hierarchy")
 		self.menuCheckboxLayer = UI.MenuCheckbox(label = "Bake To Override Layer")
-		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop")
 		self.menuCheckboxDeleteSetup = UI.MenuCheckbox(label = "Delete Setup After Bake")
 		# self.menuCheckboxCollisions = UI.MenuCheckbox(label = "Collisions")
 
 		cmds.menuItem(dividerLabel = "Pre Loop Cycles", divider = True)
+		self.menuCheckboxLoop = UI.MenuCheckbox(label = "Loop")
 		cmds.radioMenuItemCollection()
 		self.menuRadioButtonsLoop[0] = cmds.menuItem(label = "0", radioButton = True)
 		self.menuRadioButtonsLoop[1] = cmds.menuItem(label = "1", radioButton = True)
