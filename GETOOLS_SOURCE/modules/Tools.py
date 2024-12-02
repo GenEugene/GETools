@@ -145,12 +145,12 @@ class Tools:
 		self.UILayoutAnimation(layoutMain)
 		self.UILayoutTimeline(layoutMain)
 	def UILayoutLocators(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "LOCATORS // SPACE SWITCHING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, width = Settings.windowWidth)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "LOCATORS // SPACE SWITCHING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
 		
 		### LOCATORS SIZE
 		countCells1 = 6
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells1, cellWidth = Settings.windowWidth / countCells1, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells1, cellWidth = Settings.windowWidthMargin / countCells1, cellHeight = Settings.lineHeight)
 		cmds.button(label = "50%", command = partial(Locators.SelectedLocatorsSizeScale, 0.5), backgroundColor = Colors.blackWhite50, annotation = ToolsAnnotations.locatorScale50)
 		cmds.popupMenu()
 		cmds.menuItem(label = "10%", command = partial(Locators.SelectedLocatorsSizeScale, 0.1))
@@ -197,7 +197,7 @@ class Tools:
 
 		### LOCATORS ROW 1
 		countCells2 = 6
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells2, cellWidth = Settings.windowWidth / countCells2, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells2, cellWidth = Settings.windowWidthMargin / countCells2, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Locator", command = self.Locator, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locator)
 		cmds.button(label = "Match", command = self.LocatorsMatch, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorMatch)
 		cmds.button(label = "Parent", command = self.LocatorsParent, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorParent)
@@ -220,7 +220,7 @@ class Tools:
 		# cmds.setParent("..")
 
 		### AIM SPACE SWITCHING
-		layoutAimSpace = cmds.frameLayout(parent = layoutColumn, label = "Aim Space Switching", labelIndent = 75, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, width = Settings.windowWidth)
+		layoutAimSpace = cmds.frameLayout(parent = layoutColumn, label = "Aim Space Switching", labelIndent = 75, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		#
 		cmds.rowLayout(parent = layoutAimSpace, adjustableColumn = 2, numberOfColumns = 6, columnWidth6 = (40, 40, 28, 28, 28, 60), columnAlign = [1, "center"], columnAttach = [(1, "both", 0)])
 		cmds.text(label = "Offset")
@@ -239,7 +239,7 @@ class Tools:
 		cmds.button(label = "Only Rotate", command = partial(self.LocatorsBakeAim, True), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorAimSpaceBakeRotate)
 		# cmds.setParent("..")
 	def UILayoutBaking(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, width = Settings.windowWidth)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
 
 		rowLayout = cmds.rowLayout(parent = layoutColumn, adjustableColumn = 2, numberOfColumns = 3, columnWidth3 = (80, 40, 120), height = Settings.lineHeight, columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
@@ -254,7 +254,7 @@ class Tools:
 		cmds.button(label = "4", command = partial(self.BakeSamplesSet, 4), backgroundColor = Colors.lightBlue10, annotation = ToolsAnnotations.bakeSamples)
 		
 		countCells1 = 2
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells1, cellWidth = Settings.windowWidth / countCells1, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells1, cellWidth = Settings.windowWidthMargin / countCells1, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Bake Classic", command = self.BakeSelectedClassic, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.bakeClassic)
 		cmds.popupMenu()
 		cmds.menuItem(label = "Custom", command = self.BakeSelectedCustom)
@@ -263,7 +263,7 @@ class Tools:
 		cmds.menuItem(label = "Custom", command = self.BakeSelectedCustomCut)
 
 		countCells2 = 6
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells2, cellWidth = Settings.windowWidth / countCells2, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells2, cellWidth = Settings.windowWidthMargin / countCells2, cellHeight = Settings.lineHeight)
 		cmds.button(label = "By Last", command = partial(self.BakeSelectedByLastObject, True, True), backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLast)
 		cmds.button(label = "BL-POS", command = partial(self.BakeSelectedByLastObject, True, False), backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLastPos)
 		cmds.button(label = "BL-ROT", command = partial(self.BakeSelectedByLastObject, False, True), backgroundColor = Colors.orange100, annotation = ToolsAnnotations.bakeByLastRot)
@@ -271,7 +271,7 @@ class Tools:
 		cmds.button(label = "W-POS", command = partial(self.BakeSelectedByWorld, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.bakeByWorldPos)
 		cmds.button(label = "W-ROT", command = partial(self.BakeSelectedByWorld, False, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.bakeByWorldRot)
 	def UILayoutAnimation(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "ANIMATION", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, width = Settings.windowWidth)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "ANIMATION", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
 		
 		cmds.rowLayout(parent = layoutColumn, adjustableColumn = 1, numberOfColumns = 4, columnWidth4 = (60, 35, 75, 50), columnAlign = [(1, "center"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
@@ -281,11 +281,11 @@ class Tools:
 		cmds.button(label = "Static", command = Animation.DeleteStaticCurves, backgroundColor = Colors.red10, annotation = ToolsAnnotations.deleteStaticCurves)
 		#
 		countCellsEuler = 1 # TODO remove grid logic
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCellsEuler, cellWidth = Settings.windowWidth / countCellsEuler, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCellsEuler, cellWidth = Settings.windowWidthMargin / countCellsEuler, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Euler Filter", command = Animation.EulerFilterOnSelected, backgroundColor = Colors.yellow10, annotation = ToolsAnnotations.filterCurve)
 		#
 		countCellsInfinity = 5
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCellsInfinity, cellWidth = Settings.windowWidth / countCellsInfinity, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCellsInfinity, cellWidth = Settings.windowWidthMargin / countCellsInfinity, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Constant", command = partial(Animation.SetInfinity, 1, None), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.animationCurveInfinity)
 		cmds.button(label = "Linear", command = partial(Animation.SetInfinity, 2, None), backgroundColor = Colors.blue10, annotation = ToolsAnnotations.animationCurveInfinity)
 		cmds.button(label = "Cycle", command = partial(Animation.SetInfinity, 3, None), backgroundColor = Colors.blue50, annotation = ToolsAnnotations.animationCurveInfinity)
@@ -294,7 +294,7 @@ class Tools:
 		#
 
 		### Desync
-		cmds.frameLayout(parent = layoutColumn, label = "Desync", labelIndent = 110, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, width = Settings.windowWidth)
+		cmds.frameLayout(parent = layoutColumn, label = "Desync", labelIndent = 110, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		rowLayout = cmds.rowLayout(adjustableColumn = 2, numberOfColumns = 4, columnWidth4 = (120, 30, 30, 70), columnAlign = [(1, "center"), (2, "center"), (3, "right"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
 		# 1
 		cmds.gridLayout(parent = rowLayout, numberOfColumns = 6, cellWidth = 20, cellHeight = Settings.lineHeight)
@@ -313,11 +313,11 @@ class Tools:
 		cmds.button(label = "Left", command = self.AnimationOffsetMoveLeft, backgroundColor = Colors.red50, annotation = ToolsAnnotations.desync)
 		cmds.button(label = "Right", command = self.AnimationOffsetMoveRight, backgroundColor = Colors.green50, annotation = ToolsAnnotations.desync)
 	def UILayoutTimeline(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "TIMELINE", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, width = Settings.windowWidth)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "TIMELINE", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
 		
 		countOffsets = 7
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidth / countOffsets, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "<<", command = partial(Timeline.SetTime, 3), backgroundColor = Colors.green10, annotation = ToolsAnnotations.timelineSetMinOut)
 		cmds.button(label = "<-", command = partial(Timeline.SetTime, 1), backgroundColor = Colors.green50, annotation = ToolsAnnotations.timelineSetMinIn)
 		cmds.button(label = "->", command = partial(Timeline.SetTime, 2), backgroundColor = Colors.green50, annotation = ToolsAnnotations.timelineSetMaxIn)

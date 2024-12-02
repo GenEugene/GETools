@@ -108,28 +108,27 @@ class CenterOfMass:
 		self.UILayoutWeights(layoutColumn)
 		self.UILayoutBaking(layoutColumn)
 	def UILayoutSetup(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "SETUP", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, width = Settings.windowWidth)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "SETUP", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
 		
 		countCells = 4
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells, cellWidth = Settings.windowWidth / countCells, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells, cellWidth = Settings.windowWidthMargin / countCells, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Create", command = self.COMCreate, backgroundColor = Colors.green50, annotation = CenterOfMassAnnotations.create)
 		cmds.button(label = "Activate", command = self.COMActivate, backgroundColor = Colors.yellow50, annotation = CenterOfMassAnnotations.activate)
 		cmds.button(label = "Select", command = self.COMSelect, backgroundColor = Colors.lightBlue50, annotation = CenterOfMassAnnotations.select)
 		cmds.button(label = "Clean", command = self.COMClean, backgroundColor = Colors.red50, annotation = CenterOfMassAnnotations.clean)
 		
-		rowLayoutSize = (110, 40, 40, 40)
-		cmds.rowLayout(parent = layoutColumn, adjustableColumn = 1, numberOfColumns = 4, columnWidth4 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
+		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = (110, 40, 40, 40), columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
 		cmds.text(label = "Project to plane")
 		cmds.button(label = "YZ", command = partial(self.COMFloorProjection, "x"), backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.projectorYZ)
 		cmds.button(label = "XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
 		cmds.button(label = "XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
 	def UILayoutWeights(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "WEIGHTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, width = Settings.windowWidth)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "WEIGHTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
 
 		countCells1 = 1
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells1, cellWidth = Settings.windowWidth / countCells1, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells1, cellWidth = Settings.windowWidthMargin / countCells1, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Disconnect From Center Of Mass", command = self.COMDisconnectTargets, backgroundColor = Colors.red10, annotation = CenterOfMassAnnotations.disconnectTargets)
 		
 		def PartButton(partInfo = ("", 0), minMaxValue = CenterOfMassSettings.weightMinMax, onlyValue = False, annotation = ""):
@@ -141,7 +140,7 @@ class CenterOfMass:
 
 		### WEIGHTS PALETTE
 		countCells2 = 10
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells2, cellWidth = Settings.windowWidth / countCells2, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells2, cellWidth = Settings.windowWidthMargin / countCells2, cellHeight = Settings.lineHeight)
 		
 		def CustomButton(value):
 			PartButton(("", value), onlyValue = True, annotation = CenterOfMassAnnotations.weightsCustom)
@@ -159,7 +158,7 @@ class CenterOfMass:
 
 		### BODYPARTS
 		countCells3 = 3
-		layoutBodyGrid = cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells3, cellWidth = Settings.windowWidth / countCells3, cellHeight = Settings.lineHeight * countCells3)
+		layoutBodyGrid = cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells3, cellWidth = Settings.windowWidthMargin / countCells3, cellHeight = Settings.lineHeight * countCells3)
 		
 		cmds.columnLayout(parent = layoutBodyGrid, adjustableColumn = True)
 		PartButton(CenterOfMassSettings.partHead, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightHead)
@@ -176,11 +175,11 @@ class CenterOfMass:
 		PartButton(CenterOfMassSettings.partKnee, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightKnee)
 		PartButton(CenterOfMassSettings.partFoot, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightFoot)
 	def UILayoutBaking(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, width = Settings.windowWidth)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
 		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
 
 		countCells = 3
-		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells, cellWidth = Settings.windowWidth / countCells, cellHeight = Settings.lineHeight)
+		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells, cellWidth = Settings.windowWidthMargin / countCells, cellHeight = Settings.lineHeight)
 
 		cmds.button(label = "Bake To COM", command = self.BakeScenario3, backgroundColor = Colors.orange10, annotation = CenterOfMassAnnotations.bakeToCOMLink)
 		cmds.popupMenu()
