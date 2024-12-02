@@ -98,10 +98,11 @@ class Rigging:
 		self.UILayoutUtils(layoutMain)
 		self.UILayoutBlendshapes(layoutMain)
 		self.UILayoutCurves(layoutMain)
+		cmds.separator(parent = layoutMain, height = Settings.separatorHeight, style = "none")
 
 	def UILayoutPolygonWithLocators(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "POLYGON WITH LOCATORS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "POLYGON WITH LOCATORS", collapsable = True, backgroundColor = Settings.frames2Color, highlightColor = Colors.green100, marginWidth = 0, marginHeight = 0, borderVisible = True)
+		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = Settings.columnLayoutRowSpacing)
 
 		cellWidths = (75, 75, 75, 50)
 		rowLayout = cmds.rowLayout(parent = layoutColumn, adjustableColumn = 4, numberOfColumns = 4, columnWidth4 = (cellWidths[0], cellWidths[1], cellWidths[2], cellWidths[3]), columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)])
@@ -120,8 +121,8 @@ class Rigging:
 		
 		cmds.button(parent = rowLayout, label = "Create", command = self.CreatePolygonWithLocators, backgroundColor = Colors.green10)
 	def UILayoutConstraints(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CONSTRAINTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CONSTRAINTS", collapsable = True, backgroundColor = Settings.frames2Color, highlightColor = Colors.green100, marginWidth = 0, marginHeight = 0, borderVisible = True)
+		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = Settings.columnLayoutRowSpacing)
 		
 		countOffsets = 4
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
@@ -144,23 +145,23 @@ class Rigging:
 		cmds.button(label = "Disconnect", command = Constraints.DisconnectTargetsFromConstraintOnSelected, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDisconnectSelected)
 		cmds.button(label = "Delete Constraints", command = Constraints.DeleteConstraintsOnSelected, backgroundColor = Colors.red50, annotation = RiggingAnnotations.constraintDelete)
 	def UILayoutUtils(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "UTILS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "UTILS", collapsable = True, backgroundColor = Settings.frames2Color, highlightColor = Colors.green100, marginWidth = 0, marginHeight = 0, borderVisible = True)
+		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = Settings.columnLayoutRowSpacing)
 		
 		rowLayoutSize = (130, 50, 50)
 		
 		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 3, columnWidth3 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
-		cmds.text(label = "Rotate Order")
+		cmds.text(label = "Rotate Order ")
 		cmds.button(label = "SHOW", command = partial(Other.RotateOrderVisibility, True), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderShow)
 		cmds.button(label = "HIDE", command = partial(Other.RotateOrderVisibility, False), backgroundColor = Colors.green10, annotation = RiggingAnnotations.rotateOrderHide)
 		
 		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 3, columnWidth3 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
-		cmds.text(label = "Scale Compensate")
+		cmds.text(label = "Scale Compensate ")
 		cmds.button(label = "ON", command = partial(Other.SegmentScaleCompensate, True), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.scaleCompensateOn)
 		cmds.button(label = "OFF", command = partial(Other.SegmentScaleCompensate, False), backgroundColor = Colors.orange10, annotation = RiggingAnnotations.scaleCompensateOff)
 		
 		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 3, columnWidth3 = rowLayoutSize, columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)])
-		cmds.text(label = "Joint Draw Style")
+		cmds.text(label = "Joint Draw Style ")
 		cmds.button(label = "BONE", command = partial(Other.JointDrawStyle, 0), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.jointDrawStyleBone)
 		cmds.button(label = "HIDDEN", command = partial(Other.JointDrawStyle, 2), backgroundColor = Colors.yellow10, annotation = RiggingAnnotations.jointDrawStyleHidden)
 		
@@ -168,8 +169,8 @@ class Rigging:
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Copy Skin Weights From Last Selected", command = Skinning.CopySkinWeightsFromLastMesh, backgroundColor = Colors.blue10, annotation = RiggingAnnotations.copySkinWeights)
 	def UILayoutBlendshapes(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BLENDSHAPES", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BLENDSHAPES", collapsable = True, backgroundColor = Settings.frames2Color, highlightColor = Colors.green100, marginWidth = 0, marginHeight = 0, borderVisible = True)
+		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = Settings.columnLayoutRowSpacing)
 		
 		countOffsets = 3
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
@@ -182,8 +183,8 @@ class Rigging:
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Zero Weights", command = Blendshapes.ZeroBlendshapeWeightsOnSelected, backgroundColor = Colors.blackWhite100, annotation = RiggingAnnotations.blendshapeZeroWeights)
 	def UILayoutCurves(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CURVES", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "CURVES", collapsable = True, backgroundColor = Settings.frames2Color, highlightColor = Colors.green100, marginWidth = 0, marginHeight = 0, borderVisible = True)
+		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = Settings.columnLayoutRowSpacing)
 		
 		countOffsets = 2
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)

@@ -103,13 +103,14 @@ class CenterOfMass:
 		# self.layoutBaking = None
 	
 	def UICreate(self, layoutMain):
-		layoutColumn = cmds.columnLayout(parent = layoutMain, adjustableColumn = True)
-		self.UILayoutSetup(layoutColumn)
-		self.UILayoutWeights(layoutColumn)
-		self.UILayoutBaking(layoutColumn)
+		self.UILayoutSetup(layoutMain)
+		self.UILayoutWeights(layoutMain)
+		self.UILayoutBaking(layoutMain)
+		cmds.separator(parent = layoutMain, height = Settings.separatorHeight, style = "none")
+	
 	def UILayoutSetup(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "SETUP", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "SETUP", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, borderVisible = True)
+		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = Settings.columnLayoutRowSpacing)
 		
 		countCells = 4
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells, cellWidth = Settings.windowWidthMargin / countCells, cellHeight = Settings.lineHeight)
@@ -124,8 +125,8 @@ class CenterOfMass:
 		cmds.button(label = "XZ", command = partial(self.COMFloorProjection, "y"), backgroundColor = Colors.green10, annotation = CenterOfMassAnnotations.projectorXZ)
 		cmds.button(label = "XY", command = partial(self.COMFloorProjection, "z"), backgroundColor = Colors.blue10, annotation = CenterOfMassAnnotations.projectorXY)
 	def UILayoutWeights(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "WEIGHTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "WEIGHTS", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, borderVisible = True)
+		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = Settings.columnLayoutRowSpacing)
 
 		countCells1 = 1
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells1, cellWidth = Settings.windowWidthMargin / countCells1, cellHeight = Settings.lineHeight)
@@ -175,8 +176,8 @@ class CenterOfMass:
 		PartButton(CenterOfMassSettings.partKnee, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightKnee)
 		PartButton(CenterOfMassSettings.partFoot, minMaxValue = (CenterOfMassSettings.partHand[1], CenterOfMassSettings.partChest[1]), annotation = CenterOfMassAnnotations.weightFoot)
 	def UILayoutBaking(self, layoutMain):
-		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
-		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = 2)
+		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0, borderVisible = True)
+		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = Settings.columnLayoutRowSpacing)
 
 		countCells = 3
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells, cellWidth = Settings.windowWidthMargin / countCells, cellHeight = Settings.lineHeight)
