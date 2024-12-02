@@ -363,9 +363,8 @@ class Overlappy:
 		)
 
 		### Gravity
-		layoutRow = cmds.rowLayout(parent = layoutColumn, adjustableColumn = 3, numberOfColumns = 4, columnWidth4 = (14, 35, 40, 100))
-		self.nucleusGravityCheckbox = cmds.checkBox(parent = layoutRow, changeCommand = self.UpdateParticleSettings, value = OverlappySettings.nucleusGravityActivated)
-		cmds.text(parent = layoutRow, label = "Gravity")
+		layoutRow = cmds.rowLayout(parent = layoutColumn, adjustableColumn = 2, numberOfColumns = 3, columnWidth3 = (55, 40, 100))
+		self.nucleusGravityCheckbox = cmds.checkBox(parent = layoutRow, label = "Gravity", changeCommand = self.UpdateParticleSettings, value = OverlappySettings.nucleusGravityActivated)
 		self.nucleusGravityFloatField = cmds.floatField(parent = layoutRow, changeCommand = self.UpdateParticleSettings, value = OverlappySettings.nucleusGravityValue, precision = 2)
 		self.nucleusGravityDirectionFloatFieldGrp = cmds.floatFieldGrp(parent = layoutRow, changeCommand = self.UpdateParticleSettings, numberOfFields = 3, columnWidth4 = [48, 40, 40, 40], label = "Direction", value = (OverlappySettings.nucleusGravityDirection[0], OverlappySettings.nucleusGravityDirection[1], OverlappySettings.nucleusGravityDirection[2], 0))
 		self.nucleusGravityDirectionFloatFieldGrp = self.nucleusGravityDirectionFloatFieldGrp.replace(Settings.windowName + "|", "") # HACK fix for docked window only. Don't know how to avoid issue
