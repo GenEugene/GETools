@@ -18,7 +18,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
+# Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene https://discord.gg/heMxJhTqCz
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 from .utils import Colors
@@ -30,15 +30,15 @@ windowName = "windowGETools"
 dockName = "dockGETools"
 dockAllowedAreas = ("left", "right")
 dockStartArea = dockAllowedAreas[0] # start docking state, 0 - left, 1 - right
-windowHeight = 500 # vertical window size when undocked
+marginWidth = 8
+marginHeight = 0
+windowHeight = 500
 windowWidth = 300
-windowWidthScrollSpace = 20
+windowWidthOffset = windowWidth - marginWidth + 16
+windowWidthMargin = windowWidth - marginWidth * 2
 lineHeight = 24
-margin = 2
-sliderWidth = (60, 54, 10)
-sliderWidthMarker = 14
-windowWidthScroll = windowWidth - windowWidthScrollSpace
-windowWidthMargin = windowWidthScroll - margin * 2
+columnLayoutRowSpacing = 2
+separatorHeight = 1
 frames1Color = Colors.blackWhite13
 frames2Color = Colors.blackWhite20
 frames2Prefix = "//  "
