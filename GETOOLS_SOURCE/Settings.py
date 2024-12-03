@@ -18,7 +18,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene
+# Author: Eugene Gataulin tek942@gmail.com https://www.linkedin.com/in/geneugene https://discord.gg/heMxJhTqCz
 # Source code: https://github.com/GenEugene/GETools or https://app.gumroad.com/geneugene
 
 from .utils import Colors
