@@ -1,70 +1,74 @@
 GETools changelog
 
-v1.5.1
+v1.5.2 | 05.12.2024
+- added dates to changelog and bring changelog from legacy Overlappy repository
+- added fresh PNG demo collage with all GETools panels
+
+v1.5.1 | 03.12.2024
 - [UI] added visual separation with borders to panels.
 - [UI] reworked margins, more convenient space between groups.
 - [UI] reworked buttons alignment to be more straight.
 - [TOOLS] changed panel name "Animation Offset" to "Desync".
 - [OVERLAPPY] moved "Loop" checkbox lower to "Pre Loop Cycles" buttons.
 
-v1.5.0
+v1.5.0 | 19.11.2024
 - [TOOLS] added "Chain Distribution" button to create distributed rotatio rig over selected objects. Use last locator to control animation.
 - [OVERLAPPY] removed set timeline to minimum frame on plugin start.
 - added full parameters names to installed buttons.
 - updated install instruction Readme file.
 
-v1.4.4
+v1.4.4 | 13.11.2024
 - added Maya version check to avoid compatibility issues with Maya 2020 and older.
 - removed requirement to use separate GETools version for Maya 2020.
 
-v1.4.3
+v1.4.3 | 12.11.2024
 - [OVERLAPPY] fixed loop mode with rootmotion.
 
-v1.4.2
+v1.4.2 | 10.11.2024
 - [OVERLAPPY] added default preset auto loading. If not exists, use Built-in preset.
 - [OVERLAPPY] removed "Reset Settings" button.
 
-v1.4.1
+v1.4.1 | 08.11.2024
 - fixed global variables referencing between all GETools modules (Maya 2020 and older can't use these features).
 - added separate Github branch for Maya version 2020.
 
-v1.4.0
+v1.4.0 | 07.11.2024
 - [TOOLS] added "Polygon With Locators" button to create custom polygons with locators for each vertex.
 - [TOOLS] extracted Rigging UI code blocks to separate functions.
 - [UTILS] removed "Print Animatable Attributes With Shapes" button because of redundancy.
 - [UI] changed some button names.
 
-v1.3.8
+v1.3.8 | 03.11.2024
 - [CENTER OF MASS] fixed constraining to multiple selected objects.
 - [CENTER OF MASS] simplified UI buttons, removed redundant and merge similar.
 
-v1.3.7
+v1.3.7 | 02.11.2024
 - [OVERLAPPY] fixed "Load/Save Settings" missing path to folder after Getools was restarted through "Restart GETools" button.
 
-v1.3.6
+v1.3.6 | 27.10.2024
 - added link for Tutorial Video button.
 
-v1.3.5
+v1.3.5 | 26.10.2024
 - [RIGGING] fixed bug with constraining same object multiple times to create more than 1 parent.
 
-v1.3.4
+v1.3.4 | 26.10.2024
 - [RIGGING] fixed bug with constraint reverse checkbox.
 
-v1.3.3
+v1.3.3 | 19.10.2024
 - [OVERLAPPY] fixed new keys generation if original object already has animation curve on attribute.
 - [TOOLS] reworked Animation Offset buttons with more convenient way to set values.
 
-v1.3.2
+v1.3.2 | 08.10.2024
 - [OVERLAPPY] fixed error with bake to layers when current scene already contained layer from previous Overlappy use.
 - [OVERLAPPY] fixed incorrect reset settings on Point setup after Aim or Combo used.
 - [OVERLAPPY] added save and load settings buttons.
 - [OVERLAPPY] added presets.
 
-v1.3.1
+v1.3.1 | 02.10.2024
 - [TOOLS] added Up locator to Aim Space Switcher.
 - [OVERLAPPY] simplify and merge rig setup logic into one method.
 
-v1.3.0
+v1.3.0 | 27.09.2024
 - [UI] added new features to shelf buttons.
 - [UI] moved motion trail buttons from "Experimental" to "Motion Trail" group.
 - [UI] changed window width from 280 to 300.
@@ -84,10 +88,10 @@ v1.3.0
 - [OVERLAPPY] added nucleus gravity settings.
 - [OVERLAPPY] added loop cycles to option menu.
 
-v1.2.6
+v1.2.6 | 20.08.2024
 - added to Settings.py file default value for "checkboxEulerFilter".
 
-v1.2.5
+v1.2.5 | 06.08.2024
 - [OVERLAPPY] added confirm dialog for zero particle offset.
 - [UTILS] added draft annotation creation logic.
 - [UI] replaced button icon change approach, now simply use Help/Change Icon for toggling icons.
@@ -97,7 +101,7 @@ v1.2.5
 - added connection between base class instance and sub classes.
 - improved euler filter method for using after animation baking.
 
-v1.1.0
+v1.1.0 | 19.07.2024
 - [CRITICAL] fixed compatibility with Maya 2025.
 - [RIGGING] added "Extract Shapes" logic from blendshapes.
 - [UI] added button icon change on highlight.
@@ -106,7 +110,7 @@ v1.1.0
 - moved Settings script to the root folder.
 - general refactoring.
 
-v1.0.5
+v1.0.5 | 09.07.2024
 - fixed motion trails to shelf button.
 - decreased hardcode in Drag and Drop logic.
 - reworked Button Install module.
@@ -118,22 +122,22 @@ v1.0.5
 - [RIGGING] added blendshapes reconstruct button.
 - [RIGGING] added "Zero Blendshapes Weights" button.
 
-v1.0.4
+v1.0.4 | 06.03.2024
 - [OVERLAPPY] reworked Nucleus implementation with non-destructive way.
 - [UTILS] added simple SelectHierarchy method.
 - refactored code style.
 
-v1.0.3
+v1.0.3 | 12.01.2024
 - absolute import replaced by relative import.
 - added more icons on pop-up menus.
 
-v1.0.2
+v1.0.2 | 08.01.2024
 - fixed the "Set Infinity" function causing a warning message to appear in the console.
 
-v1.0.1
+v1.0.1 | 28.12.2023
 - [HOTFIX] removed cross dependency for Maya 2020.
 
-v1.0.0
+v1.0.0 | 28.12.2023
 - [UI] changed main icon and added some small icons.
 - [UI] added pop-up for shelf buttons installation.
 - [UI] decreased buttons size and renamed some labels.
@@ -149,7 +153,7 @@ v1.0.0
 - [UTILS] added color printing in Colors Palette.
 - improved various modules and overall quality.
 
-v0.0.12
+v0.0.12 | 16.12.2023
 - [UI] decreased window size and renamed some labels.
 - [UI] moved some rarely used buttons to right-click menus (cursor changes while hovering over buttons with pop-up lists).
 - [UTILS] added Printing selected attributes from channel box to Utils.
@@ -162,7 +166,7 @@ v0.0.12
 - [CENTER OF MASS] added "Disconnect from Center of Mass" button.
 - improved various modules and overall quality.
 
-v0.0.11
+v0.0.11 | 08.12.2023
 - [UI] moved "Select Transform Hierarchy button" to "Utils" menu and remove SELECT category in TOOLS module
 - [UI] changed window width, margins and spacing between UI elements
 - [UI] added Color Palette window for colors analysis
@@ -175,13 +179,13 @@ v0.0.11
 - extracted Animation functions from Other module into separate module
 - improved baking speed
 
-v0.0.10
+v0.0.10 | 01.12.2023
 - [TOOLS] added custom bake cut outside logic
 - [TOOLS] added float field for locator scale
 - [UI] extracted rigging module from Tools and created new Rigging category
 - [UI] moved "Print selected objects to console" button from Tools/Select to Utils pop-up menu
 
-v0.0.9 - reinstall required
+v0.0.9 | 29.11.2023 | reinstall required
 - [CRITICAL] fixed support for Maya 2020, removed circular dependencies
 - [UI] added restart and close getools pop-ups
 - [UI] added tear off popup menus
@@ -193,13 +197,13 @@ v0.0.9 - reinstall required
 - added Layers module with base logic
 - added labelImage parameter to ShelfButton function
 
-v0.0.8 - reinstall required
+v0.0.8 | 19.11.2023 | reinstall required
 - [CRITICAL] fixed issue with importing modules to avoid namespace intersections with other scripts
 - [CRITICAL] restructured folders, changed root naming
 - [UI] reworked docking logic
 - updated shelf button installer
 
-v0.0.7
+v0.0.7 | 16.11.2023
 - [UI] tweaked buttons order, colors and sizes
 - [UI] changed some buttons text to be more compact
 - [UI] updated help links, added version history link
@@ -208,11 +212,11 @@ v0.0.7
 - [TOOLS] fixed small errors for RotateOrderVisibility and JointDrawStyle
 - [EXPERIMENTAL] improved Motion Trail buttons usability
 
-v0.0.6
+v0.0.6 | 14.11.2023
 - [OVERLAPPY] added Cached Playback auto deactivation
 - general window cleanup
 
-v0.0.5 - First released version
+v0.0.5 | 13.11.2023 | First GETools public release
 - integrated Tools module
 - integrated Overlappy module
 - integrated Center Of Mass module
@@ -221,3 +225,93 @@ v0.0.5 - First released version
 - added drag and drop installer
 - added docking window feature
 - general cleanup of all old files
+
+v0.0.4 | 12.11.2023
+v0.0.3 | 09.11.2023
+v0.0.2 | 08.11.2023
+v0.0.1 | 06.11.2023 | converted Overlappy to GETools plugin
+
+OVERLAPPY
+v0.1.1 | 09.04.2022 | latest public update before repository archiving
+[FIX] updated for Maya 2020-2022
+
+v0.1.0 | 16.06.2019 | uploaded to public github repository in 12.11.2019
+[NEW] Full refactoring, class inheritance
+[NEW] Collapsed main logic into one block
+[NEW] Execution time log
+[NEW] SELECT hierarchy button
+[NEW] Hierarchy mode
+[NEW] SplitChains mode
+[NEW] Min loop factor controller
+[NEW] Confirm message dialogs system
+[FIX] Joint chain rotation issue
+[FIX] Progress bar close with script window
+[FIX] Timeline returns to frame before simulation
+[OTHER] More comfortable default values and sliders limits
+[OTHER] More informative logs (counts, time, etc.)
+[OTHER] Rename some buttons and color changes
+
+v0.0.9 | 08.05.2019
+[NEW] Created simulation states (for translate/rotate/other separation)
+[FIX] "blendParent1" issue
+[FIX] Optimized speed, reduced simulation passes (from 2-3 to 1)
+[FIX] Progressbar events
+[FIX] MOVE button exceptions
+[OTHER] Rewrited layer logic, safe move and much other logic
+
+v0.0.8
+[NEW] Compatibility with Maya 2017
+[NEW] "MOVE" button to move all overlappy keyed layers to safe layer
+[NEW] "offsetLocator" for calculate angle offsets
+[FIX] "'list_objects' is not defined"
+[FIX] Constraints offset baking
+[REMOVE] "sbm" parameter from frameLayout's
+[REMOVE] "cycleInfinity" variable
+
+v0.0.7 | 14.04.2019
+[NEW] Progress bar
+[FIX] Incorrect loop baking
+[FIX] Non zero start animation loop baking
+[OTHER] Refined much of code
+[OTHER] UI corrections
+
+v0.0.6
+[NEW] New variables for UI and other
+[FIX] RESET CHECKBOX button event
+[FIX] All reset events debug log
+[OTHER] Small text/descriptions fixes
+[OTHER] Set new default values
+[REMOVE] "Set cycle infinity" checkbox (combined with "Looping animation")
+
+v0.0.5 | 28.03.2019
+[NEW] Separated reset for TRANSLATION and ROTATION variables and add CHECKBOX reset
+[NEW] "Set cycle infinity" checkbox for cycle/constant infinity
+[OTHER] Full reconstructed UI
+[OTHER] Rewrited some script blocks
+[OTHER] New test checkboxes for future features
+
+v0.0.4
+[OTHER] Replaced all descriptions and comments to english
+[OTHER] Changed font size of buttons
+[OTHER] Rewrited main instruction
+
+v0.0.3 | 20.03.2019
+[NEW] Can use locked translations and rotations
+[NEW] Checkbox reverse aim axis Y (1, -1)
+[FIX] Combined 2 checkboxes to 1 for loop animation
+
+v0.0.2 | 05.03.2019 | published to Highend3D
+[NEW] Rotation simulation script
+[NEW] Instruction (rus)
+[FIX] Symbols issue (":" and "|" will replaced by "_" symbol)
+[OTHER] Few text corrections
+
+v0.0.1 | 28.02.2019
+[NEW] UI and test
+[NEW] Layouts and descriptions
+
+v0.0.0
+[NEW] Translation simulation script
+[NEW] Bking animation to layers
+
+v0 | first draft was made approximately between 2017-2019
