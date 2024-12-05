@@ -26,6 +26,7 @@ from functools import partial
 
 from .. import Settings
 from ..modules import Options
+from ..modules import Transformations
 from ..modules import Tools
 from ..modules import Rigging
 from ..modules import Overlappy
@@ -57,6 +58,7 @@ class GeneralWindow:
 		self.optionsPlugin = Options.PluginVariables()
 		self.optionsPlugin.titleGeneral = GeneralWindow._title
 
+		self.frameTransformations = None
 		self.frameTools = None
 		self.frameRigging = None
 		self.frameOverlappy = None
@@ -74,6 +76,7 @@ class GeneralWindow:
 
 		layoutScroll = cmds.scrollLayout(parent = generalWindow, width = Settings.windowWidthOffset)
 
+		self.LayoutTransformations(parentLayout = layoutScroll)
 		self.LayoutTools(parentLayout = layoutScroll)
 		self.LayoutRigging(parentLayout = layoutScroll)
 		self.LayoutOverlappy(parentLayout = layoutScroll)
@@ -432,24 +435,27 @@ class GeneralWindow:
 		cmds.menuItem(label = "Delete", command = partial(Install.ToShelf_MotionTrailDelete, self.optionsPlugin.directory), image = Icons.minus)
 		cmds.setParent('..', menu = True)
 	
+	def LayoutTransformations(self, parentLayout):
+		self.frameTransformations = cmds.frameLayout(parent = parentLayout, label = Transformations.Transformations._title, collapsable = True, backgroundColor = Settings.frames1Color, width = Settings.windowWidth, marginWidth = Settings.marginWidth, marginHeight = Settings.marginHeight)
+		Transformations.Transformations(self.optionsPlugin).UICreate(self.frameTransformations)
 	def LayoutTools(self, parentLayout):
-		self.frameTools = cmds.frameLayout(parent = parentLayout, label = "1. " + Tools.Tools._title, collapsable = True, backgroundColor = Settings.frames1Color, width = Settings.windowWidth, marginWidth = Settings.marginWidth, marginHeight = Settings.marginHeight)
+		self.frameTools = cmds.frameLayout(parent = parentLayout, label = Tools.Tools._title, collapsable = True, backgroundColor = Settings.frames1Color, width = Settings.windowWidth, marginWidth = Settings.marginWidth, marginHeight = Settings.marginHeight)
 		Tools.Tools(self.optionsPlugin).UICreate(self.frameTools)
 	def LayoutRigging(self, parentLayout):
-		self.frameRigging = cmds.frameLayout(parent = parentLayout, label = "2. " + Rigging.Rigging._title, collapsable = True, backgroundColor = Settings.frames1Color, width = Settings.windowWidth, marginWidth = Settings.marginWidth, marginHeight = Settings.marginHeight)
+		self.frameRigging = cmds.frameLayout(parent = parentLayout, label = Rigging.Rigging._title, collapsable = True, backgroundColor = Settings.frames1Color, width = Settings.windowWidth, marginWidth = Settings.marginWidth, marginHeight = Settings.marginHeight)
 		Rigging.Rigging(self.optionsPlugin).UICreate(self.frameRigging)
 	def LayoutOverlappy(self, parentLayout):
-		self.frameOverlappy = cmds.frameLayout(parent = parentLayout, label = "3. " + Overlappy.Overlappy._title, collapsable = True, backgroundColor = Settings.frames1Color, width = Settings.windowWidth, marginWidth = Settings.marginWidth, marginHeight = Settings.marginHeight)
+		self.frameOverlappy = cmds.frameLayout(parent = parentLayout, label = Overlappy.Overlappy._title, collapsable = True, backgroundColor = Settings.frames1Color, width = Settings.windowWidth, marginWidth = Settings.marginWidth, marginHeight = Settings.marginHeight)
 		Overlappy.Overlappy(self.optionsPlugin).UICreate(self.frameOverlappy)
 	def LayoutCenterOfMass(self, parentLayout):
-		self.frameCenterOfMass = cmds.frameLayout(parent = parentLayout, label = "4. " + CenterOfMass.CenterOfMass._title, collapsable = True, backgroundColor = Settings.frames1Color, width = Settings.windowWidth, marginWidth = Settings.marginWidth, marginHeight = Settings.marginHeight)
+		self.frameCenterOfMass = cmds.frameLayout(parent = parentLayout, label = CenterOfMass.CenterOfMass._title, collapsable = True, backgroundColor = Settings.frames1Color, width = Settings.windowWidth, marginWidth = Settings.marginWidth, marginHeight = Settings.marginHeight)
 		CenterOfMass.CenterOfMass(self.optionsPlugin).UICreate(self.frameCenterOfMass)
 	def LayoutMotionTrail(self, parentLayout):
 		versionMT = "v1.0" # TODO move to Motion Trail class when possible
 		nameMT = "MOTION TRAIL"
 		titleMT = nameMT + " " + versionMT
 				
-		self.frameMotionTrail = cmds.frameLayout(parent = parentLayout, label = "5. " + titleMT, collapsable = True, backgroundColor = Settings.frames1Color, width = Settings.windowWidth, marginWidth = Settings.marginWidth, marginHeight = Settings.marginHeight)
+		self.frameMotionTrail = cmds.frameLayout(parent = parentLayout, label = titleMT, collapsable = True, backgroundColor = Settings.frames1Color, width = Settings.windowWidth, marginWidth = Settings.marginWidth, marginHeight = Settings.marginHeight)
 		
 		countOffsets = 3
 		cmds.gridLayout(parent = self.frameMotionTrail, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
@@ -486,6 +492,8 @@ class GeneralWindow:
 		else:
 			print("No Window")
 	def FramesCollapse(self, value, *args): # TODO collapse function for sub frames
+		if self.frameTransformations is not None:
+			cmds.frameLayout(self.frameTransformations, edit = True, collapse = value)
 		if self.frameTools is not None:
 			cmds.frameLayout(self.frameTools, edit = True, collapse = value)
 		if self.frameRigging is not None:
