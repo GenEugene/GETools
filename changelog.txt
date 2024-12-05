@@ -181,7 +181,7 @@ v0.0.10 | 01.12.2023
 - [UI] extracted rigging module from Tools and created new Rigging category
 - [UI] moved "Print selected objects to console" button from Tools/Select to Utils pop-up menu
 
-v0.0.9 | 29.11.2023 | - reinstall required
+v0.0.9 | 29.11.2023 | reinstall required
 - [CRITICAL] fixed support for Maya 2020, removed circular dependencies
 - [UI] added restart and close getools pop-ups
 - [UI] added tear off popup menus
@@ -193,7 +193,7 @@ v0.0.9 | 29.11.2023 | - reinstall required
 - added Layers module with base logic
 - added labelImage parameter to ShelfButton function
 
-v0.0.8 | 19.11.2023 | - reinstall required
+v0.0.8 | 19.11.2023 | reinstall required
 - [CRITICAL] fixed issue with importing modules to avoid namespace intersections with other scripts
 - [CRITICAL] restructured folders, changed root naming
 - [UI] reworked docking logic
@@ -212,7 +212,7 @@ v0.0.6 | 14.11.2023
 - [OVERLAPPY] added Cached Playback auto deactivation
 - general window cleanup
 
-v0.0.5 | 13.11.2023 | - First released version
+v0.0.5 | 13.11.2023 | First GETools public release
 - integrated Tools module
 - integrated Overlappy module
 - integrated Center Of Mass module
@@ -228,8 +228,86 @@ v0.0.2 | 08.11.2023
 v0.0.1 | 06.11.2023 | converted Overlappy to GETools plugin
 
 OVERLAPPY
-v0.1.1 | 09.04.2022
-- last public update before archiving
+v0.1.1 | 09.04.2022 | latest public update before repository archiving
+[FIX] updated for Maya 2020-2022
 
-v0.1.0 | 12.11.2019
-- first upload to github
+v0.1.0 | 16.06.2019 | uploaded to public github repository in 12.11.2019
+[NEW] Full refactoring, class inheritance
+[NEW] Collapsed main logic into one block
+[NEW] Execution time log
+[NEW] SELECT hierarchy button
+[NEW] Hierarchy mode
+[NEW] SplitChains mode
+[NEW] Min loop factor controller
+[NEW] Confirm message dialogs system
+[FIX] Joint chain rotation issue
+[FIX] Progress bar close with script window
+[FIX] Timeline returns to frame before simulation
+[OTHER] More comfortable default values and sliders limits
+[OTHER] More informative logs (counts, time, etc.)
+[OTHER] Rename some buttons and color changes
+
+v0.0.9 | 08.05.2019
+[NEW] Created simulation states (for translate/rotate/other separation)
+[FIX] "blendParent1" issue
+[FIX] Optimized speed, reduced simulation passes (from 2-3 to 1)
+[FIX] Progressbar events
+[FIX] MOVE button exceptions
+[OTHER] Rewrited layer logic, safe move and much other logic
+
+v0.0.8
+[NEW] Compatibility with Maya 2017
+[NEW] "MOVE" button to move all overlappy keyed layers to safe layer
+[NEW] "offsetLocator" for calculate angle offsets
+[FIX] "'list_objects' is not defined"
+[FIX] Constraints offset baking
+[REMOVE] "sbm" parameter from frameLayout's
+[REMOVE] "cycleInfinity" variable
+
+v0.0.7 | 14.04.2019
+[NEW] Progress bar
+[FIX] Incorrect loop baking
+[FIX] Non zero start animation loop baking
+[OTHER] Refined much of code
+[OTHER] UI corrections
+
+v0.0.6
+[NEW] New variables for UI and other
+[FIX] RESET CHECKBOX button event
+[FIX] All reset events debug log
+[OTHER] Small text/descriptions fixes
+[OTHER] Set new default values
+[REMOVE] "Set cycle infinity" checkbox (combined with "Looping animation")
+
+v0.0.5 | 28.03.2019
+[NEW] Separated reset for TRANSLATION and ROTATION variables and add CHECKBOX reset
+[NEW] "Set cycle infinity" checkbox for cycle/constant infinity
+[OTHER] Full reconstructed UI
+[OTHER] Rewrited some script blocks
+[OTHER] New test checkboxes for future features
+
+v0.0.4
+[OTHER] Replaced all descriptions and comments to english
+[OTHER] Changed font size of buttons
+[OTHER] Rewrited main instruction
+
+v0.0.3 | 20.03.2019
+[NEW] Can use locked translations and rotations
+[NEW] Checkbox reverse aim axis Y (1, -1)
+[FIX] Combined 2 checkboxes to 1 for loop animation
+
+v0.0.2 | 05.03.2019 | published to Highend3D
+[NEW] Rotation simulation script
+[NEW] Instruction (rus)
+[FIX] Symbols issue (":" and "|" will replaced by "_" symbol)
+[OTHER] Few text corrections
+
+v0.0.1 | 28.02.2019
+[NEW] UI and test
+[NEW] Layouts and descriptions
+
+v0.0.0
+[NEW] Translation simulation script
+[NEW] Bking animation to layers
+
+v0 | first draft was made approximately between 2017-2019
