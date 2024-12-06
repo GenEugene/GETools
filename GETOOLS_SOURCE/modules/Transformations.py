@@ -57,11 +57,9 @@ class Transformations:
 		self.floatFieldMultiplier = None
 		self.floatFieldGrpDirection = None
 		self.floatFieldDistance = None
-
 	def UICreate(self, layoutMain):
 		self.UILayoutLocators(layoutMain)
 		cmds.separator(parent = layoutMain, height = Settings.separatorHeight, style = "none")
-	
 	def UILayoutLocators(self, layoutMain):
 		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "MOVE", collapsable = True, backgroundColor = Settings.frames2Color, highlightColor = Colors.green100, marginWidth = 0, marginHeight = 0, borderVisible = True)
 		layoutColumn = cmds.columnLayout(adjustableColumn = True)
@@ -74,7 +72,7 @@ class Transformations:
 		self.checkBoxPreserveChildPosition = cmds.checkBox(label = "Preserve Child Position", value = False)
 		self.checkBoxPivot = cmds.checkBox(label = "Pivot", value = False)
 
-		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 4, columnWidth4 = (60, 70, 60, 90), columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0)], height = Settings.lineHeight)
+		cmds.rowLayout(parent = layoutColumn, adjustableColumn = 2, numberOfColumns = 5, columnWidth5 = (60, 50, 60, 50, 50), columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center"), (5, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0), (5, "both", 0)], height = Settings.lineHeight)
 		cmds.text(label = "Multiplier: ")
 		self.floatFieldMultiplier = cmds.floatField(value = 1, precision = 3)
 		cmds.popupMenu()
@@ -98,7 +96,9 @@ class Transformations:
 		cmds.menuItem(label = "10", command = partial(self.SetMultiplier, 10))
 		cmds.menuItem(label = "100", command = partial(self.SetMultiplier, 100))
 		cmds.menuItem(label = "1000", command = partial(self.SetMultiplier, 1000))
-		# TODO fill space with 1-2 elements
+		cmds.button(label = "Edit Pivot", command = cmds.EnterEditModePress, backgroundColor = Colors.yellow10)
+		cmds.button(label = "Pivot On", command = partial(self.SetPivotAttributes, True), backgroundColor = Colors.blackWhite80)
+		cmds.button(label = "Pivot Off", command = partial(self.SetPivotAttributes, False), backgroundColor = Colors.blackWhite80)
 
 		rowLayoutDirection = cmds.rowLayout(parent = layoutColumn, adjustableColumn = 2, numberOfColumns = 2, columnWidth2 = (188, 60), columnAlign = [(1, "right"), (2, "center")], columnAttach = [(1, "both", 0), (2, "both", 0)], height = Settings.lineHeight)
 		self.floatFieldGrpDirection = cmds.floatFieldGrp(parent = rowLayoutDirection, label = "Direction: ", numberOfFields = 3, columnWidth4 = (60, 40, 40, 40), value = [0, 0, 0, 0], columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")])
@@ -139,15 +139,21 @@ class Transformations:
 		cmds.button(label = "-Z", command = partial(self.MoveSelected, 3, True), backgroundColor = Colors.blue10)
 		cmds.button(label = "+Z", command = partial(self.MoveSelected, 3, False), backgroundColor = Colors.blue50)
 
-
 	def SetMultiplier(self, value, *args):
 		cmds.floatField(self.floatFieldMultiplier, edit = True, value = value)
-
 	def SetDirection(self, value, *args):
 		cmds.floatFieldGrp(self.floatFieldGrpDirection, edit = True, value = [value[0], value[1], value[2], 0])
-	
 	def SetDistance(self, value, *args):
 		cmds.floatField(self.floatFieldDistance, edit = True, value = value)
+	def SetPivotAttributes(self, value, *args):
+		selected = cmds.ls(selection = True)
+		for i in range(len(selected)):
+			cmds.setAttr(selected[i] + ".rotatePivotX", channelBox = value)
+			cmds.setAttr(selected[i] + ".rotatePivotY", channelBox = value)
+			cmds.setAttr(selected[i] + ".rotatePivotZ", channelBox = value)
+			cmds.setAttr(selected[i] + ".scalePivotX", channelBox = value)
+			cmds.setAttr(selected[i] + ".scalePivotY", channelBox = value)
+			cmds.setAttr(selected[i] + ".scalePivotZ", channelBox = value)
 
 	def MoveSelected(self, axis, reverse=False, *args):
 		space = cmds.radioButtonGrp(self.radioButtonGrpSpace, query = True, select = True)
@@ -157,7 +163,7 @@ class Transformations:
 
 		relative = cmds.checkBox(self.checkBoxRelative, query = True, value = True)
 		preserveChildPosition = cmds.checkBox(self.checkBoxPreserveChildPosition, query = True, value = True)
-		pivot = cmds.checkBox(self.checkBoxPivot, query = True, value = True) # TODO
+		pivot = cmds.checkBox(self.checkBoxPivot, query = True, value = True)
 
 		direction = [0, 0, 0]
 		if axis == 0:
@@ -178,15 +184,13 @@ class Transformations:
 		direction[2] = direction[2] * multiplier
 
 		selected = cmds.ls(selection = True)
+		selectedFinal = []
+		if (pivot):
+			for i in range (len(selected)):
+				selectedFinal.append(selected[i] + ".scalePivot")
+				selectedFinal.append(selected[i] + ".rotatePivot")
+		else:
+			selectedFinal = selected;
 
-		cmds.move(direction[0], direction[1], direction[2], selected, worldSpace = isWorldSpace, objectSpace = isObjectSpace, localSpace = isLocalSpace, relative = relative, preserveChildPosition = preserveChildPosition)
-
-		# TODO
-		# cmds.setAttr(item + "." + Enums.Attributes.rotatePivotX, channelBox = on)
-		# cmds.setAttr(item + "." + Enums.Attributes.rotatePivotY, channelBox = on)
-		# cmds.setAttr(item + "." + Enums.Attributes.rotatePivotZ, channelBox = on)
-
-		# cmds.setAttr(item + "." + Enums.Attributes.scalePivotX, channelBox = on)
-		# cmds.setAttr(item + "." + Enums.Attributes.scalePivotX, channelBox = on)
-		# cmds.setAttr(item + "." + Enums.Attributes.scalePivotX, channelBox = on)
+		cmds.move(direction[0], direction[1], direction[2], selectedFinal, worldSpace = isWorldSpace, objectSpace = isObjectSpace, localSpace = isLocalSpace, relative = relative, preserveChildPosition = preserveChildPosition)
 
