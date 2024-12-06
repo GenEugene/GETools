@@ -31,13 +31,25 @@ from ..utils import Colors
 
 
 class TransformationsAnnotations:
-	annotation = "xxxxxxxxxxxxxxxxxxx"
+	space = "WORLD SPACE uses global axes orientations.\nLOCAL SPACE uses parent space, useful when selected object is a child of other object.\nOBJECT SPACE uses selected objects' axes and move accordingly arrows."
+	relative = "Current position used as a start point resulting move addition each step.\nDeactivate to use absolute mode to set specific coordinates."
+	preserveChildPosition = "Child object will stay on the same position while selected object will be moved.\nVery useful when you need to tweak object's position in the middle of hierarchy."
+	pivot = "Move pivot of selected objects instead of moving objects transform nodes"
+	multiplier = "Extra multiplier for DIRECTION and DISTANCE values."
 
-class TransformationsSettings:
-	value = 0
+	editPivot = "Toggle pivot editing for selected objects.\nThe same action as 'D' hotkey on keyboard."
+	pivotOn = "Show pivot attributes in channel box"
+	pivotOff = "Hide pivot attributes in channel box"
+
+	direction = "XYZ values for directional movement"
+	moveDirectionNegative = "Apply directional movement with reverse direction values"
+	moveDirectionPositive = "Apply directional movement with original direction values"
+
+	distance = "Distance value for separate axes movement"
+	moveDistance = "Apply movement to current axis.\n-+ symbols mean negative and positive directinos."
 
 class Transformations:
-	_version = "v0.0"
+	_version = "v0.1"
 	_name = "TRANSFORMATIONS"
 	_title = _name + " " + _version
 
@@ -64,17 +76,17 @@ class Transformations:
 		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "MOVE", collapsable = True, backgroundColor = Settings.frames2Color, highlightColor = Colors.green100, marginWidth = 0, marginHeight = 0, borderVisible = True)
 		layoutColumn = cmds.columnLayout(adjustableColumn = True)
 
-		self.radioButtonGrpSpace = cmds.radioButtonGrp(parent = layoutColumn, label = "Space: ", labelArray3 = ["World", "Local", "Object"], select = 1, numberOfRadioButtons = 3, columnWidth4 = (60, 50, 50, 50), columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], height = Settings.lineHeight)
+		self.radioButtonGrpSpace = cmds.radioButtonGrp(parent = layoutColumn, label = "Space: ", labelArray3 = ["World", "Local", "Object"], select = 1, numberOfRadioButtons = 3, columnWidth4 = (60, 50, 50, 50), columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], height = Settings.lineHeight, annotation = TransformationsAnnotations.space)
 		self.radioButtonGrpSpace = self.radioButtonGrpSpace.replace(Settings.windowName + "|", "") # HACK fix for docked window only. Don't know how to avoid issue
 
 		cmds.rowLayout(parent = layoutColumn, numberOfColumns = 3, columnWidth3 = (70, 150, 50), columnAlign = [(1, "center"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)], height = Settings.lineHeight)
-		self.checkBoxRelative = cmds.checkBox(label = "Relative", value = True)
-		self.checkBoxPreserveChildPosition = cmds.checkBox(label = "Preserve Child Position", value = False)
-		self.checkBoxPivot = cmds.checkBox(label = "Pivot", value = False)
+		self.checkBoxRelative = cmds.checkBox(label = "Relative", value = True, annotation = TransformationsAnnotations.relative)
+		self.checkBoxPreserveChildPosition = cmds.checkBox(label = "Preserve Child Position", value = False, annotation = TransformationsAnnotations.preserveChildPosition)
+		self.checkBoxPivot = cmds.checkBox(label = "Pivot", value = False, annotation = TransformationsAnnotations.pivot)
 
 		cmds.rowLayout(parent = layoutColumn, adjustableColumn = 2, numberOfColumns = 5, columnWidth5 = (60, 50, 60, 50, 50), columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center"), (5, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0), (4, "both", 0), (5, "both", 0)], height = Settings.lineHeight)
-		cmds.text(label = "Multiplier: ")
-		self.floatFieldMultiplier = cmds.floatField(value = 1, precision = 3)
+		cmds.text(label = "Multiplier: ", annotation = TransformationsAnnotations.multiplier)
+		self.floatFieldMultiplier = cmds.floatField(value = 1, precision = 3, annotation = TransformationsAnnotations.multiplier)
 		cmds.popupMenu()
 		cmds.menuItem(label = "0.001", command = partial(self.SetMultiplier, 0.001))
 		cmds.menuItem(label = "0.01", command = partial(self.SetMultiplier, 0.01))
@@ -96,12 +108,12 @@ class Transformations:
 		cmds.menuItem(label = "10", command = partial(self.SetMultiplier, 10))
 		cmds.menuItem(label = "100", command = partial(self.SetMultiplier, 100))
 		cmds.menuItem(label = "1000", command = partial(self.SetMultiplier, 1000))
-		cmds.button(label = "Edit Pivot", command = cmds.EnterEditModePress, backgroundColor = Colors.yellow10)
-		cmds.button(label = "Pivot On", command = partial(self.SetPivotAttributes, True), backgroundColor = Colors.blackWhite80)
-		cmds.button(label = "Pivot Off", command = partial(self.SetPivotAttributes, False), backgroundColor = Colors.blackWhite80)
+		cmds.button(label = "Edit Pivot", command = cmds.EnterEditModePress, backgroundColor = Colors.yellow10, annotation = TransformationsAnnotations.editPivot)
+		cmds.button(label = "Pivot On", command = partial(self.SetPivotAttributes, True), backgroundColor = Colors.blackWhite80, annotation = TransformationsAnnotations.pivotOn)
+		cmds.button(label = "Pivot Off", command = partial(self.SetPivotAttributes, False), backgroundColor = Colors.blackWhite80, annotation = TransformationsAnnotations.pivotOff)
 
 		rowLayoutDirection = cmds.rowLayout(parent = layoutColumn, adjustableColumn = 2, numberOfColumns = 2, columnWidth2 = (188, 60), columnAlign = [(1, "right"), (2, "center")], columnAttach = [(1, "both", 0), (2, "both", 0)], height = Settings.lineHeight)
-		self.floatFieldGrpDirection = cmds.floatFieldGrp(parent = rowLayoutDirection, label = "Direction: ", numberOfFields = 3, columnWidth4 = (60, 40, 40, 40), value = [0, 0, 0, 0], columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")])
+		self.floatFieldGrpDirection = cmds.floatFieldGrp(parent = rowLayoutDirection, label = "Direction: ", numberOfFields = 3, columnWidth4 = (60, 40, 40, 40), value = [0, 0, 0, 0], columnAlign = [(1, "right"), (2, "center"), (3, "center"), (4, "center")], annotation = TransformationsAnnotations.direction)
 		self.floatFieldGrpDirection = self.floatFieldGrpDirection.replace(Settings.windowName + "|", "") # HACK fix for docked window only. Don't know how to avoid issue
 		cmds.popupMenu()
 		cmds.menuItem(label = "0, 0, 0", command = partial(self.SetDirection, [0, 0, 0]))
@@ -110,12 +122,12 @@ class Transformations:
 		cmds.menuItem(label = "0, 1, 0", command = partial(self.SetDirection, [0, 1, 0]))
 		cmds.menuItem(label = "0, 0, 1", command = partial(self.SetDirection, [0, 0, 1]))
 		cmds.gridLayout(parent = rowLayoutDirection, numberOfColumns = 2, cellWidth = 44, cellHeight = Settings.lineHeight)
-		cmds.button(label = "-XYZ", command = partial(self.MoveSelected, 0, True), backgroundColor = Colors.orange10)
-		cmds.button(label = "+XYZ", command = partial(self.MoveSelected, 0, False), backgroundColor = Colors.orange50)
+		cmds.button(label = "-XYZ", command = partial(self.MoveSelected, 0, True), backgroundColor = Colors.orange10, annotation = TransformationsAnnotations.moveDirectionNegative)
+		cmds.button(label = "+XYZ", command = partial(self.MoveSelected, 0, False), backgroundColor = Colors.orange50, annotation = TransformationsAnnotations.moveDirectionPositive)
 		
 		cmds.rowLayout(parent = layoutColumn, adjustableColumn = 2, numberOfColumns = 3, columnWidth3 = (60, 50, 156), columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)], height = Settings.lineHeight)
-		cmds.text(label = "Distance: ")
-		self.floatFieldDistance = cmds.floatField(value = 1, precision = 3)
+		cmds.text(label = "Distance: ", annotation = TransformationsAnnotations.distance)
+		self.floatFieldDistance = cmds.floatField(value = 1, precision = 3, annotation = TransformationsAnnotations.distance)
 		cmds.popupMenu()
 		cmds.menuItem(label = "0", command = partial(self.SetDistance, 0))
 		cmds.menuItem(divider = True)
@@ -132,12 +144,12 @@ class Transformations:
 		cmds.menuItem(label = "100", command = partial(self.SetDistance, 100))
 		cmds.menuItem(label = "1000", command = partial(self.SetDistance, 1000))
 		cmds.gridLayout(numberOfColumns = 6, cellWidth = 26, cellHeight = Settings.lineHeight)
-		cmds.button(label = "-X", command = partial(self.MoveSelected, 1, True), backgroundColor = Colors.red10)
-		cmds.button(label = "+X", command = partial(self.MoveSelected, 1, False), backgroundColor = Colors.red50)
-		cmds.button(label = "-Y", command = partial(self.MoveSelected, 2, True), backgroundColor = Colors.green10)
-		cmds.button(label = "+Y", command = partial(self.MoveSelected, 2, False), backgroundColor = Colors.green50)
-		cmds.button(label = "-Z", command = partial(self.MoveSelected, 3, True), backgroundColor = Colors.blue10)
-		cmds.button(label = "+Z", command = partial(self.MoveSelected, 3, False), backgroundColor = Colors.blue50)
+		cmds.button(label = "-X", command = partial(self.MoveSelected, 1, True), backgroundColor = Colors.red10, annotation = TransformationsAnnotations.moveDistance)
+		cmds.button(label = "+X", command = partial(self.MoveSelected, 1, False), backgroundColor = Colors.red50, annotation = TransformationsAnnotations.moveDistance)
+		cmds.button(label = "-Y", command = partial(self.MoveSelected, 2, True), backgroundColor = Colors.green10, annotation = TransformationsAnnotations.moveDistance)
+		cmds.button(label = "+Y", command = partial(self.MoveSelected, 2, False), backgroundColor = Colors.green50, annotation = TransformationsAnnotations.moveDistance)
+		cmds.button(label = "-Z", command = partial(self.MoveSelected, 3, True), backgroundColor = Colors.blue10, annotation = TransformationsAnnotations.moveDistance)
+		cmds.button(label = "+Z", command = partial(self.MoveSelected, 3, False), backgroundColor = Colors.blue50, annotation = TransformationsAnnotations.moveDistance)
 
 	def SetMultiplier(self, value, *args):
 		cmds.floatField(self.floatFieldMultiplier, edit = True, value = value)
