@@ -122,7 +122,7 @@ class Transformations:
 		cmds.menuItem(label = "0, 0, 1", command = partial(self.SetDirection, [0, 0, 1]))
 		cmds.gridLayout(parent = rowLayoutDirection, numberOfColumns = 2, cellWidth = 44, cellHeight = Settings.lineHeight)
 		cmds.button(label = "-XYZ", command = partial(self.MoveSelected, 0, True), backgroundColor = Colors.orange10, annotation = TransformationsAnnotations.moveDirection)
-		cmds.button(label = "+XYZ", command = partial(self.MoveSelected, 0, False), backgroundColor = Colors.orange50, annotation = TransformationsAnnotations.moveDirectionPositive)
+		cmds.button(label = "+XYZ", command = partial(self.MoveSelected, 0, False), backgroundColor = Colors.orange50, annotation = TransformationsAnnotations.moveDirection)
 		
 		cmds.rowLayout(parent = layoutColumn, adjustableColumn = 2, numberOfColumns = 3, columnWidth3 = (60, 50, 156), columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)], height = Settings.lineHeight)
 		cmds.text(label = "Distance: ", annotation = TransformationsAnnotations.distance)
