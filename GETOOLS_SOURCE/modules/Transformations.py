@@ -41,12 +41,11 @@ class TransformationsAnnotations:
 	pivotOn = "Show pivot attributes in channel box"
 	pivotOff = "Hide pivot attributes in channel box"
 
+	_negativePositive = "-+ symbols mean negative and positive directions"
 	direction = "XYZ values for directional movement"
-	moveDirectionNegative = "Apply directional movement with reverse direction values"
-	moveDirectionPositive = "Apply directional movement with original direction values"
-
+	moveDirection = "Apply XYZ movement with direction values.\n{0}.".format(_negativePositive)
 	distance = "Distance value for separate axes movement"
-	moveDistance = "Apply movement to current axis.\n-+ symbols mean negative and positive directinos."
+	moveDistance = "Apply axis movement using distance.\n{0}.".format(_negativePositive)
 
 class Transformations:
 	_version = "v0.1"
@@ -122,7 +121,7 @@ class Transformations:
 		cmds.menuItem(label = "0, 1, 0", command = partial(self.SetDirection, [0, 1, 0]))
 		cmds.menuItem(label = "0, 0, 1", command = partial(self.SetDirection, [0, 0, 1]))
 		cmds.gridLayout(parent = rowLayoutDirection, numberOfColumns = 2, cellWidth = 44, cellHeight = Settings.lineHeight)
-		cmds.button(label = "-XYZ", command = partial(self.MoveSelected, 0, True), backgroundColor = Colors.orange10, annotation = TransformationsAnnotations.moveDirectionNegative)
+		cmds.button(label = "-XYZ", command = partial(self.MoveSelected, 0, True), backgroundColor = Colors.orange10, annotation = TransformationsAnnotations.moveDirection)
 		cmds.button(label = "+XYZ", command = partial(self.MoveSelected, 0, False), backgroundColor = Colors.orange50, annotation = TransformationsAnnotations.moveDirectionPositive)
 		
 		cmds.rowLayout(parent = layoutColumn, adjustableColumn = 2, numberOfColumns = 3, columnWidth3 = (60, 50, 156), columnAlign = [(1, "right"), (2, "center"), (3, "center")], columnAttach = [(1, "both", 0), (2, "both", 0), (3, "both", 0)], height = Settings.lineHeight)
