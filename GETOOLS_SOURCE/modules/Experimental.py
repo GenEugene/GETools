@@ -25,7 +25,8 @@ import maya.cmds as cmds
 # from functools import partial
 
 from .. import Settings
-from ..utils import File
+# from ..utils import File
+from ..utils import Create
 from ..utils import Layers
 from ..utils import Selector
 # from ..utils import Blendshapes
@@ -49,6 +50,9 @@ class Experimental:
 		# cmds.popupMenu()
 		# cmds.menuItem(label = "Right-Click test")
 		# cmds.menuItem(dividerLabel = "label", divider = True)
+		# cmds.menuItem(label = "Right-Click test")
+
+		cmds.columnLayout(parent = layoutMain, adjustableColumn = True, width = Settings.windowWidthMargin)
 
 		### MENU
 		# cmds.columnLayout("layoutMenuBar", parent = layoutMain, adjustableColumn = True)
@@ -62,41 +66,45 @@ class Experimental:
 		cmds.menuItem(label = "Layer Move", command = self.LayerMove)
 
 		### BUTTONS
-		countOffsets = 4
-		cmds.gridLayout(parent = layoutMain, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
+		cmds.columnLayout(parent = layoutMain, adjustableColumn = True, width = Settings.windowWidthMargin)
 		# cmds.button(label = "**Nucleus", command = partial(Physics.CreateNucleus, "testNucleus", None))
-		cmds.button(label = "Particle", command = PhysicsParticle.CreateOnSelected)
-		cmds.button(label = "P Aim", command = PhysicsParticle.CreateAimOnSelected)
-		cmds.button(label = "P Combo", command = PhysicsParticle.CreateComboOnSelected)
+		cmds.button(label = "Particle Point", command = PhysicsParticle.CreateOnSelected)
+		cmds.button(label = "Particle Aim", command = PhysicsParticle.CreateAimOnSelected)
+		cmds.button(label = "Particle Combo", command = PhysicsParticle.CreateComboOnSelected)
 		# cmds.button(label = "**P Chain", command = PhysicsParticle.CreateAimChainOnSelected)
 		# cmds.button(label = "Hair", command = partial(PhysicsHair.CreateNHairOnSelected, None))
+		cmds.separator()
+		cmds.button(label = "Print General Options", command = self.PrintAllOptions)
+		cmds.separator()
+		cmds.button(label = "Create Locator Projected To Mesh", command = self.CreateLocatorProjectedToMesh)
 
-		countOffsets = 2
-		cmds.gridLayout(parent = layoutMain, numberOfColumns = countOffsets, cellWidth = Settings.windowWidthMargin / countOffsets, cellHeight = Settings.lineHeight)
-		def GetCheckboxEulerFilter(*args):
-			self.optionsPlugin.PrintAllOptions()
-		cmds.button(label = "Print General Options", command = GetCheckboxEulerFilter)
-
-	### TEST LEAYER METHODS
+	### LAYERS
 	def LayerCreate(*args):
 		Layers.Create("testLayer")
-	
 	def LayerCreateForSelected(*args):
 		selected = Selector.MultipleObjects()
 		if (selected == None):
 			return
 		Layers.CreateForSelected(selected)
-	
 	def LayerDelete(*args):
 		Layers.Delete("testLayer")
-	
 	def LayerGetSelected(*args):
 		Layers.GetSelected()
-	
 	def LayerMove(*args):
 		selected = Layers.GetSelected()
 		if (selected == None or len(selected) < 2):
 			cmds.warning("Need to select at least 2 layers")
 			return
 		Layers.MoveChildrenToParent(selected[:-1], selected[-1]) # FIXME main problem is layers have no selection order, they just listed from top to bottom
+
+
+	### OTHER
+	def PrintAllOptions(self, *args):
+		self.optionsPlugin.PrintAllOptions()
+
+	def CreateLocatorProjectedToMesh(*args):
+
+		selected = cmds.ls(selection = True)
+
+		Create.CreateLocatorProjectedToMesh(mesh = selected[0], createInsideOutsideLogic = True)
 
