@@ -198,18 +198,19 @@ class Tools:
 		# cmds.setParent("..")
 
 		### LOCATORS ROW 1
-		countCells2 = 6
+		countCells2 = 7
 		cmds.gridLayout(parent = layoutColumn, numberOfColumns = countCells2, cellWidth = Settings.windowWidthMargin / countCells2, cellHeight = Settings.lineHeight)
 		cmds.button(label = "Locator", command = self.Locator, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locator)
 		cmds.button(label = "Match", command = self.LocatorsMatch, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorMatch)
 		cmds.button(label = "Parent", command = self.LocatorsParent, backgroundColor = Colors.green10, annotation = ToolsAnnotations.locatorParent)
-		cmds.button(label = "Pin", command = partial(self.LocatorsBakeReverse, True, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverse)
+		cmds.button(label = "Pin", command = partial(self.LocatorsBakeReverse, True, True, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverse)
 		cmds.popupMenu()
 		cmds.menuItem(label = "Without Reverse Constraint", command = self.LocatorsBake)
-		cmds.button(label = "P-POS", command = partial(self.LocatorsBakeReverse, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReversePos)
-		cmds.button(label = "P-ROT", command = partial(self.LocatorsBakeReverse, False, True), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverseRot)
+		cmds.button(label = "P-POS", command = partial(self.LocatorsBakeReverse, True, False, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReversePos)
+		cmds.button(label = "P-ROT", command = partial(self.LocatorsBakeReverse, False, True, False), backgroundColor = Colors.yellow50, annotation = ToolsAnnotations.locatorsBakeReverseRot)
+		cmds.button(label = "P-SCL", command = partial(self.LocatorsBakeReverse, False, False, True), backgroundColor = Colors.yellow50, annotation = "TODO") # TODO
 		# cmds.setParent("..")
-
+		
 		### LOCATORS ROW 2
 		cmds.rowLayout(parent = layoutColumn, adjustableColumn = 1, numberOfColumns = 2, columnWidth2 = (50, 150), columnAlign = [(1, "center"), (2, "center")], columnAttach = [(1, "both", 0), (2, "both", 0)])
 		cmds.button(label = "Relative", command = self.LocatorsRelativeReverse, backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorsRelativeReverse)
@@ -378,7 +379,7 @@ class Tools:
 	
 	def LocatorsBake(self, *args):
 		Locators.CreateOnSelected(scale = self.GetFloatLocatorSize(), hideParent = self.GetCheckboxLocatorHideParent(), subLocator = self.GetCheckboxLocatorSubLocator(), constraint = True, bake = True)
-	def LocatorsBakeReverse(self, translate=True, rotate=True, *args): # TODO , channelBox = False
+	def LocatorsBakeReverse(self, translate=True, rotate=True, scale=True, *args): # TODO , channelBox = False
 		Locators.CreateOnSelected(scale = self.GetFloatLocatorSize(), hideParent = self.GetCheckboxLocatorHideParent(), subLocator = self.GetCheckboxLocatorSubLocator(), constraint = True, bake = True, constrainReverse = True, constrainTranslate = translate, constrainRotate = rotate)
 	
 	def LocatorsRelative(self, *args):
