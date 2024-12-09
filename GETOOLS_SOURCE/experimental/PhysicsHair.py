@@ -105,13 +105,13 @@ def CreateNHairOnCurve(curve, nucleus): # TODO
 
 def CreateNHairOnSelected(nucleus, *args): # TODO
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(2)
+	selectedList = Selector.MultipleObjects(minimalCount = 2)
 	if (selectedList == None):
 		return
 	
 	curve = None
 	
-	result = CreateNHairOnCurve(curve, nucleus)
+	result = CreateNHairOnCurve(curve = curve, nucleus = nucleus)
 
 	print(result)
 
