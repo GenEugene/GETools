@@ -48,7 +48,7 @@ class TransformationsAnnotations:
 	moveDistance = "Apply axis movement using distance.\n{0}.".format(_negativePositive)
 
 class Transformations:
-	_version = "v0.1"
+	_version = "v1.0"
 	_name = "TRANSFORMATIONS"
 	_title = _name + " " + _version
 

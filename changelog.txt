@@ -1,8 +1,12 @@
 GETools changelog
 
+v1.6.0 | 09.12.2024
+- [TRANSFORMATIONS] added new tool to move objects.
+- [UI] changed list order numbers for main panels. TRANSFORMATION tools now stays in 1 position.
+
 v1.5.2 | 05.12.2024
-- added dates to changelog and bring changelog from legacy Overlappy repository
-- added fresh PNG demo collage with all GETools panels
+- added dates to changelog and bring changelog from legacy Overlappy repository.
+- added fresh PNG demo collage with all GETools panels.
 
 v1.5.1 | 03.12.2024
 - [UI] added visual separation with borders to panels.
