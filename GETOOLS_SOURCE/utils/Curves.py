@@ -87,8 +87,5 @@ def SetupSpaceDeformation(curves=None, *args):
 		cmds.warning("No curves provided")
 		return None
 	
-	# 1. Get curves list
-	# 2. Get latest curve from list as a deformation curve
-	# 3. Create a "Sweep Mesh" on deformation curve with "Line" profile, interpolation mode "Start To End" and steps
-	# 4. Connect other curves to "Sweep Mesh" with "Wrap" deformer using "Volume" falloff mode
+	# TODO
 
