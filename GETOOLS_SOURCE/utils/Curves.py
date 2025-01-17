@@ -23,6 +23,7 @@
 
 import maya.cmds as cmds
 
+from ..utils import Constraints
 from ..utils import Selector
 from ..values import Enums
 
@@ -33,13 +34,13 @@ _curveDegree = 1
 
 def CreateCurveFromSelectedObjects(*args):
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(2)
-	if (selectedList == None):
+	selected = Selector.MultipleObjects(minimalCount = 2)
+	if (selected == None):
 		return None
 
 	positions = []
 
-	for item in selectedList:
+	for item in selected:
 		position = cmds.xform(item, query = True, translation = True, worldSpace = True)
 		positions.append(position)
 
@@ -49,7 +50,7 @@ def CreateCurveFromSelectedObjects(*args):
 def CreateCurveFromTrajectory(*args): # TODO rework
 	### Variables
 	step = 1
-	degree = 3
+	degree = 1
 	
 	### Names
 	mtName = "newMotionTrail"
@@ -65,8 +66,8 @@ def CreateCurveFromTrajectory(*args): # TODO rework
 	cmds.snapshot(name = mtName, motionTrail = 1, increment = step, startTime = start, endTime = end)
 
 	### Get points from motion trail
-	cmds.select(mtFinalName, replace = 1)
-	selected = cmds.ls(selection = 1, dagObjects = 1, exactType = Enums.MotionTrail.snapshotShape)
+	cmds.select(mtFinalName, replace = True)
+	selected = cmds.ls(selection = True, dagObjects = True, exactType = Enums.MotionTrail.snapshotShape)
 	pts = cmds.getAttr(selected[0] + "." + Enums.MotionTrail.pts)
 	size = len(pts)
 	for i in range(size):
@@ -78,14 +79,36 @@ def CreateCurveFromTrajectory(*args): # TODO rework
 
 	### End
 	cmds.delete(mtFinalName)
-	cmds.select(clear = 1)
+	cmds.select(clear = True)
 
 	return newCurve
 
-def SetupSpaceDeformation(curves=None, *args):
+def SetupSpaceDeformation(curves=None, *args): # TODO
 	if curves is None:
 		cmds.warning("No curves provided")
 		return None
-	
-	# TODO
+
+def ConvertToMotionPath(*args): # TODO probably move to different place
+	# Check selected objects
+	selected = Selector.MultipleObjects(minimalCount = 1)
+	if (selected == None):
+		return None
+
+	## Create curve and select
+	curve = CreateCurveFromTrajectory()
+	cmds.select(curve, replace = True)
+
+	## Create closest point node with locators
+	cmds.ClosestPointOn()
+	closestPointLocatorPos = cmds.ls(selection = True)[0]
+	closestPointNode = cmds.listConnections(closestPointLocatorPos, source = True, destination = False)[0]
+	closestPointLocatorIn = cmds.listConnections(closestPointNode, source = True, destination = False, type = "transform")[0]
+	cmds.select(clear = True)
+
+	## Constrain closestPointLocatorIn to source object
+	Constraints.ConstrainSecondToFirstObject(selected, closestPointLocatorIn, maintainOffset = False, parent = False, point = True, orient = False)
+
+	## Create motion path constraint
+	## Connect closest point parameter to U parameter in motion path
+
 
