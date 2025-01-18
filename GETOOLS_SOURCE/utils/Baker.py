@@ -32,8 +32,8 @@ from ..utils import Timeline
 
 def BakeSelected(classic=True, preserveOutsideKeys=True, sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None, euler=False):
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(1)
-	if (selectedList == None):
+	selectedList = Selector.MultipleObjects(minimalCount = 1)
+	if selectedList is None:
 		return
 	
 	# Calculate time range if range highlighted
@@ -53,7 +53,7 @@ def BakeSelected(classic=True, preserveOutsideKeys=True, sampleBy=1.0, selectedR
 		if (channelBox):
 			bakeRegular = selectedAttributes == None
 		if (bakeRegular):
-			if (attributes == None):
+			if attributes is None:
 				cmds.bakeResults(time = (timeRange[0], timeRange[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy)
 			else:
 				cmds.bakeResults(time = (timeRange[0], timeRange[1]), preserveOutsideKeys = preserveOutsideKeys, simulation = True, minimizeRotation = True, sampleBy = sampleBy, attribute = attributes)
@@ -76,8 +76,8 @@ def BakeSelected(classic=True, preserveOutsideKeys=True, sampleBy=1.0, selectedR
 
 def BakeSelectedByLastObject(pairOnly=False, sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None, euler=False):
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(2)
-	if (selectedList == None):
+	selectedList = Selector.MultipleObjects(minimalCount = 2)
+	if selectedList is None:
 		return
 	
 	# Cut list by last 2 items
@@ -100,8 +100,8 @@ def BakeSelectedByLastObject(pairOnly=False, sampleBy=1.0, selectedRange=False, 
 
 def BakeSelectedByWorld(sampleBy=1.0, selectedRange=False, channelBox=False, attributes=None, euler=False):
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(1)
-	if (selectedList == None):
+	selectedList = Selector.MultipleObjects(minimalCount = 1)
+	if selectedList is None:
 		return
 	
 	world = cmds.group(world = True, empty = True)
