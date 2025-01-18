@@ -311,7 +311,7 @@ def CreateWithMotionPath(*args): # TODO
 	timeMin = cmds.playbackOptions(query = True, min = True)
 	timeMax = cmds.playbackOptions(query = True, max = True)
 	motionPath = cmds.pathAnimation(locator, curve = curve, startTimeU = timeMin, endTimeU = timeMax, follow = False)
-	Constraints.ConstrainSecondToFirstObject(firstObject, locator, maintainOffset = False, parent = False, point = False, orient = True)
+	Constraints.ConstrainSecondToFirstObject(firstObject, locator, maintainOffset = False, parent = False, point = False, orient = True) # HACK find another way to transfer rotation
 
 	### Connect closest point parameter to U parameter in motion path
 	cmds.connectAttr(closestPointNode + ".parameter", motionPath + ".uValue", force = True)
@@ -321,7 +321,7 @@ def CreateWithMotionPath(*args): # TODO
 	cmds.bakeResults(time = (timeMin, timeMax), preserveOutsideKeys = True, simulation = True, minimizeRotation = True, sampleBy = 1, disableImplicitControl = True)
 	cmds.select(clear = True)
 
-	### Bake locator rotation # HACK need to figure out how to keep rotation through motion path node
+	### TODO Bake locator rotation # FIXME need to figure out how to keep rotation through motion path node
 	cmds.select(locator, replace = True)
 	cmds.bakeResults(time = (timeMin, timeMax), preserveOutsideKeys = True, simulation = True, minimizeRotation = True, sampleBy = 1, disableImplicitControl = True, attribute = Enums.Attributes.rotateShort)
 	cmds.select(clear = True)
