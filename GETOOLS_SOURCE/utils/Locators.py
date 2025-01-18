@@ -273,26 +273,50 @@ def CreateWithMotionPath(*args): # TODO
 	selected = Selector.MultipleObjects(minimalCount = 1)
 	if (selected == None):
 		return None
+	cmds.select(clear = True)
+	
+	### Create main group as a container for all new objects
+	mainGroup = cmds.group(name = Text.SetUniqueFromText("mpGroup"), empty = True)
+	cmds.select(clear = True)
+
 
 	### TODO Create loop logic for each selected object
 
+
 	### Create curve and select
+	cmds.select(selected[0], replace = True)
 	curve = Curves.CreateCurveFromTrajectory()
-	cmds.select(curve, replace = True)
+	cmds.parent(curve, mainGroup)
 
 	### Create closest point node with locators
+	cmds.select(curve, replace = True)
 	cmds.ClosestPointOn()
 	closestPointLocatorPos = cmds.ls(selection = True)[0]
 	closestPointNode = cmds.listConnections(closestPointLocatorPos, source = True, destination = False)[0]
 	closestPointLocatorIn = cmds.listConnections(closestPointNode, source = True, destination = False, type = "transform")[0]
-	# cmds.setAttr(closestPointLocatorPos + "." + Enums.Attributes.visibility, 0)
+	cmds.setAttr(closestPointLocatorPos + "." + Enums.Attributes.visibility, 0)
 	cmds.setAttr(closestPointLocatorIn + "." + Enums.Attributes.visibility, 0)
 	cmds.select(clear = True)
+	cmds.parent(closestPointLocatorPos, mainGroup)
+	cmds.parent(closestPointLocatorIn, mainGroup)
 
 	### Constrain locators to source object
 	Constraints.ConstrainSecondToFirstObject(selected[0], closestPointLocatorIn, maintainOffset = False, parent = False, point = True, orient = False)
 	Constraints.ConstrainSecondToFirstObject(selected[0], closestPointLocatorPos, maintainOffset = False, parent = False, point = False, orient = True)
 
-	### TODO Create motion path constraint
-	### TODO Connect closest point parameter to U parameter in motion path
+	### Create locator
+	locator = Create(name = Text.SetUniqueFromText("mpLocator"))
+	cmds.parent(locator, mainGroup)
+	cmds.select(clear = True)
+
+	### Create motion path constraint
+	timeMin = cmds.playbackOptions(query = True, min = True)
+	timeMax = cmds.playbackOptions(query = True, max = True)
+	motionPath = cmds.pathAnimation(locator, curve = curve, startTimeU = timeMin, endTimeU = timeMax, follow = False)
+
+	### Connect closest point parameter to U parameter in motion path
+	cmds.connectAttr(closestPointNode + ".parameter", motionPath + ".uValue", force = True)
+
+	### TODO Bake motion path animation
+	### TODO Constrain original object to locator
 

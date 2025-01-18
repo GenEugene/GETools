@@ -28,7 +28,7 @@ from ..values import Enums
 
 
 _curveName = "newCurve"
-_curveDegree = 1
+_curveDegree = 1 # TODO add options to UI
 
 
 def CreateCurveFromSelectedObjects(*args):
