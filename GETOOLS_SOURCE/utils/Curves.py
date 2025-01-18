@@ -46,7 +46,7 @@ def CreateCurveFromSelectedObjects(*args):
 	curve = cmds.curve(name = _curveName, degree = _curveDegree, point = positions)
 	return curve
 
-def CreateCurveFromTrajectory(*args): # TODO rework
+def CreateCurveFromTrajectory(name="curve", *args): # TODO rework
 	### Variables
 	step = 1
 	degree = 1
@@ -54,7 +54,6 @@ def CreateCurveFromTrajectory(*args): # TODO rework
 	### Names
 	mtName = "newMotionTrail"
 	mtFinalName = mtName + Enums.MotionTrail.handle
-	curveName = "testCurve"
 
 
 	### Get time start/end
@@ -74,7 +73,7 @@ def CreateCurveFromTrajectory(*args): # TODO rework
 		#print "{0}: {1}".format(i, pts[i])
 
 	### Create curve
-	newCurve = cmds.curve(name = curveName, degree = degree, point = pts)
+	newCurve = cmds.curve(name = name, degree = degree, point = pts)
 
 	### End
 	cmds.delete(mtFinalName)

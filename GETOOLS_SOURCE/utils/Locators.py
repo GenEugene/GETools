@@ -281,11 +281,12 @@ def CreateWithMotionPath(*args): # TODO
 
 
 	### TODO Create loop logic for each selected object
+	firstObject = selected[0]
 
 
 	### Create curve and select
-	cmds.select(selected[0], replace = True)
-	curve = Curves.CreateCurveFromTrajectory()
+	cmds.select(firstObject, replace = True)
+	curve = Curves.CreateCurveFromTrajectory(name = Text.SetUniqueFromText("mpCurve"))
 	cmds.parent(curve, mainGroup)
 
 	### Create closest point node with locators
@@ -297,12 +298,9 @@ def CreateWithMotionPath(*args): # TODO
 	cmds.setAttr(closestPointLocatorPos + "." + Enums.Attributes.visibility, 0)
 	cmds.setAttr(closestPointLocatorIn + "." + Enums.Attributes.visibility, 0)
 	cmds.select(clear = True)
-	cmds.parent(closestPointLocatorPos, mainGroup)
-	cmds.parent(closestPointLocatorIn, mainGroup)
 
 	### Constrain locators to source object
-	Constraints.ConstrainSecondToFirstObject(selected[0], closestPointLocatorIn, maintainOffset = False, parent = False, point = True, orient = False)
-	Constraints.ConstrainSecondToFirstObject(selected[0], closestPointLocatorPos, maintainOffset = False, parent = False, point = False, orient = True)
+	Constraints.ConstrainSecondToFirstObject(firstObject, closestPointLocatorIn, maintainOffset = False, parent = False, point = True, orient = False)
 
 	### Create locator
 	locator = Create(name = Text.SetUniqueFromText("mpLocator"))
@@ -313,10 +311,26 @@ def CreateWithMotionPath(*args): # TODO
 	timeMin = cmds.playbackOptions(query = True, min = True)
 	timeMax = cmds.playbackOptions(query = True, max = True)
 	motionPath = cmds.pathAnimation(locator, curve = curve, startTimeU = timeMin, endTimeU = timeMax, follow = False)
+	Constraints.ConstrainSecondToFirstObject(firstObject, locator, maintainOffset = False, parent = False, point = False, orient = True)
 
 	### Connect closest point parameter to U parameter in motion path
 	cmds.connectAttr(closestPointNode + ".parameter", motionPath + ".uValue", force = True)
 
-	### TODO Bake motion path animation
-	### TODO Constrain original object to locator
+	### Bake motion path animation
+	cmds.select(motionPath, replace = True)
+	cmds.bakeResults(time = (timeMin, timeMax), preserveOutsideKeys = True, simulation = True, minimizeRotation = True, sampleBy = 1, disableImplicitControl = True)
+	cmds.select(clear = True)
+
+	### Bake locator rotation # HACK need to figure out how to keep rotation through motion path node
+	cmds.select(locator, replace = True)
+	cmds.bakeResults(time = (timeMin, timeMax), preserveOutsideKeys = True, simulation = True, minimizeRotation = True, sampleBy = 1, disableImplicitControl = True, attribute = Enums.Attributes.rotateShort)
+	cmds.select(clear = True)
+
+	### Delete temp locators
+	cmds.delete(closestPointNode)
+	cmds.delete(closestPointLocatorPos)
+	cmds.delete(closestPointLocatorIn)
+
+	### Constrain original object to locator
+	Constraints.ConstrainSecondToFirstObject(locator, firstObject, maintainOffset = False, parent = False, point = True, orient = True)
 
