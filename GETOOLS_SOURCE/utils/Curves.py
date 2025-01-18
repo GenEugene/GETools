@@ -23,7 +23,6 @@
 
 import maya.cmds as cmds
 
-from ..utils import Constraints
 from ..utils import Selector
 from ..values import Enums
 
@@ -82,33 +81,4 @@ def CreateCurveFromTrajectory(*args): # TODO rework
 	cmds.select(clear = True)
 
 	return newCurve
-
-def SetupSpaceDeformation(curves=None, *args): # TODO
-	if curves is None:
-		cmds.warning("No curves provided")
-		return None
-
-def ConvertToMotionPath(*args): # TODO probably move to different place
-	# Check selected objects
-	selected = Selector.MultipleObjects(minimalCount = 1)
-	if (selected == None):
-		return None
-
-	## Create curve and select
-	curve = CreateCurveFromTrajectory()
-	cmds.select(curve, replace = True)
-
-	## Create closest point node with locators
-	cmds.ClosestPointOn()
-	closestPointLocatorPos = cmds.ls(selection = True)[0]
-	closestPointNode = cmds.listConnections(closestPointLocatorPos, source = True, destination = False)[0]
-	closestPointLocatorIn = cmds.listConnections(closestPointNode, source = True, destination = False, type = "transform")[0]
-	cmds.select(clear = True)
-
-	## Constrain closestPointLocatorIn to source object
-	Constraints.ConstrainSecondToFirstObject(selected, closestPointLocatorIn, maintainOffset = False, parent = False, point = True, orient = False)
-
-	## Create motion path constraint
-	## Connect closest point parameter to U parameter in motion path
-
 

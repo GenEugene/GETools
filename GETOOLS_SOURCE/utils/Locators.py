@@ -26,6 +26,7 @@ import maya.cmds as cmds
 from ..utils import Animation
 from ..utils import Baker
 from ..utils import Constraints
+from ..utils import Curves
 from ..utils import Parent
 from ..utils import Selector
 from ..utils import Text
@@ -38,7 +39,7 @@ _scale = 1.0
 _minSelectedCount = 1
 
 
-# SIZE
+### SIZE
 def GetSize(locator):
 	shape = cmds.listRelatives(locator, shapes = True, type = Enums.Types.locator)[0]
 	if (shape != None):
@@ -86,7 +87,7 @@ def SelectedLocatorsSizeSet(value, *args):
 		if (shape != None):
 			SetSize(item, value, value, value)
 
-# CREATE
+### CREATE
 def Create(name=_nameBase, scale=_scale, hideParent=False, subLocator=False):
 	locatorCurrent = cmds.spaceLocator(name = Text.SetUniqueFromText(name))[0]
 	SetSize(locatorCurrent, scale, scale, scale)
@@ -106,7 +107,7 @@ def Create(name=_nameBase, scale=_scale, hideParent=False, subLocator=False):
 	else:
 		return locatorCurrent
 def CreateOnSelected(name=_nameBase, scale=_scale, minSelectedCount=_minSelectedCount, hideParent=False, subLocator=False, constraint=False, bake=False, parentToLastSelected=False, constrainReverse=False, constrainTranslate=True, constrainRotate=True, euler=False):
-	# Check selected objects
+	### Check selected objects
 	selectedList = Selector.MultipleObjects(minSelectedCount)
 	if (selectedList == None):
 		return None
@@ -114,7 +115,7 @@ def CreateOnSelected(name=_nameBase, scale=_scale, minSelectedCount=_minSelected
 	locatorsList = []
 	sublocatorsList = []
 
-	# Create locators on selected
+	### Create locators on selected
 	for item in selectedList:
 		nameCurrent = Text.GetShortName(item, removeSpaces = True) + "_" + name
 		created = Create(name = nameCurrent, scale = scale, hideParent = hideParent, subLocator = subLocator)
@@ -125,12 +126,12 @@ def CreateOnSelected(name=_nameBase, scale=_scale, minSelectedCount=_minSelected
 			locatorsList.append(created)
 		cmds.matchTransform(locatorsList[-1], item, position = True, rotation = True, scale = True)
 
-	# Constrain locators to selected objects
+	### Constrain locators to selected objects
 	if (constraint):
 		for i in range(len(selectedList)):
 			Constraints.ConstrainSecondToFirstObject(selectedList[i], locatorsList[i], maintainOffset = False)
 
-	# Parent locators to last or to last sublocator
+	### Parent locators to last or to last sublocator
 	if (bake):
 		if (parentToLastSelected):
 			if subLocator:
@@ -140,13 +141,13 @@ def CreateOnSelected(name=_nameBase, scale=_scale, minSelectedCount=_minSelected
 			else:
 				Parent.ListToLastObjects(locatorsList)
 
-		# Bake locators and delete constraints
+		### Bake locators and delete constraints
 		cmds.select(locatorsList)
 		Baker.BakeSelected(euler = euler)
 		Animation.DeleteStaticCurves()
 		Constraints.DeleteConstraints(locatorsList)
 
-	# Reverse constrain original objects to new locators
+	### Reverse constrain original objects to new locators
 	if constrainReverse:
 		for i in range(len(selectedList)):
 			if subLocator:
@@ -155,7 +156,7 @@ def CreateOnSelected(name=_nameBase, scale=_scale, minSelectedCount=_minSelected
 				firstObject = locatorsList[i]
 			Constraints.ConstrainSecondToFirstObject(firstObject, selectedList[i], maintainOffset = False, parent = constrainTranslate and constrainRotate, point = constrainTranslate, orient = constrainRotate)
 
-	# Select objects and return
+	### Select objects and return
 	if subLocator:
 		cmds.select(sublocatorsList)
 		return selectedList, locatorsList, sublocatorsList
@@ -163,12 +164,12 @@ def CreateOnSelected(name=_nameBase, scale=_scale, minSelectedCount=_minSelected
 		cmds.select(locatorsList)
 		return selectedList, locatorsList
 def CreateAndBakeAsChildrenFromLastSelected(scale=_scale, minSelectedCount=2, hideParent=False, subLocator=False, constraintReverse=False, skipLastReverse=True, euler=False):
-	# Check selected objects
+	### Check selected objects
 	objects = CreateOnSelected(scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator, constraint = True, bake = True, parentToLastSelected = True, euler = euler)
 	if (objects == None):
 		return None
 	
-	# Constrain objects to locators
+	### Constrain objects to locators
 	if (constraintReverse):
 		for i in range(len(objects[0])):
 			if (skipLastReverse and i == len(objects[0]) - 1):
@@ -178,19 +179,19 @@ def CreateAndBakeAsChildrenFromLastSelected(scale=_scale, minSelectedCount=2, hi
 			else:
 				Constraints.ConstrainSecondToFirstObject(objects[1][i], objects[0][i], maintainOffset = False)
 
-	# Select objects and return
+	### Select objects and return
 	if subLocator:
 		cmds.select(objects[2][-1])
 	else:
 		cmds.select(objects[1][-1])
 	return objects
 def CreateOnSelectedAim(name=_nameAim, scale=_scale, minSelectedCount=_minSelectedCount, hideParent=False, subLocator=False, rotateOnly=False, vectorAim=(1,0,0), distance=100, reverse=True, euler=False):
-	# Check selected objects
+	### Check selected objects
 	objects = CreateOnSelected(name = name, scale = scale, minSelectedCount = minSelectedCount, hideParent = hideParent, subLocator = subLocator, euler = euler)
 	if (objects == None):
 		return None
 	
-	# Create aim locators
+	### Create aim locators
 	groupsList = []
 	locatorsOffsetsList = []
 	locatorsTargetsList = []
@@ -231,7 +232,7 @@ def CreateOnSelectedAim(name=_nameAim, scale=_scale, minSelectedCount=_minSelect
 		Constraints.ConstrainListToLastElement(selected = (locTarget, objects[0][i]))
 		Constraints.ConstrainListToLastElement(selected = (locUp, objects[0][i]))
 		
-	# Bake animation from original objects
+	### Bake animation from original objects
 	cmds.select(objects[1] + locatorsTargetsList, replace = True)
 	cmds.select(objects[1] + locatorsUpList, add = True)
 	Baker.BakeSelected(euler = euler)
@@ -240,11 +241,11 @@ def CreateOnSelectedAim(name=_nameAim, scale=_scale, minSelectedCount=_minSelect
 	Constraints.DeleteConstraints(locatorsUpList)
 	Animation.DeleteStaticCurves()
 
-	# Create aim constraint
+	### Create aim constraint
 	for i in range(len(objects[0])):
 		cmds.aimConstraint(locatorsTargetsList[i], locatorsOffsetsList[i], maintainOffset = True, weight = 1, aimVector = vectorAim, worldUpType = "object", worldUpObject = locatorsUpList[i])
 	
-	# Reverse constrain # TODO move constraint to temp group
+	### Reverse constrain # TODO move constraint to temp group
 	if (reverse):
 		for i in range(len(objects[0])):
 			parentObject = None
@@ -253,17 +254,45 @@ def CreateOnSelectedAim(name=_nameAim, scale=_scale, minSelectedCount=_minSelect
 			else:
 				parentObject = locatorsOffsetsList[i]
 			
-			# Constraints
+			### Constraints
 			if (rotateOnly):
 				Constraints.ConstrainSecondToFirstObject(objects[0][i], objects[1][i], maintainOffset = False, parent = False, point = True, orient = False)
 				Constraints.ConstrainSecondToFirstObject(parentObject, objects[0][i], maintainOffset = False, parent = False, point = False, orient = True)
 			else:
 				Constraints.ConstrainSecondToFirstObject(parentObject, objects[0][i], maintainOffset = False, parent = False, point = True, orient = True)
 
-	# Select objects and return
+	### Select objects and return
 	cmds.select(locatorsTargetsList)
 	# if subLocator:
 	# 	return objects[0], aimGroup, objects[1], locatorsOffsetsList, locatorsTargetsList, objects[2]
 	# else:
 	# 	return objects[0], aimGroup, objects[1], locatorsOffsetsList, locatorsTargetsList
+
+def CreateWithMotionPath(*args): # TODO
+	### Check selected objects
+	selected = Selector.MultipleObjects(minimalCount = 1)
+	if (selected == None):
+		return None
+
+	### TODO Create loop logic for each selected object
+
+	### Create curve and select
+	curve = Curves.CreateCurveFromTrajectory()
+	cmds.select(curve, replace = True)
+
+	### Create closest point node with locators
+	cmds.ClosestPointOn()
+	closestPointLocatorPos = cmds.ls(selection = True)[0]
+	closestPointNode = cmds.listConnections(closestPointLocatorPos, source = True, destination = False)[0]
+	closestPointLocatorIn = cmds.listConnections(closestPointNode, source = True, destination = False, type = "transform")[0]
+	# cmds.setAttr(closestPointLocatorPos + "." + Enums.Attributes.visibility, 0)
+	cmds.setAttr(closestPointLocatorIn + "." + Enums.Attributes.visibility, 0)
+	cmds.select(clear = True)
+
+	### Constrain locators to source object
+	Constraints.ConstrainSecondToFirstObject(selected[0], closestPointLocatorIn, maintainOffset = False, parent = False, point = True, orient = False)
+	Constraints.ConstrainSecondToFirstObject(selected[0], closestPointLocatorPos, maintainOffset = False, parent = False, point = False, orient = True)
+
+	### TODO Create motion path constraint
+	### TODO Connect closest point parameter to U parameter in motion path
 
