@@ -27,11 +27,9 @@ from ..utils import Selector
 from ..values import Enums
 
 
-_curveName = "newCurve"
-_curveDegree = 1 # TODO add options to UI
-
-
 def CreateCurveFromSelectedObjects(*args):
+	degree = 1 # TODO add options to UI
+
 	# Check selected objects
 	selected = Selector.MultipleObjects(minimalCount = 2)
 	if (selected == None):
@@ -43,7 +41,7 @@ def CreateCurveFromSelectedObjects(*args):
 		position = cmds.xform(item, query = True, translation = True, worldSpace = True)
 		positions.append(position)
 
-	curve = cmds.curve(name = _curveName, degree = _curveDegree, point = positions)
+	curve = cmds.curve(name = "newCurve", degree = degree, point = positions)
 	return curve
 
 def CreateCurveFromTrajectory(name="curve", *args): # TODO rework

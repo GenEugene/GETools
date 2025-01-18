@@ -302,28 +302,31 @@ def CreateWithMotionPath(*args): # TODO
 	### Constrain locators to source object
 	Constraints.ConstrainSecondToFirstObject(firstObject, closestPointLocatorIn, maintainOffset = False, parent = False, point = True, orient = False)
 
-	### Create locator
-	locator = Create(name = Text.SetUniqueFromText("mpLocator"))
-	cmds.parent(locator, mainGroup)
+	### Create locator outer
+	locatorOuter = Create(name = Text.SetUniqueFromText("mpLocatorOuter"), scale = 0.1)
+	cmds.parent(locatorOuter, mainGroup)
 	cmds.select(clear = True)
 
-	### Create motion path constraint
+	### Create locator inner
+	locatorInner = Create(name = Text.SetUniqueFromText("mpLocatorInner"), scale = 1)
+	cmds.parent(locatorInner, locatorOuter)
+	cmds.select(clear = True)
+
+	### Create motion path constraint with outer locator
 	timeMin = cmds.playbackOptions(query = True, min = True)
 	timeMax = cmds.playbackOptions(query = True, max = True)
-	motionPath = cmds.pathAnimation(locator, curve = curve, startTimeU = timeMin, endTimeU = timeMax, follow = False)
-	Constraints.ConstrainSecondToFirstObject(firstObject, locator, maintainOffset = False, parent = False, point = False, orient = True) # HACK find another way to transfer rotation
+	motionPath = cmds.pathAnimation(locatorOuter, curve = curve, startTimeU = timeMin, endTimeU = timeMax, follow = True, worldUpType = "scene", bank = False)
+
+	### Constrain inner locator to outer locator
+	Constraints.ConstrainSecondToFirstObject(firstObject, locatorInner, maintainOffset = False, parent = False, point = False, orient = True)
 
 	### Connect closest point parameter to U parameter in motion path
 	cmds.connectAttr(closestPointNode + ".parameter", motionPath + ".uValue", force = True)
 
 	### Bake motion path animation
 	cmds.select(motionPath, replace = True)
+	cmds.select(locatorInner, add = True)
 	cmds.bakeResults(time = (timeMin, timeMax), preserveOutsideKeys = True, simulation = True, minimizeRotation = True, sampleBy = 1, disableImplicitControl = True)
-	cmds.select(clear = True)
-
-	### TODO Bake locator rotation # FIXME need to figure out how to keep rotation through motion path node
-	cmds.select(locator, replace = True)
-	cmds.bakeResults(time = (timeMin, timeMax), preserveOutsideKeys = True, simulation = True, minimizeRotation = True, sampleBy = 1, disableImplicitControl = True, attribute = Enums.Attributes.rotateShort)
 	cmds.select(clear = True)
 
 	### Delete temp locators
@@ -332,5 +335,5 @@ def CreateWithMotionPath(*args): # TODO
 	cmds.delete(closestPointLocatorIn)
 
 	### Constrain original object to locator
-	Constraints.ConstrainSecondToFirstObject(locator, firstObject, maintainOffset = False, parent = False, point = True, orient = True)
+	Constraints.ConstrainSecondToFirstObject(locatorInner, firstObject, maintainOffset = True, parent = False, point = True, orient = True)
 
