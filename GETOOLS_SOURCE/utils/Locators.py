@@ -315,7 +315,7 @@ def CreateWithMotionPath(*args): # TODO
 	### Create motion path constraint with outer locator
 	timeMin = cmds.playbackOptions(query = True, min = True)
 	timeMax = cmds.playbackOptions(query = True, max = True)
-	motionPath = cmds.pathAnimation(locatorOuter, curve = curve, startTimeU = timeMin, endTimeU = timeMax, follow = True, worldUpType = "scene", bank = False)
+	motionPath = cmds.pathAnimation(locatorOuter, curve = curve, startTimeU = timeMin, endTimeU = timeMax, follow = True, worldUpType = "scene") # , fractionMode = False, bank = False
 
 	### Constrain inner locator to outer locator
 	Constraints.ConstrainSecondToFirstObject(firstObject, locatorInner, maintainOffset = False, parent = False, point = False, orient = True)
@@ -323,10 +323,10 @@ def CreateWithMotionPath(*args): # TODO
 	### Connect closest point parameter to U parameter in motion path
 	cmds.connectAttr(closestPointNode + ".parameter", motionPath + ".uValue", force = True)
 
-	### Bake motion path animation
+	### Bake motion path uValue
 	cmds.select(motionPath, replace = True)
 	cmds.select(locatorInner, add = True)
-	cmds.bakeResults(time = (timeMin, timeMax), preserveOutsideKeys = True, simulation = True, minimizeRotation = True, sampleBy = 1, disableImplicitControl = True)
+	cmds.bakeResults(time = (timeMin, timeMax), preserveOutsideKeys = True, simulation = True, minimizeRotation = True, sampleBy = 1, disableImplicitControl = True, attribute = ("uValue",) + Enums.Attributes.rotateShort)
 	cmds.select(clear = True)
 
 	### Delete temp locators
