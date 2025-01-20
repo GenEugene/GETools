@@ -27,34 +27,31 @@ from ..utils import Selector
 from ..values import Enums
 
 
-_curveName = "newCurve"
-_curveDegree = 1
-
-
 def CreateCurveFromSelectedObjects(*args):
+	degree = 1 # TODO add options to UI
+
 	# Check selected objects
-	selectedList = Selector.MultipleObjects(2)
-	if (selectedList == None):
+	selected = Selector.MultipleObjects(minimalCount = 2)
+	if (selected == None):
 		return None
 
 	positions = []
 
-	for item in selectedList:
+	for item in selected:
 		position = cmds.xform(item, query = True, translation = True, worldSpace = True)
 		positions.append(position)
 
-	curve = cmds.curve(name = _curveName, degree = _curveDegree, point = positions)
+	curve = cmds.curve(name = "newCurve", degree = degree, point = positions)
 	return curve
 
-def CreateCurveFromTrajectory(*args): # TODO rework
+def CreateCurveFromTrajectory(name="curve", *args): # TODO rework
 	### Variables
 	step = 1
-	degree = 3
+	degree = 1
 	
 	### Names
 	mtName = "newMotionTrail"
 	mtFinalName = mtName + Enums.MotionTrail.handle
-	curveName = "testCurve"
 
 
 	### Get time start/end
@@ -65,8 +62,8 @@ def CreateCurveFromTrajectory(*args): # TODO rework
 	cmds.snapshot(name = mtName, motionTrail = 1, increment = step, startTime = start, endTime = end)
 
 	### Get points from motion trail
-	cmds.select(mtFinalName, replace = 1)
-	selected = cmds.ls(selection = 1, dagObjects = 1, exactType = Enums.MotionTrail.snapshotShape)
+	cmds.select(mtFinalName, replace = True)
+	selected = cmds.ls(selection = True, dagObjects = True, exactType = Enums.MotionTrail.snapshotShape)
 	pts = cmds.getAttr(selected[0] + "." + Enums.MotionTrail.pts)
 	size = len(pts)
 	for i in range(size):
@@ -74,12 +71,11 @@ def CreateCurveFromTrajectory(*args): # TODO rework
 		#print "{0}: {1}".format(i, pts[i])
 
 	### Create curve
-	newCurve = cmds.curve(name = curveName, degree = degree, point = pts)
+	newCurve = cmds.curve(name = name, degree = degree, point = pts)
 
 	### End
 	cmds.delete(mtFinalName)
-	cmds.select(clear = 1)
+	cmds.select(clear = True)
 
 	return newCurve
-
 

@@ -51,25 +51,25 @@ def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True,
 	### Check attributes with fixed axis labels
 	def CheckAttributes(attributeName, attributesFiltered):
 		axisLabels = ["x", "y", "z"]
-		# Check which attributes are missing
+		### Check which attributes are missing
 		check = [attr in attributesFiltered for attr in attributeName]
-		# If all attributes are present, return "none"
+		### If all attributes are present, return "none"
 		if all(check):
 			return "none"
-		# Return the axis labels for missing attributes
+		### Return the axis labels for missing attributes
 		return [axisLabels[i] for i, valid in enumerate(check) if not valid]
 
 	### General function to process attributes
 	def ProcessAttributes(objectChild, attributeName):
-		# Construct attributes with object name
+		### Construct attributes with object name
 		attributes = ["{0}.{1}".format(objectChild, attr) for attr in attributeName]
 		attributesFiltered = Attributes.FilterAttributesAnimatable(attributes=attributes, skipConstrainedKeys = False)
-		# If no attributes are left after filtering, return "none"
+		### If no attributes are left after filtering, return "none"
 		if not attributesFiltered:
 			return ("x", "y", "z")
-		# Remove object name from attributes
+		### Remove object name from attributes
 		attributesFiltered = [attr.replace(objectChild + ".", "") for attr in attributesFiltered]
-		# Check attributes and return the axes to skip
+		### Check attributes and return the axes to skip
 		return CheckAttributes(attributeName, attributesFiltered)
 
 	### Use generalized logic for all attributes
@@ -107,14 +107,14 @@ def ConstrainSecondToFirstObject(objectParent, objectChild, maintainOffset=True,
 		ConstrainAim(objectParent, objectChild, maintainOffset, weight) # TODO add customization logic
 
 def ConstrainAim(objectParent, objectChild, maintainOffset=True, weight=1, aimVector=(0, 0, 1), upVector=(0, 1, 0), worldUpVector=(0, 1, 0), worldUpObject=None): # TODO complete aim logic
-	# "scene" "object" "objectrotation" "vector" "none"
+	### "scene" "object" "objectrotation" "vector" "none"
 	if worldUpObject is None:
 		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, skip = "none", aimVector = aimVector, upVector = upVector, worldUpType = "vector", worldUpVector = worldUpVector)
 	else:
 		cmds.aimConstraint(objectParent, objectChild, maintainOffset = maintainOffset, weight = weight, skip = "none", aimVector = aimVector, upVector = upVector, worldUpType = "objectrotation", worldUpVector = worldUpVector, worldUpObject = worldUpObject)
 
 def DeleteConstraints(selected):
-	# First pass
+	### First pass
 	connections = Selector.GetConnectionsOfType(selected, type = Enums.Types.constraint, source = True, destination = False)
 	for item in connections:
 		if item is None:
@@ -126,7 +126,7 @@ def DeleteConstraints(selected):
 				if constraint in connection:
 					cmds.delete(connection)
 
-	# Second pass with checking child objects (if constraint exists but not connected)
+	### Second pass with checking child objects (if constraint exists but not connected)
 	children = Selector.GetChildrenOfType(selected, type = Enums.Types.constraint)
 	for i in range(len(selected)):
 		if children[i] is not None:

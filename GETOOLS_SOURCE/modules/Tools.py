@@ -240,6 +240,12 @@ class Tools:
 		cmds.button(label = "Translate + Rotate", command = partial(self.LocatorsBakeAim, False), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorAimSpaceBakeAll)
 		cmds.button(label = "Only Rotate", command = partial(self.LocatorsBakeAim, True), backgroundColor = Colors.orange10, annotation = ToolsAnnotations.locatorAimSpaceBakeRotate)
 		# cmds.setParent("..")
+
+		### CURVE SPACE SWITCHING
+		layoutCurveSpace = cmds.frameLayout(parent = layoutColumn, label = "Curve Space Switching", labelIndent = 72, collapsable = False, backgroundColor = Settings.frames2Color, marginWidth = 0, marginHeight = 0)
+		cmds.button(label = "Create Motion Path Locator", command = Locators.CreateWithMotionPath, backgroundColor = Colors.green10)
+
+
 	def UILayoutBaking(self, layoutMain):
 		cmds.frameLayout(parent = layoutMain, label = Settings.frames2Prefix + "BAKING", collapsable = True, backgroundColor = Settings.frames2Color, highlightColor = Colors.green100, marginWidth = 0, marginHeight = 0, borderVisible = True)
 		layoutColumn = cmds.columnLayout(adjustableColumn = True, rowSpacing = Settings.columnLayoutRowSpacing)
