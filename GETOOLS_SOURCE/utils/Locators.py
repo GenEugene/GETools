@@ -303,29 +303,29 @@ def CreateWithMotionPath(*args): # TODO
 	Constraints.ConstrainSecondToFirstObject(firstObject, closestPointLocatorIn, maintainOffset = False, parent = False, point = True, orient = False)
 
 	### Create locator outer
-	locatorOuter = Create(name = Text.SetUniqueFromText("mpLocatorOuter"), scale = 0.1)
+	locatorOuter = Create(name = Text.SetUniqueFromText("mpLocatorOuter"), scale = 1)
 	cmds.parent(locatorOuter, mainGroup)
 	cmds.select(clear = True)
 
 	### Create locator inner
-	locatorInner = Create(name = Text.SetUniqueFromText("mpLocatorInner"), scale = 1)
-	cmds.parent(locatorInner, locatorOuter)
-	cmds.select(clear = True)
+	# locatorInner = Create(name = Text.SetUniqueFromText("mpLocatorInner"), scale = 1)
+	# cmds.parent(locatorInner, locatorOuter)
+	# cmds.select(clear = True)
 
 	### Create motion path constraint with outer locator
 	timeMin = cmds.playbackOptions(query = True, min = True)
 	timeMax = cmds.playbackOptions(query = True, max = True)
-	motionPath = cmds.pathAnimation(locatorOuter, curve = curve, startTimeU = timeMin, endTimeU = timeMax, follow = True, worldUpType = "scene") # , fractionMode = False, bank = False
+	motionPath = cmds.pathAnimation(locatorOuter, curve = curve, startTimeU = timeMin, endTimeU = timeMax, follow = False)
 
 	### Constrain inner locator to outer locator
-	Constraints.ConstrainSecondToFirstObject(firstObject, locatorInner, maintainOffset = False, parent = False, point = False, orient = True)
+	# Constraints.ConstrainSecondToFirstObject(firstObject, locatorInner, maintainOffset = False, parent = False, point = False, orient = True)
 
 	### Connect closest point parameter to U parameter in motion path
 	cmds.connectAttr(closestPointNode + ".parameter", motionPath + ".uValue", force = True)
 
 	### Bake motion path uValue
 	cmds.select(motionPath, replace = True)
-	cmds.select(locatorInner, add = True)
+	# cmds.select(locatorInner, add = True)
 	cmds.bakeResults(time = (timeMin, timeMax), preserveOutsideKeys = True, simulation = True, minimizeRotation = True, sampleBy = 1, disableImplicitControl = True, attribute = ("uValue",) + Enums.Attributes.rotateShort)
 	cmds.select(clear = True)
 
@@ -335,5 +335,5 @@ def CreateWithMotionPath(*args): # TODO
 	cmds.delete(closestPointLocatorIn)
 
 	### Constrain original object to locator
-	Constraints.ConstrainSecondToFirstObject(locatorInner, firstObject, maintainOffset = True, parent = False, point = True, orient = True)
+	Constraints.ConstrainSecondToFirstObject(locatorOuter, firstObject, maintainOffset = True, parent = False, point = True, orient = False)
 
