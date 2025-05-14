@@ -242,7 +242,13 @@ def CreateOnSelectedAim(name=_nameAim, scale=_scale, minSelectedCount=_minSelect
 
 	# Create aim constraint
 	for i in range(len(objects[0])):
-		cmds.aimConstraint(locatorsTargetsList[i], locatorsOffsetsList[i], maintainOffset = True, weight = 1, aimVector = vectorAim, worldUpType = "object", worldUpObject = locatorsUpList[i])
+		if vectorAim[0] is not 0:
+			vectorUp = (0, 1, 0)
+		elif vectorAim[1] is not 0:
+			vectorUp = (0, 0, 1)
+		elif vectorAim[2] is not 0:
+			vectorUp = (1, 0, 0)
+		cmds.aimConstraint(locatorsTargetsList[i], locatorsOffsetsList[i], maintainOffset = True, weight = 1, aimVector = vectorAim, upVector = vectorUp, worldUpType = "object", worldUpObject = locatorsUpList[i])
 	
 	# Reverse constrain # TODO move constraint to temp group
 	if (reverse):
