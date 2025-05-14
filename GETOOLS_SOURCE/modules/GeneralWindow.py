@@ -50,7 +50,7 @@ from ..values import Icons
 
 
 class GeneralWindow:
-	_version = "v1.6.0"
+	_version = "v1.6.1"
 	_name = "GETools"
 	_title = _name + " " + _version
 

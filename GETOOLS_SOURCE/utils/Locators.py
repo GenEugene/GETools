@@ -123,7 +123,7 @@ def CreateOnSelected(name=_nameBase, scale=_scale, minSelectedCount=_minSelected
 			sublocatorsList.append(created[1])
 		else:
 			locatorsList.append(created)
-		cmds.matchTransform(locatorsList[-1], item, position = True, rotation = True, scale = True)
+		cmds.matchTransform(locatorsList[-1], item, position = True, rotation = True, scale = False)
 
 	# Constrain locators to selected objects
 	if (constraint):
@@ -201,9 +201,9 @@ def CreateOnSelectedAim(name=_nameAim, scale=_scale, minSelectedCount=_minSelect
 		locTarget = Create(name = objects[1][i] + "Target", scale = scale)
 		locUp = Create(name = objects[1][i] + "Up", scale = scale)
 
-		cmds.matchTransform(locOffset, objects[1][i], position = True, rotation = True, scale = True)
-		cmds.matchTransform(locTarget, objects[1][i], position = True, rotation = True, scale = True)
-		cmds.matchTransform(locUp, objects[1][i], position = True, rotation = True, scale = True)
+		cmds.matchTransform(locOffset, objects[1][i], position = True, rotation = True, scale = False)
+		cmds.matchTransform(locTarget, objects[1][i], position = True, rotation = True, scale = False)
+		cmds.matchTransform(locUp, objects[1][i], position = True, rotation = True, scale = False)
 
 		cmds.parent(objects[1][i], aimGroup)
 		cmds.parent(locOffset, objects[1][i])
@@ -211,7 +211,7 @@ def CreateOnSelectedAim(name=_nameAim, scale=_scale, minSelectedCount=_minSelect
 		cmds.parent(locUp, aimGroup)
 
 		if subLocator:
-			cmds.matchTransform(objects[2][i], locOffset, position = True, rotation = True, scale = True)
+			cmds.matchTransform(objects[2][i], locOffset, position = True, rotation = True, scale = False)
 			cmds.parent(objects[2][i], locOffset)
 		
 		aimVectorScaled = (
@@ -242,7 +242,13 @@ def CreateOnSelectedAim(name=_nameAim, scale=_scale, minSelectedCount=_minSelect
 
 	# Create aim constraint
 	for i in range(len(objects[0])):
-		cmds.aimConstraint(locatorsTargetsList[i], locatorsOffsetsList[i], maintainOffset = True, weight = 1, aimVector = vectorAim, worldUpType = "object", worldUpObject = locatorsUpList[i])
+		if vectorAim[0] is not 0:
+			vectorUp = (0, 1, 0)
+		elif vectorAim[1] is not 0:
+			vectorUp = (0, 0, 1)
+		elif vectorAim[2] is not 0:
+			vectorUp = (1, 0, 0)
+		cmds.aimConstraint(locatorsTargetsList[i], locatorsOffsetsList[i], maintainOffset = True, weight = 1, aimVector = vectorAim, upVector = vectorUp, worldUpType = "object", worldUpObject = locatorsUpList[i])
 	
 	# Reverse constrain # TODO move constraint to temp group
 	if (reverse):

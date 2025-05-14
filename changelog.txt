@@ -1,5 +1,9 @@
 GETools changelog
 
+v1.6.1 | 13.05.2025
+- [TOOLS] fixed bug with Aim Space Switching up locator when Y axis used.
+- [TOOLS] deactivated scale matching on locator creation.
+
 v1.6.0 | 09.12.2024
 - [TRANSFORMATIONS] added new tool to move objects.
 - [UI] changed list order numbers for main panels. TRANSFORMATION tools now stays in 1 position.
